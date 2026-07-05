@@ -123,12 +123,14 @@ Strict SCUT test115 gate:
 rule: copy_mask_cov8 >= 0.806133 and primary_edit_px <= 98868
 output: outputs/scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
 review pack: outputs/review_scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
+visible-delta analysis: outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun
 baseline second-stage residual=0.114225 overerase=0.003048
 strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
 delta residual=-0.000269 overerase=-0.000002
 selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
 manual contact-sheet pass: no obvious large-area overerase regression, but visual gain is subtle
 diff-crop review: most selected-page changes are low-contrast texture / gray-balance shifts; only a subset shows visible cleanup benefit
+visible-delta components: improve area=464 across 11 components; regress area=229 across 8 components
 ```
 
 Promotion gate:

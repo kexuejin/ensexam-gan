@@ -257,6 +257,30 @@ manual contact-sheet pass: no obvious large-area overerase regression, but visua
 diff-crop review: most selected-page changes are low-contrast texture / gray-balance shifts; only a subset shows visible cleanup benefit
 ```
 
+Visible-delta analysis:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/analyze_candidate_visible_delta.py \
+  --baseline-metrics outputs/scut_test115_second_stage_baseline_20260705/metrics.csv \
+  --candidate-metrics outputs/scut_test115_hybrid_gate_strict_cov806_edit98868_20260705/metrics.csv \
+  --output-csv outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/components.csv \
+  --summary-csv outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/summary.csv \
+  --crops-dir outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/crops \
+  --contact-sheet outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/contact_sheet_components.png \
+  --max-crops 60 \
+  --change-threshold 12 \
+  --gain-threshold 8 \
+  --min-area 20
+```
+
+Visible-delta result:
+
+```text
+improve_visible_target_region: components=11 area=464
+regress_low_contrast_target: components=1 area=36
+regress_visible_target_region: components=7 area=193
+```
+
 Decision:
 
 ```text
