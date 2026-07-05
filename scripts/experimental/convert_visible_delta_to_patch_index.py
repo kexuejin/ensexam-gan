@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 from pathlib import Path
 
 import cv2
@@ -42,13 +43,13 @@ def image_size(path: str) -> tuple[int, int]:
     return w, h
 
 
-def ticks(total: int, patch_size: int, stride: int) -> list[int]:
+def ticks(total: int, patch_size: int, overlap: int) -> list[int]:
+    """Match EnsExamRealDataset._build_patch_index coordinates exactly."""
     if total <= patch_size:
         return [0]
-    points = list(range(0, total - patch_size + 1, stride))
-    if not points or points[-1] + patch_size < total:
-        points.append(total - patch_size)
-    return points
+    step = max(patch_size - overlap, 1)
+    count = math.ceil((total - overlap) / step)
+    return [index * step for index in range(count)]
 
 
 def intersects(a: tuple[int, int, int, int], b: tuple[int, int, int, int]) -> int:
@@ -88,7 +89,6 @@ def score_component(row: dict[str, str], inter: int, source_area: int, area_weig
 
 def main() -> None:
     args = parse_args()
-    stride = max(args.img_size - args.overlap, 1)
     emitted: dict[tuple[str, int, int], dict[str, str | int | float]] = {}
     reject_rows: list[dict[str, str]] = []
 
@@ -103,8 +103,8 @@ def main() -> None:
             source_box = component_box(row, args.patch_pad, image_w, image_h)
             source_area = int(float(row["area"]))
             candidates: list[tuple[float, int, int, tuple[int, int, int, int]]] = []
-            for y1 in ticks(image_h, args.img_size, stride):
-                for x1 in ticks(image_w, args.img_size, stride):
+            for y1 in ticks(image_h, args.img_size, args.overlap):
+                for x1 in ticks(image_w, args.img_size, args.overlap):
                     tile = (x1, y1, min(x1 + args.img_size, image_w), min(y1 + args.img_size, image_h))
                     inter = intersects(source_box, tile)
                     if inter <= 0:

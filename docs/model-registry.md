@@ -133,6 +133,9 @@ diff-crop review: most selected-page changes are low-contrast texture / gray-bal
 visible-delta components: improve area=464 across 11 components; regress area=229 across 8 components
 visible-delta patch index: outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv
 visible-delta rejects: outputs/visible_delta_patch_index_strict_scut_test115_20260705/regress_reject_components.csv
+visible-delta smoke dataset: data-links/samples/visible-delta-strict-scut-test115
+visible-delta one-step smoke: outputs/smoke_visible_delta_patch_index_step1_20260705
+visible-delta smoke result: patch-index filter 234->24, MPS step=1/1 passed
 ```
 
 Promotion gate:

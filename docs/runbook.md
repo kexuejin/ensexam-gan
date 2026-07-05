@@ -306,6 +306,49 @@ output: outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_p
 reject: outputs/visible_delta_patch_index_strict_scut_test115_20260705/regress_reject_components.csv
 ```
 
+Visible-delta smoke dataset:
+
+```bash
+$ENSEXAM_PYTHON scripts/experimental/materialize_visible_delta_dataset.py \
+  --components-csv outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/components.csv \
+  --output-root data-links/samples/visible-delta-strict-scut-test115 \
+  --split train \
+  --file-list outputs/visible_delta_patch_index_strict_scut_test115_20260705/visible_delta_train_files.txt \
+  --region-type improve \
+  --reason-contains visible_target_region
+```
+
+Visible-delta one-step train smoke:
+
+```bash
+$ENSEXAM_PYTHON scripts/micro_train_region_probe.py \
+  --config configs/local/config.local-visible-delta-smoke-mps.yaml \
+  --output-dir outputs/smoke_visible_delta_patch_index_step1_20260705 \
+  --max-steps 1 \
+  --batch-size 1 \
+  --train-pages 2 \
+  --train-file-list outputs/visible_delta_patch_index_strict_scut_test115_20260705/visible_delta_train_files.txt \
+  --patch-index-file outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv \
+  --disable-augmentation \
+  --trace-batches-file outputs/smoke_visible_delta_patch_index_step1_20260705/trace_batches.csv \
+  --log-every 1 \
+  --save-every 1 \
+  --loss-override lambda_input_preserve=12.0 \
+  --device-override mps \
+  --box-class-mode all
+```
+
+Smoke result:
+
+```text
+MPS preflight: passed
+dataset patches: 234
+patch-index filter: 234->24
+step=1/1 G=15.062152 D=1.886716 lr_part=10.803489 sn=0.425416 block=0.130858
+trace sample: 156.jpg x1=960 y1=480 x2=1216 y2=736
+output: outputs/smoke_visible_delta_patch_index_step1_20260705/micro_region_probe.pth
+```
+
 Decision:
 
 ```text
