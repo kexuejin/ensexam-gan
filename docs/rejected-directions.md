@@ -70,3 +70,32 @@ scut7_cov65_edit98868_p95_5_gate0015 selected=10 total residual gain=0.000702181
 Keep `scripts/analysis/replay_hybrid_selector.py` for future selector analysis, but do not promote
 the current hybrid selector as a product default without a new candidate that improves residual
 without cross-split overerase regression.
+
+## Simple Candidate-Only Background Protection
+
+Rejected as a product inference switch. Local analysis of pages where the candidate improves residual
+but increases overerase found 649 candidate-only overerase components. The dominant failures are many
+small background edits and page-edge artifacts rather than a few large regions:
+
+```text
+small_background_edit: 431 components, area=21354
+page_edge_artifact: 127 components, area=7363
+near_changed_region_halo: 57 components, area=2492
+near_target_boundary_or_low_contrast_label: 28 components, area=1286
+```
+
+A top24 high-risk page probe reverted candidate-only connected components to the baseline prediction.
+This reduced overerase modestly, but it did not make any high-risk page safe and it also reduced the
+residual gain:
+
+```text
+none:           residual_gain=0.176509 overerase_regret=0.015874 safe_pages=0/24
+edge_only:      residual_gain=0.176170 overerase_regret=0.015132 safe_pages=0/24
+small_nonlarge: residual_gain=0.154762 overerase_regret=0.012318 safe_pages=0/24
+small_or_edge:  residual_gain=0.154762 overerase_regret=0.012291 safe_pages=0/24
+all_components: residual_gain=0.154762 overerase_regret=0.012248 safe_pages=0/24
+```
+
+Keep `scripts/analysis/analyze_candidate_overerase_delta.py` as a diagnostic tool. Future work should
+focus on model-side background preservation or stronger confidence masks rather than simple
+post-inference connected-component rollback.

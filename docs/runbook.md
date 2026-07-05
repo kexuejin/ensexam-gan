@@ -475,6 +475,54 @@ Treat inference-side selector tuning as useful analysis infrastructure, not a
 product-quality solution.
 ```
 
+### Candidate-Only Overerase Delta
+
+Use the local component analyzer to inspect where the candidate introduces
+background edits that the baseline does not:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/analyze_candidate_overerase_delta.py \
+  --page-choices outputs/selector_replay_joint_strict_candidate_20260705/page_choices.csv \
+  --output-dir outputs/analysis_joint_candidate_overerase_delta_script_20260705 \
+  --positive-gain-only \
+  --max-crops 40
+```
+
+Diagnostic result:
+
+```text
+pages with residual gain and overerase increase=106
+new candidate-only overerase components=649
+components summary:
+  small_background_edit: 431 components, area=21354
+  page_edge_artifact: 127 components, area=7363
+  near_changed_region_halo: 57 components, area=2492
+  near_target_boundary_or_low_contrast_label: 28 components, area=1286
+```
+
+A quick top24 risk-page protection probe tested reverting candidate-only
+background components back to baseline. It reduced overerase only modestly and
+kept every tested high-risk page unsafe:
+
+```text
+none:           residual_gain=0.176509 overerase_regret=0.015874 safe_pages=0/24
+edge_only:      residual_gain=0.176170 overerase_regret=0.015132 safe_pages=0/24
+small_nonlarge: residual_gain=0.154762 overerase_regret=0.012318 safe_pages=0/24
+small_or_edge:  residual_gain=0.154762 overerase_regret=0.012291 safe_pages=0/24
+all_components: residual_gain=0.154762 overerase_regret=0.012248 safe_pages=0/24
+```
+
+Decision:
+
+```text
+Do not add a simple candidate-only component protection switch to product
+inference. The overerase increase is distributed across many small background
+edits and page-edge artifacts; reverting those components sacrifices residual
+gain but does not make high-risk pages safe. A useful protection method likely
+needs better model-side confidence/background preservation, not only connected
+component filtering after inference.
+```
+
 ## Current-Primary Continuation Step4 Evaluation
 
 The 2026-07-05 four-step continuation from `artifacts/current-primary/micro_region_probe_step0001.pth`

@@ -172,6 +172,25 @@ best_safe_joint:
   max split overerase regret=-0.000000187820
 ```
 
+Candidate-only overerase diagnostic:
+
+```text
+script: scripts/analysis/analyze_candidate_overerase_delta.py
+output: outputs/analysis_joint_candidate_overerase_delta_script_20260705
+
+positive-gain pages with overerase increase=106
+new candidate-only overerase components=649
+dominant component buckets:
+  small_background_edit: 431 components, area=21354
+  page_edge_artifact: 127 components, area=7363
+  near_changed_region_halo: 57 components, area=2492
+
+top24 component-protection probe:
+  none residual_gain=0.176509 overerase_regret=0.015874 safe_pages=0/24
+  all_components residual_gain=0.154762 overerase_regret=0.012248 safe_pages=0/24
+decision: do not add simple candidate-only connected-component protection as product inference
+```
+
 Promotion gate:
 
 ```text
