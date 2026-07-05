@@ -124,3 +124,47 @@ Result:
 summary residual=0.134026 overerase=0.002482
 metrics_csv: outputs/holdout40_second_stage_readiness_20260705/metrics.csv
 ```
+
+## Current-Primary Continuation Step4 Evaluation
+
+The 2026-07-05 four-step continuation from `artifacts/current-primary/micro_region_probe_step0001.pth`
+was evaluated on holdout40 and rejected for promotion. All candidate checkpoints increased residual
+versus the current primary baseline.
+
+Command:
+
+```bash
+RUN=outputs/exp_current_primary_continuation_step4_20260705
+EVAL=outputs/eval_current_primary_continuation_step4_holdout40_20260705
+
+$ENSEXAM_PYTHON scripts/batch_eval_hardcase_checkpoints.py \
+  --items-csv "$RUN/holdout40_candidate_items.csv" \
+  --samples-file docs/holdout40-relative.txt \
+  --output-root "$EVAL" \
+  --summary-csv "$EVAL/summary.csv" \
+  --baseline-pred-dir artifacts/current-holdout40-primary-pred \
+  --device auto \
+  --copy-input-outside-mask mb \
+  --copy-mask-threshold-auto mb_cov8_step \
+  --copy-mask-threshold 70 \
+  --copy-mask-dilate 0 \
+  --page-overlap 32 \
+  --batch-size 8
+```
+
+Result:
+
+```text
+baseline primary residual=0.136111 overerase=0.002482
+step0001 residual=0.138113 overerase=0.002797 score=-0.004524
+step0002 residual=0.146358 overerase=0.002602 score=-0.011211
+step0003 residual=0.145277 overerase=0.002515 score=-0.009433
+step0004 residual=0.145792 overerase=0.002285 score=-0.009681
+summary_csv: outputs/eval_current_primary_continuation_step4_holdout40_20260705/summary.csv
+```
+
+Decision:
+
+```text
+No promotion. Do not update artifacts/current-primary from this run.
+```

@@ -102,3 +102,13 @@ metrics_csv: outputs/holdout40_second_stage_readiness_20260705/metrics.csv
 ## Rejected / Not Default
 
 Whiteout inpaint repair is metric-positive but visually rejected. Do not enable it in the default product pipeline without a better paper-tone restoration method and manual visual approval.
+
+The 2026-07-05 current-primary four-step continuation run is also rejected for promotion:
+
+```text
+run: outputs/exp_current_primary_continuation_step4_20260705
+eval: outputs/eval_current_primary_continuation_step4_holdout40_20260705/summary.csv
+baseline primary residual=0.136111 overerase=0.002482
+best candidate by score: step0001 residual=0.138113 overerase=0.002797 score=-0.004524
+decision: no promotion; keep artifacts/current-primary unchanged
+```
