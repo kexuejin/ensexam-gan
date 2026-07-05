@@ -11,6 +11,7 @@
 """
 import argparse
 import csv
+import contextlib
 import logging
 import os
 import random
@@ -54,6 +55,23 @@ sys.path.insert(0, os.path.dirname(__file__))
 from tools.early_stopping import EarlyStopping
 
 
+def load_optional_file_list(path: str) -> list[str] | None:
+    """Load an optional newline-delimited image filename list from config."""
+    if not path:
+        return None
+    resolved = normalize_path(path)
+    if not os.path.exists(resolved):
+        raise FileNotFoundError(f"file list not found: {resolved}")
+    files = []
+    with open(resolved, 'r', encoding='utf-8') as f:
+        for raw in f:
+            line = raw.strip()
+            if not line or line.startswith('#'):
+                continue
+            files.append(os.path.basename(line))
+    return files
+
+
 def set_seed(seed: int, mode: str = 'statistical'):
     """固定随机源；支持 strict（严格可复现）与 statistical（统计可复现，默认更快）。"""
     random.seed(seed)
@@ -82,7 +100,16 @@ def setup_device(train_cfg: dict):
     在 DDP 模式下（torchrun 启动），LOCAL_RANK 环境变量会覆盖 gpu_ids。
     """
     if not torch.cuda.is_available():
-        return torch.device('cpu'), []
+        device_str = train_cfg.get('device', 'auto')
+        if device_str == 'auto':
+            if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+                return torch.device('mps'), []
+            return torch.device('cpu'), []
+        if device_str == 'mps':
+            if hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+                return torch.device('mps'), []
+            raise RuntimeError('配置要求使用 mps，但当前 PyTorch/MPS 不可用')
+        return torch.device(device_str), []
 
     # DDP 模式：torchrun 会设置 LOCAL_RANK
     local_rank = os.environ.get('LOCAL_RANK')
@@ -127,6 +154,8 @@ def is_main_process() -> bool:
 def setup_ddp():
     """初始化 DDP 进程组（仅在 torchrun 环境下调用）。"""
     if os.environ.get('LOCAL_RANK') is not None and not dist.is_initialized():
+        if not torch.cuda.is_available():
+            raise RuntimeError('DDP 训练当前仅支持 CUDA 环境')
         dist.init_process_group(backend='nccl')
 
 
@@ -175,6 +204,8 @@ class CUDAPrefetcher:
         if self.stream is not None:
             with torch.cuda.stream(self.stream):
                 batch = [t.to(self.device, non_blocking=True) for t in batch]
+        else:
+            batch = [t.to(self.device) for t in batch]
 
         while True:
             try:
@@ -194,9 +225,17 @@ class CUDAPrefetcher:
             if self.stream is not None:
                 with torch.cuda.stream(self.stream):
                     batch = [t.to(self.device, non_blocking=True) for t in batch]
+            else:
+                batch = [t.to(self.device) for t in batch]
 
     def __len__(self):
         return len(self.loader)
+
+
+def autocast_context(device: torch.device, enabled: bool, dtype: torch.dtype):
+    if not enabled:
+        return contextlib.nullcontext()
+    return torch.autocast(device_type=device.type, dtype=dtype)
 
 
 # ── 日志初始化 ─────────────────────────────────────────────────────────────────
@@ -246,7 +285,7 @@ class CSVLogger:
                 epoch, f'{train_G:.6f}', f'{train_D:.6f}',
                 f'{parts[0]:.6f}', f'{parts[1]:.6f}',
                 f'{parts[2]:.6f}', f'{parts[3]:.6f}',
-                f'{val_loss:.6f}',
+                '' if val_loss is None else f'{val_loss:.6f}',
             ])
 
 
@@ -301,7 +340,9 @@ def validate(G: Generator, val_loader: DataLoader, device: torch.device) -> dict
     sums = init_metric_sums()
     n_images = 0
 
-    for Iin, _, _, _, _, _, Igt in val_loader:
+    for batch in val_loader:
+        Iin = batch[0]
+        Igt = batch[-1]
         Iin, Igt = Iin.to(device), Igt.to(device)
         *_, Icomp = G(Iin)
 
@@ -337,15 +378,21 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     if num_workers == 0 and os.name != 'nt':
         num_workers = min(4, os.cpu_count() or 1)
     save_every  = train_cfg['save_every_n_epochs']
+    max_steps_per_epoch = train_cfg.get('max_steps_per_epoch', None)
 
     data_root      = data_cfg['data_root']
     img_size       = data_cfg['img_size']
     overlap        = data_cfg['overlap']
     mask_threshold = data_cfg['mask_threshold']
+    box_class_mode = data_cfg.get('box_class_mode', 'all')
+    box_preserve_mode = data_cfg.get('box_preserve_mode', 'none')
     final_test_mode = eval_cfg.get('final_test_mode', 'both')
+    skip_final_test = bool(eval_cfg.get('skip_final_test', False))
     page_overlap = int(eval_cfg.get('page_overlap', 32))
+    val_every = max(1, int(eval_cfg.get('val_every_n_epochs', 1)))
     if final_test_mode not in {'patch', 'page', 'both'}:
-        raise ValueError(f'未知 final_test_mode: {final_test_mode}')
+        if not (skip_final_test and final_test_mode in {'none', None}):
+            raise ValueError(f'未知 final_test_mode: {final_test_mode}')
 
     # 创建本次运行目录（权重 / 日志 / config 快照统一存放）
     if run_dir is None:
@@ -376,6 +423,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
 
     # 数据集
     val_ratio = data_cfg.get('val_ratio', 0.0)
+    train_file_list = load_optional_file_list(data_cfg.get('train_file_list', ''))
+    val_file_list = load_optional_file_list(data_cfg.get('val_file_list', ''))
     if val_ratio > 0:
         # 按图像粒度从训练目录划分验证集，避免 patch 级泄漏
         train_img_dir = os.path.join(data_root, 'train', 'all_images')
@@ -383,24 +432,49 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         all_train_files = sorted(
             f for f in os.listdir(train_img_dir) if f.endswith(valid_ext)
         )
-        rng = random.Random(seed if seed is not None else 42)
-        rng.shuffle(all_train_files)
-        n_val = max(1, int(len(all_train_files) * val_ratio))
-        val_files   = all_train_files[:n_val]
-        train_files = all_train_files[n_val:]
+        if train_file_list is not None or val_file_list is not None:
+            train_files = train_file_list if train_file_list is not None else all_train_files
+            val_files = val_file_list if val_file_list is not None else []
+            if not val_files:
+                rng = random.Random(seed if seed is not None else 42)
+                shuffled = [f for f in all_train_files if f not in set(train_files)]
+                rng.shuffle(shuffled)
+                n_val = max(1, int(len(all_train_files) * val_ratio))
+                val_files = shuffled[:n_val] if shuffled else train_files[:max(1, min(len(train_files), n_val))]
+        else:
+            rng = random.Random(seed if seed is not None else 42)
+            rng.shuffle(all_train_files)
+            n_val = max(1, int(len(all_train_files) * val_ratio))
+            val_files   = all_train_files[:n_val]
+            train_files = all_train_files[n_val:]
+        max_train_files = data_cfg.get('max_train_files')
+        max_val_files = data_cfg.get('max_val_files')
+        if max_train_files is not None:
+            train_files = train_files[:int(max_train_files)]
+        if max_val_files is not None:
+            val_files = val_files[:max(1, int(max_val_files))]
         logger.info(
             f"验证集从训练目录划分：共 {len(all_train_files)} 张图，"
             f"训练 {len(train_files)} 张 / 验证 {len(val_files)} 张（val_ratio={val_ratio}）"
         )
+        if train_file_list is not None or val_file_list is not None:
+            logger.info(
+                f"使用显式文件列表：train_file_list={len(train_file_list or []) or 'auto'}，"
+                f"val_file_list={len(val_file_list or []) or 'auto'}"
+            )
         train_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=True,
             overlap=overlap, mask_threshold=mask_threshold,
             aug_cfg=data_cfg.get('augmentation'), file_list=train_files, phase=phase,
+            box_class_mode=box_class_mode,
+            box_preserve_mode=box_preserve_mode,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=True,
             overlap=0, mask_threshold=mask_threshold,
             aug_cfg=None, file_list=val_files, phase='val',
+            box_class_mode=box_class_mode,
+            box_preserve_mode=box_preserve_mode,
         )
     else:
         # val_ratio=0：沿用旧行为，直接使用 test 目录
@@ -408,10 +482,14 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             data_root=data_root, img_size=img_size, is_train=True,
             overlap=overlap, mask_threshold=mask_threshold,
             aug_cfg=data_cfg.get('augmentation'), phase=phase,
+            box_class_mode=box_class_mode,
+            box_preserve_mode=box_preserve_mode,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=False,
             overlap=0, mask_threshold=mask_threshold, aug_cfg=None, phase='val',
+            box_class_mode=box_class_mode,
+            box_preserve_mode=box_preserve_mode,
         )
 
     pin = device.type == 'cuda'
@@ -442,6 +520,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                               prefetch_factor=(2 if num_workers > 0 else None))
     if is_main_process():
         logger.info(f"训练集：{len(train_dataset)} patches | 验证集：{len(val_dataset)} patches")
+        logger.info(f"验证频率：每 {val_every} 个 epoch 验证一次（最后 1 个 epoch 强制验证）")
 
     # 模型
     G = Generator(cfg=cfg['model']).to(device)
@@ -511,13 +590,14 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     # 训练循环
     train_prefetcher = CUDAPrefetcher(train_loader, device)
     best_val_loss = float('inf')
+    last_val_m = None
     G.train(); D.train()
 
     # AMP：A800 等 Ampere+ GPU 使用 bf16 混合精度大幅提升吞吐
     use_amp = device.type == 'cuda' and torch.cuda.is_bf16_supported()
     amp_dtype = torch.bfloat16 if use_amp else torch.float16
-    scaler_G = torch.cuda.amp.GradScaler(enabled=(use_amp and amp_dtype == torch.float16))
-    scaler_D = torch.cuda.amp.GradScaler(enabled=(use_amp and amp_dtype == torch.float16))
+    scaler_G = torch.cuda.amp.GradScaler(enabled=False)
+    scaler_D = torch.cuda.amp.GradScaler(enabled=False)
     if is_main_process() and use_amp:
         logger.info(f"AMP 已启用：dtype={amp_dtype}")
 
@@ -536,8 +616,15 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     desc=f"Epoch {epoch + 1}/{epochs}", ncols=100,
                     disable=not is_main_process())
 
-        for Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt in pbar:
-            gt   = (Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
+        for batch in pbar:
+            if max_steps_per_epoch is not None and n_steps >= int(max_steps_per_epoch):
+                break
+            if len(batch) == 8:
+                Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt = batch
+                gt = (Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt)
+            else:
+                Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt = batch
+                gt = (Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
 
             # ── 训练判别器 ──────────────────────────────────────────
             # D 不用 DDP 包裹，手动 all-reduce 梯度（避免 GAN 交替训练的 unused params 问题）
@@ -545,7 +632,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             with torch.no_grad():
                 gen_out = unwrap_model(G)(Iin)
             Icomp = gen_out[-1]
-            with torch.cuda.amp.autocast(enabled=use_amp, dtype=amp_dtype):
+            with autocast_context(device, use_amp, amp_dtype):
                 real_g, real_l = D(Igt,   Mb_gt)
                 fake_g, fake_l = D(Icomp, Mb_gt)
                 loss_D = (EnsExamLoss.hinge_loss_D(real_g, fake_g)
@@ -563,7 +650,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             # G 通过 DDP 正常 forward/backward（DDP 自动 allreduce G 的梯度）
             # D 不在 DDP 中，backward 流过 D 但 D 的梯度不需要同步
             optimizer_G.zero_grad()
-            with torch.cuda.amp.autocast(enabled=use_amp, dtype=amp_dtype):
+            with autocast_context(device, use_amp, amp_dtype):
                 gen_out = G(Iin)
                 Icomp   = gen_out[-1]
                 fake_g, fake_l = D(Icomp, Mb_gt)
@@ -591,33 +678,45 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         avg_D  = sum_loss_D.item() / n
         avg_parts = [sum_parts[i].item() / n for i in range(6)]
 
-        # 验证
-        val_m = validate(G, val_loader, device)
-        best_val_loss = min(best_val_loss, val_m['l1'])
-
         current_lr = optimizer_G.param_groups[0]['lr']
-        val_display = paper_display_metrics(val_m)
+        should_validate = ((epoch + 1) % val_every == 0) or (epoch == epochs - 1)
+        val_m = None
+        val_display = None
+        if should_validate:
+            val_m = validate(G, val_loader, device)
+            last_val_m = val_m
+            best_val_loss = min(best_val_loss, val_m['l1'])
+            val_display = paper_display_metrics(val_m)
 
         # 只在 rank 0 上做日志 / CSV / W&B / checkpoint
         if is_main_process():
-            logger.info(
-                f"Epoch {epoch + 1:>4} | "
-                f"Train G={avg_G:.4f}  D={avg_D:.4f} | "
-                f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
-                f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f} | "
-                f"PSNR={val_m['psnr']:.2f}  "
-                f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
-                f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
-                f"AGE={val_m['age']:.2f}  "
-                f"pEPs={val_display['peps']:.2f}({val_m['peps']:.4f})  "
-                f"pCEPs={val_display['pceps']:.2f}({val_m['pceps']:.4f}) | "
-                f"LR={current_lr:.2e}"
-            )
-            csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, val_m['l1'])
+            if should_validate:
+                logger.info(
+                    f"Epoch {epoch + 1:>4} | "
+                    f"Train G={avg_G:.4f}  D={avg_D:.4f} | "
+                    f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
+                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f} | "
+                    f"PSNR={val_m['psnr']:.2f}  "
+                    f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
+                    f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
+                    f"AGE={val_m['age']:.2f}  "
+                    f"pEPs={val_display['peps']:.2f}({val_m['peps']:.4f})  "
+                    f"pCEPs={val_display['pceps']:.2f}({val_m['pceps']:.4f}) | "
+                    f"LR={current_lr:.2e}"
+                )
+            else:
+                logger.info(
+                    f"Epoch {epoch + 1:>4} | "
+                    f"Train G={avg_G:.4f}  D={avg_D:.4f} | "
+                    f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
+                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f} | "
+                    f"Val=skipped | LR={current_lr:.2e}"
+                )
+            csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, None if val_m is None else val_m['l1'])
 
             # W&B：上报数值指标
             if wb_run is not None:
-                wandb.log({
+                wandb_payload = {
                     'train/loss_G':     avg_G,
                     'train/loss_D':     avg_D,
                     'train/adv':        avg_parts[0],
@@ -626,21 +725,25 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     'train/style':      avg_parts[3],
                     'train/sn':         avg_parts[4],
                     'train/block':      avg_parts[5],
-                    'val/psnr':         val_m['psnr'],
-                    'val/ms_ssim':      val_m['ms_ssim'],
-                    'val/mse':          val_m['mse'],
-                    'val/l1':           val_m['l1'],
-                    'val/age':          val_m['age'],
-                    'val/peps':         val_m['peps'],
-                    'val/pceps':        val_m['pceps'],
-                    'val_display/ms_ssim_x100': val_display['ms_ssim'],
-                    'val_display/mse_x100':     val_display['mse'],
-                    'val_display/peps_x100':    val_display['peps'],
-                    'val_display/pceps_x100':   val_display['pceps'],
                     'train/lr':         current_lr,
-                }, step=epoch + 1)
+                }
+                if should_validate:
+                    wandb_payload.update({
+                        'val/psnr':         val_m['psnr'],
+                        'val/ms_ssim':      val_m['ms_ssim'],
+                        'val/mse':          val_m['mse'],
+                        'val/l1':           val_m['l1'],
+                        'val/age':          val_m['age'],
+                        'val/peps':         val_m['peps'],
+                        'val/pceps':        val_m['pceps'],
+                        'val_display/ms_ssim_x100': val_display['ms_ssim'],
+                        'val_display/mse_x100':     val_display['mse'],
+                        'val_display/peps_x100':    val_display['peps'],
+                        'val_display/pceps_x100':   val_display['pceps'],
+                    })
+                wandb.log(wandb_payload, step=epoch + 1)
                 # 每隔 N epoch 上传对比图
-                if (epoch + 1) % log_img_every == 0:
+                if should_validate and (epoch + 1) % log_img_every == 0:
                     log_images_to_wandb(G, val_loader, device, epoch + 1)
 
             # 保存 checkpoint（先存再 step，确保 lr 与本 epoch 对应）
@@ -654,8 +757,10 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                 'scheduler_D':  scheduler_D.state_dict() if scheduler_D else None,
                 'avg_loss_G':   avg_G,
                 'avg_loss_D':   avg_D,
-                'val_loss':     val_m['l1'],
+                'val_loss':     None if val_m is None else val_m['l1'],
             }
+            if last_val_m is not None:
+                ckpt['last_val_metrics'] = last_val_m
             torch.save(ckpt, os.path.join(run_dir, 'latest.pth'))
 
         if scheduler_G is not None:
@@ -669,7 +774,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                 logger.info(f"已保存：{path}")
 
         # 保存最优模型（由早停判定，监控 PSNR）——所有 rank 都 step 以保持同步
-        if es is not None:
+        if es is not None and should_validate:
             should_stop = es.step(val_m['psnr'], epoch + 1)
             if is_main_process():
                 if should_stop:
@@ -687,7 +792,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                 break
 
     # ── 训练结束后，在测试集上评估最优模型 ─────────────────────────────────────
-    if is_main_process():
+    if is_main_process() and not skip_final_test:
         logger.info("=" * 60)
         logger.info("训练结束，开始在测试集上评估最优模型...")
 
@@ -712,6 +817,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             test_dataset = EnsExamRealDataset(
                 data_root=data_root, img_size=img_size, is_train=False,
                 overlap=0, mask_threshold=mask_threshold, aug_cfg=None, phase='test',
+                box_class_mode=box_class_mode,
+                box_preserve_mode=box_preserve_mode,
             )
             test_loader = DataLoader(
                 test_dataset, batch_size=batch_size, shuffle=False,
@@ -796,6 +903,9 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
 
             if wandb_payload:
                 wandb.log(wandb_payload)
+
+    elif is_main_process() and skip_final_test:
+        logger.info("已跳过训练结束后的最终测试（skip_final_test=true）")
 
     if wb_run is not None:
         wandb.finish()

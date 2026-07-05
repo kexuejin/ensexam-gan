@@ -52,6 +52,11 @@ class EnsExamLoss(nn.Module):
         'lambda_b': 0.4,
         'lambda_n': [5, 6, 8, 10],
         'beta_n': [0.8, 0.8, 0.8, 2.0],
+        'normalize_lr_regions': False,
+        'lambda_input_preserve': 0.0,
+        'input_preserve_threshold': 0.2,
+        'lambda_mb_leak': 0.0,
+        'lambda_box_preserve': 0.0,
     }
 
     def __init__(self, cfg: dict = None):
@@ -65,6 +70,11 @@ class EnsExamLoss(nn.Module):
         self.lambda_style = c['lambda_style']
         self.lambda_sn   = c['lambda_sn']
         self.lambda_b    = c['lambda_b']
+        self.normalize_lr_regions = bool(c.get('normalize_lr_regions', False))
+        self.lambda_input_preserve = float(c.get('lambda_input_preserve', 0.0))
+        self.input_preserve_threshold = float(c.get('input_preserve_threshold', 0.2))
+        self.lambda_mb_leak = float(c.get('lambda_mb_leak', 0.0))
+        self.lambda_box_preserve = float(c.get('lambda_box_preserve', 0.0))
 
     # ── 各分项损失 ────────────────────────────────────────────────────────
 
@@ -87,14 +97,32 @@ class EnsExamLoss(nn.Module):
         denom = (Mb ** 2).sum([1, 2, 3]) + (Mb_gt ** 2).sum([1, 2, 3])
         return (1 - 2 * inter / (denom + 1e-8)).mean()
 
+    @staticmethod
+    def masked_l1_loss(Iout: torch.Tensor,
+                       Igt: torch.Tensor,
+                       mask: torch.Tensor,
+                       normalize_region: bool) -> torch.Tensor:
+        """L1 on a masked region, optionally normalized by region size."""
+        if not normalize_region:
+            return F.l1_loss(Iout * mask, Igt * mask)
+
+        diff = torch.abs(Iout - Igt) * mask
+        denom = mask.sum(dim=(1, 2, 3)) * Iout.shape[1]
+        valid = denom > 1.0
+        if valid.sum() == 0:
+            return diff.sum() * 0
+        per_sample = diff.sum(dim=(1, 2, 3)) / (denom + 1e-6)
+        return per_sample[valid].mean()
+
     def lr_loss(self, Iouts: list, Igt_list: list, Mb_gt: torch.Tensor) -> torch.Tensor:
         """LR Loss：多尺度 L1，文本区域和非文本区域分别加权。"""
         loss = 0.0
         for i, (Iout, Igt) in enumerate(zip(Iouts, Igt_list)):
             _, _, h, w = Iout.shape
             mask = F.interpolate(Mb_gt, size=(h, w), mode='nearest')
-            loss += (self.lambda_n[i] * F.l1_loss(Iout * mask, Igt * mask)
-                     + self.beta_n[i] * F.l1_loss(Iout * (1 - mask), Igt * (1 - mask)))
+            inside = self.masked_l1_loss(Iout, Igt, mask, self.normalize_lr_regions)
+            outside = self.masked_l1_loss(Iout, Igt, 1 - mask, self.normalize_lr_regions)
+            loss += self.lambda_n[i] * inside + self.beta_n[i] * outside
         return loss
 
     def perceptual_loss(self, I_list: list, Igt: torch.Tensor) -> torch.Tensor:
@@ -115,6 +143,38 @@ class EnsExamLoss(nn.Module):
                 loss += torch.abs(gram_matrix(f_pred) - G_gt).sum(dim=(1, 2)).mean()
         return loss
 
+    def input_preserve_loss(self,
+                            Icomp: torch.Tensor,
+                            Iin: torch.Tensor | None,
+                            Ms_gt: torch.Tensor) -> torch.Tensor:
+        """Keep non-handwriting regions close to input to suppress over-erasure."""
+        if Iin is None or self.lambda_input_preserve <= 0:
+            return Icomp.sum() * 0
+        preserve_mask = (Ms_gt < self.input_preserve_threshold).float()
+        return self.masked_l1_loss(Icomp, Iin, preserve_mask, normalize_region=True)
+
+    def mb_leak_loss(self, Mb: torch.Tensor, Mb_gt: torch.Tensor) -> torch.Tensor:
+        """Penalize predicted erase/composite mask outside the GT text block."""
+        if self.lambda_mb_leak <= 0:
+            return Mb.sum() * 0
+        outside = 1 - Mb_gt
+        leak = Mb * outside
+        denom = outside.sum(dim=(1, 2, 3))
+        valid = denom > 1.0
+        if valid.sum() == 0:
+            return leak.sum() * 0
+        per_sample = leak.sum(dim=(1, 2, 3)) / (denom + 1e-6)
+        return per_sample[valid].mean()
+
+    def box_preserve_loss(self,
+                          Icomp: torch.Tensor,
+                          Iin: torch.Tensor | None,
+                          box_preserve_gt: torch.Tensor | None) -> torch.Tensor:
+        """Keep non-erase annotated boxes close to input without narrowing Mb_gt."""
+        if Iin is None or box_preserve_gt is None or self.lambda_box_preserve <= 0:
+            return Icomp.sum() * 0
+        return self.masked_l1_loss(Icomp, Iin, box_preserve_gt, normalize_region=True)
+
     # ── GAN Hinge Loss ────────────────────────────────────────────────────
 
     @staticmethod
@@ -133,7 +193,9 @@ class EnsExamLoss(nn.Module):
         """
         Args:
             gen_out:    Generator 输出 (Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp)
-            gt:         标签 (Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
+            gt:         标签 (Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt) 或
+                        (Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt) 或
+                        (Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt)
             disc_score: 判别器分数 (global_score, local_score)
 
         Returns:
@@ -141,7 +203,14 @@ class EnsExamLoss(nn.Module):
             parts:   各分项损失列表 [L_adv, L_lr, L_per, L_style, L_sn, L_block]
         """
         Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp = gen_out
-        Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt = gt
+        Iin = None
+        Box_preserve_gt = None
+        if len(gt) == 8:
+            Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt = gt
+        elif len(gt) == 7:
+            Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt = gt
+        else:
+            Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt = gt
         global_score, local_score = disc_score
 
         L_sn    = self.sn_loss(Ms, Ms_gt)            * self.lambda_sn
@@ -150,7 +219,10 @@ class EnsExamLoss(nn.Module):
                                [Igt4, Igt2, Igt1, Igt], Mb_gt) * self.lambda_lr
         L_per   = self.perceptual_loss([Ire, Icomp], Igt) * self.lambda_p
         L_style = self.style_loss([Ire, Icomp], Igt)      * self.lambda_style
+        L_preserve = self.input_preserve_loss(Icomp, Iin, Ms_gt) * self.lambda_input_preserve
+        L_mb_leak = self.mb_leak_loss(Mb, Mb_gt) * self.lambda_mb_leak
+        L_box_preserve = self.box_preserve_loss(Icomp, Iin, Box_preserve_gt) * self.lambda_box_preserve
         L_adv   = (self.hinge_loss_G(global_score) + self.hinge_loss_G(local_score)) / 2
 
-        L_total = L_adv + L_lr + L_per + L_style + L_sn + L_block
+        L_total = L_adv + L_lr + L_per + L_style + L_sn + L_block + L_preserve + L_mb_leak + L_box_preserve
         return L_total, [L_adv, L_lr, L_per, L_style, L_sn, L_block]

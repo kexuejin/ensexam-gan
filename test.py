@@ -17,6 +17,7 @@ import sys
 import cv2
 import torch
 from torch.utils.data import DataLoader
+from torch.utils.data import Subset
 
 from config_loader import load_config
 from data.dataset import EnsExamRealDataset
@@ -54,7 +55,9 @@ def evaluate(G: Generator, test_loader: DataLoader, device: torch.device,
     n_images = 0
     saved_count = 0
 
-    for Iin, _, _, _, _, _, Igt in test_loader:
+    for batch in test_loader:
+        Iin = batch[0]
+        Igt = batch[-1]
         Iin, Igt = Iin.to(device), Igt.to(device)
         *_, Icomp = G(Iin)
 
@@ -100,6 +103,10 @@ def main():
                         help='评估模式：patch / page / both（默认读取 config.evaluation.standalone_test_mode）')
     parser.add_argument('--page-overlap', type=int, default=None,
                         help='整页评估时的滑窗重叠像素（默认读取 config.evaluation.page_overlap）')
+    parser.add_argument('--max-test-files', type=int, default=None,
+                        help='仅评估前 N 张测试页（按文件名排序后截断）')
+    parser.add_argument('--max-test-patches', type=int, default=None,
+                        help='仅评估前 N 个测试 patch')
     args = parser.parse_args()
 
     # ── 加载配置 ──────────────────────────────────────────────────────────
@@ -116,7 +123,12 @@ def main():
 
     # ── 设备 ──────────────────────────────────────────────────────────────
     if args.device == 'auto':
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        if torch.cuda.is_available():
+            device = torch.device('cuda')
+        elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+            device = torch.device('mps')
+        else:
+            device = torch.device('cpu')
     else:
         device = torch.device(args.device)
 
@@ -138,6 +150,8 @@ def main():
     if device.type == 'cuda':
         print(f"GPU         : {torch.cuda.get_device_name(0)}")
         print(f"VRAM        : {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f} GB")
+    elif device.type == 'mps':
+        print("MPS         : enabled")
     print(f"权重文件    : {weights_path}")
     print(f"配置文件    : {args.config}")
     print(f"Batch Size  : {batch_size}")
@@ -160,10 +174,20 @@ def main():
 
     if eval_mode in ('patch', 'both'):
         print(f"\n[{step}] 构建 patch 测试集...")
+        file_list = None
+        if args.max_test_files is not None:
+            img_dir = os.path.join(data_root, 'test', 'all_images')
+            valid_ext = ('.png', '.jpg', '.jpeg')
+            file_list = sorted(
+                f for f in os.listdir(img_dir) if f.endswith(valid_ext)
+            )[:args.max_test_files]
         test_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=False,
-            overlap=0, mask_threshold=mask_threshold, aug_cfg=None, phase='test',
+            overlap=0, mask_threshold=mask_threshold, aug_cfg=None, file_list=file_list, phase='test',
         )
+        if args.max_test_patches is not None:
+            limit = min(int(args.max_test_patches), len(test_dataset))
+            test_dataset = Subset(test_dataset, range(limit))
         test_loader = DataLoader(
             test_dataset, batch_size=batch_size, shuffle=False,
             num_workers=num_workers, drop_last=False, pin_memory=pin,

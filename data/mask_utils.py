@@ -4,6 +4,7 @@
   - Mb（文本块掩码）：优先使用 box_label_txt 精确标注；无标注时退回像素差值+膨胀
 """
 import os
+from collections import defaultdict
 
 import cv2
 import numpy as np
@@ -95,10 +96,23 @@ def generate_mask_from_pair(Iin, Igt, threshold=20, debug=False):
     return Ms_gt, Mb_gt
 
 
+def _parse_box_line(line: str):
+    parts = [p.strip() for p in line.strip().split(',')]
+    if len(parts) < 9:
+        return None
+    try:
+        coords = [int(float(p)) for p in parts[:8]]
+        cls = int(float(parts[8]))
+    except ValueError:
+        return None
+    return np.array(coords, dtype=np.float32).reshape(4, 2), cls
+
+
 def generate_mb_from_boxes(txt_path: str,
                             crop_x1: int, crop_y1: int,
                             crop_x2: int, crop_y2: int,
-                            patch_size: int) -> np.ndarray:
+                            patch_size: int,
+                            target_classes: set[int] | tuple[int, ...] | list[int] | None = None) -> np.ndarray:
     """
     从 box_label_txt 标注文件生成文本块掩码 Mb_gt。
 
@@ -111,9 +125,11 @@ def generate_mb_from_boxes(txt_path: str,
         patch_size: 输出掩码边长（正方形）
 
     Returns:
+        target_classes: 只保留指定标注类别；None 表示使用全部类别。
         Mb_gt: uint8 {0, 1}，shape (patch_size, patch_size)
     """
     Mb = np.zeros((patch_size, patch_size), dtype=np.uint8)
+    target_class_set = set(target_classes) if target_classes is not None else None
 
     if not os.path.exists(txt_path):
         return Mb
@@ -125,16 +141,12 @@ def generate_mb_from_boxes(txt_path: str,
         line = line.strip()
         if not line:
             continue
-        parts = line.split(',')
-        if len(parts) < 8:
+        parsed = _parse_box_line(line)
+        if parsed is None:
             continue
-        try:
-            coords = [int(p.strip()) for p in parts[:8]]
-        except ValueError:
+        pts, cls = parsed
+        if target_class_set is not None and cls not in target_class_set:
             continue
-
-        # 四个角点 (x, y)
-        pts = np.array(coords, dtype=np.float32).reshape(4, 2)
 
         # 快速过滤：包围盒与 patch 不相交则跳过
         bx_min, by_min = pts[:, 0].min(), pts[:, 1].min()
@@ -152,3 +164,74 @@ def generate_mb_from_boxes(txt_path: str,
         cv2.fillPoly(Mb, [pts], 1)
 
     return Mb
+
+
+def infer_changed_box_classes(data_root: str,
+                              split: str = "train",
+                              file_list: list[str] | None = None,
+                              max_files: int = 80,
+                              diff_threshold: int = 12) -> tuple[tuple[int, ...], dict[int, dict[str, float]]]:
+    """Infer erase-target box classes from local input/target pixel differences.
+
+    SCUT's target image already removes handwriting. The class whose box pixels
+    change more between all_images and all_labels is therefore the erase class.
+    This keeps class selection local and deterministic instead of using visual AI.
+    """
+    img_dir = os.path.join(data_root, split, "all_images")
+    gt_dir = os.path.join(data_root, split, "all_labels")
+    box_dir = os.path.join(data_root, split, "box_label_txt")
+    valid_ext = (".png", ".jpg", ".jpeg")
+
+    if file_list is None:
+        files = sorted(f for f in os.listdir(img_dir) if f.endswith(valid_ext))
+    else:
+        files = [f for f in file_list if f.endswith(valid_ext)]
+    files = files[:max_files]
+
+    stats = defaultdict(lambda: {"boxes": 0, "area": 0, "changed": 0, "diff_sum": 0.0})
+    for fname in files:
+        img_path = os.path.join(img_dir, fname)
+        gt_path = os.path.join(gt_dir, fname)
+        txt_path = os.path.join(box_dir, os.path.splitext(fname)[0] + ".txt")
+        if not os.path.exists(gt_path) or not os.path.exists(txt_path):
+            continue
+        iin = cv2.imread(img_path)
+        igt = cv2.imread(gt_path)
+        if iin is None or igt is None:
+            continue
+        diff = np.abs(iin.astype(np.int16) - igt.astype(np.int16)).mean(axis=-1)
+        with open(txt_path, "r", encoding="utf-8") as f:
+            for raw in f:
+                parsed = _parse_box_line(raw)
+                if parsed is None:
+                    continue
+                pts, cls = parsed
+                mask = np.zeros(diff.shape, dtype=np.uint8)
+                poly = pts.copy()
+                h, w = diff.shape
+                poly[:, 0] = np.clip(poly[:, 0], 0, w - 1)
+                poly[:, 1] = np.clip(poly[:, 1], 0, h - 1)
+                cv2.fillPoly(mask, [poly.astype(np.int32)], 1)
+                values = diff[mask > 0]
+                if values.size == 0:
+                    continue
+                item = stats[cls]
+                item["boxes"] += 1
+                item["area"] += int(values.size)
+                item["changed"] += int((values > diff_threshold).sum())
+                item["diff_sum"] += float(values.sum())
+
+    summary: dict[int, dict[str, float]] = {}
+    for cls, item in stats.items():
+        area = max(float(item["area"]), 1.0)
+        summary[cls] = {
+            "boxes": float(item["boxes"]),
+            "area": float(item["area"]),
+            "changed_ratio": float(item["changed"]) / area,
+            "mean_box_diff": float(item["diff_sum"]) / area,
+        }
+    if not summary:
+        return tuple(), {}
+
+    best_cls = max(summary, key=lambda cls: (summary[cls]["changed_ratio"], summary[cls]["mean_box_diff"]))
+    return (int(best_cls),), summary

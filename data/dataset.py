@@ -11,7 +11,7 @@ import torch.nn.functional as F
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from data.mask_utils import generate_mask_from_pair, generate_mb_from_boxes
+from data.mask_utils import generate_mask_from_pair, generate_mb_from_boxes, infer_changed_box_classes
 from data.augmentation import get_train_augmentation
 from utils.path_utils import normalize_path
 from tools.color_augment import (
@@ -54,7 +54,9 @@ class EnsExamRealDataset(Dataset):
                  mask_threshold: int = 20,
                  aug_cfg: dict = None,
                  file_list: list = None,
-                 phase: str = "train"):
+                 phase: str = "train",
+                 box_class_mode: str = "all",
+                 box_preserve_mode: str = "none"):
         """
         Args:
             file_list: 指定使用的图像文件名列表（仅文件名，不含路径）。
@@ -70,6 +72,8 @@ class EnsExamRealDataset(Dataset):
         self.augment = (aug_cfg is not None) and is_train
         self.aug_cfg = aug_cfg or {}
         self.phase = phase
+        self.box_class_mode = box_class_mode
+        self.box_preserve_mode = box_preserve_mode
 
         if self.augment:
             self.aug = get_train_augmentation(aug_cfg)
@@ -83,12 +87,61 @@ class EnsExamRealDataset(Dataset):
         split = "train" if is_train else "test"
         self.img_dir  = os.path.join(self.data_root, split, "all_images")
         self.gt_dir   = os.path.join(self.data_root, split, "all_labels")
+        self.mask_dir = os.path.join(self.data_root, split, "all_masks")
         self.box_dir  = os.path.join(self.data_root, split, "box_label_txt")
+        self.has_explicit_masks = os.path.isdir(self.mask_dir)
         self.has_boxes = os.path.isdir(self.box_dir)
         self._file_list = file_list  # None 表示使用全部文件
+        self.erase_box_classes = None
+        self.preserve_box_classes = None
+        needs_class_stats = (
+            self.has_boxes
+            and (
+                self.box_class_mode == "target_diff"
+                or self.box_preserve_mode == "target_diff_non_erase"
+            )
+        )
+        if needs_class_stats:
+            inferred, class_stats = infer_changed_box_classes(
+                self.data_root,
+                split=split,
+                file_list=file_list,
+                max_files=int(self.aug_cfg.get("box_class_infer_max_files", 80)),
+                diff_threshold=int(self.aug_cfg.get("box_class_infer_diff_threshold", self.mask_threshold)),
+            )
+            if inferred:
+                self.erase_box_classes = inferred
+                non_erase = tuple(
+                    int(cls) for cls in sorted(class_stats)
+                    if int(cls) not in set(self.erase_box_classes)
+                )
+                if self.box_preserve_mode == "target_diff_non_erase" and non_erase:
+                    self.preserve_box_classes = non_erase
+                stats_text = ", ".join(
+                    f"class {cls}: changed_ratio={vals['changed_ratio']:.4f} mean_diff={vals['mean_box_diff']:.2f}"
+                    for cls, vals in sorted(class_stats.items())
+                )
+                print(f"erase_box_classes={self.erase_box_classes} inferred_from_target_diff ({stats_text})")
+                if self.preserve_box_classes:
+                    print(f"preserve_box_classes={self.preserve_box_classes} inferred_as_non_erase")
+        elif self.box_class_mode != "all":
+            raise ValueError(f"Unsupported box_class_mode: {self.box_class_mode}")
+        if self.box_preserve_mode not in ("none", "target_diff_non_erase"):
+            raise ValueError(f"Unsupported box_preserve_mode: {self.box_preserve_mode}")
 
         self.patch_index_map = []
         self._build_patch_index()
+
+    def _find_mask_path(self, fname: str) -> str | None:
+        """Return an explicit handwriting mask path matching the image stem."""
+        if not self.has_explicit_masks:
+            return None
+        stem = os.path.splitext(fname)[0]
+        for ext in (".png", ".jpg", ".jpeg"):
+            path = os.path.join(self.mask_dir, stem + ext)
+            if os.path.exists(path):
+                return path
+        return None
 
     def _apply_domain_augment(self,
                               Iin: np.ndarray,
@@ -216,6 +269,7 @@ class EnsExamRealDataset(Dataset):
             gt_path = os.path.join(self.gt_dir, fname)
             if not os.path.exists(gt_path):
                 continue
+            mask_path = self._find_mask_path(fname)
 
             img_path = os.path.join(self.img_dir, fname)
             img_temp = cv2.imread(img_path)
@@ -251,6 +305,7 @@ class EnsExamRealDataset(Dataset):
                     self.patch_index_map.append({
                         'img_path':     img_path,
                         'gt_path':      gt_path,
+                        'mask_path':    mask_path,
                         'box_txt_path': box_txt,
                         'y1': y1, 'y2': y2,
                         'x1': x1, 'x2': x2,
@@ -270,8 +325,17 @@ class EnsExamRealDataset(Dataset):
         # 1. 加载完整图并裁剪（BGR → RGB）
         Iin = cv2.imread(info['img_path'])[:, :, ::-1]
         Igt = cv2.imread(info['gt_path'])[:, :, ::-1]
+        explicit_mask = None
+        if info.get('mask_path'):
+            explicit_mask = cv2.imread(info['mask_path'], cv2.IMREAD_GRAYSCALE)
+            if explicit_mask is None:
+                raise RuntimeError(f"Failed to read explicit mask: {info['mask_path']}")
         Iin = np.ascontiguousarray(Iin[info['y1']:info['y2'], info['x1']:info['x2']])
         Igt = np.ascontiguousarray(Igt[info['y1']:info['y2'], info['x1']:info['x2']])
+        if explicit_mask is not None:
+            explicit_mask = np.ascontiguousarray(
+                explicit_mask[info['y1']:info['y2'], info['x1']:info['x2']]
+            )
 
         # 2. 边缘 padding（REPLICATE 比黑边伪影少）
         if info['pad_h'] or info['pad_w']:
@@ -279,29 +343,52 @@ class EnsExamRealDataset(Dataset):
             pad_w = self.img_size - Iin.shape[1]
             Iin = cv2.copyMakeBorder(Iin, 0, pad_h, 0, pad_w, cv2.BORDER_REPLICATE)
             Igt = cv2.copyMakeBorder(Igt, 0, pad_h, 0, pad_w, cv2.BORDER_REPLICATE)
+            if explicit_mask is not None:
+                explicit_mask = cv2.copyMakeBorder(
+                    explicit_mask, 0, pad_h, 0, pad_w, cv2.BORDER_CONSTANT, value=0
+                )
 
         # 3. 生成 Mb（增强前，坐标在原图空间）
         #    有 box_label_txt 时用精确四边形标注；否则退回像素差值+膨胀
         box_txt = info['box_txt_path']
-        if box_txt and os.path.exists(box_txt):
+        if explicit_mask is not None:
+            Mb_pre = (explicit_mask > self.mask_threshold).astype(np.uint8)
+            Box_preserve_pre = None
+        elif box_txt and os.path.exists(box_txt):
             Mb_pre = generate_mb_from_boxes(
                 box_txt,
                 info['x1'], info['y1'], info['x2'], info['y2'],
                 self.img_size,
+                target_classes=self.erase_box_classes,
             )
+            Box_preserve_pre = None
+            if self.preserve_box_classes:
+                Box_preserve_pre = generate_mb_from_boxes(
+                    box_txt,
+                    info['x1'], info['y1'], info['x2'], info['y2'],
+                    self.img_size,
+                    target_classes=self.preserve_box_classes,
+                )
         else:
             _, Mb_float = generate_mask_from_pair(Iin, Igt, threshold=self.mask_threshold)
             Mb_pre = (Mb_float > 0.5).astype(np.uint8)
+            Box_preserve_pre = None
 
         # 4. 领域增强（字迹插入 / 色彩增强）
         Iin, Igt = self._apply_domain_augment(Iin, Igt, box_txt)
-        # 新增字迹后，用差值掩码补充 Mb，避免监督遗漏新增区域
-        _, Mb_from_aug = generate_mask_from_pair(Iin, Igt, threshold=self.mask_threshold)
-        Mb_pre = np.maximum(Mb_pre, (Mb_from_aug > 0.5).astype(np.uint8))
+        if explicit_mask is None:
+            # 新增字迹后，用差值掩码补充 Mb，避免监督遗漏新增区域。
+            # 显式 mask 数据集已提供监督边界，不再混入启发式 diff mask。
+            _, Mb_from_aug = generate_mask_from_pair(Iin, Igt, threshold=self.mask_threshold)
+            Mb_pre = np.maximum(Mb_pre, (Mb_from_aug > 0.5).astype(np.uint8))
 
         # 5. albumentations 数据增强（Iin/Igt/Mb 施加相同的空间变换）
         if self.augment:
-            result = self.aug(image=Iin, gt=Igt, mb=Mb_pre)
+            if Box_preserve_pre is not None:
+                result = self.aug(image=Iin, gt=Igt, mb=Mb_pre, box_preserve=Box_preserve_pre)
+                Box_preserve_pre = result['box_preserve']
+            else:
+                result = self.aug(image=Iin, gt=Igt, mb=Mb_pre)
             Iin, Igt, Mb_pre = result['image'], result['gt'], result['mb']
 
         # 6. 增强后从像素差值生成 Ms；Mb 直接用增强后的结果
@@ -315,6 +402,9 @@ class EnsExamRealDataset(Dataset):
         # 8. 掩码转 Tensor，形状 (1, H, W)
         Ms_gt = torch.from_numpy(Ms_gt_np).unsqueeze(0).float()
         Mb_gt = torch.from_numpy(Mb_gt_np).unsqueeze(0).float()
+        Box_preserve_gt = None
+        if Box_preserve_pre is not None:
+            Box_preserve_gt = torch.from_numpy(Box_preserve_pre.astype(np.float32)).unsqueeze(0).float()
 
         # 9. 多尺度 GT（1/4, 1/2, 1/1），供 CoarseNet 多尺度监督用
         Igt_u = Igt.unsqueeze(0)
@@ -324,4 +414,6 @@ class EnsExamRealDataset(Dataset):
                              mode='bilinear', align_corners=False).squeeze(0)
         Igt1 = Igt
 
+        if Box_preserve_gt is not None:
+            return Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt
         return Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt
