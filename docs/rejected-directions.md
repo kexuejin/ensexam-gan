@@ -99,3 +99,34 @@ all_components: residual_gain=0.154762 overerase_regret=0.012248 safe_pages=0/24
 Keep `scripts/analysis/analyze_candidate_overerase_delta.py` as a diagnostic tool. Future work should
 focus on model-side background preservation or stronger confidence masks rather than simple
 post-inference connected-component rollback.
+
+## Global Preservation Weight Increase
+
+Rejected as a direct continuation path from the current checkpoint. Two 2-step MPS probes increased
+the existing `input_preserve` and `mb_leak` loss weights:
+
+```text
+preserve16/leak0.75: lambda_input_preserve=16.0, lambda_mb_leak=0.75
+preserve24/leak1:    lambda_input_preserve=24.0, lambda_mb_leak=1.0
+```
+
+Both probes were numerically stable and exposed useful loss telemetry, but strict-gate evaluation
+became over-conservative:
+
+```text
+preserve16/leak0.75:
+  scut115 residual=0.114210374926 overerase=0.003048663423 selected=1/115
+  holdout40 residual=0.134427251448 overerase=0.002498697889 selected=3/40
+
+preserve24/leak1:
+  scut115 residual=0.114210460744 overerase=0.003048568711 selected=1/115
+  holdout40 residual=0.134429857005 overerase=0.002498202272 selected=3/40
+
+original strict:
+  scut115 residual=0.113955546480 overerase=0.003046624105 selected=6/115
+  holdout40 residual=0.133596140373 overerase=0.002492318453 selected=3/40
+```
+
+Do not keep scaling global preservation weights as the next product-quality route. It removes the
+few useful strict-gate pages without solving cross-split overerase. Future attempts should use more
+selective preservation targets or confidence masks.

@@ -191,6 +191,26 @@ top24 component-protection probe:
 decision: do not add simple candidate-only connected-component protection as product inference
 ```
 
+Preservation weight probes:
+
+```text
+loss telemetry: input_preserve, mb_leak, and box_preserve are logged by train.py and micro_train_region_probe.py
+
+preserve16/leak0.75:
+  run: outputs/exp_preserve16_leak0p75_step2_20260705
+  scut eval: outputs/scut_test115_hybrid_gate_preserve16_leak0p75_step2_strict_20260705
+  holdout eval: outputs/holdout40_hybrid_gate_preserve16_leak0p75_step2_strict_20260705
+  result: selected=1/115 on scut115 and 3/40 on holdout40; worse than original strict
+
+preserve24/leak1:
+  run: outputs/exp_preserve24_leak1_step2_20260705
+  scut eval: outputs/scut_test115_hybrid_gate_preserve24_leak1_step2_strict_20260705
+  holdout eval: outputs/holdout40_hybrid_gate_preserve24_leak1_step2_strict_20260705
+  result: selected=1/115 on scut115 and 3/40 on holdout40; worse than original strict
+
+decision: do not promote either probe; global preservation-weight increases are too conservative
+```
+
 Promotion gate:
 
 ```text

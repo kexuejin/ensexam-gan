@@ -523,6 +523,67 @@ needs better model-side confidence/background preservation, not only connected
 component filtering after inference.
 ```
 
+### Preservation Weight Probes
+
+The existing loss already has `input_preserve` and `mb_leak` terms. A logging
+update exposed those parts in `micro_loss_history.csv`, then two 2-step MPS
+probes tested stronger preservation:
+
+```bash
+$ENSEXAM_PYTHON scripts/train/micro_train_region_probe.py \
+  --config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --output-dir outputs/exp_preserve16_leak0p75_step2_20260705 \
+  --max-steps 2 \
+  --batch-size 1 \
+  --train-pages 8 \
+  --disable-augmentation \
+  --trace-batches-file outputs/exp_preserve16_leak0p75_step2_20260705/trace_batches.csv \
+  --log-every 1 \
+  --save-every 1 \
+  --device-override mps \
+  --loss-override lambda_input_preserve=16.0 \
+  --loss-override lambda_mb_leak=0.75
+
+$ENSEXAM_PYTHON scripts/train/micro_train_region_probe.py \
+  --config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --output-dir outputs/exp_preserve24_leak1_step2_20260705 \
+  --max-steps 2 \
+  --batch-size 1 \
+  --train-pages 8 \
+  --disable-augmentation \
+  --trace-batches-file outputs/exp_preserve24_leak1_step2_20260705/trace_batches.csv \
+  --log-every 1 \
+  --save-every 1 \
+  --device-override mps \
+  --loss-override lambda_input_preserve=24.0 \
+  --loss-override lambda_mb_leak=1.0
+```
+
+Both probes trained stably, but strict-gate evaluation got too conservative:
+
+```text
+preserve16/leak0.75:
+  scut115 residual=0.114210374926 overerase=0.003048663423 selected=1/115 files=303.jpg
+  holdout40 residual=0.134427251448 overerase=0.002498697889 selected=3/40 files=466.jpg,268.jpg,341.jpg
+
+preserve24/leak1:
+  scut115 residual=0.114210460744 overerase=0.003048568711 selected=1/115 files=303.jpg
+  holdout40 residual=0.134429857005 overerase=0.002498202272 selected=3/40 files=466.jpg,268.jpg,341.jpg
+
+original strict:
+  scut115 residual=0.113955546480 overerase=0.003046624105 selected=6/115 files=17.jpg,156.jpg,254.jpg,303.jpg,370.jpg,371.jpg
+  holdout40 residual=0.133596140373 overerase=0.002492318453 selected=3/40 files=193.jpg,466.jpg,268.jpg
+```
+
+Decision:
+
+```text
+Do not continue simply increasing lambda_input_preserve/lambda_mb_leak from the
+current checkpoint. It suppresses gate eligibility and loses the original strict
+residual gains while still not beating baseline overerase. Future model-side work
+needs a more selective preserve target, not a global preservation-weight increase.
+```
+
 ## Current-Primary Continuation Step4 Evaluation
 
 The 2026-07-05 four-step continuation from `artifacts/current-primary/micro_region_probe_step0001.pth`
