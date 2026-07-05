@@ -1,11 +1,11 @@
 # Local Data Links
 
-This directory stores local symlinks to datasets that are too large to commit.
+This directory stores local dataset payloads that are too large to commit.
 
-Current expected local symlink:
+Current expected local dataset root:
 
 ```text
-data-links/samples -> /Volumes/Tool/source/clean-doc/samples
+data-links/samples
 ```
 
 Do not commit dataset payloads here.

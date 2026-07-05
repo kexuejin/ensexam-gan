@@ -1,6 +1,6 @@
 # Local Artifacts
 
-This directory is intentionally local-first. Large checkpoints, prediction folders, and dataset-derived outputs should be symlinked here instead of committed.
+This directory is intentionally local-first. Large checkpoints, prediction folders, and dataset-derived outputs are kept here as local payloads instead of committed files.
 
 Registered production/current assets are documented in:
 
@@ -8,7 +8,7 @@ Registered production/current assets are documented in:
 docs/model-registry.md
 ```
 
-Current expected local symlinks:
+Current expected local payloads:
 
 ```text
 artifacts/full-training-best.pth

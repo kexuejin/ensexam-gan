@@ -27,7 +27,7 @@ dilation: 0
 
 The previous one-day full-training run is directly reusable in this fork. Do not repeat that full training by default.
 
-Registered symlink:
+Registered local checkpoint:
 
 ```text
 artifacts/full-training-best.pth
@@ -39,10 +39,10 @@ Source run:
 artifacts/full-training/20260702_070153/
 ```
 
-Physical source:
+Local copied source:
 
 ```text
-/Volumes/Tool/source/clean-doc/external/ensexam-gan/checkpoints-full-mps-fast/ensexam/20260702_070153/best.pth
+artifacts/full-training-best.pth
 ```
 
 Use this checkpoint as the reusable full-training base / baseline for comparison, rollback, and new targeted continuation experiments. Rerun broad full training only if the run artifacts are invalid, incompatible, or later evidence shows a reset is better than continuing from the existing full-training base.
@@ -90,7 +90,7 @@ scut-test115 second-stage: residual 0.114225, overerase 0.003048
 
 ## New-Project Readiness Reproduction
 
-The forked workspace reproduced the registered holdout40 second-stage anchor using only new-project paths and registered symlinks:
+The forked workspace reproduced the registered holdout40 second-stage anchor using only new-project paths and registered local payloads:
 
 ```text
 samples: docs/holdout40-relative.txt

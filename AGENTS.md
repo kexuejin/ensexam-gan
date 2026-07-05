@@ -17,7 +17,7 @@ Do not add new model-training or model-inference scripts under:
 /Volumes/Tool/source/clean-doc/external/ensexam-gan
 ```
 
-`clean-doc` remains a historical product/research workspace and a local artifact source.
+`clean-doc` remains a historical product/research workspace only. Active datasets and model artifacts should be local to this repository under `data-links/` and `artifacts/`.
 
 ## Environment
 
@@ -95,4 +95,3 @@ summary residual=0.125765 overerase=0.002500
 ## Rejected Defaults
 
 Whiteout/correction-fluid inpaint repair is not default. It improved some metrics but produced visually dirtier paper-tone restoration. Keep clean white correction-fluid patches unless a better paper-tone harmonization method passes visual review.
-
