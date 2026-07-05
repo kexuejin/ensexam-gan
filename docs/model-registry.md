@@ -105,10 +105,24 @@ baseline second-stage residual=0.134026 overerase=0.002482
 candidate-all second-stage residual=0.130543 overerase=0.002732
 ```
 
+SCUT test115 result:
+
+```text
+samples: docs/scut-test115-relative.txt
+baseline output: outputs/scut_test115_second_stage_baseline_20260705
+hybrid output: outputs/scut_test115_hybrid_gate_nearworst_safe_step1_t98_20260705
+review pack: outputs/review_scut_test115_hybrid_gate_nearworst_safe_step1_t98_20260705
+baseline second-stage residual=0.114225 overerase=0.003048
+hybrid residual=0.112203 overerase=0.003125 selected=29/115
+delta residual=-0.002022 overerase=+0.000077
+```
+
 Promotion gate:
 
 ```text
-Do not promote until SCUT test115 and manual review confirm the same residual improvement without visible overerase regression.
+Do not promote as the default pipeline yet. SCUT test115 confirms residual improvement,
+but overerase increases versus the current second-stage baseline and selected pages need
+manual visual review before any product promotion.
 ```
 
 ## Validation Anchors

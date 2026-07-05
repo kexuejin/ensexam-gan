@@ -169,10 +169,64 @@ summary residual=0.131148 overerase=0.002547 selected=14/40
 metrics_csv: outputs/hybrid_gate_nearworst_safe_step1_t98_holdout40_20260705/metrics.csv
 ```
 
+SCUT test115 validation:
+
+```bash
+$ENSEXAM_PYTHON scripts/run_second_stage_residual_repair.py \
+  --samples-file docs/scut-test115-relative.txt \
+  --output-dir outputs/scut_test115_second_stage_baseline_20260705 \
+  --primary-config artifacts/current-primary/config.yaml \
+  --primary-weights artifacts/current-primary/micro_region_probe_step0001.pth \
+  --primary-copy-mask mb \
+  --primary-copy-threshold 70 \
+  --primary-copy-threshold-auto mb_cov8_step \
+  --primary-copy-dilate 0 \
+  --cleanup-checkpoint artifacts/current-second-stage-best.pt \
+  --cleanup-alpha-threshold 0.3 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 32 \
+  --dark-threshold 0 \
+  --device auto \
+  --save-primary
+
+$ENSEXAM_PYTHON scripts/run_hybrid_second_stage_gate.py \
+  --samples-file docs/scut-test115-relative.txt \
+  --output-dir outputs/scut_test115_hybrid_gate_nearworst_safe_step1_t98_20260705 \
+  --baseline-pred-dir outputs/scut_test115_second_stage_baseline_20260705/pred \
+  --candidate-config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --candidate-weights outputs/exp_current_primary_nearworst_safe_step1_20260705/micro_region_probe.pth \
+  --cleanup-checkpoint artifacts/current-second-stage-best.pt \
+  --candidate-copy-mask mb \
+  --candidate-copy-threshold 98 \
+  --candidate-copy-threshold-auto none \
+  --candidate-copy-dilate 0 \
+  --min-copy-mask-cov8 0.18436555 \
+  --max-primary-edit-px 107112 \
+  --cleanup-alpha-threshold 0.3 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 32 \
+  --dark-threshold 0 \
+  --device auto
+```
+
+SCUT test115 result:
+
+```text
+baseline residual=0.114225 overerase=0.003048
+hybrid residual=0.112203 overerase=0.003125 selected=29/115
+review pack: outputs/review_scut_test115_hybrid_gate_nearworst_safe_step1_t98_20260705
+```
+
 Decision:
 
 ```text
-Product candidate, not default replacement yet. Run SCUT test115 and manual review before promotion.
+Product candidate, not default replacement yet. SCUT test115 improved residual, but overerase rose;
+do not promote until the selected pages pass manual visual review or a stricter gate removes the
+overerase regressions.
 ```
 
 ## Current-Primary Continuation Step4 Evaluation
