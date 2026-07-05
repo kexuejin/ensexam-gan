@@ -80,6 +80,37 @@ second_delta_threshold: 32
 dark_threshold: 0
 ```
 
+## Hybrid Gate Product Candidate
+
+This is the strongest current product candidate, but it is not promoted as the default pipeline yet.
+It chooses per page between the current baseline second-stage output and the `nearworst_safe_step1`
+candidate using inference-time features only:
+
+```text
+script: scripts/run_hybrid_second_stage_gate.py
+candidate weights: outputs/exp_current_primary_nearworst_safe_step1_20260705/micro_region_probe.pth
+baseline pred dir: outputs/holdout40_second_stage_readiness_20260705/pred
+candidate copy mask: mb
+candidate copy threshold: 98
+min_copy_mask_cov8: 0.18436555
+max_primary_edit_px: 107112
+```
+
+Holdout40 result:
+
+```text
+output: outputs/hybrid_gate_nearworst_safe_step1_t98_holdout40_20260705
+summary residual=0.131148 overerase=0.002547 selected=14/40
+baseline second-stage residual=0.134026 overerase=0.002482
+candidate-all second-stage residual=0.130543 overerase=0.002732
+```
+
+Promotion gate:
+
+```text
+Do not promote until SCUT test115 and manual review confirm the same residual improvement without visible overerase regression.
+```
+
 ## Validation Anchors
 
 ```text

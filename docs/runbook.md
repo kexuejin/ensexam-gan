@@ -18,6 +18,7 @@ See `docs/environment.md`.
 $ENSEXAM_PYTHON -m py_compile \
   scripts/micro_train_region_probe.py \
   scripts/run_second_stage_residual_repair.py \
+  scripts/run_hybrid_second_stage_gate.py \
   scripts/eval_hardcase_worst_pages.py \
   scripts/batch_eval_hardcase_checkpoints.py \
   scripts/cached_sweep_hardcase_postprocess.py
@@ -123,6 +124,55 @@ Result:
 ```text
 summary residual=0.134026 overerase=0.002482
 metrics_csv: outputs/holdout40_second_stage_readiness_20260705/metrics.csv
+```
+
+## Hybrid Gate Product Candidate
+
+The best current product candidate is a page-level hybrid gate. It keeps the current
+baseline second-stage output for risky pages and uses the `nearworst_safe_step1`
+candidate only when inference-time safety features pass:
+
+```text
+copy_mask_cov8 >= 0.18436555
+primary_edit_px <= 107112
+```
+
+Command:
+
+```bash
+$ENSEXAM_PYTHON scripts/run_hybrid_second_stage_gate.py \
+  --samples-file docs/holdout40-relative.txt \
+  --output-dir outputs/hybrid_gate_nearworst_safe_step1_t98_holdout40_20260705 \
+  --baseline-pred-dir outputs/holdout40_second_stage_readiness_20260705/pred \
+  --candidate-config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --candidate-weights outputs/exp_current_primary_nearworst_safe_step1_20260705/micro_region_probe.pth \
+  --cleanup-checkpoint artifacts/current-second-stage-best.pt \
+  --candidate-copy-mask mb \
+  --candidate-copy-threshold 98 \
+  --candidate-copy-threshold-auto none \
+  --candidate-copy-dilate 0 \
+  --min-copy-mask-cov8 0.18436555 \
+  --max-primary-edit-px 107112 \
+  --cleanup-alpha-threshold 0.3 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 32 \
+  --dark-threshold 0 \
+  --device auto
+```
+
+Result:
+
+```text
+summary residual=0.131148 overerase=0.002547 selected=14/40
+metrics_csv: outputs/hybrid_gate_nearworst_safe_step1_t98_holdout40_20260705/metrics.csv
+```
+
+Decision:
+
+```text
+Product candidate, not default replacement yet. Run SCUT test115 and manual review before promotion.
 ```
 
 ## Current-Primary Continuation Step4 Evaluation
