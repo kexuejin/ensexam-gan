@@ -275,7 +275,8 @@ class CSVLogger:
                 csv.writer(f).writerow(
                     ['epoch', 'train_G', 'train_D',
                      'train_adv', 'train_lr', 'train_per', 'train_style',
-                     'val_loss']
+                     'train_sn', 'train_block', 'train_input_preserve',
+                     'train_mb_leak', 'train_box_preserve', 'val_loss']
                 )
 
     def write(self, epoch: int, train_G: float, train_D: float,
@@ -283,8 +284,7 @@ class CSVLogger:
         with open(self.path, 'a', newline='', encoding='utf-8') as f:
             csv.writer(f).writerow([
                 epoch, f'{train_G:.6f}', f'{train_D:.6f}',
-                f'{parts[0]:.6f}', f'{parts[1]:.6f}',
-                f'{parts[2]:.6f}', f'{parts[3]:.6f}',
+                *[f'{part:.6f}' for part in parts],
                 '' if val_loss is None else f'{val_loss:.6f}',
             ])
 
@@ -609,7 +609,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         # GPU 上累加损失，避免每 step .item() 导致的 CPU-GPU 同步
         sum_loss_G = torch.zeros(1, device=device)
         sum_loss_D = torch.zeros(1, device=device)
-        sum_parts  = torch.zeros(6, device=device)
+        sum_parts  = torch.zeros(9, device=device)
         n_steps = 0
 
         pbar = tqdm(train_prefetcher, total=len(train_loader),
@@ -676,7 +676,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         n = max(n_steps, 1)
         avg_G  = sum_loss_G.item() / n
         avg_D  = sum_loss_D.item() / n
-        avg_parts = [sum_parts[i].item() / n for i in range(6)]
+        avg_parts = [sum_parts[i].item() / n for i in range(len(sum_parts))]
 
         current_lr = optimizer_G.param_groups[0]['lr']
         should_validate = ((epoch + 1) % val_every == 0) or (epoch == epochs - 1)
@@ -695,7 +695,9 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"Epoch {epoch + 1:>4} | "
                     f"Train G={avg_G:.4f}  D={avg_D:.4f} | "
                     f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
-                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f} | "
+                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
+                    f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
+                    f"box_preserve={avg_parts[8]:.4f} | "
                     f"PSNR={val_m['psnr']:.2f}  "
                     f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
                     f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
@@ -709,7 +711,9 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"Epoch {epoch + 1:>4} | "
                     f"Train G={avg_G:.4f}  D={avg_D:.4f} | "
                     f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
-                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f} | "
+                    f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
+                    f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
+                    f"box_preserve={avg_parts[8]:.4f} | "
                     f"Val=skipped | LR={current_lr:.2e}"
                 )
             csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, None if val_m is None else val_m['l1'])
@@ -725,6 +729,9 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     'train/style':      avg_parts[3],
                     'train/sn':         avg_parts[4],
                     'train/block':      avg_parts[5],
+                    'train/input_preserve': avg_parts[6],
+                    'train/mb_leak':    avg_parts[7],
+                    'train/box_preserve': avg_parts[8],
                     'train/lr':         current_lr,
                 }
                 if should_validate:

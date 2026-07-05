@@ -342,7 +342,21 @@ def main() -> None:
     history_path = output_dir / "micro_loss_history.csv"
     with history_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
-        writer.writerow(["step", "loss_G", "loss_D", "adv", "lr", "per", "style", "sn", "block", "mask_bce"])
+        writer.writerow([
+            "step",
+            "loss_G",
+            "loss_D",
+            "adv",
+            "lr",
+            "per",
+            "style",
+            "sn",
+            "block",
+            "input_preserve",
+            "mb_leak",
+            "box_preserve",
+            "mask_bce",
+        ])
 
     def save_checkpoint(path: Path, steps_done: int) -> None:
         out_ckpt = {
@@ -404,8 +418,18 @@ def main() -> None:
                      + weighted_mask_bce(Mb, Mb_gt, args.mask_bce_negative_weight)) * args.mask_bce_weight
             loss_g = L_sn + L_block + L_bce
             loss_d = loss_g.detach() * 0
-            parts = [loss_g.detach() * 0, loss_g.detach() * 0, loss_g.detach() * 0,
-                     loss_g.detach() * 0, L_sn, L_block, L_bce]
+            parts = [
+                loss_g.detach() * 0,
+                loss_g.detach() * 0,
+                loss_g.detach() * 0,
+                loss_g.detach() * 0,
+                L_sn,
+                L_block,
+                loss_g.detach() * 0,
+                loss_g.detach() * 0,
+                loss_g.detach() * 0,
+                L_bce,
+            ]
         else:
             opt_d.zero_grad(set_to_none=True)
             with torch.no_grad():
@@ -441,7 +465,9 @@ def main() -> None:
             print(
                 f"step={step}/{args.max_steps} "
                 f"G={row[1]} D={row[2]} lr_part={row[4]} "
-                f"sn={row[7]} block={row[8]} bce={row[9]} "
+                f"sn={row[7]} block={row[8]} "
+                f"preserve={row[9]} mb_leak={row[10]} box_preserve={row[11]} "
+                f"bce={row[12]} "
                 f"elapsed={elapsed:.1f}s",
                 flush=True,
             )

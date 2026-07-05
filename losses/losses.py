@@ -200,7 +200,8 @@ class EnsExamLoss(nn.Module):
 
         Returns:
             L_total: 标量总损失
-            parts:   各分项损失列表 [L_adv, L_lr, L_per, L_style, L_sn, L_block]
+            parts:   各分项损失列表 [L_adv, L_lr, L_per, L_style, L_sn, L_block,
+                     L_preserve, L_mb_leak, L_box_preserve]
         """
         Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp = gen_out
         Iin = None
@@ -225,4 +226,14 @@ class EnsExamLoss(nn.Module):
         L_adv   = (self.hinge_loss_G(global_score) + self.hinge_loss_G(local_score)) / 2
 
         L_total = L_adv + L_lr + L_per + L_style + L_sn + L_block + L_preserve + L_mb_leak + L_box_preserve
-        return L_total, [L_adv, L_lr, L_per, L_style, L_sn, L_block]
+        return L_total, [
+            L_adv,
+            L_lr,
+            L_per,
+            L_style,
+            L_sn,
+            L_block,
+            L_preserve,
+            L_mb_leak,
+            L_box_preserve,
+        ]
