@@ -127,6 +127,7 @@ baseline second-stage residual=0.114225 overerase=0.003048
 strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
 delta residual=-0.000269 overerase=-0.000002
 selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
+manual contact-sheet pass: no obvious large-area overerase regression, but visual gain is subtle
 ```
 
 Promotion gate:
@@ -134,7 +135,8 @@ Promotion gate:
 ```text
 Do not promote the loose gate as the default pipeline. The stricter gate is safer because
 SCUT test115 aggregate overerase is not worse than baseline, but the residual gain is small
-and the six selected pages need manual visual review before any product promotion.
+and the six selected pages only passed a coarse contact-sheet review. Treat it as an optional
+safe-mode candidate until full-size page review confirms the subtle gains are worth the added path.
 ```
 
 ## Validation Anchors

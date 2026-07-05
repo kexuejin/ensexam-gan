@@ -253,14 +253,16 @@ baseline residual=0.114225 overerase=0.003048
 strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
 selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
 review pack: outputs/review_scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
+manual contact-sheet pass: no obvious large-area overerase regression, but visual gain is subtle
 ```
 
 Decision:
 
 ```text
 Loose gate is not a default replacement because overerase rose on SCUT test115. Strict gate is
-the safer product candidate, but residual improvement is small; do not promote until the six
-selected pages pass manual visual review.
+the safer product candidate, but residual improvement is small. Keep it as an optional safe-mode
+candidate until full-size manual review confirms the six selected pages are visually better than
+baseline.
 ```
 
 ## Current-Primary Continuation Step4 Evaluation
