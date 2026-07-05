@@ -221,12 +221,46 @@ hybrid residual=0.112203 overerase=0.003125 selected=29/115
 review pack: outputs/review_scut_test115_hybrid_gate_nearworst_safe_step1_t98_20260705
 ```
 
+Strict SCUT test115 gate:
+
+```bash
+$ENSEXAM_PYTHON scripts/run_hybrid_second_stage_gate.py \
+  --samples-file docs/scut-test115-relative.txt \
+  --output-dir outputs/scut_test115_hybrid_gate_strict_cov806_edit98868_20260705 \
+  --baseline-pred-dir outputs/scut_test115_second_stage_baseline_20260705/pred \
+  --candidate-config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --candidate-weights outputs/exp_current_primary_nearworst_safe_step1_20260705/micro_region_probe.pth \
+  --cleanup-checkpoint artifacts/current-second-stage-best.pt \
+  --candidate-copy-mask mb \
+  --candidate-copy-threshold 98 \
+  --candidate-copy-threshold-auto none \
+  --candidate-copy-dilate 0 \
+  --min-copy-mask-cov8 0.806133 \
+  --max-primary-edit-px 98868 \
+  --cleanup-alpha-threshold 0.3 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 32 \
+  --dark-threshold 0 \
+  --device auto
+```
+
+Strict result:
+
+```text
+baseline residual=0.114225 overerase=0.003048
+strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
+selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
+review pack: outputs/review_scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
+```
+
 Decision:
 
 ```text
-Product candidate, not default replacement yet. SCUT test115 improved residual, but overerase rose;
-do not promote until the selected pages pass manual visual review or a stricter gate removes the
-overerase regressions.
+Loose gate is not a default replacement because overerase rose on SCUT test115. Strict gate is
+the safer product candidate, but residual improvement is small; do not promote until the six
+selected pages pass manual visual review.
 ```
 
 ## Current-Primary Continuation Step4 Evaluation

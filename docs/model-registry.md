@@ -117,12 +117,24 @@ hybrid residual=0.112203 overerase=0.003125 selected=29/115
 delta residual=-0.002022 overerase=+0.000077
 ```
 
+Strict SCUT test115 gate:
+
+```text
+rule: copy_mask_cov8 >= 0.806133 and primary_edit_px <= 98868
+output: outputs/scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
+review pack: outputs/review_scut_test115_hybrid_gate_strict_cov806_edit98868_20260705
+baseline second-stage residual=0.114225 overerase=0.003048
+strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
+delta residual=-0.000269 overerase=-0.000002
+selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
+```
+
 Promotion gate:
 
 ```text
-Do not promote as the default pipeline yet. SCUT test115 confirms residual improvement,
-but overerase increases versus the current second-stage baseline and selected pages need
-manual visual review before any product promotion.
+Do not promote the loose gate as the default pipeline. The stricter gate is safer because
+SCUT test115 aggregate overerase is not worse than baseline, but the residual gain is small
+and the six selected pages need manual visual review before any product promotion.
 ```
 
 ## Validation Anchors
