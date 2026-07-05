@@ -41,6 +41,12 @@ For current-best product continuation, continue from:
 artifacts/current-primary/micro_region_probe_step0001.pth
 ```
 
+Use this config for direct current-primary continuation:
+
+```text
+configs/local/config.local-current-primary-continuation-mps.yaml
+```
+
 Use broad full training only as an explicit reset experiment after documenting why the existing full-training base, targeted fine-tune, gate tuning, and second-stage repair are insufficient.
 
 ## Migration Smoke

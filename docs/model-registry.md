@@ -57,6 +57,12 @@ or start from artifacts/current-primary/micro_region_probe_step0001.pth for curr
 -> promote only if residual improves without visible overerase regression
 ```
 
+Current-best continuation config:
+
+```text
+configs/local/config.local-current-primary-continuation-mps.yaml
+```
+
 ## Current Second-Stage Residual Repair Checkpoint
 
 Checkpoint:

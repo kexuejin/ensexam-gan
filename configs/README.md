@@ -6,6 +6,7 @@ Mainline configs:
 
 ```text
 configs/local/config.local-full-mps-fast.yaml
+configs/local/config.local-current-primary-continuation-mps.yaml
 configs/local/config.local-hardcase-mps.yaml
 configs/local/config.local-hardcase-region-mps.yaml
 configs/local/config.local-hardcase-region-preserve12-leak0p5-mps.yaml
