@@ -131,6 +131,8 @@ selected pages: 17.jpg 156.jpg 254.jpg 303.jpg 370.jpg 371.jpg
 manual contact-sheet pass: no obvious large-area overerase regression, but visual gain is subtle
 diff-crop review: most selected-page changes are low-contrast texture / gray-balance shifts; only a subset shows visible cleanup benefit
 visible-delta components: improve area=464 across 11 components; regress area=229 across 8 components
+visible-delta patch index: outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv
+visible-delta rejects: outputs/visible_delta_patch_index_strict_scut_test115_20260705/regress_reject_components.csv
 ```
 
 Promotion gate:

@@ -281,6 +281,31 @@ regress_low_contrast_target: components=1 area=36
 regress_visible_target_region: components=7 area=193
 ```
 
+Visible-delta training patch index:
+
+```bash
+$ENSEXAM_PYTHON scripts/experimental/convert_visible_delta_to_patch_index.py \
+  --components-csv outputs/analysis_visible_delta_strict_scut_test115_20260705_rerun/components.csv \
+  --output-csv outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv \
+  --reject-csv outputs/visible_delta_patch_index_strict_scut_test115_20260705/regress_reject_components.csv \
+  --region-type improve \
+  --reason-contains visible_target_region \
+  --img-size 256 \
+  --overlap 96 \
+  --patch-pad 96 \
+  --max-tiles-per-component 4 \
+  --min-area 20
+```
+
+Patch-index result:
+
+```text
+improve patch-index rows=24 files=2
+reject regress components=8 files=5
+output: outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv
+reject: outputs/visible_delta_patch_index_strict_scut_test115_20260705/regress_reject_components.csv
+```
+
 Decision:
 
 ```text
