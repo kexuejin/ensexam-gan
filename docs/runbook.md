@@ -126,11 +126,15 @@ summary residual=0.134026 overerase=0.002482
 metrics_csv: outputs/holdout40_second_stage_readiness_20260705/metrics.csv
 ```
 
-## Hybrid Gate Product Candidate
+## Hybrid Gate Research Candidate
 
-The best current product candidate is a page-level hybrid gate. It keeps the current
-baseline second-stage output for risky pages and uses the `nearworst_safe_step1`
-candidate only when inference-time safety features pass:
+The current page-level hybrid gate is a research candidate, not a promoted product
+default. It keeps the current baseline second-stage output for risky pages and uses
+the `nearworst_safe_step1` candidate only when inference-time safety features pass.
+
+The original loose rule was useful for finding residual-reduction headroom, but it
+is not safe enough for default use because overerase rises on both SCUT test115 and
+holdout40:
 
 ```text
 copy_mask_cov8 >= 0.18436555
@@ -393,6 +397,82 @@ Loose gate is not a default replacement because overerase rose on SCUT test115. 
 safer on aggregate metrics, but diff-crop review shows most changes are subtle texture /
 gray-balance shifts rather than clear product-visible cleanup. Keep it as a research candidate,
 not an optional product mode, until full-size manual review proves consistent page-level gains.
+```
+
+### Joint Selector Replay
+
+Use the replay script to compare label-free selector rules across SCUT test115 and
+holdout40 from saved candidate outputs:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/replay_hybrid_selector.py \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/scut_test115_hybrid_gate_strict_cov806_edit98868_savecand_20260705/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_readiness_20260705/metrics.csv:outputs/holdout40_hybrid_gate_strict_cov806_edit98868_savecand_20260705/metrics.csv \
+  --output-dir outputs/selector_replay_joint_strict_candidate_20260705 \
+  --candidate-subdir candidate \
+  --max-overerase-regret 0 \
+  --min-selected-total 1 \
+  --max-thresholds-per-feature 22 \
+  --pin-min-copy-mask-cov8 0.806133 \
+  --pin-min-copy-mask-cov8 0.65 \
+  --pin-max-primary-edit-px 98868 \
+  --pin-max-primary-p95-edit-delta 5 \
+  --pin-max-second-stage-gate-ratio 0.0015 \
+  --pin-max-second-stage-gate-ratio 1 \
+  --named-rule strict_cov806_edit98868:0.806133:98868:1000000000:1000000000 \
+  --named-rule scut7_cov65_edit98868_p95_5_gate0015:0.65:98868:5:0.0015 \
+  --named-rule best_safe_joint:0.4584378323676181:101340:5:0.0002489434157317036 \
+  --top-n 80
+```
+
+Joint replay result:
+
+```text
+output: outputs/selector_replay_joint_strict_candidate_20260705
+rules scored=212187
+safe rules=15057
+best safe joint rule: copy_mask_cov8 >= 0.458438, primary_edit_px <= 101340,
+  primary_p95_edit_delta <= 5, second_stage_gate_ratio <= 0.000248943
+best safe joint selected=2 total pages
+best safe joint total residual gain=0.000074976101
+best safe joint max split overerase regret=-0.000000187820
+selected pages: scut115/254.jpg, holdout40/477.jpg
+```
+
+Named-rule comparison:
+
+```text
+strict_cov806_edit98868:
+  selected=9 total pages
+  total residual gain=0.000699581706
+  max split overerase regret=+0.000010712336
+  scut115 selected=6 residual_gain=0.000269417458 overerase_regret=-0.000001672613
+  holdout40 selected=3 residual_gain=0.000430164248 overerase_regret=+0.000010712336
+
+scut7_cov65_edit98868_p95_5_gate0015:
+  selected=10 total pages
+  total residual gain=0.000702181859
+  max split overerase regret=+0.000010712336
+  scut115 selected=7 residual_gain=0.000272017610 overerase_regret=-0.000000667079
+  holdout40 selected=3 residual_gain=0.000430164248 overerase_regret=+0.000010712336
+
+best_safe_joint:
+  selected=2 total pages
+  total residual gain=0.000074976101
+  max split overerase regret=-0.000000187820
+  scut115 selected=1 residual_gain=0.000001562550 overerase_regret=-0.000000187820
+  holdout40 selected=1 residual_gain=0.000073413551 overerase_regret=-0.000000322772
+```
+
+Decision:
+
+```text
+Do not promote the loose, strict, SCUT7, or best-safe joint selector as the default
+product path yet. The only rule that is non-worse on overerase across both splits
+selects just 2/155 pages and gives negligible residual gain. The strict and SCUT7
+rules give more residual improvement, but holdout40 overerase still rises slightly.
+Treat inference-side selector tuning as useful analysis infrastructure, not a
+product-quality solution.
 ```
 
 ## Current-Primary Continuation Step4 Evaluation

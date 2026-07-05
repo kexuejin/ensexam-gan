@@ -80,11 +80,12 @@ second_delta_threshold: 32
 dark_threshold: 0
 ```
 
-## Hybrid Gate Product Candidate
+## Hybrid Gate Research Candidate
 
-This is the strongest current product candidate, but it is not promoted as the default pipeline yet.
-It chooses per page between the current baseline second-stage output and the `nearworst_safe_step1`
-candidate using inference-time features only:
+This is a research candidate, not a promoted product default. It chooses per page
+between the current baseline second-stage output and the `nearworst_safe_step1`
+candidate using inference-time features only. The loose rule below finds residual
+headroom but increases overerase, so it must not be enabled by default:
 
 ```text
 script: scripts/run_hybrid_second_stage_gate.py
@@ -142,13 +143,44 @@ visible-delta step10 result: residual=0.114225 overerase=0.003048 selected=0/115
 visible-delta step10 decision: rejected; full-generator patch-only training broke safety-gate features
 ```
 
+Joint selector replay:
+
+```text
+script: scripts/analysis/replay_hybrid_selector.py
+output: outputs/selector_replay_joint_strict_candidate_20260705
+top_rules: outputs/selector_replay_joint_strict_candidate_20260705/top_rules.csv
+named_rules: outputs/selector_replay_joint_strict_candidate_20260705/named_rules.csv
+
+rules scored=212187
+safe rules=15057
+
+strict_cov806_edit98868:
+  selected=9 total pages
+  total residual gain=0.000699581706
+  max split overerase regret=+0.000010712336
+
+scut7_cov65_edit98868_p95_5_gate0015:
+  selected=10 total pages
+  total residual gain=0.000702181859
+  max split overerase regret=+0.000010712336
+
+best_safe_joint:
+  rule: copy_mask_cov8 >= 0.458438 and primary_edit_px <= 101340 and
+        primary_p95_edit_delta <= 5 and second_stage_gate_ratio <= 0.000248943
+  selected=2 total pages: scut115/254.jpg, holdout40/477.jpg
+  total residual gain=0.000074976101
+  max split overerase regret=-0.000000187820
+```
+
 Promotion gate:
 
 ```text
-Do not promote either gate as the default pipeline. The stricter gate is safer on aggregate
-metrics, but diff-crop review shows most gains are subtle texture / gray-balance shifts rather
-than clear product-visible cleanup. Treat it as a research candidate, not a product candidate,
-unless a future visual review proves consistent full-size page improvements.
+Do not promote any current hybrid gate as the default pipeline. The loose gate improves
+residual but increases overerase. The stricter and SCUT7 rules improve residual less and
+still increase holdout40 overerase slightly. The only jointly non-worse rule selects just
+2/155 pages and has negligible residual gain. Treat selector tuning as analysis
+infrastructure unless a future candidate gives meaningful residual improvement without
+cross-split overerase regression.
 ```
 
 ## Validation Anchors

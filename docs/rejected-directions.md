@@ -41,3 +41,32 @@ Feature drift on the original six strict-gate pages shows why it failed: `copy_m
 Do not continue this exact patch-only full-generator training path. Future visible-delta probes should
 try narrower trainable scopes, mask-only/head-only updates, lower LR, or an auxiliary objective that
 preserves gate features instead of updating the whole generator against a tiny two-page patch set.
+
+## Current Hybrid Gate Promotion
+
+Rejected for default product promotion. A joint SCUT test115 + holdout40 selector replay over saved
+strict-candidate outputs found that the only rules with non-worse overerase on both splits select too
+few pages to matter.
+
+Best jointly safe label-free rule:
+
+```text
+copy_mask_cov8 >= 0.458438
+primary_edit_px <= 101340
+primary_p95_edit_delta <= 5
+second_stage_gate_ratio <= 0.000248943
+selected=2/155 pages
+total residual gain=0.000074976101
+max split overerase regret=-0.000000187820
+```
+
+The strict and SCUT7 rules produce larger residual gains but still raise holdout40 overerase:
+
+```text
+strict_cov806_edit98868 selected=9 total residual gain=0.000699581706 max overerase regret=+0.000010712336
+scut7_cov65_edit98868_p95_5_gate0015 selected=10 total residual gain=0.000702181859 max overerase regret=+0.000010712336
+```
+
+Keep `scripts/analysis/replay_hybrid_selector.py` for future selector analysis, but do not promote
+the current hybrid selector as a product default without a new candidate that improves residual
+without cross-split overerase regression.
