@@ -7,8 +7,10 @@ __pycache__/
 ensexam_checkpoints/
 reptile_checkpoints/
 checkpoints/
+checkpoints-*/
 .ipynb_checkpoints/
 *.pth
+*.pt
 
 
 # ── 训练日志 ──────────────────────────────────────────────────────────────────
@@ -24,13 +26,19 @@ wandb/
 # ── 数据集（体积过大，不入库）─────────────────────────────────────────────────
 data/SCUT-EnsExam/
 data/stroke_library/
+data-links/*
+!data-links/README.md
+
+# ── 本地模型资产与评测输出（通过 docs/model-registry.md 登记）───────────────
+artifacts/*
+!artifacts/README.md
+outputs/
 
 # ── 笔迹原始数据 PDF（体积较大，本地管理）────────────────────────────────────
 *.pdf
 
 # ── Claude Code 内部状态 ───────────────────────────────────────────────────────
 .claude/
-AGENTS.md
 
 # ── 旧配置文件 ────────────────────────────────────────────────────────────────
 config.json
