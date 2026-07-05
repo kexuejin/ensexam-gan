@@ -349,6 +349,43 @@ trace sample: 156.jpg x1=960 y1=480 x2=1216 y2=736
 output: outputs/smoke_visible_delta_patch_index_step1_20260705/micro_region_probe.pth
 ```
 
+Visible-delta 10-step probe:
+
+```bash
+$ENSEXAM_PYTHON scripts/micro_train_region_probe.py \
+  --config configs/local/config.local-visible-delta-smoke-mps.yaml \
+  --output-dir outputs/exp_visible_delta_patch_index_step10_20260705 \
+  --max-steps 10 \
+  --batch-size 1 \
+  --train-pages 2 \
+  --train-file-list outputs/visible_delta_patch_index_strict_scut_test115_20260705/visible_delta_train_files.txt \
+  --patch-index-file outputs/visible_delta_patch_index_strict_scut_test115_20260705/improve_patch_index.csv \
+  --disable-augmentation \
+  --trace-batches-file outputs/exp_visible_delta_patch_index_step10_20260705/trace_batches.csv \
+  --log-every 1 \
+  --save-every 5 \
+  --loss-override lambda_input_preserve=12.0 \
+  --device-override mps \
+  --box-class-mode all
+```
+
+Step10 strict-gate evaluation:
+
+```text
+output: outputs/scut_test115_hybrid_gate_visible_delta_step10_strict_20260705
+baseline residual=0.114225 overerase=0.003048
+original strict hybrid residual=0.113956 overerase=0.003047 selected=6/115
+visible-delta step10 residual=0.114225 overerase=0.003048 selected=0/115
+```
+
+Failure mode:
+
+```text
+The 10-step patch-only full-generator update broke the candidate safety features. On the original
+six selected pages, copy_mask_cov8 dropped and primary_edit_px increased enough that every page
+failed the strict gate. Do not continue this exact full-generator patch-only direction.
+```
+
 Decision:
 
 ```text

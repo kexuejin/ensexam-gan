@@ -136,6 +136,10 @@ visible-delta rejects: outputs/visible_delta_patch_index_strict_scut_test115_202
 visible-delta smoke dataset: data-links/samples/visible-delta-strict-scut-test115
 visible-delta one-step smoke: outputs/smoke_visible_delta_patch_index_step1_20260705
 visible-delta smoke result: patch-index filter 234->24, MPS step=1/1 passed
+visible-delta step10 output: outputs/exp_visible_delta_patch_index_step10_20260705
+visible-delta step10 strict eval: outputs/scut_test115_hybrid_gate_visible_delta_step10_strict_20260705
+visible-delta step10 result: residual=0.114225 overerase=0.003048 selected=0/115
+visible-delta step10 decision: rejected; full-generator patch-only training broke safety-gate features
 ```
 
 Promotion gate:
