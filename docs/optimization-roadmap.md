@@ -189,3 +189,33 @@ Implementation order:
 If this fails, the evidence is still useful: it means correction-fluid handling needs model-level
 training data or should be left as baseline rather than patched with post-processing.
 
+## Whiteout Tone-Harmonization Probe
+
+An initial local probe generated six correction-fluid candidates with a conservative post-processing
+script:
+
+```text
+script:
+  scripts/analysis/generate_whiteout_tone_harmonization.py
+
+default candidate:
+  max_shift = 3
+  blend = 0.20
+```
+
+The probe shows this direction is only marginally useful unless the detector becomes more precise:
+
+```text
+best conservative grid point:
+  mean target MAE delta: -0.009769
+  improved pages by MAE: 3 / 6
+  mean overdark delta: +0.007446
+  max overdark delta: +0.015796
+  mean changed ratio: 0.000462
+  max changed ratio: 0.001086
+```
+
+More aggressive tone shifts improve target MAE slightly more, but consistently increase the
+overdark / dirty-paper proxy and modify too much page area. Treat this as a tentative candidate
+generator, not a product path. It needs crop-level review and a tighter whiteout detector before any
+promotion.
