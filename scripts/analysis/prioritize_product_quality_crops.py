@@ -7,6 +7,9 @@ import argparse
 import csv
 from pathlib import Path
 
+import cv2
+import numpy as np
+
 
 SOURCE_TYPE_WEIGHT = {
     "target_residual": 1000,
@@ -37,6 +40,8 @@ def parse_args() -> argparse.Namespace:
         default="",
         help="Optional residual feature CSV from analyze_crop_residual_features.py.",
     )
+    parser.add_argument("--contact-sheet", default="")
+    parser.add_argument("--contact-width", type=int, default=1200)
     return parser.parse_args()
 
 
@@ -86,6 +91,50 @@ def priority_score(row: dict[str, str]) -> float:
         + min(area, 50000) / 100.0
     )
     return base_score + feature_score(row) * 10.0
+
+
+def add_priority_header(image: np.ndarray, row: dict[str, object], width: int) -> np.ndarray:
+    if image.shape[1] != width:
+        scale = width / max(image.shape[1], 1)
+        image = cv2.resize(
+            image,
+            (width, max(1, int(image.shape[0] * scale))),
+            interpolation=cv2.INTER_AREA,
+        )
+    header = np.full((58, image.shape[1], 3), 255, np.uint8)
+    text = (
+        f"rank={row.get('priority_rank')} score={row.get('priority_score')} "
+        f"{row.get('split')}/{row.get('file')} {row.get('source_type')} area={row.get('source_area')} "
+        f"hw={row.get('handwriting_likelihood_score', '')}"
+    )
+    cv2.putText(header, text[:170], (10, 24), cv2.FONT_HERSHEY_SIMPLEX, 0.62, (20, 20, 20), 1, cv2.LINE_AA)
+    detail = (
+        f"residual_px={row.get('residual_px', '')} residual_ratio={row.get('residual_ratio', '')} "
+        f"source_overlap={row.get('source_dark_overlap', '')} edge={row.get('edge_density', '')}"
+    )
+    cv2.putText(header, detail[:170], (10, 48), cv2.FONT_HERSHEY_SIMPLEX, 0.52, (60, 60, 60), 1, cv2.LINE_AA)
+    return np.concatenate([header, image], axis=0)
+
+
+def write_contact_sheet(rows: list[dict[str, object]], path_text: str, width: int) -> None:
+    if not path_text:
+        return
+    sheet_rows = []
+    for row in rows:
+        image_path = Path(str(row.get("crop_review_image", "")))
+        image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
+        if image is None:
+            continue
+        sheet_rows.append(add_priority_header(image, row, width))
+    if not sheet_rows:
+        return
+    separator = np.full((12, width, 3), 230, np.uint8)
+    parts: list[np.ndarray] = []
+    for image in sheet_rows:
+        parts.extend([image, separator])
+    output_path = Path(path_text)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    cv2.imwrite(str(output_path), np.concatenate(parts[:-1], axis=0))
 
 
 def main() -> None:
@@ -163,10 +212,13 @@ def main() -> None:
         writer.writeheader()
         for row in selected:
             writer.writerow(row)
+    write_contact_sheet(selected, args.contact_sheet, args.contact_width)
 
     print(f"input_rows={len(rows)}")
     print(f"selected={len(selected)}")
     print(f"output_csv={output_path}")
+    if args.contact_sheet:
+        print(f"contact_sheet={args.contact_sheet}")
 
 
 if __name__ == "__main__":

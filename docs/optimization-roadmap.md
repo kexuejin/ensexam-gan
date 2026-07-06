@@ -319,6 +319,7 @@ $ENSEXAM_PYTHON scripts/analysis/prioritize_product_quality_crops.py \
   --index-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/index.csv \
   --feature-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/target_residual_features.csv \
   --output-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15.csv \
+  --contact-sheet outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15.png \
   --source-type target_residual \
   --max-total 15 \
   --max-per-page 2
