@@ -73,6 +73,30 @@ experiment is conservative paper-tone harmonization for correction-fluid pages, 
 candidate generation and calibrated selector analysis. Do not resume threshold-only micro-tuning
 unless it is tied to a named failure bucket and page-level acceptance criteria.
 
+## Preliminary Candidate: Identity-Safe Erasemap Cleanup
+
+A separate second-stage `EraseMapCleanupNet` training probe is now available in
+`scripts/train/train_patch_cleanup_erasemap_probe.py`. It is intentionally independent from the
+main EnsExam generator and initializes the cleanup branch as an identity mapping, so an untrained or
+undertrained checkpoint does not randomly rewrite the page.
+
+Initial smoke evidence is positive but not enough for promotion:
+
+```text
+training data: ExamInk-Seg smoke4 explicit-mask patches
+checkpoint: outputs/smoke_examink_cleanup_erasemap_identity_step100_20260707/cleanup_probe.pt
+ExamInk smoke4, base_edit=12, second_delta=2:
+  residual 0.193198 -> 0.168635
+  overerase 0.004355 -> 0.004293
+SCUT holdout4, base_edit=12, second_delta=4:
+  residual ~= 0.1562 -> 0.1550
+  overerase ~= 0.00202 -> 0.00198
+```
+
+Do not treat this as a product default yet. The ExamInk result is same-sample train/eval and the SCUT
+result is small. The next useful step is to train this cleanup branch on a larger ExamInk-Seg subset
+and validate on fixed SCUT/holdout splits before selector tuning.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
