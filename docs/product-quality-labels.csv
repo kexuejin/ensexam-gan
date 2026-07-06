@@ -1,26 +1,26 @@
 split,file,candidate,bucket,label,flags,reviewer,review_date,comment
-scut115,17.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-scut115,156.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-scut115,303.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-scut115,370.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-scut115,371.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-holdout40,466.jpg,exact129_lam16_union_gate,union_selected_candidate,,,,,candidate selected by current two-box union gate; label page-level win/loss
-scut115,156.jpg,exact129_lam16_union_gate,visible_delta_mixed,,,,,visible-delta improve_area=304 regress_area=37
-scut115,17.jpg,exact129_lam16_union_gate,visible_delta_mixed,,,,,visible-delta improve_area=154 regress_area=85
-scut115,303.jpg,exact129_lam16_union_gate,visible_delta_regress_only,,,,,visible-delta improve_area=0 regress_area=27
-scut115,370.jpg,exact129_lam16_union_gate,visible_delta_regress_only,,,,,visible-delta improve_area=0 regress_area=32
-holdout40,466.jpg,exact129_lam16_union_gate,visible_delta_mixed,,,,,visible-delta improve_area=501 regress_area=249
-train160,166.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,,,,,relaxed interval selected this page and increased train160 aggregate overerase; review as selector false positive
-train160,190.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,,,,,relaxed interval selected this page and increased train160 aggregate overerase; review as selector false positive
-train160,192.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,,,,,relaxed interval selected this page and increased train160 aggregate overerase; review as selector false positive
-next120,282.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,273.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,374.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,389.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,362.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,392.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,283.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,274.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,281.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
-next120,275.jpg,exact129_lam16_union_gate,coverage_negative_noop,,,,,union gate selected baseline on next120; review whether this page represents missed coverage or acceptable no-op
+scut115,17.jpg,exact129_lam16_union_gate,union_selected_candidate,noop,,,,page-scale difference is minimal
+scut115,156.jpg,exact129_lam16_union_gate,union_selected_candidate,slight_win,residual_handwriting,,,candidate looks modestly closer to target than baseline
+scut115,303.jpg,exact129_lam16_union_gate,union_selected_candidate,noop,,,,selected by gate but page-scale improvement is not clear
+scut115,370.jpg,exact129_lam16_union_gate,union_selected_candidate,noop,,,,page-scale improvement is not clear
+scut115,371.jpg,exact129_lam16_union_gate,union_selected_candidate,noop,,,,page-scale improvement is not clear
+holdout40,466.jpg,exact129_lam16_union_gate,union_selected_candidate,slight_win,residual_handwriting,,,candidate removes some marks and is modestly closer to target
+scut115,156.jpg,exact129_lam16_union_gate,visible_delta_mixed,slight_win,residual_handwriting,,,improve area outweighs regress area and page still looks closer to target
+scut115,17.jpg,exact129_lam16_union_gate,visible_delta_mixed,noop,,,,mixed component signal but page-scale difference remains subtle
+scut115,303.jpg,exact129_lam16_union_gate,visible_delta_regress_only,slight_loss,halo_or_edge_artifact,,,visible-delta is regress-only and page-scale improvement is not evident
+scut115,370.jpg,exact129_lam16_union_gate,visible_delta_regress_only,slight_loss,paper_texture_dirty,,,candidate appears slightly worse on paper texture with no clear page-scale gain
+holdout40,466.jpg,exact129_lam16_union_gate,visible_delta_mixed,slight_win,residual_handwriting,,,candidate appears modestly closer to target despite mixed local regressions
+train160,166.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,slight_loss,overerase,,,known selector false positive with overerase risk and no obvious visual upside
+train160,190.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,slight_loss,overerase,,,known selector false positive with overerase risk and no obvious visual upside
+train160,192.jpg,exact129_lam16_relaxed_interval_rejected,selector_false_positive_overerase_risk,slight_loss,overerase,,,known selector false positive with overerase risk and no obvious visual upside
+next120,282.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,baseline and candidate are the same; keep as coverage-negative reference
+next120,273.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,374.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,389.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,362.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,392.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,283.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,274.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,281.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
+next120,275.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
 todo,TODO-whiteout-examples,todo,correction_fluid_white_patch,,,,,No current-repo whiteout/inpaint output directory found; add concrete correction-fluid examples before training whiteout repair.
