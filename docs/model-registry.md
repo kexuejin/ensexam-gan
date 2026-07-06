@@ -169,6 +169,19 @@ decision: use the exact patch index for nearworst_safe_step1 reproduction; rando
 are not comparable because sampled patch identity changes gate features
 ```
 
+Train high-stroke patch sensitivity:
+
+```text
+patch index: outputs/train_hard_patch_index_for_sensitivity_20260706/patch_index.csv
+queue: outputs/patch_sensitivity_train_top4_20260706
+summary: outputs/patch_sensitivity_train_top4_20260706/summary.csv
+top4 patches: 362.jpg at (1280,320), (1280,640), (1280,480), (1440,480)
+scut115: selected=0/115 residual=0.114224963938 overerase=0.003048296717
+holdout40: selected=0/40 residual=0.134026304621 overerase=0.002481606117
+decision: rejected as a direct route; high stroke density alone does not preserve or restore
+strict-gate eligibility
+```
+
 Joint selector replay:
 
 ```text

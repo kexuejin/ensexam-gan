@@ -23,6 +23,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `train.py` records skipped validation cleanly in CSV/W&B paths.
 - `scripts/train/micro_train_region_probe.py` can mix patch-index-selected patches with ordinary
   patches via `--patch-index-mix-ratio`, and trace whether sampled patches matched the index.
+- `scripts/experimental/build_hard_patch_list.py` can be run directly from this repository to
+  generate ranked train-split patch-index CSVs for sensitivity sweeps.
 - `hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv` pins the single patch needed to
   reproduce the nearworst-safe one-step probe without relying on DataLoader shuffle order.
 - `scripts/experimental/build_patch_sensitivity_queue.py` turns ranked patch-index CSVs into

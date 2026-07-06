@@ -604,6 +604,28 @@ commands/run_all.sh
 This tool only prepares deterministic local experiment queues. Commit the script
 and resulting decision records, not failed sweep outputs or large checkpoints.
 
+Top4 train-split high-stroke sweep:
+
+```text
+patch index: outputs/train_hard_patch_index_for_sensitivity_20260706/patch_index.csv
+queue: outputs/patch_sensitivity_train_top4_20260706
+summary: outputs/patch_sensitivity_train_top4_20260706/summary.csv
+patches:
+  001_362_x1280_y320
+  002_362_x1280_y640
+  003_362_x1280_y480
+  004_362_x1440_y480
+result:
+  scut115 selected=0/115 residual=0.114224963938 overerase=0.003048296717
+  holdout40 selected=0/40 residual=0.134026304621 overerase=0.002481606117
+```
+
+Decision: do not expand the naive high-stroke train-patch sweep. The top ranked
+training patches all collapse to baseline under the strict gate, so this is not
+a useful product-quality route by itself. Future patch selection should target
+gate-feature preservation explicitly (`copy_mask_cov8`, `primary_edit_px`) rather
+than only high local handwriting/stroke density.
+
 ### Preservation Weight Probes
 
 The existing loss already has `input_preserve` and `mb_leak` terms. A logging

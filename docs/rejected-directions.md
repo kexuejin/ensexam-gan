@@ -42,6 +42,30 @@ Do not continue this exact patch-only full-generator training path. Future visib
 try narrower trainable scopes, mask-only/head-only updates, lower LR, or an auxiliary objective that
 preserves gate features instead of updating the whole generator against a tiny two-page patch set.
 
+## High Stroke-Ratio Train Patch Sensitivity
+
+Rejected as a direct patch-selection strategy. A deterministic top4 sweep used ranked train-split
+hard patches from `outputs/train_hard_patch_index_for_sensitivity_20260706/patch_index.csv` and
+one-step MPS micro-probes from the current primary checkpoint.
+
+All four top-ranked patches came from `362.jpg` and had very high local stroke density, but strict
+SCUT115 and holdout40 evaluation selected no candidate pages:
+
+```text
+001_362_x1280_y320: scut selected=0/115 holdout selected=0/40
+002_362_x1280_y640: scut selected=0/115 holdout selected=0/40
+003_362_x1280_y480: scut selected=0/115 holdout selected=0/40
+004_362_x1440_y480: scut selected=0/115 holdout selected=0/40
+```
+
+The metrics therefore exactly matched baseline second-stage outputs: SCUT115 residual
+`0.114224963938`, overerase `0.003048296717`; holdout40 residual `0.134026304621`,
+overerase `0.002481606117`.
+
+Do not expand this naive high-stroke sweep. Future patch sensitivity work should rank patches by
+their ability to preserve strict-gate features such as `copy_mask_cov8` and `primary_edit_px`, not
+by stroke density alone.
+
 ## Current Hybrid Gate Promotion
 
 Rejected for default product promotion. A joint SCUT test115 + holdout40 selector replay over saved
