@@ -341,3 +341,51 @@ These pages should be reviewed before lower-scoring, large-area crops because th
 source-dark overlap and edge density signals. If they are true residual handwriting, the next useful
 work is candidate generation for coverage expansion. If they are mostly target/background mismatch,
 the coverage-negative bucket should be down-weighted.
+
+## Coverage-Residual Training Probe
+
+The feature-ranked residual queue can be converted into a bounded micro-training patch index:
+
+```text
+$ENSEXAM_PYTHON scripts/experimental/convert_priority_crops_to_patch_index.py \
+  --priority-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15_with_sheet.csv \
+  --output-csv outputs/coverage_residual_feature_top15_patch_index_20260706/patch_index.csv \
+  --train-files-out outputs/coverage_residual_feature_top15_patch_index_20260706/train_files.txt \
+  --max-tiles-per-crop 3
+```
+
+This is the next training candidate source. It targets the named `coverage_negative_noop` bucket and
+uses residual-feature evidence instead of generic stroke density.
+
+Initial conversion output:
+
+```text
+priority rows: 15
+patch rows: 45
+files: 9
+train files:
+  273.jpg 274.jpg 275.jpg 281.jpg 282.jpg 362.jpg 374.jpg 389.jpg 392.jpg
+```
+
+MPS training smoke:
+
+```text
+command:
+  scripts/train/micro_train_region_probe.py
+output:
+  outputs/smoke_coverage_residual_feature_top15_step1_20260706
+matched patches:
+  45 / 1232
+step:
+  1 / 1
+sampled patch:
+  281.jpg x1=1440 y1=1120 x2=1696 y2=1376
+loss:
+  G=31.760653 D=3.581648
+checkpoint:
+  outputs/smoke_coverage_residual_feature_top15_step1_20260706/micro_region_probe.pth
+```
+
+This verifies the training entrypoint only. It does not prove quality. The next meaningful run should
+train a bounded multi-step candidate from this patch index and evaluate it through the existing
+SCUT115 / holdout40 / next120 product-quality reports.
