@@ -32,6 +32,41 @@ of launching another probe.
 
 Rejected for current product path. Direct ExamInk partial and mixed updates made the model overly conservative. Mask-only updates worsened hardcase residual.
 
+## Identity-Safe Erasemap Cleanup Train31 Promotion
+
+Rejected for product promotion in its current checkpoint form. The identity-safe cleanup training
+script is useful infrastructure, but the train31 step500 checkpoint does not survive SCUT115
+validation.
+
+Small-set checks looked positive:
+
+```text
+ExamInk train31 same-sample:
+  residual 0.198286 -> 0.193751
+  overerase 0.004114 -> 0.004060
+SCUT holdout4:
+  residual 0.156151 -> 0.154797
+  overerase 0.002022 -> 0.001983
+```
+
+Full SCUT115 checks failed:
+
+```text
+primary input:
+  residual=0.118313 overerase=0.003048
+current second-stage baseline:
+  residual=0.114225 overerase=0.003048
+train31 cleanup as replacement:
+  residual=0.136329 overerase=0.003003
+train31 cleanup after current second-stage:
+  residual=0.132060 overerase=0.003009
+```
+
+Do not promote `outputs/train_examink_cleanup_erasemap_identity_train31_step500_20260707/cleanup_probe.pt`
+or repeat replacement/third-stage evaluation for this checkpoint. Future cleanup work should train
+on a larger frozen ExamInk-Seg train/val split and require SCUT115 plus holdout40 validation before
+selector tuning.
+
 ## Patent-Style Standalone Mask Calibration
 
 Rejected as a standalone branch. SCUT pseudo-mask heads-only training worsened hardcase residual, indicating isolated mask branch tuning breaks erase gating.

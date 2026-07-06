@@ -100,12 +100,20 @@ ExamInk train31, base_edit=12, second_delta=2:
 SCUT holdout4, base_edit=12, second_delta=2:
   residual 0.156151 -> 0.154797
   overerase 0.002022 -> 0.001983
+SCUT115 replacement check, base_edit=12, second_delta=2:
+  primary input residual 0.118313, overerase 0.003048
+  current second-stage baseline residual 0.114225, overerase 0.003048
+  train31 cleanup residual 0.136329, overerase 0.003003
+SCUT115 third-stage check after current second-stage, base_edit=12, second_delta=2:
+  current second-stage baseline residual 0.114225, overerase 0.003048
+  train31 cleanup residual 0.132060, overerase 0.003009
 ```
 
-Do not treat this as a product default yet. The ExamInk results are same-sample train/eval and the
-SCUT result is still only holdout4. The next useful step is to finish a larger ExamInk-Seg download,
-train the cleanup branch on a frozen train/val subset, and validate on SCUT115 / holdout40 before
-selector tuning.
+Do not treat this as a product default. The ExamInk results are same-sample train/eval and the
+holdout4 result does not survive SCUT115 validation. The useful part is the identity-safe training
+infrastructure; the current checkpoint is rejected for replacement or third-stage promotion. The next
+useful step is to finish a larger ExamInk-Seg train/val subset, train with held-out validation, and
+only then revisit SCUT115 / holdout40 selector tuning.
 
 Source-of-truth details for the historical migration remain in:
 
