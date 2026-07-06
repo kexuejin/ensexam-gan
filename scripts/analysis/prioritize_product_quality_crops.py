@@ -32,6 +32,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-per-page", type=int, default=3)
     parser.add_argument("--source-type", action="append", default=[])
     parser.add_argument("--bucket", action="append", default=[])
+    parser.add_argument(
+        "--feature-csv",
+        default="",
+        help="Optional residual feature CSV from analyze_crop_residual_features.py.",
+    )
     return parser.parse_args()
 
 
@@ -47,15 +52,40 @@ def source_area(row: dict[str, str]) -> int:
         return 0
 
 
+def crop_key(row: dict[str, str]) -> tuple[str, str, str, str, str, str]:
+    return (
+        row.get("candidate", ""),
+        row.get("bucket", ""),
+        row.get("split", ""),
+        row.get("file", ""),
+        row.get("source_type", ""),
+        row.get("crop_index", ""),
+    )
+
+
+def read_feature_rows(path_text: str) -> dict[tuple[str, str, str, str, str, str], dict[str, str]]:
+    if not path_text:
+        return {}
+    return {crop_key(row): row for row in read_rows(Path(path_text))}
+
+
+def feature_score(row: dict[str, str]) -> float:
+    try:
+        return float(row.get("handwriting_likelihood_score", ""))
+    except ValueError:
+        return 0.0
+
+
 def priority_score(row: dict[str, str]) -> float:
     source_type = row.get("source_type", "")
     bucket = row.get("bucket", "")
     area = source_area(row)
-    return (
+    base_score = (
         SOURCE_TYPE_WEIGHT.get(source_type, 0)
         + BUCKET_WEIGHT.get(bucket, 0)
         + min(area, 50000) / 100.0
     )
+    return base_score + feature_score(row) * 10.0
 
 
 def main() -> None:
@@ -67,6 +97,25 @@ def main() -> None:
     if args.bucket:
         allowed = set(args.bucket)
         rows = [row for row in rows if row.get("bucket", "") in allowed]
+    feature_by_key = read_feature_rows(args.feature_csv)
+    if feature_by_key:
+        merged_rows = []
+        for row in rows:
+            merged = dict(row)
+            feature = feature_by_key.get(crop_key(row), {})
+            for key in [
+                "handwriting_likelihood_score",
+                "residual_px",
+                "residual_ratio",
+                "mean_residual_delta",
+                "source_dark_overlap",
+                "edge_density",
+                "largest_component_fill",
+            ]:
+                if key in feature:
+                    merged[key] = feature[key]
+            merged_rows.append(merged)
+        rows = merged_rows
 
     ranked = sorted(rows, key=priority_score, reverse=True)
     selected: list[dict[str, object]] = []
@@ -98,6 +147,11 @@ def main() -> None:
         "source_box",
         "crop_box",
         "crop_review_image",
+        "handwriting_likelihood_score",
+        "residual_px",
+        "residual_ratio",
+        "source_dark_overlap",
+        "edge_density",
         "label",
         "flags",
         "reviewer",

@@ -312,6 +312,18 @@ Use the resulting `handwriting_likelihood_score` as a triage signal only. It hel
 the source input and baseline still contain dark, edge-like residuals that the target removed; it is
 not a substitute for crop labels.
 
+The priority queue can consume the feature report:
+
+```text
+$ENSEXAM_PYTHON scripts/analysis/prioritize_product_quality_crops.py \
+  --index-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/index.csv \
+  --feature-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/target_residual_features.csv \
+  --output-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15.csv \
+  --source-type target_residual \
+  --max-total 15 \
+  --max-per-page 2
+```
+
 Initial target-residual feature run:
 
 ```text
