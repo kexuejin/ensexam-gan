@@ -300,6 +300,19 @@ random one-step rerun holdout40: selected=2/40 residual=0.134134815794 overerase
 The `edit98908` threshold only admits the SCUT `254.jpg` near-miss relative to `edit98868`; it
 does not add holdout pages. Treat it as a reproducibility variant, not a product default.
 
+Joint selector replay on the exact129 candidate:
+
+```text
+output: outputs/selector_replay_joint_exact129_cov806_edit98908_20260706
+best safe rule: selected=3/155 total residual gain=0.000144868289
+exact129_cov806_edit98868: selected=8 total residual gain=0.000621405155 max overerase regret=+0.000010921776
+exact129_cov806_edit98908: selected=9 total residual gain=0.000620503683 max overerase regret=+0.000010921776
+```
+
+The selector replay reaches the same conclusion as earlier candidates: label-free selector tuning
+alone is not enough for a product default. The safe rule is too small, while the larger strict rules
+still carry a small holdout overerase regression.
+
 Visible-delta analysis:
 
 ```bash

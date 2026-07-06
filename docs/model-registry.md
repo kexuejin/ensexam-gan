@@ -156,6 +156,15 @@ exact129 cov806/edit98908 result:
   scut selected=6/115 residual=0.113988387733 overerase=0.003046310539
   holdout selected=3/40 residual=0.133642377143 overerase=0.002492527893
   selected pages match original strict on both splits
+exact129 joint selector replay:
+  output: outputs/selector_replay_joint_exact129_cov806_edit98908_20260706
+  best safe rule: selected=3/155 total residual gain=0.000144868289
+  rule: copy_mask_cov8 >= 0.389202, primary_edit_px <= 101434,
+        primary_p95_edit_delta <= 5, second_stage_gate_ratio <= 0.000245596
+  exact129_cov806_edit98868: selected=8 total residual gain=0.000621405155,
+                             max overerase regret=+0.000010921776
+  exact129_cov806_edit98908: selected=9 total residual gain=0.000620503683,
+                             max overerase regret=+0.000010921776
 decision: use the exact patch index for nearworst_safe_step1 reproduction; random one-step reruns
 are not comparable because sampled patch identity changes gate features
 ```
