@@ -1,5 +1,33 @@
 # Rejected Directions
 
+## Threshold-Only Micro-Tuning Loop
+
+Rejected as the primary path forward. The recent exact129 / outside-edit / union-gate work found a
+safe selector window, but the useful coverage is too small for productization:
+
+```text
+SCUT115: selected=5/115
+holdout40: selected=1/40
+train160: selected=0/160
+next120: selected=0/120
+combined selected=6/435
+```
+
+The next120 non-overlap check is useful safety evidence because it selected no pages and caused no
+metric regression, but it also proves that the current selector family does not broaden coverage.
+More hand-tuned intervals or one-step patch probes are unlikely to close the product-quality gap
+unless they are anchored to explicit failure buckets and page-level visual labels.
+
+Do not continue the default loop of:
+
+```text
+one-step probe -> replay selector thresholds -> tiny safe window -> document narrow result
+```
+
+Future experiments should first define the target failure bucket, expected page coverage lift, and
+manual visual acceptance criteria. Without that, improve the benchmark and labeling workflow instead
+of launching another probe.
+
 ## ExamInk-Seg Direct / Mask-Only Adaptation
 
 Rejected for current product path. Direct ExamInk partial and mixed updates made the model overly conservative. Mask-only updates worsened hardcase residual.

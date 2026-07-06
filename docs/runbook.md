@@ -462,6 +462,23 @@ Decision update: next120 does not add product-visible coverage for the union sel
 useful safety check because the gate selected no extra pages and caused no metric regression on a
 new non-overlapping SCUT train slice. Treat this as safety evidence only, not quality improvement.
 
+Micro-tuning stop rule:
+
+```text
+Do not keep running one-step probe + selector replay loops on the current exact129/outside-edit
+candidate family. The latest safe selector covers only 6/435 validated pages and next120 adds
+0/120 new pages. Further tuning needs a named failure bucket, expected coverage lift, and page-level
+visual acceptance criteria before it runs.
+```
+
+Next high-leverage task: build a compact product-quality benchmark with page labels:
+
+```text
+clear win / slight win / no-op / slight loss / clear loss
+failure buckets: correction-fluid white patch, gray paper tone, residual handwriting,
+                 printed-text damage, halo/edge artifacts
+```
+
 Visible-delta analysis:
 
 ```bash
