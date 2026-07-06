@@ -34,9 +34,9 @@ Rejected for current product path. Direct ExamInk partial and mixed updates made
 
 ## Identity-Safe Erasemap Cleanup Train31 Promotion
 
-Rejected for product promotion in its current checkpoint form. The identity-safe cleanup training
-script is useful infrastructure, but the train31 step500 checkpoint does not survive SCUT115
-validation.
+Rejected for product promotion in its current checkpoint forms. The identity-safe cleanup training
+and validation scripts are useful infrastructure, but the ExamInk-only cleanup checkpoints do not
+survive SCUT115 validation.
 
 Small-set checks looked positive:
 
@@ -66,6 +66,25 @@ Do not promote `outputs/train_examink_cleanup_erasemap_identity_train31_step500_
 or repeat replacement/third-stage evaluation for this checkpoint. Future cleanup work should train
 on a larger frozen ExamInk-Seg train/val split and require SCUT115 plus holdout40 validation before
 selector tuning.
+
+A later train24/val7 split added held-out validation and selected `cleanup_best.pt` by validation
+loss:
+
+```text
+validation loss:
+  step100=1.727791
+  step500=1.573239
+ExamInk val7:
+  residual 0.182208 -> 0.159401
+  overerase 0.004473 -> 0.004433
+SCUT115 replacement:
+  current second-stage baseline residual=0.114225 overerase=0.003048
+  train24/val7 cleanup residual=0.162796 overerase=0.003009
+```
+
+This means an ExamInk held-out validation win is not enough evidence for SCUT product quality. Do not
+spend more cycles promoting ExamInk-only cleanup checkpoints through threshold tuning; the next
+cleanup attempt needs SCUT-style validation or a mixed-domain objective before SCUT115 evaluation.
 
 ## Patent-Style Standalone Mask Calibration
 

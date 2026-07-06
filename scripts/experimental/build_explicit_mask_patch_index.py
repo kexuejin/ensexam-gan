@@ -7,6 +7,8 @@ It is intended for datasets converted into EnsExamRealDataset layout with:
   train/all_images/*.jpg
   train/all_labels/*.jpg
   train/all_masks/*.png
+
+Validation splits use the same layout under val/.
 """
 
 from __future__ import annotations
@@ -39,7 +41,7 @@ def load_file_list(path: str | None) -> set[str] | None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", required=True)
-    parser.add_argument("--split", default="train", choices=("train", "test"))
+    parser.add_argument("--split", default="train", choices=("train", "val", "test"))
     parser.add_argument("--output-csv", required=True)
     parser.add_argument("--train-file-list", default=None)
     parser.add_argument("--img-size", type=int, default=256)

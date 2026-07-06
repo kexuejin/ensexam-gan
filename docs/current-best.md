@@ -107,13 +107,25 @@ SCUT115 replacement check, base_edit=12, second_delta=2:
 SCUT115 third-stage check after current second-stage, base_edit=12, second_delta=2:
   current second-stage baseline residual 0.114225, overerase 0.003048
   train31 cleanup residual 0.132060, overerase 0.003009
+
+training data: frozen ExamInk-Seg train24 with held-out val7
+checkpoint: outputs/train_examink_cleanup_erasemap_identity_train24_val7_step500_20260707/cleanup_best.pt
+validation loss:
+  1.727791 at step100 -> 1.573239 at step500
+ExamInk val7, base_edit=12, second_delta=2:
+  residual 0.182208 -> 0.159401
+  overerase 0.004473 -> 0.004433
+SCUT115 replacement check, base_edit=12, second_delta=2:
+  current second-stage baseline residual 0.114225, overerase 0.003048
+  train24/val7 cleanup residual 0.162796, overerase 0.003009
 ```
 
 Do not treat this as a product default. The ExamInk results are same-sample train/eval and the
-holdout4 result does not survive SCUT115 validation. The useful part is the identity-safe training
-infrastructure; the current checkpoint is rejected for replacement or third-stage promotion. The next
-useful step is to finish a larger ExamInk-Seg train/val subset, train with held-out validation, and
-only then revisit SCUT115 / holdout40 selector tuning.
+holdout4 / val7 results do not survive SCUT115 validation. The useful part is the identity-safe
+training and validation infrastructure; the current checkpoints are rejected for replacement or
+third-stage promotion. The next useful step is to address domain mismatch before selector tuning,
+for example by mixing SCUT-style validation patches with ExamInk-Seg or adding a SCUT-calibrated
+candidate loss.
 
 Source-of-truth details for the historical migration remain in:
 

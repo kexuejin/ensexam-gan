@@ -126,6 +126,68 @@ def dice_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     return (1.0 - (2.0 * inter + 1.0) / (denom + 1.0)).mean()
 
 
+def compute_loss_terms(
+    model: EraseMapCleanupNet,
+    inp: torch.Tensor,
+    target: torch.Tensor,
+    mask: torch.Tensor,
+    args: argparse.Namespace,
+) -> dict[str, torch.Tensor]:
+    pred, alpha, clean = model(inp)
+    inside = masked_l1(pred, target, mask) * args.inside_weight
+    outside = masked_l1(pred, inp, 1.0 - mask) * args.outside_weight
+    clean_inside = masked_l1(clean, target, mask) * args.clean_inside_weight
+    alpha_weight = 1.0 + mask * (args.alpha_positive_weight - 1.0)
+    alpha_bce = (
+        F.binary_cross_entropy(alpha.clamp(1e-6, 1.0 - 1e-6), mask, weight=alpha_weight)
+        * args.alpha_bce_weight
+    )
+    alpha_dice = dice_loss(alpha, mask) * args.alpha_dice_weight
+    alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
+    loss = inside + outside + clean_inside + alpha_bce + alpha_dice + alpha_sparse
+    return {
+        "loss": loss,
+        "inside_l1": inside,
+        "outside_l1": outside,
+        "clean_inside_l1": clean_inside,
+        "alpha_bce": alpha_bce,
+        "alpha_dice": alpha_dice,
+        "alpha_sparsity": alpha_sparse,
+    }
+
+
+def tensor_terms_to_floats(terms: dict[str, torch.Tensor]) -> dict[str, float]:
+    return {key: float(value.detach().cpu()) for key, value in terms.items()}
+
+
+def evaluate_loss(
+    model: EraseMapCleanupNet,
+    loader: DataLoader,
+    device: torch.device,
+    args: argparse.Namespace,
+    max_batches: int,
+) -> dict[str, float]:
+    model.eval()
+    sums: dict[str, float] = {}
+    count = 0
+    with torch.no_grad():
+        for batch_index, (inp, target, mask) in enumerate(loader, start=1):
+            inp = inp.to(device)
+            target = target.to(device)
+            mask = mask.to(device)
+            batch_size = int(inp.shape[0])
+            terms = tensor_terms_to_floats(compute_loss_terms(model, inp, target, mask, args))
+            for key, value in terms.items():
+                sums[key] = sums.get(key, 0.0) + value * batch_size
+            count += batch_size
+            if max_batches > 0 and batch_index >= max_batches:
+                break
+    model.train()
+    if count == 0:
+        raise RuntimeError("validation loader produced no batches")
+    return {key: value / count for key, value in sums.items()}
+
+
 def initialize_identity_safe(model: EraseMapCleanupNet, alpha_init_bias: float) -> None:
     """Make the untrained cleanup branch an identity mapping by default."""
     final_alpha = model.alpha_head[-2]
@@ -146,6 +208,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--split", default="train")
     parser.add_argument("--input-dir", required=True)
     parser.add_argument("--patch-index-file", required=True)
+    parser.add_argument("--val-data-root", default="")
+    parser.add_argument("--val-split", default="val")
+    parser.add_argument("--val-input-dir", default="")
+    parser.add_argument("--val-patch-index-file", default="")
+    parser.add_argument("--val-every", type=int, default=0)
+    parser.add_argument("--val-max-batches", type=int, default=0)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--init-checkpoint", default="")
     parser.add_argument("--device", choices=("auto", "cpu", "mps", "cuda"), default="auto")
@@ -166,6 +234,31 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--alpha-sparsity-weight", type=float, default=0.02)
     parser.add_argument("--alpha-init-bias", type=float, default=-6.0)
     return parser.parse_args()
+
+
+def build_val_loader(args: argparse.Namespace) -> DataLoader | None:
+    val_paths = [args.val_data_root, args.val_input_dir, args.val_patch_index_file]
+    if not any(val_paths):
+        return None
+    if not all(val_paths):
+        raise ValueError("Provide all of --val-data-root, --val-input-dir, and --val-patch-index-file")
+    if args.val_every <= 0:
+        raise ValueError("--val-every must be > 0 when validation data is provided")
+    dataset = CleanupPatchDataset(
+        data_root=Path(args.val_data_root),
+        split=args.val_split,
+        input_dir=Path(args.val_input_dir),
+        patch_index_file=Path(args.val_patch_index_file),
+        tile_size=args.tile_size,
+        mask_threshold=args.mask_threshold,
+    )
+    return DataLoader(
+        dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        num_workers=0,
+        drop_last=False,
+    )
 
 
 def main() -> None:
@@ -194,6 +287,9 @@ def main() -> None:
         generator=torch.Generator().manual_seed(args.seed),
     )
     print(f"patches={len(dataset)} batch_size={args.batch_size}", flush=True)
+    val_loader = build_val_loader(args)
+    if val_loader is not None:
+        print(f"val_patches={len(val_loader.dataset)} val_every={args.val_every}", flush=True)
 
     model = EraseMapCleanupNet().to(device)
     if args.init_checkpoint:
@@ -214,9 +310,23 @@ def main() -> None:
             "alpha_dice",
             "alpha_sparsity",
         ])
+    val_history_path = output_dir / "cleanup_val_loss_history.csv"
+    if val_loader is not None:
+        with val_history_path.open("w", newline="", encoding="utf-8") as f:
+            csv.writer(f).writerow([
+                "step",
+                "loss",
+                "inside_l1",
+                "outside_l1",
+                "clean_inside_l1",
+                "alpha_bce",
+                "alpha_dice",
+                "alpha_sparsity",
+            ])
 
     start = time.time()
     data_iter = iter(loader)
+    best_val_loss: float | None = None
     for step in range(1, args.max_steps + 1):
         try:
             inp, target, mask = next(data_iter)
@@ -228,30 +338,20 @@ def main() -> None:
         mask = mask.to(device)
 
         optimizer.zero_grad(set_to_none=True)
-        pred, alpha, _clean = model(inp)
-        inside = masked_l1(pred, target, mask) * args.inside_weight
-        outside = masked_l1(pred, inp, 1.0 - mask) * args.outside_weight
-        clean_inside = masked_l1(_clean, target, mask) * args.clean_inside_weight
-        alpha_weight = 1.0 + mask * (args.alpha_positive_weight - 1.0)
-        alpha_bce = (
-            F.binary_cross_entropy(alpha.clamp(1e-6, 1.0 - 1e-6), mask, weight=alpha_weight)
-            * args.alpha_bce_weight
-        )
-        alpha_dice = dice_loss(alpha, mask) * args.alpha_dice_weight
-        alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
-        loss = inside + outside + clean_inside + alpha_bce + alpha_dice + alpha_sparse
-        loss.backward()
+        terms = compute_loss_terms(model, inp, target, mask, args)
+        terms["loss"].backward()
         optimizer.step()
 
+        train_terms = tensor_terms_to_floats(terms)
         row = [
             step,
-            float(loss.detach().cpu()),
-            float(inside.detach().cpu()),
-            float(outside.detach().cpu()),
-            float(clean_inside.detach().cpu()),
-            float(alpha_bce.detach().cpu()),
-            float(alpha_dice.detach().cpu()),
-            float(alpha_sparse.detach().cpu()),
+            train_terms["loss"],
+            train_terms["inside_l1"],
+            train_terms["outside_l1"],
+            train_terms["clean_inside_l1"],
+            train_terms["alpha_bce"],
+            train_terms["alpha_dice"],
+            train_terms["alpha_sparsity"],
         ]
         with history_path.open("a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([row[0], *[f"{value:.8f}" for value in row[1:]]])
@@ -264,6 +364,35 @@ def main() -> None:
                 f"elapsed={time.time() - start:.1f}s",
                 flush=True,
             )
+        if val_loader is not None and (step % args.val_every == 0 or step == args.max_steps):
+            val_terms = evaluate_loss(model, val_loader, device, args, args.val_max_batches)
+            val_row = [
+                step,
+                val_terms["loss"],
+                val_terms["inside_l1"],
+                val_terms["outside_l1"],
+                val_terms["clean_inside_l1"],
+                val_terms["alpha_bce"],
+                val_terms["alpha_dice"],
+                val_terms["alpha_sparsity"],
+            ]
+            with val_history_path.open("a", newline="", encoding="utf-8") as f:
+                csv.writer(f).writerow([val_row[0], *[f"{value:.8f}" for value in val_row[1:]]])
+            print(
+                f"val step={step}/{args.max_steps} loss={val_row[1]:.6f} "
+                f"inside={val_row[2]:.6f} outside={val_row[3]:.6f} "
+                f"clean_inside={val_row[4]:.6f} alpha_bce={val_row[5]:.6f} "
+                f"alpha_dice={val_row[6]:.6f} alpha_sparse={val_row[7]:.6f}",
+                flush=True,
+            )
+            if best_val_loss is None or val_terms["loss"] < best_val_loss:
+                best_val_loss = val_terms["loss"]
+                best_path = output_dir / "cleanup_best.pt"
+                torch.save(
+                    {"model": model.state_dict(), "args": vars(args), "step": step, "val_loss": best_val_loss},
+                    best_path,
+                )
+                print(f"saved_best={best_path} val_loss={best_val_loss:.6f}", flush=True)
         if args.save_every > 0 and (step % args.save_every == 0):
             torch.save({"model": model.state_dict(), "args": vars(args), "step": step}, output_dir / f"cleanup_step{step:04d}.pt")
 
