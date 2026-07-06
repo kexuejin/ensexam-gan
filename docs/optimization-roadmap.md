@@ -274,3 +274,27 @@ $ENSEXAM_PYTHON scripts/analysis/summarize_product_quality_crop_labels.py \
   --labels-csv outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/crop-labels-template.csv \
   --output-dir outputs/product_quality_crop_label_summary_whiteout_tone_v1_20260706
 ```
+
+When a crop pack is large, generate a prioritized manual-label subset first:
+
+```text
+$ENSEXAM_PYTHON scripts/analysis/prioritize_product_quality_crops.py \
+  --index-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/index.csv \
+  --output-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_top24.csv \
+  --max-total 24 \
+  --max-per-page 3
+```
+
+Initial union residual priority output:
+
+```text
+input crops: 84
+selected: 24
+source_type: target_residual = 24
+bucket: coverage_negative_noop = 24
+pages covered: 9
+```
+
+This makes the next manual review question concrete: are the largest no-op residual crops true
+missed handwriting, or mostly target/background mismatch? The answer determines whether the next
+model work should expand coverage or avoid chasing noisy target differences.
