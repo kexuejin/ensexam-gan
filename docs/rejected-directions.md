@@ -259,6 +259,41 @@ candidate-generation objective.
 
 ## Low-Diff Outside-Edit 003 Step1 Promotion
 
+## Coverage-Residual Feature Top15 Patch Training
+
+Rejected for continuation. A feature-ranked `target_residual` queue converted the top 15 missed
+coverage crops into 45 training patches across nine next120 train pages:
+
+```text
+patch index: outputs/coverage_residual_feature_top15_patch_index_20260706/patch_index.csv
+train files: 273.jpg 274.jpg 275.jpg 281.jpg 282.jpg 362.jpg 374.jpg 389.jpg 392.jpg
+```
+
+The training entrypoint is valid: a one-step MPS smoke matched `45/1232` patches, sampled
+`281.jpg x1=1440 y1=1120`, and saved a finite-loss checkpoint.
+
+However, both bounded step5 candidates worsened the same nine target pages compared with the
+existing next120 second-stage baseline:
+
+```text
+baseline:
+  residual=0.338039701
+  overerase=0.006130962
+
+full-generator step5:
+  residual=0.428630279  delta=+0.090590578
+  overerase=0.014270546 delta=+0.008139585
+
+mask-only decoder step5:
+  residual=0.421282252  delta=+0.083242551
+  overerase=0.016514974 delta=+0.010384012
+```
+
+Do not continue this exact patch-index route by adding more steps. It is useful evidence that
+feature-ranked target-residual crops alone are not enough to expand coverage safely. Future coverage
+training should first add crop labels to separate true residual handwriting from target/background
+mismatch, or add a stronger paper/printed-text preservation objective before revisiting these pages.
+
 Rejected for promotion. The lowdiff003 outside-edit one-step probe produced the strongest strict
 residual improvement among the tested low-diff outside-edit anchors, but it increased overerase on
 both SCUT115 and holdout40. The selector replay safe window collapses to one holdout page with

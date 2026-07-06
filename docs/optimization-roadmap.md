@@ -389,3 +389,33 @@ checkpoint:
 This verifies the training entrypoint only. It does not prove quality. The next meaningful run should
 train a bounded multi-step candidate from this patch index and evaluate it through the existing
 SCUT115 / holdout40 / next120 product-quality reports.
+
+Bounded step5 candidates were evaluated on the same nine targeted train pages against the existing
+next120 second-stage baseline:
+
+```text
+full-generator step5:
+  output: outputs/exp_coverage_residual_feature_top15_step5_20260706
+  eval: outputs/eval_coverage_residual_feature_top15_step5_target9_20260706
+  baseline residual: 0.338039701
+  candidate residual: 0.428630279
+  delta residual: +0.090590578
+  baseline overerase: 0.006130962
+  candidate overerase: 0.014270546
+  delta overerase: +0.008139585
+
+mask-only decoder step5:
+  output: outputs/exp_coverage_residual_feature_top15_maskonly_decoder_step5_20260706
+  eval: outputs/eval_coverage_residual_feature_top15_maskonly_decoder_step5_target9_20260706
+  baseline residual: 0.338039701
+  candidate residual: 0.421282252
+  delta residual: +0.083242551
+  baseline overerase: 0.006130962
+  candidate overerase: 0.016514974
+  delta overerase: +0.010384012
+```
+
+Do not continue this exact patch-index route by adding more steps. The likely issue is that
+target-residual crops include target/background mismatch or regions where direct patch training
+damages page tone more than it removes useful residual handwriting. The next training route needs
+crop labels or a stronger preserve objective before more coverage expansion.
