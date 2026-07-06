@@ -175,6 +175,10 @@ aggressive checkpoint:
 safer checkpoint:
   alpha_init_bias=-3, lr=5e-5, stronger outside/overerase/negative-alpha constraints
   SCUT115 residual=0.209663, overerase=0.003024, gate=0.018118
+residual-delta checkpoint:
+  model_type=residual_delta, residual_delta_scale=0.08
+  SCUT115 residual=0.118880, overerase=0.003014, gate=0.016595
+  diagnosis: max sampled second_delta ~= 5.48/255; no sampled pixels exceeded 12/255
 ```
 
 The current cleanup branch now has two failure modes: conservative initialization stays identity,
@@ -182,6 +186,12 @@ while stronger alpha training produces broad edits that worsen residual badly. T
 more scalar alpha/bias tuning and toward a better candidate architecture/objective, such as masked
 residual-only deltas, explicit paper-tone preservation, or a selector trained on page-level win/loss
 labels.
+
+A bounded residual-delta candidate is now implemented and is materially safer than the full clean
+image head, but it still does not beat the current second-stage baseline. Keep it as a reusable
+candidate-generation branch, not a product default. The next iteration should combine this
+representation with page-level win/loss selection or stronger residual-localization targets rather
+than increasing edit strength globally.
 
 Source-of-truth details for the historical migration remain in:
 

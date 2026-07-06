@@ -63,6 +63,55 @@ class EraseMapCleanupNet(nn.Module):
         return pred, alpha, clean_candidate
 
 
+class ResidualDeltaCleanupNet(nn.Module):
+    """Cleanup model that predicts a bounded residual delta instead of a full image."""
+
+    def __init__(self, residual_delta_scale: float = 0.25):
+        super().__init__()
+        self.residual_delta_scale = residual_delta_scale
+        self.enc1 = ConvBlock(3, 32)
+        self.pool1 = nn.MaxPool2d(2)
+        self.enc2 = ConvBlock(32, 64)
+        self.pool2 = nn.MaxPool2d(2)
+        self.bottleneck = ConvBlock(64, 96)
+        self.up2 = nn.ConvTranspose2d(96, 64, 2, stride=2)
+        self.dec2 = ConvBlock(128, 64)
+        self.up1 = nn.ConvTranspose2d(64, 32, 2, stride=2)
+        self.dec1 = ConvBlock(64, 32)
+        self.alpha_head = nn.Sequential(
+            nn.Conv2d(32, 16, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(16, 1, 1),
+            nn.Sigmoid(),
+        )
+        self.delta_head = nn.Sequential(
+            nn.Conv2d(32, 16, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(16, 3, 1),
+            nn.Tanh(),
+        )
+
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        e1 = self.enc1(x)
+        e2 = self.enc2(self.pool1(e1))
+        b = self.bottleneck(self.pool2(e2))
+        d2 = self.dec2(torch.cat([self.up2(b), e2], dim=1))
+        d1 = self.dec1(torch.cat([self.up1(d2), e1], dim=1))
+        alpha = self.alpha_head(d1)
+        bounded_delta = self.delta_head(d1) * self.residual_delta_scale
+        clean_candidate = torch.clamp(x + bounded_delta, 0.0, 1.0)
+        pred = torch.clamp(x + alpha * bounded_delta, 0.0, 1.0)
+        return pred, alpha, clean_candidate
+
+
+def build_model(model_type: str, residual_delta_scale: float = 0.25) -> nn.Module:
+    if model_type == "erasemap":
+        return EraseMapCleanupNet()
+    if model_type == "residual_delta":
+        return ResidualDeltaCleanupNet(residual_delta_scale=residual_delta_scale)
+    raise ValueError(f"Unsupported cleanup model type: {model_type}")
+
+
 def resolve_device(device_arg: str) -> torch.device:
     if device_arg == "cpu":
         return torch.device("cpu")
@@ -81,9 +130,12 @@ def resolve_device(device_arg: str) -> torch.device:
     return torch.device("cpu")
 
 
-def load_model(checkpoint_path: Path, device: torch.device) -> EraseMapCleanupNet:
+def load_model(checkpoint_path: Path, device: torch.device) -> nn.Module:
     state = torch.load(checkpoint_path, map_location="cpu")
-    model = EraseMapCleanupNet().to(device)
+    args = state.get("args", {}) if isinstance(state, dict) else {}
+    model_type = args.get("model_type", "erasemap")
+    residual_delta_scale = float(args.get("residual_delta_scale", 0.25))
+    model = build_model(model_type, residual_delta_scale=residual_delta_scale).to(device)
     model.load_state_dict(state["model"] if isinstance(state, dict) else state)
     model.eval()
     return model
@@ -94,7 +146,7 @@ def to_tensor(rgb: np.ndarray) -> torch.Tensor:
 
 
 def infer_full_page(
-    model: EraseMapCleanupNet,
+    model: nn.Module,
     image: np.ndarray,
     device: torch.device,
     tile_size: int,

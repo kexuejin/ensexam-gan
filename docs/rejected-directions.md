@@ -158,6 +158,21 @@ produce residual-specific corrections without damaging the page. Future work sho
 candidate representation or use page-level acceptance labels instead of attempting to rescue this
 checkpoint family with gate tweaks.
 
+A residual-delta cleanup candidate reduced the over-broad edit problem but still failed promotion:
+
+```text
+model_type=residual_delta, residual_delta_scale=0.08:
+  sampled max second_delta ~= 5.48/255
+  sampled px_delta_ge_12=0.000000
+  SCUT115 residual=0.118880
+  overerase=0.003014
+  gate=0.016595
+```
+
+This is much safer than the full clean-head variants, but it remains worse than the current
+second-stage baseline residual `0.114225`. Do not promote it directly. Treat it as a better
+candidate representation for future selector/page-label experiments, not as a solved cleanup model.
+
 ## Patent-Style Standalone Mask Calibration
 
 Rejected as a standalone branch. SCUT pseudo-mask heads-only training worsened hardcase residual, indicating isolated mask branch tuning breaks erase gating.

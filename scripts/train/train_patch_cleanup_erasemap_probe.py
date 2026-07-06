@@ -28,7 +28,7 @@ INFER_DIR = ROOT / "scripts" / "infer"
 if str(INFER_DIR) not in sys.path:
     sys.path.insert(0, str(INFER_DIR))
 
-from patch_cleanup_erasemap import EraseMapCleanupNet, resolve_device  # noqa: E402
+from patch_cleanup_erasemap import build_model, EraseMapCleanupNet, resolve_device  # noqa: E402
 
 
 def find_image(directory: Path, file_name: str) -> Path:
@@ -161,7 +161,7 @@ def dice_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
 
 
 def compute_loss_terms(
-    model: EraseMapCleanupNet,
+    model: torch.nn.Module,
     inp: torch.Tensor,
     target: torch.Tensor,
     mask: torch.Tensor,
@@ -258,6 +258,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--val-max-batches", type=int, default=0)
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--init-checkpoint", default="")
+    parser.add_argument("--model-type", choices=("erasemap", "residual_delta"), default="erasemap")
+    parser.add_argument("--residual-delta-scale", type=float, default=0.25)
     parser.add_argument("--device", choices=("auto", "cpu", "mps", "cuda"), default="auto")
     parser.add_argument("--tile-size", type=int, default=256)
     parser.add_argument("--mask-threshold", type=int, default=12)
@@ -337,7 +339,7 @@ def main() -> None:
     if val_loader is not None:
         print(f"val_patches={len(val_loader.dataset)} val_every={args.val_every}", flush=True)
 
-    model = EraseMapCleanupNet().to(device)
+    model = build_model(args.model_type, residual_delta_scale=args.residual_delta_scale).to(device)
     if args.init_checkpoint:
         load_initial_state(model, args.init_checkpoint, device)
     else:
