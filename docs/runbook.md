@@ -342,6 +342,36 @@ a productization candidate for the hybrid gate, not as evidence that lambda-only
 the problem. The improvement comes from inference-time interval gating; keep the generated output
 directories out of commits.
 
+Extended train160 non-holdout validation:
+
+```text
+sample list: docs/scut-train160-nonholdout-relative.txt
+baseline: outputs/scut_train160_nonholdout_second_stage_baseline_20260706
+relaxed interval eval: outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+refined replay: outputs/selector_replay_exact129_outside_edit_lam16_interval_train160_refined_20260706
+
+train160 baseline: residual=0.144527160040 overerase=0.002314662644
+relaxed interval: selected=3/160 residual=0.144524066276 overerase=0.002322399968
+relaxed selected: 166.jpg, 190.jpg, 192.jpg
+relaxed decision: unsafe; overerase regresses by +0.000007737324 on train160.
+
+refined interval adds an edit floor:
+  copy_mask_cov8: 0.807064 <= cov8 <= 0.881053
+  primary_edit_px: 67887 <= edit_px <= 98699
+  primary_p95_edit_delta: 0 <= p95 <= 4.667
+  second_stage_gate_ratio: 0.0004928 <= gate <= 0.0010997
+
+refined replay across SCUT115 + holdout40 + train160:
+  scut115 selected=4/115 residual_gain=0.000048330735 overerase_regret=-0.000003493826
+  holdout40 selected=1/40 residual_gain=0.000063217389 overerase_regret=-0.000000311370
+  train160 selected=0/160 residual_gain=0 overerase_regret=0
+```
+
+Decision update: the earlier relaxed interval is not broad-validation safe. The refined edit-floor
+rule is safer but drops the large SCUT 156.jpg gain, so it should be treated as a conservative
+selector hypothesis rather than a strong productization candidate. Larger validation and visual
+review are still required before default use.
+
 Visible-delta analysis:
 
 ```bash

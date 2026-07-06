@@ -260,6 +260,28 @@ decision: promote as a selector/productization candidate for further visual revi
 holdout validation. Do not describe it as model-side retraining quality improvement: lam8/lam16
 alone did not reduce holdout overerase; the interval gate removed unsafe holdout pages 193.jpg
 and 268.jpg while preserving the SCUT exact129 strict wins.
+
+train160 follow-up:
+  sample list: docs/scut-train160-nonholdout-relative.txt
+  baseline: outputs/scut_train160_nonholdout_second_stage_baseline_20260706
+  relaxed interval eval: outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+  relaxed result: selected=3/160 residual=0.144524066276 overerase=0.002322399968
+  baseline result: residual=0.144527160040 overerase=0.002314662644
+  selected pages: train160/166.jpg, train160/190.jpg, train160/192.jpg
+  decision update: relaxed interval is unsafe on train160 because overerase regresses
+                   by +0.000007737324.
+
+refined train160-safe interval:
+  0.807064 <= copy_mask_cov8 <= 0.881053
+  67887 <= primary_edit_px <= 98699
+  0 <= primary_p95_edit_delta <= 4.667
+  0.0004928 <= second_stage_gate_ratio <= 0.0010997
+  replay: outputs/selector_replay_exact129_outside_edit_lam16_interval_train160_refined_20260706
+  scut115 selected=4/115 residual_gain=0.000048330735 overerase_regret=-0.000003493826
+  holdout40 selected=1/40 residual_gain=0.000063217389 overerase_regret=-0.000000311370
+  train160 selected=0/160 residual_gain=0 overerase_regret=0
+  decision: safer but much more conservative; drops SCUT 156.jpg, so keep as a
+            selector hypothesis needing larger validation, not a promoted default.
 ```
 
 Low-diff outside-edit preservation probe:
@@ -475,9 +497,10 @@ Promotion gate:
 ```text
 Do not promote the hybrid gate as the default pipeline without larger validation and visual
 review. The previous loose/strict gates either increased overerase or had negligible safe gain.
-The exact129 outside-edit interval gate is now the strongest productization candidate because it
-keeps SCUT115 residual and overerase improvements while making holdout40 overerase slightly better
-than baseline, but it remains a selector-level candidate rather than a fully productized default.
+The relaxed exact129 outside-edit interval gate fixed SCUT115/holdout40 but regressed train160
+overerase, while the refined train160-safe interval is much more conservative and loses the large
+SCUT 156.jpg gain. Treat interval gating as the best current selector hypothesis, not a product
+default.
 ```
 
 ## Validation Anchors
