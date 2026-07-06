@@ -287,6 +287,13 @@ full-generator step5:
 mask-only decoder step5:
   residual=0.421282252  delta=+0.083242551
   overerase=0.016514974 delta=+0.010384012
+
+outside-edit step2:
+  lr=2e-6
+  lambda_outside_edit_size=8.0
+  outside_edit_threshold_px=4.0
+  residual=0.508559486  delta=+0.170519785
+  overerase=0.043658455 delta=+0.037527493
 ```
 
 Do not continue this exact patch-index route by adding more steps. It is useful evidence that

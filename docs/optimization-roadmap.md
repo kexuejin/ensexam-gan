@@ -419,3 +419,24 @@ Do not continue this exact patch-index route by adding more steps. The likely is
 target-residual crops include target/background mismatch or regions where direct patch training
 damages page tone more than it removes useful residual handwriting. The next training route needs
 crop labels or a stronger preserve objective before more coverage expansion.
+
+A stronger preservation-aware probe did not fix this route:
+
+```text
+outside-edit step2:
+  output: outputs/exp_coverage_residual_feature_top15_outsideedit_step2_20260706
+  eval: outputs/eval_coverage_residual_feature_top15_outsideedit_step2_target9_20260706
+  lr: 2e-6
+  lambda_outside_edit_size: 8.0
+  outside_edit_threshold_px: 4.0
+  baseline residual: 0.338039701
+  candidate residual: 0.508559486
+  delta residual: +0.170519785
+  baseline overerase: 0.006130962
+  candidate overerase: 0.043658455
+  delta overerase: +0.037527493
+```
+
+This makes the failure mode clearer: direct training on these target-residual crops is unsafe even
+with an outside-edit penalty. The next useful step is to label or filter the crop queue before
+creating another training candidate.
