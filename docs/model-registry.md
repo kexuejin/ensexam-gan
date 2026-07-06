@@ -280,6 +280,30 @@ mix25 step2 follow-up:
   decision: also not a product candidate. Mixed sampling reduces SCUT overerase but
   worsens residual on both SCUT115 and holdout40. The safe replay window is too small
   to justify further tuning of this exact anchor/mix setting.
+
+lowdiff001 step1 follow-up:
+  train output: outputs/exp_lowdiff001_outside_edit_step1_20260706
+  eval outputs:
+    outputs/eval_scut115_lowdiff001_outside_edit_step1_strict_20260706
+    outputs/eval_holdout40_lowdiff001_outside_edit_step1_strict_20260706
+  selector replay: outputs/selector_replay_lowdiff001_outside_edit_step1_20260706
+
+  strict gate:
+    scut115 selected=1/115 residual=0.114160171559 overerase=0.003060470866
+    holdout40 selected=2/40 residual=0.134636204411 overerase=0.002526421284
+
+  comparison to lowdiff001 without outside-edit:
+    scut115 residual 0.114160943919 -> 0.114160171559, overerase 0.003060213443 -> 0.003060470866
+    holdout40 residual 0.134691305786 -> 0.134636204411, overerase 0.002524365006 -> 0.002526421284
+
+  safe replay:
+    best safe rule selected=1/155 total residual gain=0.000275221700
+    max split overerase regret=0
+    selected split coverage: scut115=1, holdout40=0
+
+  decision: not a product candidate. The outside-edit objective slightly improves
+  residual versus the original 001 probe, but overerase is worse and holdout remains
+  unsafe. The only safe replay window is the same tiny one-page SCUT-only pattern.
 ```
 
 Joint selector replay:

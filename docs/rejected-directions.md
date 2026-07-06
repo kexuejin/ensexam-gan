@@ -193,6 +193,42 @@ selected split coverage: scut115=1, holdout40=0
 Do not continue this exact lowdiff002 mix25 step2 path. If outside-edit training continues, vary the
 anchor or objective schedule rather than spending more cycles on selector replay for this candidate.
 
+## Low-Diff Outside-Edit 001 Step1 Promotion
+
+Rejected for promotion. Switching the outside-edit one-step probe from lowdiff002 to lowdiff001 did
+not solve the cross-split tradeoff. The probe slightly improved residual versus the original
+lowdiff001 candidate, but it increased overerase and stayed unsafe on holdout40.
+
+Strict-gate result:
+
+```text
+scut115: selected=1/115 residual=0.114160171559 overerase=0.003060470866
+holdout40: selected=2/40 residual=0.134636204411 overerase=0.002526421284
+```
+
+Compared with the original lowdiff001 one-step probe:
+
+```text
+scut115 residual 0.114160943919 -> 0.114160171559
+scut115 overerase 0.003060213443 -> 0.003060470866
+holdout40 residual 0.134691305786 -> 0.134636204411
+holdout40 overerase 0.002524365006 -> 0.002526421284
+```
+
+Joint selector replay with `max-overerase-regret=0` again found only a one-page SCUT-only safe
+window:
+
+```text
+selected=1/155
+total residual gain=0.000275221700
+max split overerase regret=0
+selected split coverage: scut115=1, holdout40=0
+```
+
+Do not continue the exact lowdiff001 outside-edit step1 path. This reinforces that the current
+low-diff anchors expose diagnostic signal but are not enough for product quality without a better
+candidate-generation objective.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual
