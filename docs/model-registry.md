@@ -196,6 +196,42 @@ decision: useful direction, not product default; low-diff anchor-like patches re
 eligibility but still increase overerase and edit-size risk
 ```
 
+Low-diff anchor selector replay:
+
+```text
+script: scripts/analysis/replay_hybrid_selector.py
+outputs:
+  outputs/selector_replay_anchor_lowdiff_001_161_x1120_y0_20260706
+  outputs/selector_replay_anchor_lowdiff_002_130_x2240_y960_20260706
+  outputs/selector_replay_anchor_lowdiff003_20260706
+  outputs/selector_replay_anchor_lowdiff_004_378_x0_y960_20260706
+
+001_161_x1120_y0:
+  best safe rule selected=1/155 total residual gain=0.000276124066
+  max split overerase regret=0
+  selected: scut115/153.jpg only
+
+002_130_x2240_y960:
+  best safe rule selected=4/155 total residual gain=0.000119013592
+  max split overerase regret=-0.000000740458
+  selected: scut115/490.jpg, scut115/491.jpg, holdout40/475.jpg, holdout40/477.jpg
+
+003_84_x800_y480:
+  best safe rule selected=1/155 total residual gain=-0.000000895287
+  max split overerase regret=0
+  selected: holdout40/477.jpg only
+
+004_378_x0_y960:
+  no safe rules under max-overerase-regret=0
+  best unsafe rule selected=7/155 total residual gain=0.003780324651
+  max split overerase regret=0.000317846011
+
+decision: selector-only tuning on low-diff anchor candidates is analysis-only. It can find
+small zero-regret windows for 001/002, but the gains are too small and unstable for product
+promotion. The next useful route is model-side edit-size/background preservation while
+retaining strict-gate eligibility, not more threshold search on the current candidates.
+```
+
 Joint selector replay:
 
 ```text

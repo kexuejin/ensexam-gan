@@ -65,6 +65,15 @@ artifacts/current-primary/micro_region_probe_step0001.pth
 
 Prefer bounded hardcase fine-tunes, local target-vs-prediction evaluation, gate tuning, and second-stage residual repair before considering another broad retrain.
 
+For patch-sensitivity experiments, do not rank patches by stroke density alone. Prefer local
+target-difference and gate-feature diagnostics, especially `copy_mask_cov8`, `primary_edit_px`,
+`primary_p95_edit_delta`, and `second_stage_gate_ratio`.
+
+Treat selector-only threshold search as analysis infrastructure, not a product-quality path by
+itself. Promote a candidate only when it improves residual without cross-split overerase regression
+on SCUT115 and holdout40; otherwise document the result as rejected/not-default instead of tuning
+thresholds indefinitely.
+
 ## Evaluation Policy
 
 Prefer local comparisons against target/label images and reproducible metrics. Do not rely on uploading images to visual AI unless local metrics and review packs are insufficient.

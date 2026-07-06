@@ -95,6 +95,31 @@ Keep `scripts/analysis/replay_hybrid_selector.py` for future selector analysis, 
 the current hybrid selector as a product default without a new candidate that improves residual
 without cross-split overerase regression.
 
+## Low-Diff Anchor Selector-Only Promotion
+
+Rejected as a product default. Low-diff anchor-like patch probes can restore some strict-gate
+eligibility, but replaying label-free selector thresholds across SCUT115 and holdout40 shows that
+safe rules have too little stable residual gain.
+
+Best safe selector replay results:
+
+```text
+001_161_x1120_y0: selected=1/155 total residual gain=0.000276124066 max overerase regret=0
+002_130_x2240_y960: selected=4/155 total residual gain=0.000119013592 max overerase regret=-0.000000740458
+003_84_x800_y480: selected=1/155 total residual gain=-0.000000895287 max overerase regret=0
+004_378_x0_y960: no safe rules; best unsafe max overerase regret=0.000317846011
+```
+
+The best-looking raw candidate, `003_84_x800_y480`, improves SCUT/holdout residual under the strict
+rule but raises overerase. Once the replay requires no cross-split overerase regression, it keeps
+only one holdout page with slightly negative residual gain. `001` and `002` expose useful diagnostic
+signals, but their product-level gain is negligible.
+
+Keep the low-diff anchor ranking and replay tooling for future probes, but do not spend more cycles
+promoting the current low-diff candidates through threshold search alone. Future work should change
+the training objective or candidate generation so useful pages keep high `copy_mask_cov8` while
+reducing `primary_edit_px`, p95 edit delta, and background overerase.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual
