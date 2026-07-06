@@ -279,3 +279,53 @@ outputs/product_quality_label_summary_manual_YYYYMMDD/pending_labels.csv
 ```
 
 Do not promote a candidate if `pending_labels.csv` still contains rows from a core bucket.
+
+## Residual-Delta Review Queue
+
+The residual-delta branch now has a deterministic page-level review queue generator. It expands the
+manual review surface from the 30-row seed set into metric-win, metric-loss, selector-hit, and
+high-activity risk buckets without inventing labels.
+
+```text
+script:
+  scripts/analysis/build_residual_delta_review_set.py
+
+verified output:
+  outputs/product_quality_review_residual_delta_20260707/review-pages.csv
+  outputs/product_quality_review_residual_delta_20260707/labels-template.csv
+  outputs/product_quality_review_residual_delta_20260707/review_pack/contact_sheet.png
+
+rows:
+  total = 142
+  scut115 = 78
+  holdout40 = 64
+
+buckets:
+  residual_delta_metric_win = 39
+  residual_delta_metric_loss = 48
+  residual_delta_joint_selector = 7
+  residual_delta_high_activity_risk = 48
+```
+
+Regenerate the queue and contact sheet with:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_residual_delta_review_set.py \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv:outputs/selector_features_residual_delta_joint_20260707_nodummy/page_features.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv:outputs/selector_features_residual_delta_joint_20260707_nodummy/page_features.csv \
+  --candidate-name residual_delta_bias3_scale008 \
+  --output-review-csv outputs/product_quality_review_residual_delta_YYYYMMDD/review-pages.csv \
+  --output-labels-template outputs/product_quality_review_residual_delta_YYYYMMDD/labels-template.csv \
+  --review-pack outputs/product_quality_review_residual_delta_YYYYMMDD
+
+$ENSEXAM_PYTHON scripts/analysis/build_product_quality_review_pack.py \
+  --review-csv outputs/product_quality_review_residual_delta_YYYYMMDD/review-pages.csv \
+  --output-dir outputs/product_quality_review_residual_delta_YYYYMMDD/review_pack \
+  --thumb-width 360 \
+  --thumb-height 260 \
+  --max-contact-rows 80
+```
+
+Do not merge the generated labels template into `docs/product-quality-labels.csv` until the pages
+have been reviewed visually. For selector training, the next required artifact is the filled
+`labels-template.csv`; metric wins alone are not acceptable labels.
