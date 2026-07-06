@@ -360,3 +360,43 @@ auto_review_priority:
 Treat `auto_suggest_label` as a review aid only. Human review should focus first on
 `auto_review_priority=high`, especially low-confidence metric wins with high gate activity and any
 suggested losses. Low-priority noops can be sampled instead of exhaustively reviewed.
+
+After visual labels are filled, calibrate a page-level selector from confirmed labels and page
+features:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/calibrate_page_quality_selector.py \
+  --labels-csv outputs/product_quality_review_residual_delta_YYYYMMDD/labels-template.csv \
+  --features-csv outputs/selector_features_residual_delta_joint_20260707_nodummy/page_features.csv \
+  --candidate residual_delta_bias3_scale008 \
+  --output-dir outputs/page_quality_selector_residual_delta_YYYYMMDD \
+  --min-labeled 40
+```
+
+The calibrator refuses to mine rules when confirmed labels are insufficient:
+
+```text
+empty labels-template smoke:
+  status = insufficient_labeled
+  joined_labeled = 0
+  min_labeled = 40
+```
+
+An auto-suggest smoke run proves the rule-mining path, but must not be treated as product evidence:
+
+```text
+labels source: labels-auto-suggest.csv
+joined_labeled = 142
+positive = 48
+negative = 74
+neutral = 20
+best smoke rule:
+  active_gray_p25 >= 114 AND candidate_delta_p99 >= 2
+  selected = 20
+  positive = 19
+  negative = 0
+  precision = 0.950
+```
+
+Only use rules mined from visually confirmed `label` values for promotion decisions. Rules mined
+from `auto_suggest_label` are smoke tests for plumbing and prioritization only.
