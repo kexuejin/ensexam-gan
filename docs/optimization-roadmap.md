@@ -440,3 +440,26 @@ outside-edit step2:
 This makes the failure mode clearer: direct training on these target-residual crops is unsafe even
 with an outside-edit penalty. The next useful step is to label or filter the crop queue before
 creating another training candidate.
+
+The crop queue can be triaged before another training attempt:
+
+```text
+$ENSEXAM_PYTHON scripts/analysis/bucket_residual_crop_candidates.py \
+  --priority-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15_with_sheet.csv \
+  --output-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/priority_feature_top15_triage.csv
+```
+
+This creates review/training buckets such as `high_confidence_residual_handwriting`,
+`possible_residual_handwriting`, and `probable_background_or_target_mismatch`. These buckets are
+triage signals only; product promotion still requires visual crop labels and split validation.
+
+Initial top15 triage:
+
+```text
+high_confidence_residual_handwriting: 5
+possible_residual_handwriting: 4
+probable_background_or_target_mismatch: 6
+```
+
+This explains the failed direct training probes: the queue is not clean enough to use as supervision
+without filtering or manual labels.
