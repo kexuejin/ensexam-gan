@@ -68,6 +68,11 @@ generator objective, or a specialized repair branch for correction-fluid / paper
 
 Do not add the current whiteout inpaint repair to the default pipeline. It can reduce residual metrics on correction-fluid pages, but visual review shows the repaired area may look dirtier than leaving a clean white patch.
 
+The current optimization roadmap is in `docs/optimization-roadmap.md`. The highest-leverage next
+experiment is conservative paper-tone harmonization for correction-fluid pages, followed by better
+candidate generation and calibrated selector analysis. Do not resume threshold-only micro-tuning
+unless it is tied to a named failure bucket and page-level acceptance criteria.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
