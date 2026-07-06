@@ -144,6 +144,16 @@ def metric_hinge_proxy(
     return residual, overerase
 
 
+def balanced_alpha_bce(alpha: torch.Tensor, mask: torch.Tensor, args: argparse.Namespace) -> torch.Tensor:
+    """Mask-normalized alpha supervision so sparse erase pixels are not diluted."""
+    alpha = alpha.clamp(1e-6, 1.0 - 1e-6)
+    pos = F.binary_cross_entropy(alpha, torch.ones_like(alpha), reduction="none")
+    neg = F.binary_cross_entropy(alpha, torch.zeros_like(alpha), reduction="none")
+    pos_loss = masked_mean(pos, mask)
+    neg_loss = masked_mean(neg, 1.0 - mask)
+    return (pos_loss * args.alpha_positive_weight + neg_loss * args.alpha_negative_weight) * args.alpha_bce_weight
+
+
 def dice_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     inter = (pred * target).sum(dim=(1, 2, 3))
     denom = pred.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3))
@@ -161,11 +171,7 @@ def compute_loss_terms(
     inside = masked_l1(pred, target, mask) * args.inside_weight
     outside = masked_l1(pred, inp, 1.0 - mask) * args.outside_weight
     clean_inside = masked_l1(clean, target, mask) * args.clean_inside_weight
-    alpha_weight = 1.0 + mask * (args.alpha_positive_weight - 1.0)
-    alpha_bce = (
-        F.binary_cross_entropy(alpha.clamp(1e-6, 1.0 - 1e-6), mask, weight=alpha_weight)
-        * args.alpha_bce_weight
-    )
+    alpha_bce = balanced_alpha_bce(alpha, mask, args)
     alpha_dice = dice_loss(alpha, mask) * args.alpha_dice_weight
     alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
     residual_proxy, overerase_proxy = metric_hinge_proxy(pred, target, inp, mask, args)
@@ -266,6 +272,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--clean-inside-weight", type=float, default=2.0)
     parser.add_argument("--alpha-bce-weight", type=float, default=0.5)
     parser.add_argument("--alpha-positive-weight", type=float, default=8.0)
+    parser.add_argument("--alpha-negative-weight", type=float, default=1.0)
     parser.add_argument("--alpha-dice-weight", type=float, default=0.25)
     parser.add_argument("--alpha-sparsity-weight", type=float, default=0.02)
     parser.add_argument("--metric-eval-threshold", type=float, default=12.0)

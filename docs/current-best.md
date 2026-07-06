@@ -161,6 +161,28 @@ This is infrastructure only, not a promoted checkpoint. The next meaningful expe
 SCUT-calibrated cleanup run using these proxy terms, followed by SCUT115 validation against the
 current second-stage baseline.
 
+SCUT-calibrated cleanup follow-up:
+
+```text
+data: SCUT target-diff explicit patches, file-level split 15 train pages / 6 val pages
+no-op checkpoint:
+  alpha_init_bias=-6, lr=1e-5
+  SCUT115 residual=0.118313, overerase=0.003048, gate=0.000000
+  diagnosis: alpha ~= 0.002476; max second_delta ~= 0.335/255
+aggressive checkpoint:
+  alpha_init_bias=-2, lr=5e-5, balanced alpha BCE
+  SCUT115 residual=0.278154, overerase=0.003030, gate=0.023974
+safer checkpoint:
+  alpha_init_bias=-3, lr=5e-5, stronger outside/overerase/negative-alpha constraints
+  SCUT115 residual=0.209663, overerase=0.003024, gate=0.018118
+```
+
+The current cleanup branch now has two failure modes: conservative initialization stays identity,
+while stronger alpha training produces broad edits that worsen residual badly. This points away from
+more scalar alpha/bias tuning and toward a better candidate architecture/objective, such as masked
+residual-only deltas, explicit paper-tone preservation, or a selector trained on page-level win/loss
+labels.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text

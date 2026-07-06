@@ -122,6 +122,42 @@ This exactly falls back to the primary input and remains worse than the current 
 baseline residual `0.114225`. Treat the current cleanup checkpoint family as closed unless the
 training objective or architecture changes.
 
+Metric-aligned SCUT cleanup training also failed to produce a promotable checkpoint. A conservative
+identity-safe run with `alpha_init_bias=-6` stayed locked near identity:
+
+```text
+SCUT115, metric-aligned cleanup best:
+  residual=0.118313
+  overerase=0.003048
+  gate=0.000000
+diagnostic:
+  alpha ~= 0.002476 across sampled tiles
+  max second_delta ~= 0.335/255
+```
+
+Mask-normalized alpha BCE fixed the gradient dilution issue, but stronger alpha settings caused
+over-broad edits rather than useful residual cleanup:
+
+```text
+alpha_init_bias=-2, lr=5e-5:
+  residual=0.278154
+  overerase=0.003030
+  gate=0.023974
+alpha_init_bias=-3 with stronger outside/overerase constraints:
+  residual=0.209663
+  overerase=0.003024
+  gate=0.018118
+current second-stage baseline:
+  residual=0.114225
+  overerase=0.003048
+```
+
+Do not continue scalar alpha-bias / alpha-threshold tuning for this cleanup architecture. The useful
+lesson is that alpha supervision must be mask-normalized, but this branch still lacks a mechanism to
+produce residual-specific corrections without damaging the page. Future work should change the
+candidate representation or use page-level acceptance labels instead of attempting to rescue this
+checkpoint family with gate tweaks.
+
 ## Patent-Style Standalone Mask Calibration
 
 Rejected as a standalone branch. SCUT pseudo-mask heads-only training worsened hardcase residual, indicating isolated mask branch tuning breaks erase gating.
