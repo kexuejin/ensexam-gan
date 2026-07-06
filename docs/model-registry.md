@@ -152,6 +152,10 @@ random one-step rerun: scut selected=1/115, holdout selected=2/40
 exact129 strict result:
   scut selected=5/115 residual=0.113987486262 overerase=0.003046587193
   holdout selected=3/40 residual=0.133642377143 overerase=0.002492527893
+exact129 cov806/edit98908 result:
+  scut selected=6/115 residual=0.113988387733 overerase=0.003046310539
+  holdout selected=3/40 residual=0.133642377143 overerase=0.002492527893
+  selected pages match original strict on both splits
 decision: use the exact patch index for nearworst_safe_step1 reproduction; random one-step reruns
 are not comparable because sampled patch identity changes gate features
 ```

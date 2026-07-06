@@ -291,9 +291,14 @@ Validation on 2026-07-06:
 ```text
 exact129 strict scut115: selected=5/115 residual=0.113987486262 overerase=0.003046587193
 exact129 strict holdout40: selected=3/40 residual=0.133642377143 overerase=0.002492527893
+exact129 cov806/edit98908 scut115: selected=6/115 residual=0.113988387733 overerase=0.003046310539
+exact129 cov806/edit98908 holdout40: selected=3/40 residual=0.133642377143 overerase=0.002492527893
 random one-step rerun scut115: selected=1/115 residual=0.114234747159 overerase=0.003057036945
 random one-step rerun holdout40: selected=2/40 residual=0.134134815794 overerase=0.002521871278
 ```
+
+The `edit98908` threshold only admits the SCUT `254.jpg` near-miss relative to `edit98868`; it
+does not add holdout pages. Treat it as a reproducibility variant, not a product default.
 
 Visible-delta analysis:
 
