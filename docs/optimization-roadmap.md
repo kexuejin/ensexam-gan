@@ -219,3 +219,40 @@ More aggressive tone shifts improve target MAE slightly more, but consistently i
 overdark / dirty-paper proxy and modify too much page area. Treat this as a tentative candidate
 generator, not a product path. It needs crop-level review and a tighter whiteout detector before any
 promotion.
+
+## Crop-Level Review Packs
+
+Page-level contact sheets are not enough for deciding small local changes. Use crop-level packs for
+whiteout, gray-background residue, low-contrast residual strokes, and printed-text protection before
+promoting a candidate.
+
+Reusable tooling:
+
+```text
+script:
+  scripts/analysis/build_product_quality_crop_review_pack.py
+
+example:
+  $ENSEXAM_PYTHON scripts/analysis/build_product_quality_crop_review_pack.py \
+    --review-csv outputs/whiteout_tone_harmonize_v1_default_20260706/review_rows.csv \
+    --output-dir outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706 \
+    --bucket correction_fluid_white_patch \
+    --candidate whiteout_tone_harmonize_v1 \
+    --max-crops-per-row 6 \
+    --crop-size 320 \
+    --thumb-size 240
+```
+
+Initial whiteout tone-harmonization crop pack:
+
+```text
+rows: 6
+crops: 33
+contact sheet:
+  outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/contact_sheet.png
+index:
+  outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/index.csv
+```
+
+Do not treat the crop pack itself as product evidence until labels are added. Its purpose is to make
+local failure review cheaper and more consistent than page-scale inspection.
