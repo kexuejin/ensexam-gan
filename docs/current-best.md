@@ -118,14 +118,27 @@ ExamInk val7, base_edit=12, second_delta=2:
 SCUT115 replacement check, base_edit=12, second_delta=2:
   current second-stage baseline residual 0.114225, overerase 0.003048
   train24/val7 cleanup residual 0.162796, overerase 0.003009
+
+training data: mixed frozen ExamInk-Seg + SCUT target-diff explicit patches
+checkpoint: outputs/train_mixed_cleanup_erasemap_step500_20260707/cleanup_best.pt
+validation loss:
+  best step100 = 1.229255; later steps did not improve
+SCUT115 replacement check, base_edit=12, second_delta=2:
+  current second-stage baseline residual 0.114225, overerase 0.003048
+  mixed cleanup residual 0.150084, overerase 0.003008
+SCUT115 conservative gate sweep:
+  best checked gate base_edit=12, second_delta=12
+  residual 0.116928, overerase 0.003021, gate 0.002447
+  still worse than current baseline by +0.002703 residual
 ```
 
 Do not treat this as a product default. The ExamInk results are same-sample train/eval and the
-holdout4 / val7 results do not survive SCUT115 validation. The useful part is the identity-safe
-training and validation infrastructure; the current checkpoints are rejected for replacement or
-third-stage promotion. The next useful step is to address domain mismatch before selector tuning,
-for example by mixing SCUT-style validation patches with ExamInk-Seg or adding a SCUT-calibrated
-candidate loss.
+holdout4 / val7 results do not survive SCUT115 validation. A small mixed-domain run improves over
+ExamInk-only cleanup but still fails against the current second-stage baseline, and conservative gate
+tuning does not close the gap. The useful part is the identity-safe training and validation
+infrastructure; the current checkpoints are rejected for replacement or third-stage promotion. The
+next useful step is to change the cleanup objective itself, not tune selectors around this candidate
+family.
 
 Source-of-truth details for the historical migration remain in:
 

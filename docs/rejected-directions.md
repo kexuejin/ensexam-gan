@@ -86,6 +86,29 @@ This means an ExamInk held-out validation win is not enough evidence for SCUT pr
 spend more cycles promoting ExamInk-only cleanup checkpoints through threshold tuning; the next
 cleanup attempt needs SCUT-style validation or a mixed-domain objective before SCUT115 evaluation.
 
+A follow-up mixed-domain run added SCUT target-diff explicit patches to the cleanup training and
+validation set. It improved over the ExamInk-only cleanup checkpoints but still failed product
+promotion:
+
+```text
+mixed cleanup best checkpoint:
+  outputs/train_mixed_cleanup_erasemap_step500_20260707/cleanup_best.pt
+validation:
+  best step100 loss=1.229255
+SCUT115 replacement:
+  current second-stage baseline residual=0.114225 overerase=0.003048
+  mixed cleanup residual=0.150084 overerase=0.003008
+SCUT115 conservative gate sweep:
+  base_edit=12 second_delta=12 gate=0.002447
+  residual=0.116928 overerase=0.003021
+  residual regret=+0.002703 versus current baseline
+```
+
+Do not continue selector or threshold tuning for this mixed cleanup checkpoint. Even highly
+conservative gates only approach the primary-input result and remain worse than the current
+second-stage baseline. Future cleanup work needs a stronger objective or architecture change, not
+more gate narrowing around this candidate family.
+
 ## Patent-Style Standalone Mask Calibration
 
 Rejected as a standalone branch. SCUT pseudo-mask heads-only training worsened hardcase residual, indicating isolated mask branch tuning breaks erase gating.
