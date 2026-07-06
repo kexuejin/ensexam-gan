@@ -408,6 +408,7 @@ def main() -> None:
             "input_preserve",
             "mb_leak",
             "box_preserve",
+            "outside_edit_size",
             "mask_bce",
         ])
 
@@ -483,6 +484,7 @@ def main() -> None:
                 loss_g.detach() * 0,
                 loss_g.detach() * 0,
                 loss_g.detach() * 0,
+                loss_g.detach() * 0,
                 L_bce,
             ]
         else:
@@ -522,7 +524,7 @@ def main() -> None:
                 f"G={row[1]} D={row[2]} lr_part={row[4]} "
                 f"sn={row[7]} block={row[8]} "
                 f"preserve={row[9]} mb_leak={row[10]} box_preserve={row[11]} "
-                f"bce={row[12]} "
+                f"outside_edit={row[12]} bce={row[13]} "
                 f"elapsed={elapsed:.1f}s",
                 flush=True,
             )

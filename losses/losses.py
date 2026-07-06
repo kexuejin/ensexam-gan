@@ -57,6 +57,8 @@ class EnsExamLoss(nn.Module):
         'input_preserve_threshold': 0.2,
         'lambda_mb_leak': 0.0,
         'lambda_box_preserve': 0.0,
+        'lambda_outside_edit_size': 0.0,
+        'outside_edit_threshold_px': 12.0,
     }
 
     def __init__(self, cfg: dict = None):
@@ -75,6 +77,8 @@ class EnsExamLoss(nn.Module):
         self.input_preserve_threshold = float(c.get('input_preserve_threshold', 0.2))
         self.lambda_mb_leak = float(c.get('lambda_mb_leak', 0.0))
         self.lambda_box_preserve = float(c.get('lambda_box_preserve', 0.0))
+        self.lambda_outside_edit_size = float(c.get('lambda_outside_edit_size', 0.0))
+        self.outside_edit_threshold_px = float(c.get('outside_edit_threshold_px', 12.0))
 
     # ── 各分项损失 ────────────────────────────────────────────────────────
 
@@ -175,6 +179,24 @@ class EnsExamLoss(nn.Module):
             return Icomp.sum() * 0
         return self.masked_l1_loss(Icomp, Iin, box_preserve_gt, normalize_region=True)
 
+    def outside_edit_size_loss(self,
+                               Icomp: torch.Tensor,
+                               Iin: torch.Tensor | None,
+                               Mb_gt: torch.Tensor) -> torch.Tensor:
+        """Penalize large edits outside target boxes to preserve gate eligibility."""
+        if Iin is None or self.lambda_outside_edit_size <= 0:
+            return Icomp.sum() * 0
+        outside = 1 - Mb_gt
+        threshold = self.outside_edit_threshold_px / 127.5
+        edit_delta = torch.amax(torch.abs(Icomp - Iin), dim=1, keepdim=True)
+        excess = F.relu(edit_delta - threshold) * outside
+        denom = outside.sum(dim=(1, 2, 3))
+        valid = denom > 1.0
+        if valid.sum() == 0:
+            return excess.sum() * 0
+        per_sample = excess.sum(dim=(1, 2, 3)) / (denom + 1e-6)
+        return per_sample[valid].mean()
+
     # ── GAN Hinge Loss ────────────────────────────────────────────────────
 
     @staticmethod
@@ -201,7 +223,7 @@ class EnsExamLoss(nn.Module):
         Returns:
             L_total: 标量总损失
             parts:   各分项损失列表 [L_adv, L_lr, L_per, L_style, L_sn, L_block,
-                     L_preserve, L_mb_leak, L_box_preserve]
+                     L_preserve, L_mb_leak, L_box_preserve, L_outside_edit_size]
         """
         Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp = gen_out
         Iin = None
@@ -223,9 +245,15 @@ class EnsExamLoss(nn.Module):
         L_preserve = self.input_preserve_loss(Icomp, Iin, Ms_gt) * self.lambda_input_preserve
         L_mb_leak = self.mb_leak_loss(Mb, Mb_gt) * self.lambda_mb_leak
         L_box_preserve = self.box_preserve_loss(Icomp, Iin, Box_preserve_gt) * self.lambda_box_preserve
+        L_outside_edit_size = (
+            self.outside_edit_size_loss(Icomp, Iin, Mb_gt) * self.lambda_outside_edit_size
+        )
         L_adv   = (self.hinge_loss_G(global_score) + self.hinge_loss_G(local_score)) / 2
 
-        L_total = L_adv + L_lr + L_per + L_style + L_sn + L_block + L_preserve + L_mb_leak + L_box_preserve
+        L_total = (
+            L_adv + L_lr + L_per + L_style + L_sn + L_block
+            + L_preserve + L_mb_leak + L_box_preserve + L_outside_edit_size
+        )
         return L_total, [
             L_adv,
             L_lr,
@@ -236,4 +264,5 @@ class EnsExamLoss(nn.Module):
             L_preserve,
             L_mb_leak,
             L_box_preserve,
+            L_outside_edit_size,
         ]

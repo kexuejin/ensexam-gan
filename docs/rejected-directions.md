@@ -120,6 +120,44 @@ promoting the current low-diff candidates through threshold search alone. Future
 the training objective or candidate generation so useful pages keep high `copy_mask_cov8` while
 reducing `primary_edit_px`, p95 edit delta, and background overerase.
 
+## Low-Diff Outside-Edit Step1 Promotion
+
+Rejected for promotion, but keep the training objective. The new `outside_edit_size` loss directly
+penalizes large edits outside `Mb_gt`, and a one-step lowdiff002 probe confirmed that the loss runs
+on MPS and logs a non-zero `outside_edit` term. However, the resulting candidate is not good enough
+for product promotion.
+
+Strict-gate result:
+
+```text
+scut115: selected=3/115 residual=0.114371078175 overerase=0.003050526697
+holdout40: selected=2/40 residual=0.133809982834 overerase=0.002500990117
+```
+
+Compared with the original lowdiff002 one-step probe, SCUT improves slightly, but holdout40 residual
+and overerase both move in the wrong direction:
+
+```text
+scut115 residual 0.114388655784 -> 0.114371078175
+scut115 overerase 0.003050635477 -> 0.003050526697
+holdout40 residual 0.133796433250 -> 0.133809982834
+holdout40 overerase 0.002500568850 -> 0.002500990117
+```
+
+Joint selector replay with `max-overerase-regret=0` found only a negligible safe window:
+
+```text
+selected=4/155
+total residual gain=0.000027968598
+max split overerase regret=0
+selected split coverage: scut115=4, holdout40=0
+```
+
+Do not promote this checkpoint or repeat the exact one-step lowdiff002 setting as a product path.
+Future probes can still use `lambda_outside_edit_size` with lower learning rate, different anchors,
+or mixed patch sampling because the objective is more targeted than global preservation weight
+increases.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual

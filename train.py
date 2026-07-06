@@ -276,7 +276,8 @@ class CSVLogger:
                     ['epoch', 'train_G', 'train_D',
                      'train_adv', 'train_lr', 'train_per', 'train_style',
                      'train_sn', 'train_block', 'train_input_preserve',
-                     'train_mb_leak', 'train_box_preserve', 'val_loss']
+                     'train_mb_leak', 'train_box_preserve',
+                     'train_outside_edit_size', 'val_loss']
                 )
 
     def write(self, epoch: int, train_G: float, train_D: float,
@@ -609,7 +610,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         # GPU 上累加损失，避免每 step .item() 导致的 CPU-GPU 同步
         sum_loss_G = torch.zeros(1, device=device)
         sum_loss_D = torch.zeros(1, device=device)
-        sum_parts  = torch.zeros(9, device=device)
+        sum_parts  = torch.zeros(10, device=device)
         n_steps = 0
 
         pbar = tqdm(train_prefetcher, total=len(train_loader),
@@ -697,7 +698,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
-                    f"box_preserve={avg_parts[8]:.4f} | "
+                    f"box_preserve={avg_parts[8]:.4f}  "
+                    f"outside_edit={avg_parts[9]:.4f} | "
                     f"PSNR={val_m['psnr']:.2f}  "
                     f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
                     f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
@@ -713,7 +715,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"adv={avg_parts[0]:.4f}  rec={avg_parts[1]:.4f}  "
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
-                    f"box_preserve={avg_parts[8]:.4f} | "
+                    f"box_preserve={avg_parts[8]:.4f}  "
+                    f"outside_edit={avg_parts[9]:.4f} | "
                     f"Val=skipped | LR={current_lr:.2e}"
                 )
             csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, None if val_m is None else val_m['l1'])
@@ -732,6 +735,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     'train/input_preserve': avg_parts[6],
                     'train/mb_leak':    avg_parts[7],
                     'train/box_preserve': avg_parts[8],
+                    'train/outside_edit_size': avg_parts[9],
                     'train/lr':         current_lr,
                 }
                 if should_validate:

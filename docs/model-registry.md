@@ -232,6 +232,36 @@ promotion. The next useful route is model-side edit-size/background preservation
 retaining strict-gate eligibility, not more threshold search on the current candidates.
 ```
 
+Low-diff outside-edit preservation probe:
+
+```text
+objective: add a default-off outside-edit-size loss that penalizes large edits outside Mb_gt
+config: configs/local/config.local-lowdiff-outside-edit-mps.yaml
+train output: outputs/exp_lowdiff002_outside_edit_step1_20260706
+eval outputs:
+  outputs/eval_scut115_lowdiff002_outside_edit_step1_strict_20260706
+  outputs/eval_holdout40_lowdiff002_outside_edit_step1_strict_20260706
+selector replay: outputs/selector_replay_lowdiff002_outside_edit_step1_20260706
+
+strict gate result:
+  scut115 selected=3/115 residual=0.114371078175 overerase=0.003050526697
+  holdout40 selected=2/40 residual=0.133809982834 overerase=0.002500990117
+
+comparison to lowdiff002 without outside-edit:
+  scut115 residual 0.114388655784 -> 0.114371078175, overerase 0.003050635477 -> 0.003050526697
+  holdout40 residual 0.133796433250 -> 0.133809982834, overerase 0.002500568850 -> 0.002500990117
+
+safe replay:
+  best safe rule selected=4/155 total residual gain=0.000027968598
+  max split overerase regret=0
+  selected split coverage: scut115=4, holdout40=0
+
+decision: keep the outside-edit-size loss as reusable tooling because it is a direct,
+targeted way to penalize large background edits, but do not promote the lowdiff002
+step1 candidate. The first probe is slightly more conservative on SCUT but still has
+strict-gate overerase regression and no meaningful safe joint gain.
+```
+
 Joint selector replay:
 
 ```text
