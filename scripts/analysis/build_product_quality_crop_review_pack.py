@@ -38,6 +38,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--thumb-size", type=int, default=220)
     parser.add_argument("--min-component-area", type=int, default=120)
     parser.add_argument("--diff-threshold", type=int, default=4)
+    parser.add_argument(
+        "--include-target-residual",
+        action="store_true",
+        help="Also crop baseline-vs-target residual regions; useful for missed-coverage no-op pages.",
+    )
     parser.add_argument("--max-contact-crops", type=int, default=80)
     parser.add_argument(
         "--labels-template",
@@ -89,6 +94,21 @@ def candidate_diff_boxes(
 ) -> list[tuple[int, int, int, int, int]]:
     diff = np.abs(candidate.astype(np.int16) - baseline.astype(np.int16)).max(axis=2)
     return component_boxes(diff > diff_threshold, min_area)
+
+
+def target_residual_boxes(
+    baseline: np.ndarray,
+    target: np.ndarray,
+    diff_threshold: int,
+    min_area: int,
+) -> list[tuple[int, int, int, int, int]]:
+    diff = np.abs(baseline.astype(np.int16) - target.astype(np.int16)).max(axis=2)
+    gray = cv2.cvtColor(baseline, cv2.COLOR_BGR2GRAY)
+    target_gray = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
+    # Prefer regions where the baseline is darker than target, which is the
+    # common residual handwriting / unremoved mark signal.
+    residual = (diff > diff_threshold) & ((target_gray.astype(np.int16) - gray.astype(np.int16)) > 8)
+    return component_boxes(residual, min_area)
 
 
 def whiteout_boxes(
@@ -197,6 +217,8 @@ def main() -> None:
         if row.get("bucket") == "correction_fluid_white_patch":
             boxes.extend(whiteout_boxes(images["source_input"], baseline, args.min_component_area))
         boxes.extend(candidate_diff_boxes(baseline, images["candidate_pred"], args.diff_threshold, args.min_component_area))
+        if args.include_target_residual or row.get("bucket") == "coverage_negative_noop":
+            boxes.extend(target_residual_boxes(baseline, images["target"], args.diff_threshold, args.min_component_area))
 
         # Deduplicate boxes with the same center neighborhood.
         seen_centers: set[tuple[int, int]] = set()

@@ -241,6 +241,14 @@ example:
     --max-crops-per-row 6 \
     --crop-size 320 \
     --thumb-size 240
+
+missed-coverage example:
+  $ENSEXAM_PYTHON scripts/analysis/build_product_quality_crop_review_pack.py \
+    --review-csv docs/product-quality-review-pages.csv \
+    --output-dir outputs/product_quality_crop_review_pack_union_gate_residual_20260706 \
+    --candidate exact129_lam16_union_gate \
+    --include-target-residual \
+    --max-crops-per-row 4
 ```
 
 Initial whiteout tone-harmonization crop pack:
