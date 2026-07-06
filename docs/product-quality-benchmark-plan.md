@@ -193,3 +193,89 @@ representative next120 no-op pages
 ```
 
 Then create contact-sheet review packs for those pages and label them before any more training.
+
+## Manual Labeling Workflow
+
+The first review pack has already been generated locally:
+
+```text
+contact sheet:
+  outputs/product_quality_review_pack_initial_20260706/contact_sheet.png
+
+chunked sheets:
+  outputs/product_quality_review_pack_initial_20260706/chunks/chunk_01.png
+  outputs/product_quality_review_pack_initial_20260706/chunks/chunk_02.png
+  outputs/product_quality_review_pack_initial_20260706/chunks/chunk_03.png
+  outputs/product_quality_review_pack_initial_20260706/chunks/chunk_04.png
+  outputs/product_quality_review_pack_initial_20260706/chunks/chunk_05.png
+
+single-page review images:
+  outputs/product_quality_review_pack_initial_20260706/pages/
+```
+
+Each review image is ordered left to right:
+
+```text
+input | baseline | candidate | target
+```
+
+Fill this file after local visual review:
+
+```text
+docs/product-quality-labels.csv
+```
+
+Allowed `label` values:
+
+```text
+clear_win      candidate is clearly better than baseline
+slight_win     candidate is better, but subtle
+noop           no meaningful visible difference
+slight_loss    candidate is slightly worse / dirtier
+clear_loss     candidate clearly damages content, paper tone, or readability
+```
+
+Allowed `flags` values are comma-separated:
+
+```text
+residual_handwriting
+correction_fluid_white_patch
+gray_paper_tone
+low_contrast_handwriting
+printed_text_damage
+paper_texture_dirty
+halo_or_edge_artifact
+overerase
+missed_coverage
+```
+
+Label conservatively:
+
+```text
+- If candidate and baseline look the same at page scale, use noop.
+- If the candidate removes handwriting but also dirties paper tone, use slight_loss or clear_loss
+  depending on whether the damage is user-visible.
+- If the candidate is selected only by metrics but not visibly better, use noop.
+- If a next120 page should have been improved but the selector stayed baseline, use noop plus
+  missed_coverage in flags.
+- Leave label blank only when the review image is insufficient or the page needs a zoomed crop.
+```
+
+After labels are filled, run:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/summarize_product_quality_labels.py \
+  --labels-csv docs/product-quality-labels.csv \
+  --review-csv docs/product-quality-review-pages.csv \
+  --output-dir outputs/product_quality_label_summary_manual_YYYYMMDD
+```
+
+Promotion discussion should use:
+
+```text
+outputs/product_quality_label_summary_manual_YYYYMMDD/candidate_summary.csv
+outputs/product_quality_label_summary_manual_YYYYMMDD/bucket_summary.csv
+outputs/product_quality_label_summary_manual_YYYYMMDD/pending_labels.csv
+```
+
+Do not promote a candidate if `pending_labels.csv` still contains rows from a core bucket.
