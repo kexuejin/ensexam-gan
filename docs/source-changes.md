@@ -29,6 +29,12 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `test.py` supports MPS auto-selection.
 - `test.py` supports `--max-test-files` and `--max-test-patches` for bounded smoke checks.
 
+## Analysis
+
+- `scripts/analysis/compare_gate_feature_drift.py` compares strict-gate feature drift across
+  candidate metrics, highlighting whether rejected pages missed `copy_mask_cov8`,
+  `primary_edit_px`, or both.
+
 ## Projectization
 
 - New scripts under `scripts/` provide hardcase eval, checkpoint sweeps, micro training probes, second-stage residual repair, analysis helpers, and experimental utilities.
