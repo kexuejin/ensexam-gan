@@ -306,6 +306,19 @@ two-box OR union interval gate:
   decision: current best selector hypothesis. It restores SCUT 156.jpg, keeps holdout40 466.jpg,
             and avoids train160 relaxed-interval bad pages. Still not product default until larger
             non-overlapping validation and manual visual review pass.
+  visible-delta local review:
+    scut115 output: outputs/analysis_visible_delta_union_scut115_20260706
+    holdout40 output: outputs/analysis_visible_delta_union_holdout40_20260706
+    scut115 improve_visible_target_region=11 components / 458 area
+    scut115 regress_visible_target_region=5 components / 144 area
+    scut115 regress_low_contrast_target=1 component / 37 area
+    holdout40 improve_visible_target_region=5 components / 501 area
+    holdout40 regress_visible_target_region=7 components / 249 area
+    strict scut115 comparison: old strict regress_visible=7 components / 193 area;
+                               union regress_visible=5 components / 144 area
+    decision: supports union over old strict selector because it removes the 254.jpg selected-page
+              regression and lowers SCUT visible-regress area, but holdout40 466.jpg remains mixed
+              and still needs full manual review before default promotion.
 ```
 
 Low-diff outside-edit preservation probe:

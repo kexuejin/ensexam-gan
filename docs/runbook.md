@@ -411,6 +411,39 @@ and avoids selecting the train160 bad pages from the relaxed interval. It is sti
 hypothesis rather than product default until larger non-overlapping validation and manual visual
 review pass.
 
+Union visible-delta local review:
+
+```text
+SCUT115 review pack: outputs/analysis_visible_delta_union_scut115_20260706
+holdout40 review pack: outputs/analysis_visible_delta_union_holdout40_20260706
+
+SCUT115:
+  improve_visible_target_region: components=11 area=458
+  regress_visible_target_region: components=5 area=144
+  regress_low_contrast_target: components=1 area=37
+  by page:
+    156.jpg improve=8:304 regress_low_contrast=1:37
+    17.jpg improve=3:154 regress_visible=3:85
+    303.jpg regress_visible=1:27
+    370.jpg regress_visible=1:32
+
+holdout40:
+  improve_visible_target_region: components=5 area=501
+  regress_visible_target_region: components=7 area=249
+  by page:
+    466.jpg improve=5:501 regress_visible=7:249
+
+strict SCUT115 comparison:
+  old strict review: improve=11:464 regress_visible=7:193 regress_low_contrast=1:36
+  union review: improve=11:458 regress_visible=5:144 regress_low_contrast=1:37
+```
+
+Review decision: local visible-delta evidence supports the union gate over the old strict selector
+because it removes the `254.jpg` selected-page regression and reduces SCUT visible-regress area
+from 193 to 144 while keeping the same 17/156 improvement pattern. Holdout40 `466.jpg` remains
+mixed, with larger improve area than regress area but enough local visible regressions that full
+manual review is still required before product default promotion.
+
 Visible-delta analysis:
 
 ```bash
