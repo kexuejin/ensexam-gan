@@ -298,3 +298,33 @@ pages covered: 9
 This makes the next manual review question concrete: are the largest no-op residual crops true
 missed handwriting, or mostly target/background mismatch? The answer determines whether the next
 model work should expand coverage or avoid chasing noisy target differences.
+
+Before manual review, compute deterministic residual features:
+
+```text
+$ENSEXAM_PYTHON scripts/analysis/analyze_crop_residual_features.py \
+  --index-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/index.csv \
+  --output-csv outputs/product_quality_crop_review_pack_union_gate_residual_typed_20260706/target_residual_features.csv \
+  --source-type target_residual
+```
+
+Use the resulting `handwriting_likelihood_score` as a triage signal only. It helps find crops where
+the source input and baseline still contain dark, edge-like residuals that the target removed; it is
+not a substitute for crop labels.
+
+Initial target-residual feature run:
+
+```text
+input rows: 40
+output rows: 40
+top scoring pages:
+  next120/281.jpg
+  next120/374.jpg
+  next120/273.jpg
+  next120/274.jpg
+```
+
+These pages should be reviewed before lower-scoring, large-area crops because they have stronger
+source-dark overlap and edge density signals. If they are true residual handwriting, the next useful
+work is candidate generation for coverage expansion. If they are mostly target/background mismatch,
+the coverage-negative bucket should be down-weighted.
