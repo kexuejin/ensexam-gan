@@ -266,6 +266,36 @@ selected split coverage: scut115=0, holdout40=1
 Do not promote this checkpoint. This confirms that outside-edit alone can move residual in the
 right direction, but it is not enough to solve the product-level residual/overerase tradeoff.
 
+## Mask-Confidence Feature Selector
+
+Rejected as a product inference selector for the current lowdiff003 outside-edit candidate family.
+The diagnostic script `scripts/analysis/analyze_mask_confidence_features.py` re-runs the primary
+model to recover page-level `ms`/`mb` masks, loads saved candidate images, and writes residual /
+overerase deltas plus mask-confidence features.
+
+The analysis confirmed the core tradeoff: many pages improve residual, but almost none are safe on
+overerase.
+
+```text
+scut115:
+  pages=115 positive_gain=71 safe_positive=1
+  avg_residual_gain=0.003083072386
+  avg_overerase_regret=0.000349649965
+  only safe positive: 397.jpg gain=0.002036560758 overerase_regret=-0.000174437785
+
+holdout40:
+  pages=40 positive_gain=26 safe_positive=1
+  avg_residual_gain=0.003024969740
+  avg_overerase_regret=0.000350554299
+  only safe positive: 477.jpg gain=0.000620732464 overerase_regret=-0.000002347434
+```
+
+A local threshold sweep over `mb_cov8`, `mb_cov98`, `primary_edit_px`,
+`primary_p95_edit_delta`, and `ms_cov98` found no safe rules. Keep the script as diagnostic
+tooling, but do not continue product work by tuning mask-confidence thresholds on the same saved
+candidates. The next useful route remains better candidate generation or a training objective that
+reduces background edits while preserving residual improvements.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual

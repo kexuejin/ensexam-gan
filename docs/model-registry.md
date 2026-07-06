@@ -328,6 +328,28 @@ lowdiff003 step1 follow-up:
   decision: not a product candidate. This anchor gives the strongest strict residual
   improvement among the low-diff outside-edit probes, but it increases overerase on
   both splits. The safe replay window has negligible gain and no SCUT coverage.
+
+mask-confidence diagnostic on lowdiff003 outside-edit:
+  script: scripts/analysis/analyze_mask_confidence_features.py
+  outputs:
+    outputs/analysis_mask_confidence_lowdiff003_outside_scut115_20260706
+    outputs/analysis_mask_confidence_lowdiff003_outside_holdout40_20260706
+
+  summary:
+    scut115 pages=115 positive_gain=71 safe_positive=1
+    scut115 avg_residual_gain=0.003083072386 avg_overerase_regret=0.000349649965
+    scut115 only safe positive: 397.jpg gain=0.002036560758 overerase_regret=-0.000174437785
+    holdout40 pages=40 positive_gain=26 safe_positive=1
+    holdout40 avg_residual_gain=0.003024969740 avg_overerase_regret=0.000350554299
+    holdout40 only safe positive: 477.jpg gain=0.000620732464 overerase_regret=-0.000002347434
+
+  selector sweep:
+    features tested: mb_cov8, mb_cov98, primary_edit_px, primary_p95_edit_delta, ms_cov98
+    safe_rules=0
+
+  decision: keep the script as reusable diagnostic tooling. Mask-confidence features show
+  that the candidate often reduces residual, but they do not separate safe useful pages
+  well enough for a product selector on this candidate family.
 ```
 
 Joint selector replay:

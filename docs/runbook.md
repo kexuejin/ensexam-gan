@@ -604,6 +604,28 @@ commands/run_all.sh
 This tool only prepares deterministic local experiment queues. Commit the script
 and resulting decision records, not failed sweep outputs or large checkpoints.
 
+### Mask-Confidence Candidate Diagnostics
+
+Use this when a saved candidate reduces residual on many pages but fails product promotion because
+overerase rises. The diagnostic re-runs the primary model to recover `ms` / `mb` masks, compares the
+saved candidate against baseline metrics, and writes per-page features for local selector analysis.
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/analyze_mask_confidence_features.py \
+  --config configs/local/config.local-lowdiff-outside-edit-mps.yaml \
+  --weights outputs/<experiment>/micro_region_probe_step0001.pth \
+  --samples-file docs/holdout40-relative.txt \
+  --baseline-metrics outputs/holdout40_second_stage_readiness_20260705/metrics.csv \
+  --candidate-dir outputs/<eval>/candidate \
+  --output-dir outputs/analysis_mask_confidence_<tag> \
+  --device mps \
+  --batch-size 8
+```
+
+Treat this as diagnostic evidence, not a product selector by itself. A threshold rule from the CSV
+still needs joint SCUT115 + holdout40 replay before promotion, and failed threshold sweeps should be
+rolled into consolidated rejected-direction records rather than committed one by one.
+
 Top4 train-split high-stroke sweep:
 
 ```text
