@@ -211,6 +211,26 @@ preserve24/leak1:
 decision: do not promote either probe; global preservation-weight increases are too conservative
 ```
 
+Selective box-preserve probes:
+
+```text
+class2 preserve patch index: outputs/box_preserve_class2_patch_index_20260705/class2_preserve_patch_index.csv
+class2-only lambda_box_preserve=4:
+  run: outputs/exp_box_preserve4_class2patch_step2_20260705
+  result: scut115 selected=0/115; holdout40 selected=0/40; exactly baseline metrics
+
+class2-only lambda_box_preserve=1:
+  run: outputs/exp_box_preserve1_class2patch_step2_20260706
+  result: scut115 selected=0/115; holdout40 selected=1/40 but residual worsened vs baseline
+
+class2-mix50 lambda_box_preserve=1 step4:
+  run: outputs/exp_box_preserve1_class2mix50_step4_20260706
+  result: scut115 selected=0/115; holdout40 selected=1/40 but residual worsened vs baseline
+
+decision: do not promote selective class2 box-preserve continuation; it lowers copy_mask_cov8 on
+the original strict-gate wins and loses gate eligibility
+```
+
 Promotion gate:
 
 ```text

@@ -130,3 +130,55 @@ original strict:
 Do not keep scaling global preservation weights as the next product-quality route. It removes the
 few useful strict-gate pages without solving cross-split overerase. Future attempts should use more
 selective preservation targets or confidence masks.
+
+## Selective Box-Preserve Class2 Training
+
+Rejected as a direct continuation path from the current checkpoint. The `target_diff_non_erase`
+box-preserve target correctly identifies class `2` as non-erase/preserve on the hard proxy subset,
+but bounded probes made the candidate too conservative for the existing strict hybrid gate.
+
+Tested probes:
+
+```text
+box_preserve4 class2-only:
+  run: outputs/exp_box_preserve4_class2patch_step2_20260705
+  scut eval: outputs/scut_test115_hybrid_gate_box_preserve4_class2patch_step2_strict_20260705
+  holdout eval: outputs/holdout40_hybrid_gate_box_preserve4_class2patch_step2_strict_20260705
+  result: scut115 selected=0/115 residual=0.114224963938 overerase=0.003048296717
+          holdout40 selected=0/40 residual=0.134026304621 overerase=0.002481606117
+
+box_preserve1 class2-only:
+  run: outputs/exp_box_preserve1_class2patch_step2_20260706
+  scut eval: outputs/scut_test115_hybrid_gate_box_preserve1_class2patch_step2_strict_20260706
+  holdout eval: outputs/holdout40_hybrid_gate_box_preserve1_class2patch_step2_strict_20260706
+  result: scut115 selected=0/115 residual=0.114224963938 overerase=0.003048296717
+          holdout40 selected=1/40 residual=0.134092140149 overerase=0.002443962885
+
+box_preserve1 class2-mix50 step4:
+  run: outputs/exp_box_preserve1_class2mix50_step4_20260706
+  scut eval: outputs/scut_test115_hybrid_gate_box_preserve1_class2mix50_step4_strict_20260706
+  holdout eval: outputs/holdout40_hybrid_gate_box_preserve1_class2mix50_step4_strict_20260706
+  result: scut115 selected=0/115 residual=0.114224963938 overerase=0.003048296717
+          holdout40 selected=1/40 residual=0.134166309288 overerase=0.002446837699
+
+original strict:
+  scut115 selected=6/115 residual=0.113955546480 overerase=0.003046624105
+  holdout40 selected=3/40 residual=0.133596140373 overerase=0.002492318453
+```
+
+The failure mode is gate-feature drift, especially lower `copy_mask_cov8`, not a single threshold
+miss. The original SCUT strict pages all lost eligibility:
+
+```text
+17.jpg:  cov8 0.806133 -> 0.485925 on mix50
+156.jpg: cov8 0.806202 -> 0.535520 on mix50
+254.jpg: cov8 0.923547 -> 0.775880 on mix50
+303.jpg: cov8 0.877718 -> 0.648027 on mix50
+370.jpg: cov8 0.848411 -> 0.713620 on mix50
+371.jpg: cov8 0.835678 -> 0.673334 on mix50
+```
+
+Keep `micro_train_region_probe.py`'s patch-index mixed sampling and trace marker as reusable
+diagnostic tooling, but do not continue class2-only or high-ratio class2 box-preserve training as
+the next product path. Future attempts should first preserve the original strict gate features, then
+try to enlarge selected coverage.

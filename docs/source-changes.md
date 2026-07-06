@@ -21,6 +21,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `train.py` supports explicit train/val file lists, max train/val file limits, max steps per epoch, validation cadence, and skip-final-test for bounded probes.
 - `train.py` accepts dataset batches with optional `Box_preserve_gt`.
 - `train.py` records skipped validation cleanly in CSV/W&B paths.
+- `scripts/train/micro_train_region_probe.py` can mix patch-index-selected patches with ordinary
+  patches via `--patch-index-mix-ratio`, and trace whether sampled patches matched the index.
 
 ## Testing
 
@@ -44,4 +46,3 @@ Split future commits by concern where possible:
 ```
 
 Do not mix new experiments with migration cleanup unless the experiment needs the migration to run.
-
