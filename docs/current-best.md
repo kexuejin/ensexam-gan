@@ -80,7 +80,7 @@ A separate second-stage `EraseMapCleanupNet` training probe is now available in
 main EnsExam generator and initializes the cleanup branch as an identity mapping, so an untrained or
 undertrained checkpoint does not randomly rewrite the page.
 
-Initial smoke evidence is positive but not enough for promotion:
+Initial evidence is positive but not enough for promotion:
 
 ```text
 training data: ExamInk-Seg smoke4 explicit-mask patches
@@ -91,11 +91,21 @@ ExamInk smoke4, base_edit=12, second_delta=2:
 SCUT holdout4, base_edit=12, second_delta=4:
   residual ~= 0.1562 -> 0.1550
   overerase ~= 0.00202 -> 0.00198
+
+training data: frozen ExamInk-Seg train31 explicit-mask patches
+checkpoint: outputs/train_examink_cleanup_erasemap_identity_train31_step500_20260707/cleanup_probe.pt
+ExamInk train31, base_edit=12, second_delta=2:
+  residual 0.198286 -> 0.193751
+  overerase 0.004114 -> 0.004060
+SCUT holdout4, base_edit=12, second_delta=2:
+  residual 0.156151 -> 0.154797
+  overerase 0.002022 -> 0.001983
 ```
 
-Do not treat this as a product default yet. The ExamInk result is same-sample train/eval and the SCUT
-result is small. The next useful step is to train this cleanup branch on a larger ExamInk-Seg subset
-and validate on fixed SCUT/holdout splits before selector tuning.
+Do not treat this as a product default yet. The ExamInk results are same-sample train/eval and the
+SCUT result is still only holdout4. The next useful step is to finish a larger ExamInk-Seg download,
+train the cleanup branch on a frozen train/val subset, and validate on SCUT115 / holdout40 before
+selector tuning.
 
 Source-of-truth details for the historical migration remain in:
 
