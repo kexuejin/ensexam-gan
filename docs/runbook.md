@@ -575,6 +575,35 @@ needs better model-side confidence/background preservation, not only connected
 component filtering after inference.
 ```
 
+### Patch Sensitivity Queue
+
+Use this when testing whether the exact one-step patch identity, rather than a
+loss or selector change, explains strict-gate behavior. It creates one patch CSV,
+one training command, and two gate-eval commands per candidate patch, so the
+experiment is reproducible and does not depend on random `DataLoader` order.
+
+```bash
+$ENSEXAM_PYTHON scripts/experimental/build_patch_sensitivity_queue.py \
+  --patch-index-csv outputs/<ranked_patch_index>/patch_index.csv \
+  --output-dir outputs/patch_sensitivity_queue_YYYYMMDD \
+  --limit 16 \
+  --experiment-prefix patch_sensitivity \
+  --date-tag YYYYMMDD
+```
+
+Outputs:
+
+```text
+manifest.csv
+patch_indices/*.csv
+commands/01_train.sh
+commands/02_eval.sh
+commands/run_all.sh
+```
+
+This tool only prepares deterministic local experiment queues. Commit the script
+and resulting decision records, not failed sweep outputs or large checkpoints.
+
 ### Preservation Weight Probes
 
 The existing loss already has `input_preserve` and `mb_leak` terms. A logging

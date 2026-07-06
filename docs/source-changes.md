@@ -25,6 +25,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
   patches via `--patch-index-mix-ratio`, and trace whether sampled patches matched the index.
 - `hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv` pins the single patch needed to
   reproduce the nearworst-safe one-step probe without relying on DataLoader shuffle order.
+- `scripts/experimental/build_patch_sensitivity_queue.py` turns ranked patch-index CSVs into
+  per-patch index files plus train/eval command queues for deterministic sensitivity sweeps.
 
 ## Testing
 
