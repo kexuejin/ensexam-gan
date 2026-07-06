@@ -23,6 +23,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `train.py` records skipped validation cleanly in CSV/W&B paths.
 - `scripts/train/micro_train_region_probe.py` can mix patch-index-selected patches with ordinary
   patches via `--patch-index-mix-ratio`, and trace whether sampled patches matched the index.
+- `hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv` pins the single patch needed to
+  reproduce the nearworst-safe one-step probe without relying on DataLoader shuffle order.
 
 ## Testing
 

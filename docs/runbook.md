@@ -261,6 +261,40 @@ manual contact-sheet pass: no obvious large-area overerase regression, but visua
 diff-crop review: most selected-page changes are low-contrast texture / gray-balance shifts; only a subset shows visible cleanup benefit
 ```
 
+Strict nearworst-safe reproduction:
+
+```text
+registered patch index: hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv
+exact patch: 129.jpg x1=320 y1=160 x2=576 y2=416
+```
+
+Use the registered patch index when reproducing the one-step candidate. A random one-step rerun is
+not equivalent because patch identity changes gate features.
+
+```bash
+$ENSEXAM_PYTHON scripts/train/micro_train_region_probe.py \
+  --config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --output-dir outputs/exp_current_primary_nearworst_safe_step1_exact129_YYYYMMDD \
+  --max-steps 1 \
+  --batch-size 1 \
+  --train-pages 16 \
+  --patch-index-file hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv \
+  --loss-override lambda_input_preserve=24.0 \
+  --loss-override lambda_mb_leak=2.0 \
+  --trace-batches-file outputs/exp_current_primary_nearworst_safe_step1_exact129_YYYYMMDD/trace_batches.csv \
+  --log-every 1 \
+  --save-every 1
+```
+
+Validation on 2026-07-06:
+
+```text
+exact129 strict scut115: selected=5/115 residual=0.113987486262 overerase=0.003046587193
+exact129 strict holdout40: selected=3/40 residual=0.133642377143 overerase=0.002492527893
+random one-step rerun scut115: selected=1/115 residual=0.114234747159 overerase=0.003057036945
+random one-step rerun holdout40: selected=2/40 residual=0.134134815794 overerase=0.002521871278
+```
+
 Visible-delta analysis:
 
 ```bash

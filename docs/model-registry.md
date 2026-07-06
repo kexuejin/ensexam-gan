@@ -143,6 +143,19 @@ visible-delta step10 result: residual=0.114225 overerase=0.003048 selected=0/115
 visible-delta step10 decision: rejected; full-generator patch-only training broke safety-gate features
 ```
 
+Nearworst safe-step reproducibility:
+
+```text
+original trace patch: 129.jpg x1=320 y1=160 x2=576 y2=416
+registered patch index: hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv
+random one-step rerun: scut selected=1/115, holdout selected=2/40
+exact129 strict result:
+  scut selected=5/115 residual=0.113987486262 overerase=0.003046587193
+  holdout selected=3/40 residual=0.133642377143 overerase=0.002492527893
+decision: use the exact patch index for nearworst_safe_step1 reproduction; random one-step reruns
+are not comparable because sampled patch identity changes gate features
+```
+
 Joint selector replay:
 
 ```text
