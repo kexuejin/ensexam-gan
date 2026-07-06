@@ -70,7 +70,10 @@ def resize_like(image: np.ndarray, reference: np.ndarray) -> np.ndarray:
     return cv2.resize(image, (reference.shape[1], reference.shape[0]), interpolation=cv2.INTER_AREA)
 
 
-def component_boxes(mask: np.ndarray, min_area: int) -> list[tuple[int, int, int, int, int]]:
+Box = tuple[int, int, int, int, int, str]
+
+
+def component_boxes(mask: np.ndarray, min_area: int, source_type: str) -> list[Box]:
     mask_u8 = cv2.morphologyEx(mask.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
     count, labels, stats, _ = cv2.connectedComponentsWithStats(mask_u8, connectivity=8)
     boxes = []
@@ -82,7 +85,7 @@ def component_boxes(mask: np.ndarray, min_area: int) -> list[tuple[int, int, int
         y = int(stats[label, cv2.CC_STAT_TOP])
         w = int(stats[label, cv2.CC_STAT_WIDTH])
         h = int(stats[label, cv2.CC_STAT_HEIGHT])
-        boxes.append((x, y, x + w - 1, y + h - 1, area))
+        boxes.append((x, y, x + w - 1, y + h - 1, area, source_type))
     return sorted(boxes, key=lambda item: item[4], reverse=True)
 
 
@@ -91,9 +94,9 @@ def candidate_diff_boxes(
     candidate: np.ndarray,
     diff_threshold: int,
     min_area: int,
-) -> list[tuple[int, int, int, int, int]]:
+) -> list[Box]:
     diff = np.abs(candidate.astype(np.int16) - baseline.astype(np.int16)).max(axis=2)
-    return component_boxes(diff > diff_threshold, min_area)
+    return component_boxes(diff > diff_threshold, min_area, "candidate_diff")
 
 
 def target_residual_boxes(
@@ -101,21 +104,21 @@ def target_residual_boxes(
     target: np.ndarray,
     diff_threshold: int,
     min_area: int,
-) -> list[tuple[int, int, int, int, int]]:
+) -> list[Box]:
     diff = np.abs(baseline.astype(np.int16) - target.astype(np.int16)).max(axis=2)
     gray = cv2.cvtColor(baseline, cv2.COLOR_BGR2GRAY)
     target_gray = cv2.cvtColor(target, cv2.COLOR_BGR2GRAY)
     # Prefer regions where the baseline is darker than target, which is the
     # common residual handwriting / unremoved mark signal.
     residual = (diff > diff_threshold) & ((target_gray.astype(np.int16) - gray.astype(np.int16)) > 8)
-    return component_boxes(residual, min_area)
+    return component_boxes(residual, min_area, "target_residual")
 
 
 def whiteout_boxes(
     source: np.ndarray,
     baseline: np.ndarray,
     min_area: int,
-) -> list[tuple[int, int, int, int, int]]:
+) -> list[Box]:
     components = detect_whiteout_components(
         source=source,
         baseline=baseline,
@@ -128,16 +131,16 @@ def whiteout_boxes(
         ys, xs = np.where(component)
         if len(xs) == 0:
             continue
-        boxes.append((int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()), int(component.sum())))
+        boxes.append((int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max()), int(component.sum()), "whiteout_detector"))
     return sorted(boxes, key=lambda item: item[4], reverse=True)
 
 
 def expand_box(
-    box: tuple[int, int, int, int, int],
+    box: Box,
     image_shape: tuple[int, int, int],
     crop_size: int,
 ) -> tuple[int, int, int, int]:
-    x1, y1, x2, y2, _ = box
+    x1, y1, x2, y2, _, _ = box
     cx = (x1 + x2) // 2
     cy = (y1 + y2) // 2
     half = crop_size // 2
@@ -240,6 +243,7 @@ def main() -> None:
                 "crop_index": crop_index,
                 "source_box": f"{box[0]},{box[1]},{box[2]},{box[3]}",
                 "source_area": box[4],
+                "source_type": box[5],
                 "crop_box": f"{crop[0]},{crop[1]},{crop[2]},{crop[3]}",
                 "crop_review_image": str(output_path),
             })
@@ -269,6 +273,7 @@ def main() -> None:
         "crop_index",
         "source_box",
         "source_area",
+        "source_type",
         "crop_box",
         "label",
         "flags",
@@ -289,6 +294,7 @@ def main() -> None:
                 "crop_index": row.get("crop_index", ""),
                 "source_box": row.get("source_box", ""),
                 "source_area": row.get("source_area", ""),
+                "source_type": row.get("source_type", ""),
                 "crop_box": row.get("crop_box", ""),
                 "label": "",
                 "flags": "",
