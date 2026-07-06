@@ -313,6 +313,35 @@ The selector replay reaches the same conclusion as earlier candidates: label-fre
 alone is not enough for a product default. The safe rule is too small, while the larger strict rules
 still carry a small holdout overerase regression.
 
+Exact129 outside-edit interval gate on 2026-07-06:
+
+```text
+candidate: outputs/exp_exact129_outside_edit_lam16_step1_20260706/micro_region_probe.pth
+analysis replay: outputs/selector_replay_exact129_outside_edit_lam16_interval_relaxed_20260706
+real SCUT115 gate: outputs/eval_scut115_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+real holdout40 gate: outputs/eval_holdout40_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+
+selector interval:
+  copy_mask_cov8: 0.807064 <= cov8 <= 0.881053
+  primary_edit_px: 12580 <= edit_px <= 98699
+  primary_p95_edit_delta: 0 <= p95 <= 4.667
+  second_stage_gate_ratio: 0.0004928 <= gate <= 0.0010997
+
+SCUT115 baseline: residual=0.114224963938 overerase=0.003048296717
+SCUT115 interval: selected=5/115 residual=0.113964590999 overerase=0.003046575437
+SCUT115 selected: 17.jpg, 156.jpg, 303.jpg, 370.jpg, 371.jpg
+
+holdout40 baseline: residual=0.134026304621 overerase=0.002481606117
+holdout40 interval: selected=1/40 residual=0.133963087233 overerase=0.002481294748
+holdout40 selected: 466.jpg
+```
+
+Decision: this is the first current exact129-family selector that keeps the SCUT strict wins while
+removing the holdout overerase regression by filtering out holdout 193.jpg and 268.jpg. Treat it as
+a productization candidate for the hybrid gate, not as evidence that lambda-only retraining solved
+the problem. The improvement comes from inference-time interval gating; keep the generated output
+directories out of commits.
+
 Visible-delta analysis:
 
 ```bash

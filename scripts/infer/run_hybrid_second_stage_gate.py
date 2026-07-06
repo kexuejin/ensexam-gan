@@ -75,7 +75,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--change-threshold", type=int, default=12)
     parser.add_argument("--eval-threshold", type=int, default=12)
     parser.add_argument("--min-copy-mask-cov8", type=float, default=0.18436555)
+    parser.add_argument("--max-copy-mask-cov8", type=float, default=1.0)
+    parser.add_argument("--min-primary-edit-px", type=int, default=0)
     parser.add_argument("--max-primary-edit-px", type=int, default=107112)
+    parser.add_argument("--min-primary-p95-edit-delta", type=float, default=0.0)
+    parser.add_argument("--max-primary-p95-edit-delta", type=float, default=1e9)
+    parser.add_argument("--min-second-stage-gate-ratio", type=float, default=0.0)
+    parser.add_argument("--max-second-stage-gate-ratio", type=float, default=1.0)
     parser.add_argument("--save-candidate", action="store_true")
     return parser.parse_args()
 
@@ -153,8 +159,28 @@ def candidate_primary(
     return pred_bgr, features
 
 
-def choose_candidate(features: dict[str, float], min_cov8: float, max_edit_px: int) -> bool:
-    return features["copy_mask_cov8"] >= min_cov8 and features["primary_edit_px"] <= max_edit_px
+def choose_candidate(
+    features: dict[str, float],
+    second_stage_gate_ratio: float,
+    min_cov8: float,
+    max_cov8: float,
+    min_edit_px: int,
+    max_edit_px: int,
+    min_p95_edit_delta: float,
+    max_p95_edit_delta: float,
+    min_second_stage_gate_ratio: float,
+    max_second_stage_gate_ratio: float,
+) -> bool:
+    return (
+        min_cov8 <= features["copy_mask_cov8"] <= max_cov8
+        and min_edit_px <= features["primary_edit_px"] <= max_edit_px
+        and min_p95_edit_delta
+        <= features["primary_p95_edit_delta"]
+        <= max_p95_edit_delta
+        and min_second_stage_gate_ratio
+        <= second_stage_gate_ratio
+        <= max_second_stage_gate_ratio
+    )
 
 
 def main() -> None:
@@ -194,7 +220,19 @@ def main() -> None:
             second_delta_threshold=args.second_delta_threshold,
             dark_threshold=args.dark_threshold,
         )
-        use_candidate = choose_candidate(features, args.min_copy_mask_cov8, args.max_primary_edit_px)
+        second_stage_gate_ratio = float(second_stage_gate.mean())
+        use_candidate = choose_candidate(
+            features,
+            second_stage_gate_ratio,
+            min_cov8=args.min_copy_mask_cov8,
+            max_cov8=args.max_copy_mask_cov8,
+            min_edit_px=args.min_primary_edit_px,
+            max_edit_px=args.max_primary_edit_px,
+            min_p95_edit_delta=args.min_primary_p95_edit_delta,
+            max_p95_edit_delta=args.max_primary_p95_edit_delta,
+            min_second_stage_gate_ratio=args.min_second_stage_gate_ratio,
+            max_second_stage_gate_ratio=args.max_second_stage_gate_ratio,
+        )
         final_bgr = candidate_bgr if use_candidate else baseline_bgr
 
         pred_path = pred_dir / f"{image_path.stem}.png"
@@ -210,8 +248,14 @@ def main() -> None:
             "source": "candidate" if use_candidate else "baseline",
             "use_candidate": int(use_candidate),
             "min_copy_mask_cov8": args.min_copy_mask_cov8,
+            "max_copy_mask_cov8": args.max_copy_mask_cov8,
+            "min_primary_edit_px": args.min_primary_edit_px,
             "max_primary_edit_px": args.max_primary_edit_px,
-            "second_stage_gate_ratio": float(second_stage_gate.mean()),
+            "min_primary_p95_edit_delta": args.min_primary_p95_edit_delta,
+            "max_primary_p95_edit_delta": args.max_primary_p95_edit_delta,
+            "min_second_stage_gate_ratio": args.min_second_stage_gate_ratio,
+            "max_second_stage_gate_ratio": args.max_second_stage_gate_ratio,
+            "second_stage_gate_ratio": second_stage_gate_ratio,
             **features,
         }
         try:

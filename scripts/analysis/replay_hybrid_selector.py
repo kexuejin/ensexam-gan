@@ -116,6 +116,16 @@ def parse_args() -> argparse.Namespace:
             "MAX_P95/MAX_GATE values to disable those caps."
         ),
     )
+    parser.add_argument(
+        "--named-interval-rule",
+        action="append",
+        default=[],
+        metavar="NAME:MIN_COV8:MAX_COV8:MIN_EDIT_PX:MAX_EDIT_PX:MIN_P95:MAX_P95:MIN_GATE:MAX_GATE",
+        help=(
+            "Optional fixed interval selector rule to summarize separately. "
+            "Use 0/larger-than-observed bounds to disable a lower/upper bound."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -134,6 +144,29 @@ def parse_named_rule(value: str) -> tuple[str, float, float, float, float]:
         )
     name, min_cov8, max_edit_px, max_p95, max_gate = parts
     return name, float(min_cov8), float(max_edit_px), float(max_p95), float(max_gate)
+
+
+def parse_named_interval_rule(
+    value: str,
+) -> tuple[str, float, float, float, float, float, float, float, float]:
+    parts = value.split(":", 8)
+    if len(parts) != 9 or not all(parts):
+        raise ValueError(
+            f"Invalid --named-interval-rule {value!r}; expected "
+            "NAME:MIN_COV8:MAX_COV8:MIN_EDIT_PX:MAX_EDIT_PX:MIN_P95:MAX_P95:MIN_GATE:MAX_GATE"
+        )
+    name, min_cov8, max_cov8, min_edit_px, max_edit_px, min_p95, max_p95, min_gate, max_gate = parts
+    return (
+        name,
+        float(min_cov8),
+        float(max_cov8),
+        float(min_edit_px),
+        float(max_edit_px),
+        float(min_p95),
+        float(max_p95),
+        float(min_gate),
+        float(max_gate),
+    )
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:
@@ -242,6 +275,25 @@ def selected_by_rule(
     )
 
 
+def selected_by_interval_rule(
+    row: dict[str, object],
+    min_cov8: float,
+    max_cov8: float,
+    min_edit_px: float,
+    max_edit_px: float,
+    min_p95: float,
+    max_p95: float,
+    min_gate: float,
+    max_gate: float,
+) -> bool:
+    return (
+        min_cov8 <= float(row["copy_mask_cov8"]) <= max_cov8
+        and min_edit_px <= float(row["primary_edit_px"]) <= max_edit_px
+        and min_p95 <= float(row["primary_p95_edit_delta"]) <= max_p95
+        and min_gate <= float(row["second_stage_gate_ratio"]) <= max_gate
+    )
+
+
 def summarize_rule(
     rows: list[dict[str, object]],
     split_names: list[str],
@@ -266,6 +318,81 @@ def summarize_rule(
         split_rows = [row for row in rows if row["split"] == split]
         selected = [
             selected_by_rule(row, min_cov8, max_edit_px, max_p95, max_gate)
+            for row in split_rows
+        ]
+        residual = mean(
+            fnum(row, "candidate_residual_ratio") if is_selected else fnum(row, "baseline_residual_ratio")
+            for row, is_selected in zip(split_rows, selected)
+        )
+        overerase = mean(
+            fnum(row, "candidate_overerase_ratio") if is_selected else fnum(row, "baseline_overerase_ratio")
+            for row, is_selected in zip(split_rows, selected)
+        )
+        baseline_residual = mean(fnum(row, "baseline_residual_ratio") for row in split_rows)
+        baseline_overerase = mean(fnum(row, "baseline_overerase_ratio") for row in split_rows)
+        residual_gain = baseline_residual - residual
+        overerase_regret = overerase - baseline_overerase
+        selected_count = sum(selected)
+
+        out[f"{split}_selected"] = selected_count
+        out[f"{split}_residual"] = residual
+        out[f"{split}_overerase"] = overerase
+        out[f"{split}_residual_gain"] = residual_gain
+        out[f"{split}_overerase_regret"] = overerase_regret
+        total_selected += selected_count
+        total_residual_gain += residual_gain
+        max_split_overerase_regret = max(max_split_overerase_regret, overerase_regret)
+        safe_all = safe_all and overerase_regret <= max_overerase_regret
+
+    out["total_selected"] = total_selected
+    out["total_residual_gain"] = total_residual_gain
+    out["max_split_overerase_regret"] = max_split_overerase_regret
+    out["safe_all_splits"] = int(safe_all)
+    return out
+
+
+def summarize_interval_rule(
+    rows: list[dict[str, object]],
+    split_names: list[str],
+    min_cov8: float,
+    max_cov8: float,
+    min_edit_px: float,
+    max_edit_px: float,
+    min_p95: float,
+    max_p95: float,
+    min_gate: float,
+    max_gate: float,
+    max_overerase_regret: float,
+) -> dict[str, object]:
+    out: dict[str, object] = {
+        "min_copy_mask_cov8": min_cov8,
+        "max_copy_mask_cov8": max_cov8,
+        "min_primary_edit_px": int(min_edit_px),
+        "max_primary_edit_px": int(max_edit_px),
+        "min_primary_p95_edit_delta": min_p95,
+        "max_primary_p95_edit_delta": max_p95,
+        "min_second_stage_gate_ratio": min_gate,
+        "max_second_stage_gate_ratio": max_gate,
+    }
+    total_selected = 0
+    total_residual_gain = 0.0
+    max_split_overerase_regret = -1e9
+    safe_all = True
+
+    for split in split_names:
+        split_rows = [row for row in rows if row["split"] == split]
+        selected = [
+            selected_by_interval_rule(
+                row,
+                min_cov8,
+                max_cov8,
+                min_edit_px,
+                max_edit_px,
+                min_p95,
+                max_p95,
+                min_gate,
+                max_gate,
+            )
             for row in split_rows
         ]
         residual = mean(
@@ -409,6 +536,36 @@ def main() -> None:
     if fixed_rule_rows:
         write_csv(output_dir / "named_rules.csv", fixed_rule_rows)
 
+    fixed_interval_rule_rows: list[dict[str, object]] = []
+    for (
+        name,
+        min_cov8,
+        max_cov8,
+        min_edit_px,
+        max_edit_px,
+        min_p95,
+        max_p95,
+        min_gate,
+        max_gate,
+    ) in [parse_named_interval_rule(value) for value in args.named_interval_rule]:
+        row = summarize_interval_rule(
+            rows,
+            split_names,
+            min_cov8=min_cov8,
+            max_cov8=max_cov8,
+            min_edit_px=min_edit_px,
+            max_edit_px=max_edit_px,
+            min_p95=min_p95,
+            max_p95=max_p95,
+            min_gate=min_gate,
+            max_gate=max_gate,
+            max_overerase_regret=args.max_overerase_regret,
+        )
+        row["rule_name"] = name
+        fixed_interval_rule_rows.append(row)
+    if fixed_interval_rule_rows:
+        write_csv(output_dir / "named_interval_rules.csv", fixed_interval_rule_rows)
+
     safe = [row for row in summaries if int(row["safe_all_splits"])]
     best = safe[0] if safe else (summaries[0] if summaries else {})
     print(f"page_choices: {output_dir / 'page_choices.csv'}")
@@ -416,6 +573,8 @@ def main() -> None:
     print(f"top_rules: {output_dir / 'top_rules.csv'}")
     if fixed_rule_rows:
         print(f"named_rules: {output_dir / 'named_rules.csv'}")
+    if fixed_interval_rule_rows:
+        print(f"named_interval_rules: {output_dir / 'named_interval_rules.csv'}")
     print(f"rules={len(summaries)} safe={len(safe)}")
     if best:
         print(

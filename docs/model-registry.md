@@ -232,6 +232,36 @@ promotion. The next useful route is model-side edit-size/background preservation
 retaining strict-gate eligibility, not more threshold search on the current candidates.
 ```
 
+Exact129 outside-edit interval gate:
+
+```text
+date: 2026-07-06
+candidate: outputs/exp_exact129_outside_edit_lam16_step1_20260706/micro_region_probe.pth
+script support:
+  scripts/infer/run_hybrid_second_stage_gate.py supports interval bounds for cov8/edit/p95/gate
+  scripts/analysis/replay_hybrid_selector.py supports fixed named interval replay
+
+selector interval:
+  0.807064 <= copy_mask_cov8 <= 0.881053
+  12580 <= primary_edit_px <= 98699
+  0 <= primary_p95_edit_delta <= 4.667
+  0.0004928 <= second_stage_gate_ratio <= 0.0010997
+
+replay: outputs/selector_replay_exact129_outside_edit_lam16_interval_relaxed_20260706
+real eval scut115: outputs/eval_scut115_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+real eval holdout40: outputs/eval_holdout40_exact129_outside_edit_lam16_interval_relaxed_gate_20260706
+
+scut115: selected=5/115 residual=0.113964590999 overerase=0.003046575437
+holdout40: selected=1/40 residual=0.133963087233 overerase=0.002481294748
+selected pages: scut115/17.jpg, scut115/156.jpg, scut115/303.jpg,
+                scut115/370.jpg, scut115/371.jpg, holdout40/466.jpg
+
+decision: promote as a selector/productization candidate for further visual review and larger
+holdout validation. Do not describe it as model-side retraining quality improvement: lam8/lam16
+alone did not reduce holdout overerase; the interval gate removed unsafe holdout pages 193.jpg
+and 268.jpg while preserving the SCUT exact129 strict wins.
+```
+
 Low-diff outside-edit preservation probe:
 
 ```text
@@ -443,12 +473,11 @@ the original strict-gate wins and loses gate eligibility
 Promotion gate:
 
 ```text
-Do not promote any current hybrid gate as the default pipeline. The loose gate improves
-residual but increases overerase. The stricter and SCUT7 rules improve residual less and
-still increase holdout40 overerase slightly. The only jointly non-worse rule selects just
-2/155 pages and has negligible residual gain. Treat selector tuning as analysis
-infrastructure unless a future candidate gives meaningful residual improvement without
-cross-split overerase regression.
+Do not promote the hybrid gate as the default pipeline without larger validation and visual
+review. The previous loose/strict gates either increased overerase or had negligible safe gain.
+The exact129 outside-edit interval gate is now the strongest productization candidate because it
+keeps SCUT115 residual and overerase improvements while making holdout40 overerase slightly better
+than baseline, but it remains a selector-level candidate rather than a fully productized default.
 ```
 
 ## Validation Anchors
