@@ -23,4 +23,9 @@ next120,283.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_cov
 next120,274.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
 next120,281.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
 next120,275.jpg,exact129_lam16_union_gate,coverage_negative_noop,noop,missed_coverage,,,union stayed on baseline; treat as coverage-negative noop unless later zoom review shows missed benefit
-todo,TODO-whiteout-examples,todo,correction_fluid_white_patch,,,,,No current-repo whiteout/inpaint output directory found; add concrete correction-fluid examples before training whiteout repair.
+scut115,249.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,,,,,historical whiteout repair sample with strong metric gain; review paper-tone continuity and naturalness
+scut115,41.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,slight_loss,"correction_fluid_white_patch,paper_texture_dirty",,,repaired white patch looks dirtier / less natural than the baseline smooth patch
+scut115,239.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,slight_loss,"correction_fluid_white_patch,gray_paper_tone",,,candidate patch tone looks less natural than the baseline page-scale result
+scut115,43.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,slight_loss,"correction_fluid_white_patch,paper_texture_dirty",,,negative-gain whiteout repair also looks visually worse than baseline
+scut115,397.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,,,,,historical whiteout repair zero-gain sample; use as correction-fluid no-benefit anchor
+scut115,37.jpg,whiteout_inpaint_d10_g215_a120,correction_fluid_white_patch,,,,,historical whiteout repair zero-gain sample; use as correction-fluid no-benefit anchor
