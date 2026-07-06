@@ -27,6 +27,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
   generate ranked train-split patch-index CSVs for sensitivity sweeps.
 - `hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv` pins the single patch needed to
   reproduce the nearworst-safe one-step probe without relying on DataLoader shuffle order.
+- `scripts/experimental/build_anchor_similar_patch_list.py` ranks train-split patches by local
+  similarity to an anchor patch, which is useful when patch identity changes gate features.
 - `scripts/experimental/build_patch_sensitivity_queue.py` turns ranked patch-index CSVs into
   per-patch index files plus train/eval command queues for deterministic sensitivity sweeps.
 

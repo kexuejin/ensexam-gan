@@ -182,6 +182,20 @@ decision: rejected as a direct route; high stroke density alone does not preserv
 strict-gate eligibility
 ```
 
+Exact129 low-diff anchor patch sensitivity:
+
+```text
+script: scripts/experimental/build_anchor_similar_patch_list.py
+patch index: outputs/anchor_similar_lowdiff_exact129_patch_index_20260706/patch_index.csv
+queue: outputs/patch_sensitivity_anchor_lowdiff_top4_20260706
+summary: outputs/patch_sensitivity_anchor_lowdiff_top4_20260706/summary.csv
+best SCUT residual candidate: 003_84_x800_y480
+  scut115 selected=5/115 residual=0.114007786589 overerase=0.003061889507
+  holdout40 selected=3/40 residual=0.133760842647 overerase=0.002508892113
+decision: useful direction, not product default; low-diff anchor-like patches restore gate
+eligibility but still increase overerase and edit-size risk
+```
+
 Joint selector replay:
 
 ```text

@@ -626,6 +626,35 @@ a useful product-quality route by itself. Future patch selection should target
 gate-feature preservation explicitly (`copy_mask_cov8`, `primary_edit_px`) rather
 than only high local handwriting/stroke density.
 
+Top4 exact129 low-diff anchor sweep:
+
+```bash
+$ENSEXAM_PYTHON scripts/experimental/build_anchor_similar_patch_list.py \
+  --config configs/local/config.local-current-primary-continuation-mps.yaml \
+  --anchor-patch-csv hardcase_lists/nearworst_safe_step1_exact129_patch_index.csv \
+  --train-file-list hardcase_lists/scut_train_hard_proxy_160.txt \
+  --output-csv outputs/anchor_similar_lowdiff_exact129_patch_index_20260706/patch_index.csv \
+  --train-pages 160 \
+  --top-k 16 \
+  --exclude-anchor
+```
+
+```text
+queue: outputs/patch_sensitivity_anchor_lowdiff_top4_20260706
+summary: outputs/patch_sensitivity_anchor_lowdiff_top4_20260706/summary.csv
+001_161_x1120_y0:   scut selected=1/115 residual=0.114160943919 overerase=0.003060213443; holdout selected=2/40 residual=0.134691305786 overerase=0.002524365006
+002_130_x2240_y960: scut selected=3/115 residual=0.114388655784 overerase=0.003050635477; holdout selected=2/40 residual=0.133796433250 overerase=0.002500568850
+003_84_x800_y480:   scut selected=5/115 residual=0.114007786589 overerase=0.003061889507; holdout selected=3/40 residual=0.133760842647 overerase=0.002508892113
+004_378_x0_y960:    scut selected=1/115 residual=0.114839309779 overerase=0.003155448069; holdout selected=0/40 residual=0.134026304621 overerase=0.002481606117
+```
+
+Decision: low-diff anchor-similar patches are a useful signal because they can
+restore strict-gate eligibility, unlike high-stroke patches. They are not a
+product default yet: the best SCUT residual case still increases SCUT and
+holdout overerase, and one patch worsens SCUT residual. Next step should tune
+selector thresholds or training loss around the low-diff family while explicitly
+penalizing edit-size growth.
+
 ### Preservation Weight Probes
 
 The existing loss already has `input_preserve` and `mb_leak` terms. A logging
