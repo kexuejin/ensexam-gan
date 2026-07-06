@@ -329,3 +329,34 @@ $ENSEXAM_PYTHON scripts/analysis/build_product_quality_review_pack.py \
 Do not merge the generated labels template into `docs/product-quality-labels.csv` until the pages
 have been reviewed visually. For selector training, the next required artifact is the filled
 `labels-template.csv`; metric wins alone are not acceptable labels.
+
+To reduce manual review cost, generate auto-suggested labels as triage hints:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/suggest_product_quality_labels.py \
+  --labels-template outputs/product_quality_review_residual_delta_YYYYMMDD/labels-template.csv \
+  --review-csv outputs/product_quality_review_residual_delta_YYYYMMDD/review-pages.csv \
+  --features-csv outputs/selector_features_residual_delta_joint_20260707_nodummy/page_features.csv \
+  --output-csv outputs/product_quality_review_residual_delta_YYYYMMDD/labels-auto-suggest.csv
+```
+
+Verified residual-delta suggestion output:
+
+```text
+rows = 142
+auto_suggest_label:
+  slight_loss = 74
+  slight_win = 48
+  noop = 20
+auto_confidence:
+  medium = 114
+  low = 28
+auto_review_priority:
+  high = 102
+  medium = 26
+  low = 14
+```
+
+Treat `auto_suggest_label` as a review aid only. Human review should focus first on
+`auto_review_priority=high`, especially low-confidence metric wins with high gate activity and any
+suggested losses. Low-priority noops can be sampled instead of exhaustively reviewed.
