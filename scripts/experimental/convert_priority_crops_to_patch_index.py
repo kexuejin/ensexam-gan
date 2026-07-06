@@ -21,6 +21,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--overlap", type=int, default=96)
     parser.add_argument("--patch-pad", type=int, default=64)
     parser.add_argument("--max-tiles-per-crop", type=int, default=3)
+    parser.add_argument(
+        "--triage-bucket",
+        action="append",
+        default=[],
+        help="Optional triage_bucket value to include. May be repeated.",
+    )
     return parser.parse_args()
 
 
@@ -86,6 +92,9 @@ def main() -> None:
     args = parse_args()
     emitted: dict[tuple[str, int, int], dict[str, object]] = {}
     priority_rows = read_rows(Path(args.priority_csv))
+    if args.triage_bucket:
+        allowed = set(args.triage_bucket)
+        priority_rows = [row for row in priority_rows if row.get("triage_bucket", "") in allowed]
     data_root = Path(args.data_root)
 
     for source_index, row in enumerate(priority_rows, start=1):

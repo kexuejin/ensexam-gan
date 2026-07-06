@@ -463,3 +463,32 @@ probable_background_or_target_mismatch: 6
 
 This explains the failed direct training probes: the queue is not clean enough to use as supervision
 without filtering or manual labels.
+
+High-confidence-only residual training still failed:
+
+```text
+triage source:
+  high_confidence_residual_handwriting only
+patch rows:
+  15
+files:
+  273.jpg 274.jpg 281.jpg 374.jpg
+smoke:
+  outputs/smoke_coverage_residual_highconf_step1_20260706
+  matched patches: 15 / 560
+step2:
+  outputs/exp_coverage_residual_highconf_step2_20260706
+eval:
+  outputs/eval_coverage_residual_highconf_step2_target4_20260706
+baseline residual: 0.334932443
+candidate residual: 0.510497900
+delta residual: +0.175565458
+baseline overerase: 0.007438648
+candidate overerase: 0.030668833
+delta overerase: +0.023230184
+```
+
+The filtered queue still fails, so the next training route should not be another residual-crop
+micro-tune. The model needs a different objective/data representation for coverage expansion, such
+as explicit residual masks with a stronger paper/printed-text preservation target, or a separate
+candidate generator that does not update the full image synthesis path.

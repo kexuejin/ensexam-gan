@@ -301,6 +301,24 @@ feature-ranked target-residual crops alone are not enough to expand coverage saf
 training should first add crop labels to separate true residual handwriting from target/background
 mismatch, or add a stronger paper/printed-text preservation objective before revisiting these pages.
 
+The filtered high-confidence subset was also rejected. After triaging the feature top15 queue, only
+`high_confidence_residual_handwriting` crops were converted into 15 patch rows across four pages:
+
+```text
+files: 273.jpg 274.jpg 281.jpg 374.jpg
+smoke: matched 15/560 patches
+step2 run: outputs/exp_coverage_residual_highconf_step2_20260706
+eval: outputs/eval_coverage_residual_highconf_step2_target4_20260706
+baseline residual=0.334932443 overerase=0.007438648
+candidate residual=0.510497900 overerase=0.030668833
+delta residual=+0.175565458 overerase=+0.023230184
+```
+
+Do not continue residual-crop micro-tuning by simply filtering the same queue harder. Even the
+high-confidence subset teaches the full generator in a way that damages page tone and overerase.
+Future coverage work needs a different training target or architecture path, not more steps on these
+patches.
+
 Rejected for promotion. The lowdiff003 outside-edit one-step probe produced the strongest strict
 residual improvement among the tested low-diff outside-edit anchors, but it increased overerase on
 both SCUT115 and holdout40. The selector replay safe window collapses to one holdout page with
