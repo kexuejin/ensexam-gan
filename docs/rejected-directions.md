@@ -444,6 +444,41 @@ Do not keep scaling global preservation weights as the next product-quality rout
 few useful strict-gate pages without solving cross-split overerase. Future attempts should use more
 selective preservation targets or confidence masks.
 
+## SCUT Target-Diff Explicit-Mask Mask-Only Promotion
+
+Rejected as a model promotion path from the current checkpoint. The explicit-mask data path itself is
+valid and should be kept, but bounded mask-only fine-tunes did not produce holdout-safe quality.
+
+Reusable setup:
+
+```text
+materialize masks:
+  scripts/experimental/materialize_target_diff_masks.py
+patch index:
+  scripts/experimental/build_explicit_mask_patch_index.py
+  fixed to match EnsExamRealDataset edge-patch coordinates exactly
+smoke config:
+  configs/local/config.local-scut-targetdiff-maskonly-smoke-mps.yaml
+```
+
+Observed probes:
+
+```text
+heads-only step1:
+  train: outputs/smoke_scut_targetdiff_explicit_mask_heads_exact_step1_20260706
+  train4:   residual 0.089141230 -> 0.086848954, overerase 0.001060701 -> 0.001049271
+  holdout4: residual 0.156151160 -> 0.158561260, overerase 0.002021731 -> 0.002092774
+
+decoder step3:
+  train: outputs/exp_scut_targetdiff_explicit_mask_decoder_step3_20260706
+  train4: residual 0.089141230 -> 0.090902478, overerase 0.001060701 -> 0.000975507
+```
+
+The heads-only result was a training-set-only improvement dominated by one page and did not transfer
+to holdout. Decoder-scope training worsened train residual. Do not promote either checkpoint; future
+explicit-mask work should use higher-quality external masks or a selector/candidate branch evaluated
+on larger split coverage before any model registry update.
+
 ## Selective Box-Preserve Class2 Training
 
 Rejected as a direct continuation path from the current checkpoint. The `target_diff_non_erase`

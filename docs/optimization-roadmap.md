@@ -492,3 +492,27 @@ The filtered queue still fails, so the next training route should not be another
 micro-tune. The model needs a different objective/data representation for coverage expansion, such
 as explicit residual masks with a stronger paper/printed-text preservation target, or a separate
 candidate generator that does not update the full image synthesis path.
+
+Target-difference explicit-mask smoke was added as a safer representation probe:
+
+```text
+mask materialization:
+  scripts/experimental/materialize_target_diff_masks.py
+  output: data-links/samples/SCUT-EnsExam-targetdiff-explicit
+patch queue:
+  scripts/experimental/build_explicit_mask_patch_index.py
+  output: outputs/scut_targetdiff_explicit_patch_index_20260706/patch_index_exact.csv
+  matched patches after coordinate fix: 128 / 3848
+heads-only step1:
+  train: outputs/smoke_scut_targetdiff_explicit_mask_heads_exact_step1_20260706
+  train4 eval: residual 0.089141230 -> 0.086848954, overerase 0.001060701 -> 0.001049271
+  holdout4 eval: residual 0.156151160 -> 0.158561260, overerase 0.002021731 -> 0.002092774
+decoder step3:
+  train: outputs/exp_scut_targetdiff_explicit_mask_decoder_step3_20260706
+  train4 eval: residual 0.089141230 -> 0.090902478, overerase 0.001060701 -> 0.000975507
+```
+
+Conclusion: the explicit-mask path is now runnable and useful for future data experiments, but the
+current SCUT target-diff mask-only candidates should not be promoted. Heads-only improvement on the
+training probe did not transfer to holdout, and decoder-scope training worsened residual on the
+training probe.

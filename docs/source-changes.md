@@ -8,6 +8,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `data/dataset.py` can infer erase box classes from local input/target differences and optionally preserve non-erase box classes.
 - `data/augmentation.py` treats `box_preserve` as a mask target so preservation masks receive the same spatial transforms as the image.
 - `data/mask_utils.py` parses box classes, filters `generate_mb_from_boxes` by target classes, and infers changed box classes using deterministic local target comparison.
+- `scripts/experimental/materialize_target_diff_masks.py` creates local `all_masks` datasets from paired input/target images without copying large image payloads by default.
+- `scripts/experimental/build_explicit_mask_patch_index.py` ranks explicit-mask patches using coordinates that match `EnsExamRealDataset` exactly, including edge patches.
 
 ## Losses
 
@@ -31,6 +33,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
   similarity to an anchor patch, which is useful when patch identity changes gate features.
 - `scripts/experimental/build_patch_sensitivity_queue.py` turns ranked patch-index CSVs into
   per-patch index files plus train/eval command queues for deterministic sensitivity sweeps.
+- `configs/local/config.local-scut-targetdiff-maskonly-smoke-mps.yaml` provides a bounded MPS smoke
+  config for target-difference explicit-mask mask-only probes.
 
 ## Testing
 

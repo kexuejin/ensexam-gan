@@ -13,20 +13,20 @@ from __future__ import annotations
 
 import argparse
 import csv
+import math
 import os
 from pathlib import Path
 
 import cv2
 
 
-def ticks(total: int, patch_size: int, stride: int) -> list[int]:
+def dataset_ticks(total: int, patch_size: int, overlap: int) -> list[int]:
+    """Match EnsExamRealDataset._build_patch_index start coordinates."""
     if total <= patch_size:
         return [0]
-    values = list(range(0, max(total - patch_size, 0) + 1, stride))
-    last = total - patch_size
-    if values[-1] != last:
-        values.append(last)
-    return values
+    step = max(patch_size - overlap, 1)
+    count = math.ceil((total - overlap) / step)
+    return [index * step for index in range(count)]
 
 
 def load_file_list(path: str | None) -> set[str] | None:
@@ -56,7 +56,6 @@ def main() -> None:
     image_dir = data_root / args.split / "all_images"
     mask_dir = data_root / args.split / "all_masks"
     allowed_files = load_file_list(args.train_file_list)
-    stride = max(args.img_size - args.overlap, 1)
 
     if not mask_dir.is_dir():
         raise RuntimeError(f"missing explicit mask directory: {mask_dir}")
@@ -79,8 +78,8 @@ def main() -> None:
         if mask is None:
             continue
         h, w = mask.shape[:2]
-        for y1 in ticks(h, args.img_size, stride):
-            for x1 in ticks(w, args.img_size, stride):
+        for y1 in dataset_ticks(h, args.img_size, args.overlap):
+            for x1 in dataset_ticks(w, args.img_size, args.overlap):
                 y2 = min(y1 + args.img_size, h)
                 x2 = min(x1 + args.img_size, w)
                 crop = mask[y1:y2, x1:x2]
