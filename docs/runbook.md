@@ -444,6 +444,24 @@ from 193 to 144 while keeping the same 17/156 improvement pattern. Holdout40 `46
 mixed, with larger improve area than regress area but enough local visible regressions that full
 manual review is still required before product default promotion.
 
+Next120 non-overlap validation:
+
+```text
+sample list: docs/scut-next120-nonoverlap-relative.txt
+construction: first 120 SCUT train pages not present in scut-test115, holdout40, train160,
+              or smoke-holdout3 lists
+baseline output: outputs/scut_next120_nonoverlap_second_stage_baseline_20260706
+union output: outputs/eval_scut_next120_nonoverlap_exact129_outside_edit_lam16_union_gate_20260706
+
+baseline: n=120 residual=0.161840916843 overerase=0.002782668402
+union: selected=0/120 residual=0.161840916843 overerase=0.002782668402
+delta: residual=+0.000000000000 overerase=+0.000000000000
+```
+
+Decision update: next120 does not add product-visible coverage for the union selector, but it is a
+useful safety check because the gate selected no extra pages and caused no metric regression on a
+new non-overlapping SCUT train slice. Treat this as safety evidence only, not quality improvement.
+
 Visible-delta analysis:
 
 ```bash

@@ -319,6 +319,17 @@ two-box OR union interval gate:
     decision: supports union over old strict selector because it removes the 254.jpg selected-page
               regression and lowers SCUT visible-regress area, but holdout40 466.jpg remains mixed
               and still needs full manual review before default promotion.
+  next120 non-overlap validation:
+    sample list: docs/scut-next120-nonoverlap-relative.txt
+    construction: first 120 SCUT train pages not present in scut-test115, holdout40, train160,
+                  or smoke-holdout3 lists
+    baseline output: outputs/scut_next120_nonoverlap_second_stage_baseline_20260706
+    union output: outputs/eval_scut_next120_nonoverlap_exact129_outside_edit_lam16_union_gate_20260706
+    baseline n=120 residual=0.161840916843 overerase=0.002782668402
+    union selected=0/120 residual=0.161840916843 overerase=0.002782668402
+    delta residual=+0.000000000000 overerase=+0.000000000000
+    decision: safety evidence only. The union selector caused no regression on this new
+              non-overlapping train slice, but also added no coverage or quality gain.
 ```
 
 Low-diff outside-edit preservation probe:
