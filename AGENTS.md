@@ -74,6 +74,12 @@ itself. Promote a candidate only when it improves residual without cross-split o
 on SCUT115 and holdout40; otherwise document the result as rejected/not-default instead of tuning
 thresholds indefinitely.
 
+Do not create one git commit per failed experiment. Failed probes should normally stay as local
+outputs plus brief working notes until several related results can be summarized together. Commit
+rejected directions only when they close an expensive/repeated exploration path, add reusable
+tooling/configuration, or form a consolidated family-level decision record. Do not commit failed
+checkpoints, generated predictions, or routine parameter misses.
+
 ## Evaluation Policy
 
 Prefer local comparisons against target/label images and reproducible metrics. Do not rely on uploading images to visual AI unless local metrics and review packs are insufficient.
