@@ -10,6 +10,9 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `data/mask_utils.py` parses box classes, filters `generate_mb_from_boxes` by target classes, and infers changed box classes using deterministic local target comparison.
 - `scripts/experimental/materialize_target_diff_masks.py` creates local `all_masks` datasets from paired input/target images without copying large image payloads by default.
 - `scripts/experimental/build_explicit_mask_patch_index.py` ranks explicit-mask patches using coordinates that match `EnsExamRealDataset` exactly, including edge patches.
+- `scripts/experimental/prepare_examink_seg_dataset.py` downloads the current `ynyg/ExamInk-Seg`
+  Hugging Face layout through the tree API, including pagination, source/target/mask stem matching,
+  per-triplet progress, train-only probes, and curl fallback for transient SSL EOFs.
 
 ## Losses
 
@@ -35,6 +38,8 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
   per-patch index files plus train/eval command queues for deterministic sensitivity sweeps.
 - `configs/local/config.local-scut-targetdiff-maskonly-smoke-mps.yaml` provides a bounded MPS smoke
   config for target-difference explicit-mask mask-only probes.
+- `configs/local/config.local-examink-seg-maskonly-smoke-mps.yaml` provides the matching bounded
+  MPS smoke config for ExamInk-Seg explicit-mask probes.
 
 ## Testing
 

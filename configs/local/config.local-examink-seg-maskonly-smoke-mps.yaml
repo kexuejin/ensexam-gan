@@ -1,0 +1,55 @@
+model:
+  coarse_in_channels: 3
+  refine_in_channels: 7
+  cbam_reduction: 16
+loss:
+  lambda_n: [7, 8, 10, 12]
+  beta_n: [0.8, 0.8, 0.8, 2.0]
+  lambda_lr: 1.15
+  lambda_p: 0.0416
+  lambda_style: 0.01
+  lambda_sn: 1.0
+  lambda_b: 0.3
+  normalize_lr_regions: true
+  lambda_input_preserve: 12.0
+  input_preserve_threshold: 0.2
+  lambda_mb_leak: 0.5
+train:
+  epochs: 1
+  batch_size: 1
+  lr: 1.0e-6
+  adam_betas: [0.3037, 0.9]
+  device: mps
+  gpu_ids: []
+  num_workers: 0
+  save_every_n_epochs: 1
+  save_dir: ./checkpoints-examink-seg-maskonly-smoke-mps
+  resume: true
+  resume_path: ./artifacts/current-primary/micro_region_probe_step0001.pth
+  seed: 42
+  reproducibility_mode: statistical
+data:
+  data_root: ./data-links/samples/ExamInk-Seg-smoke
+  img_size: 256
+  overlap: 96
+  mask_threshold: 12
+  val_ratio: 0.1
+  augmentation: null
+  train_file_list: null
+  val_file_list: null
+inference:
+  auto_scale:
+    enabled: true
+    reference_text_height: 16.0
+    trigger_ratio: 1.05
+    min_scale: 0.5
+    max_scale: 1.5
+    min_components: 30
+evaluation:
+  standalone_test_mode: both
+  final_test_mode: none
+  skip_final_test: true
+  page_overlap: 32
+  val_every_n_epochs: 1
+early_stopping:
+  enabled: false

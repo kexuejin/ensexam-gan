@@ -15,27 +15,77 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
+import shutil
+import subprocess
 import time
 import urllib.request
 from pathlib import Path
 
 
-DEFAULT_BASE_URL = "https://huggingface.co/datasets/ynyg/ExamInk-Seg/resolve/main/data"
+DEFAULT_REPO_ID = "ynyg/ExamInk-Seg"
+DEFAULT_REVISION = "main"
 
 
-def read_metadata(base_url: str, split: str) -> list[dict[str, str]]:
-    url = f"{base_url.rstrip('/')}/{split}/metadata.jsonl"
-    with urllib.request.urlopen(url, timeout=60) as response:
-        text = response.read().decode("utf-8")
-    return [json.loads(line) for line in text.splitlines() if line.strip()]
+def request_json_with_headers(url: str, timeout: int, retries: int) -> tuple[object, object]:
+    last_error: Exception | None = None
+    for attempt in range(1, retries + 1):
+        try:
+            request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(response.read().decode("utf-8")), response.headers
+        except Exception as exc:  # noqa: BLE001 - report final URL with original failure.
+            last_error = exc
+            if attempt < retries:
+                time.sleep(min(2 ** (attempt - 1), 8))
+    raise RuntimeError(f"failed to read JSON {url} after {retries} attempts: {last_error!r}")
+
+
+def next_link(headers: object) -> str | None:
+    link_value = headers.get("Link", "")
+    for item in link_value.split(","):
+        if 'rel="next"' not in item:
+            continue
+        match = re.search(r"<([^>]+)>", item)
+        if match:
+            return match.group(1)
+    return None
+
+
+def list_hf_files(repo_id: str, revision: str, directory: str, timeout: int, retries: int) -> list[str]:
+    url = (
+        f"https://huggingface.co/api/datasets/{repo_id}/tree/{revision}/{directory}"
+        "?limit=1000"
+    )
+    paths: list[str] = []
+    while url:
+        rows, headers = request_json_with_headers(url, timeout, retries)
+        if not isinstance(rows, list):
+            raise RuntimeError(f"unexpected tree response for {directory}: {type(rows).__name__}")
+        paths.extend(
+            str(row["path"])
+            for row in rows
+            if isinstance(row, dict) and row.get("type") == "file" and row.get("path")
+        )
+        url = next_link(headers)
+    if not paths:
+        raise RuntimeError(f"no files found under {directory}")
+    return paths
 
 
 def target_split_name(source_split: str) -> str:
     return "test" if source_split == "val" else source_split
 
 
-def output_name(path_value: str) -> str:
-    return Path(path_value).name
+def hf_resolve_url(repo_id: str, revision: str, path: str) -> str:
+    return f"https://huggingface.co/datasets/{repo_id}/resolve/{revision}/{path}"
+
+
+def natural_key(path_value: str) -> tuple[int, str]:
+    stem = Path(path_value).stem
+    if stem.isdigit():
+        return int(stem), Path(path_value).name
+    return 10**12, Path(path_value).name
 
 
 def download_url(url: str, destination: Path, overwrite: bool, timeout: int, retries: int) -> None:
@@ -48,7 +98,12 @@ def download_url(url: str, destination: Path, overwrite: bool, timeout: int, ret
         try:
             request = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
             with urllib.request.urlopen(request, timeout=timeout) as response:
-                tmp.write_bytes(response.read())
+                with tmp.open("wb") as f:
+                    while True:
+                        chunk = response.read(1024 * 1024)
+                        if not chunk:
+                            break
+                        f.write(chunk)
             tmp.replace(destination)
             return
         except Exception as exc:
@@ -56,12 +111,42 @@ def download_url(url: str, destination: Path, overwrite: bool, timeout: int, ret
             tmp.unlink(missing_ok=True)
             if attempt < retries:
                 time.sleep(min(2 ** (attempt - 1), 8))
+    curl = shutil.which("curl")
+    if curl:
+        try:
+            subprocess.run(
+                [
+                    curl,
+                    "-L",
+                    "--fail",
+                    "--connect-timeout",
+                    str(timeout),
+                    "--max-time",
+                    str(timeout),
+                    "-o",
+                    str(tmp),
+                    url,
+                ],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+            tmp.replace(destination)
+            return
+        except Exception as exc:  # noqa: BLE001 - preserve urllib error in final message too.
+            tmp.unlink(missing_ok=True)
+            raise RuntimeError(
+                f"failed to download {url} after {retries} urllib attempts "
+                f"and curl fallback: urllib={last_error!r} curl={exc!r}"
+            ) from exc
     raise RuntimeError(f"failed to download {url} after {retries} attempts: {last_error!r}")
 
 
 def convert_split(
     *,
-    base_url: str,
+    repo_id: str,
+    revision: str,
     output_root: Path,
     source_split: str,
     limit: int | None,
@@ -69,28 +154,49 @@ def convert_split(
     timeout: int,
     retries: int,
 ) -> int:
-    rows = read_metadata(base_url, source_split)
+    if limit == 0:
+        print(f"{source_split}: skipped (limit=0)", flush=True)
+        return 0
+    source_paths = sorted(
+        list_hf_files(repo_id, revision, f"data/{source_split}/source", timeout, retries),
+        key=natural_key,
+    )
+    target_by_stem = {
+        Path(path).stem: path
+        for path in list_hf_files(repo_id, revision, f"data/{source_split}/target", timeout, retries)
+    }
+    mask_by_stem = {
+        Path(path).stem: path
+        for path in list_hf_files(repo_id, revision, f"data/{source_split}/mask", timeout, retries)
+    }
+    rows: list[tuple[str, str, str]] = []
+    for source_path in source_paths:
+        stem = Path(source_path).stem
+        target_path = target_by_stem.get(stem)
+        mask_path = mask_by_stem.get(stem)
+        if target_path is None or mask_path is None:
+            continue
+        rows.append((source_path, target_path, mask_path))
     if limit is not None:
         rows = rows[:limit]
+    if not rows:
+        raise RuntimeError(f"no matched source/target/mask triplets found for split {source_split}")
 
     out_split = target_split_name(source_split)
     copied = 0
-    for row in rows:
-        source_name = output_name(row["file_name"])
-        target_name = output_name(row["target_file_name"])
-        mask_name = output_name(row["mask_file_name"])
-
-        # Keep source/target basenames aligned for EnsExamRealDataset.
+    for source_path, target_path, mask_path in rows:
+        source_name = Path(source_path).name
+        mask_name = Path(mask_path).name
         target_out_name = source_name
-        source_url = f"{base_url.rstrip('/')}/{source_split}/{row['file_name']}"
-        target_url = f"{base_url.rstrip('/')}/{source_split}/{row['target_file_name']}"
-        mask_url = f"{base_url.rstrip('/')}/{source_split}/{row['mask_file_name']}"
+        source_url = hf_resolve_url(repo_id, revision, source_path)
+        target_url = hf_resolve_url(repo_id, revision, target_path)
+        mask_url = hf_resolve_url(repo_id, revision, mask_path)
 
         download_url(source_url, output_root / out_split / "all_images" / source_name, overwrite, timeout, retries)
         download_url(target_url, output_root / out_split / "all_labels" / target_out_name, overwrite, timeout, retries)
         download_url(mask_url, output_root / out_split / "all_masks" / mask_name, overwrite, timeout, retries)
         copied += 1
-        if copied % 10 == 0 or copied == len(rows):
+        if len(rows) <= 10 or copied % 10 == 0 or copied == len(rows):
             print(f"{source_split}: downloaded {copied}/{len(rows)}", flush=True)
     return copied
 
@@ -98,7 +204,8 @@ def convert_split(
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-root", required=True)
-    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
+    parser.add_argument("--repo-id", default=DEFAULT_REPO_ID)
+    parser.add_argument("--revision", default=DEFAULT_REVISION)
     parser.add_argument("--limit-train", type=int, default=None)
     parser.add_argument("--limit-val", type=int, default=None)
     parser.add_argument("--download-timeout", type=int, default=30)
@@ -108,7 +215,8 @@ def main() -> None:
 
     output_root = Path(args.output_root)
     train_count = convert_split(
-        base_url=args.base_url,
+        repo_id=args.repo_id,
+        revision=args.revision,
         output_root=output_root,
         source_split="train",
         limit=args.limit_train,
@@ -117,7 +225,8 @@ def main() -> None:
         retries=args.download_retries,
     )
     val_count = convert_split(
-        base_url=args.base_url,
+        repo_id=args.repo_id,
+        revision=args.revision,
         output_root=output_root,
         source_split="val",
         limit=args.limit_val,

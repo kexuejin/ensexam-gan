@@ -479,6 +479,46 @@ to holdout. Decoder-scope training worsened train residual. Do not promote eithe
 explicit-mask work should use higher-quality external masks or a selector/candidate branch evaluated
 on larger split coverage before any model registry update.
 
+## ExamInk-Seg Heads-Only Step1 Promotion
+
+Rejected as a model promotion path. ExamInk-Seg is valuable as a real external explicit-mask source,
+and the intake script now downloads its current Hugging Face layout, but the first heads-only
+one-step probe made the model more conservative instead of improving erasure quality.
+
+Tested setup:
+
+```text
+download:
+  scripts/experimental/prepare_examink_seg_dataset.py
+  output: data-links/samples/ExamInk-Seg-smoke
+  train files: 0.jpg 1.jpg 2.jpg 3.jpg
+patch index:
+  outputs/examink_seg_smoke_patch_index_20260706/patch_index.csv
+  matched: 64 / 507
+train:
+  outputs/smoke_examink_seg_mask_heads_step1_20260706
+eval:
+  outputs/eval_examink_seg_smoke_baseline_train4_20260706
+  outputs/eval_examink_seg_smoke_mask_heads_step1_train4_20260706
+```
+
+Result:
+
+```text
+baseline:  residual 0.193198, overerase 0.004355
+candidate: residual 0.195089, overerase 0.003790
+
+0.jpg residual -0.000474, overerase -0.000862
+1.jpg residual +0.004418, overerase -0.000200
+2.jpg residual +0.002942, overerase -0.000425
+3.jpg residual +0.000675, overerase -0.000772
+```
+
+Do not promote this checkpoint. The result is useful evidence that explicit masks can reduce
+overerase pressure, but coverage worsened on 3/4 pages. Future ExamInk-Seg use should train or
+calibrate a selector/mask candidate with an explicit residual-coverage objective and larger
+SCUT/holdout validation.
+
 ## Selective Box-Preserve Class2 Training
 
 Rejected as a direct continuation path from the current checkpoint. The `target_diff_non_erase`

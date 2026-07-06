@@ -516,3 +516,34 @@ Conclusion: the explicit-mask path is now runnable and useful for future data ex
 current SCUT target-diff mask-only candidates should not be promoted. Heads-only improvement on the
 training probe did not transfer to holdout, and decoder-scope training worsened residual on the
 training probe.
+
+ExamInk-Seg external-mask intake is now validated at smoke scale:
+
+```text
+dataset:
+  Hugging Face: ynyg/ExamInk-Seg
+  actual layout: data/{train,val}/{source,target,mask}
+  train triplets: 1511
+  val triplets: 115
+download helper:
+  scripts/experimental/prepare_examink_seg_dataset.py
+  supports HF tree pagination, source/target jpg + mask png stem matching,
+  per-triplet progress, train-only probes via --limit-val 0, and curl fallback
+smoke data:
+  data-links/samples/ExamInk-Seg-smoke
+  train files: 0.jpg 1.jpg 2.jpg 3.jpg
+  mask ratios: 0.014298 0.011411 0.017351 0.019216
+patch queue:
+  outputs/examink_seg_smoke_patch_index_20260706/patch_index.csv
+  matched patches: 64 / 507
+heads-only step1:
+  train: outputs/smoke_examink_seg_mask_heads_step1_20260706
+  eval: outputs/eval_examink_seg_smoke_mask_heads_step1_train4_20260706
+  baseline:  residual 0.193198, overerase 0.004355
+  candidate: residual 0.195089, overerase 0.003790
+```
+
+Conclusion: external explicit masks are now usable locally, but the first heads-only mask probe
+became more conservative rather than better: overerase improved, residual worsened on 3/4 pages.
+The next useful route is not to promote this checkpoint, but to use ExamInk-Seg for a larger
+selector/mask calibration experiment that explicitly balances residual coverage against overerase.
