@@ -193,6 +193,35 @@ candidate-generation branch, not a product default. The next iteration should co
 representation with page-level win/loss selection or stronger residual-localization targets rather
 than increasing edit strength globally.
 
+Residual-delta selector mining:
+
+```text
+script: scripts/analysis/analyze_residual_delta_selector_features.py
+candidate: outputs/train_scut_residual_delta_bias3_scale008_step150_20260707/cleanup_best.pt
+SCUT115 direct candidate:
+  baseline residual=0.114225, overerase=0.003048
+  candidate residual=0.118880, overerase=0.003014
+  wins=40/115, losses=75/115
+  oracle residual gain=0.002361903162
+SCUT115 best local rule:
+  active_gray_p25 >= 123.9 AND active_baseline_edit_p95 <= 153.703333333
+  selected=12, wins=12, losses=0
+  residual_gain=0.000982513297, overerase_delta=-0.000006683623
+holdout40 direct candidate:
+  baseline residual=0.130543, overerase=0.002732
+  candidate residual=0.134065, overerase=0.002694
+  wins=15/40, losses=25/40
+joint SCUT115 + holdout40 best safe rule:
+  active_gray_p25 >= 111.6 AND candidate_delta_max <= 200.133333333
+  selected=7 total, wins=7, losses=0
+  SCUT115 selected=6, wins=6, residual_gain=0.000670315057
+  holdout40 selected=1, wins=1, residual_gain=0.000826318693
+```
+
+This shows the residual-delta branch has real but narrow page-level wins. The safe transfer rules are
+too low-coverage for productization, so the next useful path is a labeled page-level selector or a
+better candidate family, not more hand-mined threshold tightening.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text

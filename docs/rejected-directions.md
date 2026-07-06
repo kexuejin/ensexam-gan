@@ -744,3 +744,35 @@ Keep `micro_train_region_probe.py`'s patch-index mixed sampling and trace marker
 diagnostic tooling, but do not continue class2-only or high-ratio class2 box-preserve training as
 the next product path. Future attempts should first preserve the original strict gate features, then
 try to enlarge selected coverage.
+
+## Residual-Delta Direct Promotion And Hand-Mined Selectors
+
+Rejected as a product default. The bounded residual-delta cleanup branch is safer than the full
+clean-image head, but direct promotion worsened residual on both SCUT115 and holdout40. Page-level
+oracle selection shows some real wins, but simple label-free threshold selectors only transfer at
+very narrow coverage.
+
+Tested evidence:
+
+```text
+SCUT115:
+  baseline:  residual=0.114225, overerase=0.003048
+  candidate: residual=0.118880, overerase=0.003014
+  oracle wins=40/115, losses=75/115, oracle_gain=0.002361903162
+  best local safe rule selected=12, wins=12, losses=0, gain=0.000982513297
+
+holdout40:
+  baseline:  residual=0.130543, overerase=0.002732
+  candidate: residual=0.134065, overerase=0.002694
+  oracle wins=15/40, losses=25/40, oracle_gain=0.001651170237
+
+joint safe selector:
+  active_gray_p25 >= 111.6 AND candidate_delta_max <= 200.133333333
+  selected=7 total, wins=7, losses=0
+  SCUT115 selected=6, holdout40 selected=1
+  total residual_gain=0.001496633750
+```
+
+Do not spend more cycles on scalar thresholds or global edit-strength increases for this candidate.
+The reusable part is `scripts/analysis/analyze_residual_delta_selector_features.py`; future work
+should train or label a page-level selector and require materially higher coverage before promotion.
