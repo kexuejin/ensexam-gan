@@ -336,11 +336,10 @@ holdout40 interval: selected=1/40 residual=0.133963087233 overerase=0.0024812947
 holdout40 selected: 466.jpg
 ```
 
-Decision: this is the first current exact129-family selector that keeps the SCUT strict wins while
-removing the holdout overerase regression by filtering out holdout 193.jpg and 268.jpg. Treat it as
-a productization candidate for the hybrid gate, not as evidence that lambda-only retraining solved
-the problem. The improvement comes from inference-time interval gating; keep the generated output
-directories out of commits.
+Decision: this relaxed interval was useful for finding selector headroom, but it is no longer a
+productization candidate after the train160 follow-up below. The improvement came from
+inference-time interval gating, not lambda-only retraining; keep generated output directories out
+of commits.
 
 Extended train160 non-holdout validation:
 
@@ -371,6 +370,46 @@ Decision update: the earlier relaxed interval is not broad-validation safe. The 
 rule is safer but drops the large SCUT 156.jpg gain, so it should be treated as a conservative
 selector hypothesis rather than a strong productization candidate. Larger validation and visual
 review are still required before default use.
+
+Exact129 outside-edit OR-of-intervals union gate:
+
+```text
+date: 2026-07-06
+candidate: outputs/exp_exact129_outside_edit_lam16_step1_20260706/micro_region_probe.pth
+replay: outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706
+real SCUT115 gate: outputs/eval_scut115_exact129_outside_edit_lam16_union_gate_20260706
+real holdout40 gate: outputs/eval_holdout40_exact129_outside_edit_lam16_union_gate_20260706
+real train160 gate: outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_union_gate_20260706
+
+low156 interval:
+  copy_mask_cov8: 0.807 <= cov8 <= 0.8072
+  primary_edit_px: 0 <= edit_px <= 13000
+  primary_p95_edit_delta: 0 <= p95 <= 1.7
+  second_stage_gate_ratio: 0 <= gate <= 0.0011
+
+normal interval:
+  copy_mask_cov8: 0.807064 <= cov8 <= 0.881053
+  primary_edit_px: 67887 <= edit_px <= 98699
+  primary_p95_edit_delta: 0 <= p95 <= 4.667
+  second_stage_gate_ratio: 0.0004928 <= gate <= 0.0010997
+
+SCUT115 union: selected=5/115 residual=0.113964591000 overerase=0.003046575437
+SCUT115 selected: 17.jpg, 156.jpg, 303.jpg, 370.jpg, 371.jpg
+holdout40 union: selected=1/40 residual=0.133963087233 overerase=0.002481294748
+holdout40 selected: 466.jpg
+train160 union: selected=0/160 residual=0.144527160040 overerase=0.002314662644
+
+delta vs baseline:
+  SCUT115 residual_delta=-0.000260372939 overerase_delta=-0.000001721280
+  holdout40 residual_delta=-0.000063217389 overerase_delta=-0.000000311370
+  train160 residual_delta=+0.000000000000 overerase_delta=+0.000000000000
+```
+
+Decision update: the two-box OR union gate is the current best selector hypothesis. It restores the
+large SCUT 156.jpg gain that the refined single interval dropped, keeps the holdout40 466.jpg gain,
+and avoids selecting the train160 bad pages from the relaxed interval. It is still a selector
+hypothesis rather than product default until larger non-overlapping validation and manual visual
+review pass.
 
 Visible-delta analysis:
 

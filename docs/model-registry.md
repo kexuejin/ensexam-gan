@@ -256,10 +256,9 @@ holdout40: selected=1/40 residual=0.133963087233 overerase=0.002481294748
 selected pages: scut115/17.jpg, scut115/156.jpg, scut115/303.jpg,
                 scut115/370.jpg, scut115/371.jpg, holdout40/466.jpg
 
-decision: promote as a selector/productization candidate for further visual review and larger
-holdout validation. Do not describe it as model-side retraining quality improvement: lam8/lam16
-alone did not reduce holdout overerase; the interval gate removed unsafe holdout pages 193.jpg
-and 268.jpg while preserving the SCUT exact129 strict wins.
+decision: useful for finding selector headroom, but no longer a productization candidate after
+train160 validation. Do not describe it as model-side retraining quality improvement: lam8/lam16
+alone did not reduce holdout overerase. The improvement came from inference-time interval gating.
 
 train160 follow-up:
   sample list: docs/scut-train160-nonholdout-relative.txt
@@ -282,6 +281,31 @@ refined train160-safe interval:
   train160 selected=0/160 residual_gain=0 overerase_regret=0
   decision: safer but much more conservative; drops SCUT 156.jpg, so keep as a
             selector hypothesis needing larger validation, not a promoted default.
+
+two-box OR union interval gate:
+  script support:
+    scripts/infer/run_hybrid_second_stage_gate.py supports repeated --candidate-interval-rule
+    scripts/analysis/replay_hybrid_selector.py supports --named-interval-union-rule
+  replay: outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706
+  real eval scut115: outputs/eval_scut115_exact129_outside_edit_lam16_union_gate_20260706
+  real eval holdout40: outputs/eval_holdout40_exact129_outside_edit_lam16_union_gate_20260706
+  real eval train160: outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_union_gate_20260706
+  low156 box: 0.807 <= cov8 <= 0.8072, 0 <= edit_px <= 13000,
+              0 <= p95 <= 1.7, 0 <= gate <= 0.0011
+  normal box: 0.807064 <= cov8 <= 0.881053, 67887 <= edit_px <= 98699,
+              0 <= p95 <= 4.667, 0.0004928 <= gate <= 0.0010997
+  scut115 selected=5/115 residual=0.113964591000 overerase=0.003046575437
+  holdout40 selected=1/40 residual=0.133963087233 overerase=0.002481294748
+  train160 selected=0/160 residual=0.144527160040 overerase=0.002314662644
+  selected pages: scut115/17.jpg, scut115/156.jpg, scut115/303.jpg,
+                  scut115/370.jpg, scut115/371.jpg, holdout40/466.jpg
+  delta vs baseline:
+    scut115 residual_delta=-0.000260372939 overerase_delta=-0.000001721280
+    holdout40 residual_delta=-0.000063217389 overerase_delta=-0.000000311370
+    train160 residual_delta=+0.000000000000 overerase_delta=+0.000000000000
+  decision: current best selector hypothesis. It restores SCUT 156.jpg, keeps holdout40 466.jpg,
+            and avoids train160 relaxed-interval bad pages. Still not product default until larger
+            non-overlapping validation and manual visual review pass.
 ```
 
 Low-diff outside-edit preservation probe:
@@ -499,8 +523,9 @@ Do not promote the hybrid gate as the default pipeline without larger validation
 review. The previous loose/strict gates either increased overerase or had negligible safe gain.
 The relaxed exact129 outside-edit interval gate fixed SCUT115/holdout40 but regressed train160
 overerase, while the refined train160-safe interval is much more conservative and loses the large
-SCUT 156.jpg gain. Treat interval gating as the best current selector hypothesis, not a product
-default.
+SCUT 156.jpg gain. The two-box OR union gate is the best current selector hypothesis because it
+restores SCUT 156.jpg, keeps holdout40 466.jpg, and selects 0/160 train160 pages. Treat it as a
+selector hypothesis, not a product default.
 ```
 
 ## Validation Anchors

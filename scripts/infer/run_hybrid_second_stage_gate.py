@@ -82,8 +82,31 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-primary-p95-edit-delta", type=float, default=1e9)
     parser.add_argument("--min-second-stage-gate-ratio", type=float, default=0.0)
     parser.add_argument("--max-second-stage-gate-ratio", type=float, default=1.0)
+    parser.add_argument(
+        "--candidate-interval-rule",
+        action="append",
+        default=[],
+        metavar="MIN_COV8,MAX_COV8,MIN_EDIT_PX,MAX_EDIT_PX,MIN_P95,MAX_P95,MIN_GATE,MAX_GATE",
+        help=(
+            "Optional candidate selector interval. May be repeated; candidate is used when "
+            "any interval matches. Overrides the individual min/max selector arguments."
+        ),
+    )
     parser.add_argument("--save-candidate", action="store_true")
     return parser.parse_args()
+
+
+IntervalBox = tuple[float, float, float, float, float, float, float, float]
+
+
+def parse_interval_box(value: str) -> IntervalBox:
+    parts = value.split(",")
+    if len(parts) != 8 or not all(parts):
+        raise ValueError(
+            f"Invalid --candidate-interval-rule {value!r}; expected "
+            "MIN_COV8,MAX_COV8,MIN_EDIT_PX,MAX_EDIT_PX,MIN_P95,MAX_P95,MIN_GATE,MAX_GATE"
+        )
+    return tuple(float(part) for part in parts)  # type: ignore[return-value]
 
 
 def prediction_path(pred_dir: Path, image_path: Path) -> Path:
@@ -183,6 +206,29 @@ def choose_candidate(
     )
 
 
+def choose_candidate_from_interval_boxes(
+    features: dict[str, float],
+    second_stage_gate_ratio: float,
+    boxes: list[IntervalBox],
+) -> bool:
+    for box in boxes:
+        min_cov8, max_cov8, min_edit_px, max_edit_px, min_p95, max_p95, min_gate, max_gate = box
+        if choose_candidate(
+            features,
+            second_stage_gate_ratio,
+            min_cov8=min_cov8,
+            max_cov8=max_cov8,
+            min_edit_px=int(min_edit_px),
+            max_edit_px=int(max_edit_px),
+            min_p95_edit_delta=min_p95,
+            max_p95_edit_delta=max_p95,
+            min_second_stage_gate_ratio=min_gate,
+            max_second_stage_gate_ratio=max_gate,
+        ):
+            return True
+    return False
+
+
 def main() -> None:
     args = parse_args()
     output_dir = Path(args.output_dir)
@@ -198,6 +244,7 @@ def main() -> None:
     generator = load_generator(args.candidate_config, args.candidate_weights, device)
     cleanup_model = load_cleanup_model(Path(args.cleanup_checkpoint), device)
     baseline_dir = Path(args.baseline_pred_dir)
+    candidate_interval_boxes = [parse_interval_box(value) for value in args.candidate_interval_rule]
 
     rows: list[dict[str, object]] = []
     for index, image_path in enumerate(read_sample_paths(Path(args.samples_file)), start=1):
@@ -221,18 +268,25 @@ def main() -> None:
             dark_threshold=args.dark_threshold,
         )
         second_stage_gate_ratio = float(second_stage_gate.mean())
-        use_candidate = choose_candidate(
-            features,
-            second_stage_gate_ratio,
-            min_cov8=args.min_copy_mask_cov8,
-            max_cov8=args.max_copy_mask_cov8,
-            min_edit_px=args.min_primary_edit_px,
-            max_edit_px=args.max_primary_edit_px,
-            min_p95_edit_delta=args.min_primary_p95_edit_delta,
-            max_p95_edit_delta=args.max_primary_p95_edit_delta,
-            min_second_stage_gate_ratio=args.min_second_stage_gate_ratio,
-            max_second_stage_gate_ratio=args.max_second_stage_gate_ratio,
-        )
+        if candidate_interval_boxes:
+            use_candidate = choose_candidate_from_interval_boxes(
+                features,
+                second_stage_gate_ratio,
+                candidate_interval_boxes,
+            )
+        else:
+            use_candidate = choose_candidate(
+                features,
+                second_stage_gate_ratio,
+                min_cov8=args.min_copy_mask_cov8,
+                max_cov8=args.max_copy_mask_cov8,
+                min_edit_px=args.min_primary_edit_px,
+                max_edit_px=args.max_primary_edit_px,
+                min_p95_edit_delta=args.min_primary_p95_edit_delta,
+                max_p95_edit_delta=args.max_primary_p95_edit_delta,
+                min_second_stage_gate_ratio=args.min_second_stage_gate_ratio,
+                max_second_stage_gate_ratio=args.max_second_stage_gate_ratio,
+            )
         final_bgr = candidate_bgr if use_candidate else baseline_bgr
 
         pred_path = pred_dir / f"{image_path.stem}.png"
@@ -255,6 +309,7 @@ def main() -> None:
             "max_primary_p95_edit_delta": args.max_primary_p95_edit_delta,
             "min_second_stage_gate_ratio": args.min_second_stage_gate_ratio,
             "max_second_stage_gate_ratio": args.max_second_stage_gate_ratio,
+            "candidate_interval_rules": ";".join(args.candidate_interval_rule),
             "second_stage_gate_ratio": second_stage_gate_ratio,
             **features,
         }
