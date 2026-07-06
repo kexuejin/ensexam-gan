@@ -252,7 +252,17 @@ contact sheet:
   outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/contact_sheet.png
 index:
   outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/index.csv
+label template:
+  outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/crop-labels-template.csv
 ```
 
 Do not treat the crop pack itself as product evidence until labels are added. Its purpose is to make
 local failure review cheaper and more consistent than page-scale inspection.
+
+Crop labels can be summarized with:
+
+```text
+$ENSEXAM_PYTHON scripts/analysis/summarize_product_quality_crop_labels.py \
+  --labels-csv outputs/product_quality_crop_review_pack_whiteout_tone_v1_20260706/crop-labels-template.csv \
+  --output-dir outputs/product_quality_crop_label_summary_whiteout_tone_v1_20260706
+```

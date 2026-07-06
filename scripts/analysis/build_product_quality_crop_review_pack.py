@@ -39,6 +39,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-component-area", type=int, default=120)
     parser.add_argument("--diff-threshold", type=int, default=4)
     parser.add_argument("--max-contact-crops", type=int, default=80)
+    parser.add_argument(
+        "--labels-template",
+        default="",
+        help="Optional crop-label template CSV path. Defaults to <output-dir>/crop-labels-template.csv.",
+    )
     return parser.parse_args()
 
 
@@ -233,11 +238,50 @@ def main() -> None:
         writer.writeheader()
         writer.writerows(index_rows)
 
+    labels_path = Path(args.labels_template) if args.labels_template else output_dir / "crop-labels-template.csv"
+    label_fieldnames = [
+        "split",
+        "file",
+        "candidate",
+        "bucket",
+        "crop_index",
+        "source_box",
+        "source_area",
+        "crop_box",
+        "label",
+        "flags",
+        "reviewer",
+        "review_date",
+        "comment",
+        "crop_review_image",
+    ]
+    with labels_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=label_fieldnames)
+        writer.writeheader()
+        for row in index_rows:
+            writer.writerow({
+                "split": row.get("split", ""),
+                "file": row.get("file", ""),
+                "candidate": row.get("candidate", ""),
+                "bucket": row.get("bucket", ""),
+                "crop_index": row.get("crop_index", ""),
+                "source_box": row.get("source_box", ""),
+                "source_area": row.get("source_area", ""),
+                "crop_box": row.get("crop_box", ""),
+                "label": "",
+                "flags": "",
+                "reviewer": "",
+                "review_date": "",
+                "comment": "",
+                "crop_review_image": row.get("crop_review_image", ""),
+            })
+
     print(f"rows={len(rows)}")
     print(f"crops={len(index_rows)}")
     print(f"crops_dir={crops_dir}")
     print(f"contact_sheet={output_dir / 'contact_sheet.png'}")
     print(f"index_csv={output_dir / 'index.csv'}")
+    print(f"labels_template={labels_path}")
 
 
 if __name__ == "__main__":
