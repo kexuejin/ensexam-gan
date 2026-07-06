@@ -304,6 +304,30 @@ lowdiff001 step1 follow-up:
   decision: not a product candidate. The outside-edit objective slightly improves
   residual versus the original 001 probe, but overerase is worse and holdout remains
   unsafe. The only safe replay window is the same tiny one-page SCUT-only pattern.
+
+lowdiff003 step1 follow-up:
+  train output: outputs/exp_lowdiff003_outside_edit_step1_20260706
+  eval outputs:
+    outputs/eval_scut115_lowdiff003_outside_edit_step1_strict_20260706
+    outputs/eval_holdout40_lowdiff003_outside_edit_step1_strict_20260706
+  selector replay: outputs/selector_replay_lowdiff003_outside_edit_step1_20260706
+
+  strict gate:
+    scut115 selected=5/115 residual=0.113975166648 overerase=0.003064461676
+    holdout40 selected=3/40 residual=0.133709426395 overerase=0.002514275694
+
+  comparison to lowdiff003 without outside-edit:
+    scut115 residual 0.114007786589 -> 0.113975166648, overerase 0.003061889507 -> 0.003064461676
+    holdout40 residual 0.133760842647 -> 0.133709426395, overerase 0.002508892113 -> 0.002514275694
+
+  safe replay:
+    best safe rule selected=1/155 total residual gain=0.000015518312
+    max split overerase regret=0
+    selected split coverage: scut115=0, holdout40=1
+
+  decision: not a product candidate. This anchor gives the strongest strict residual
+  improvement among the low-diff outside-edit probes, but it increases overerase on
+  both splits. The safe replay window has negligible gain and no SCUT coverage.
 ```
 
 Joint selector replay:

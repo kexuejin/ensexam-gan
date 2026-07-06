@@ -229,6 +229,43 @@ Do not continue the exact lowdiff001 outside-edit step1 path. This reinforces th
 low-diff anchors expose diagnostic signal but are not enough for product quality without a better
 candidate-generation objective.
 
+## Low-Diff Outside-Edit 003 Step1 Promotion
+
+Rejected for promotion. The lowdiff003 outside-edit one-step probe produced the strongest strict
+residual improvement among the tested low-diff outside-edit anchors, but it increased overerase on
+both SCUT115 and holdout40. The selector replay safe window collapses to one holdout page with
+negligible total gain.
+
+Strict-gate result:
+
+```text
+scut115: selected=5/115 residual=0.113975166648 overerase=0.003064461676
+holdout40: selected=3/40 residual=0.133709426395 overerase=0.002514275694
+```
+
+Compared with the original lowdiff003 one-step probe, outside-edit improved residual but worsened
+overerase on both splits:
+
+```text
+scut115 residual 0.114007786589 -> 0.113975166648
+scut115 overerase 0.003061889507 -> 0.003064461676
+holdout40 residual 0.133760842647 -> 0.133709426395
+holdout40 overerase 0.002508892113 -> 0.002514275694
+```
+
+Joint selector replay with `max-overerase-regret=0` found only a negligible holdout-only safe
+window:
+
+```text
+selected=1/155
+total residual gain=0.000015518312
+max split overerase regret=0
+selected split coverage: scut115=0, holdout40=1
+```
+
+Do not promote this checkpoint. This confirms that outside-edit alone can move residual in the
+right direction, but it is not enough to solve the product-level residual/overerase tradeoff.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual
