@@ -51,6 +51,9 @@ This fork retains upstream history from `https://github.com/xiaozhejiya/ensexam-
 - `scripts/analysis/compare_gate_feature_drift.py` compares strict-gate feature drift across
   candidate metrics, highlighting whether rejected pages missed `copy_mask_cov8`,
   `primary_edit_px`, or both.
+- `scripts/analysis/mine_safe_interval_selector.py` mines target-aware interval-box selector
+  headroom from replay `page_choices.csv` files; it is an oracle analysis tool, not a product rule
+  generator.
 
 ## Projectization
 

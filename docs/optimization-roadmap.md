@@ -547,3 +547,30 @@ Conclusion: external explicit masks are now usable locally, but the first heads-
 became more conservative rather than better: overerase improved, residual worsened on 3/4 pages.
 The next useful route is not to promote this checkpoint, but to use ExamInk-Seg for a larger
 selector/mask calibration experiment that explicitly balances residual coverage against overerase.
+
+Current exact129/outside-edit union candidate selector ceiling:
+
+```text
+four-split replay:
+  outputs/selector_replay_exact129_outside_edit_lam16_union_four_split_20260706
+  splits: scut115 + holdout40 + train160 + next120 = 435 pages
+current named union:
+  selected=6/435
+  total_residual_gain=0.000323590327
+  max_split_overerase_regret=0
+best monotonic threshold sweep:
+  selected=1/435
+  total_residual_gain=0.000073397331
+oracle safe-positive pages:
+  selected=26/435 (5.98%)
+  total_residual_gain=0.000891888940
+offline interval-box mining:
+  selected=23/435
+  safe_positive_selected=13
+  unsafe_selected=10
+  total_residual_gain=0.000960965951
+```
+
+This closes the threshold-search route for the current candidate family. Even target-aware oracle
+selection cannot approach 20%-30% safe coverage, so the next real quality step needs a different
+candidate representation/objective rather than another selector sweep.

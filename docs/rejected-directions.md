@@ -123,6 +123,39 @@ Keep `scripts/analysis/replay_hybrid_selector.py` for future selector analysis, 
 the current hybrid selector as a product default without a new candidate that improves residual
 without cross-split overerase regression.
 
+Four-split selector replay with SCUT115, holdout40, train160, and next120 makes the selector ceiling
+lower, not higher:
+
+```text
+replay:
+  outputs/selector_replay_exact129_outside_edit_lam16_union_four_split_20260706
+splits:
+  scut115=115, holdout40=40, train160=160, next120=120
+named union rule:
+  selected=6/435
+  total_residual_gain=0.000323590327
+  max_split_overerase_regret=0
+best monotonic threshold rule:
+  selected=1/435
+  total_residual_gain=0.000073397331
+  max_split_overerase_regret=0
+safe positive oracle:
+  selected=26/435 (5.98%)
+  total_residual_gain=0.000891888940
+  max_split_overerase_regret=-0.000000728701
+min-2 interval-box oracle:
+  selected=23/435
+  safe_positive_selected=13
+  unsafe_selected=10
+  total_residual_gain=0.000960965951
+  max_split_overerase_regret=-0.000000055094
+```
+
+The current candidate family cannot reach the desired 20%-30% safe coverage even with target-metric
+oracle selection. Stop threshold-only selector searches on this family; future work needs a new
+candidate generator or objective that separates residual cleanup from overerase before selector
+calibration can matter.
+
 ## Low-Diff Anchor Selector-Only Promotion
 
 Rejected as a product default. Low-diff anchor-like patch probes can restore some strict-gate
