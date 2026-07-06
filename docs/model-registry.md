@@ -260,6 +260,26 @@ decision: keep the outside-edit-size loss as reusable tooling because it is a di
 targeted way to penalize large background edits, but do not promote the lowdiff002
 step1 candidate. The first probe is slightly more conservative on SCUT but still has
 strict-gate overerase regression and no meaningful safe joint gain.
+
+mix25 step2 follow-up:
+  train output: outputs/exp_lowdiff002_outside_edit_mix25_step2_20260706
+  eval outputs:
+    outputs/eval_scut115_lowdiff002_outside_edit_mix25_step2_strict_20260706
+    outputs/eval_holdout40_lowdiff002_outside_edit_mix25_step2_strict_20260706
+  selector replay: outputs/selector_replay_lowdiff002_outside_edit_mix25_step2_20260706
+
+  strict gate:
+    scut115 selected=4/115 residual=0.114540661017 overerase=0.003039349003
+    holdout40 selected=3/40 residual=0.134347379815 overerase=0.002487066735
+
+  safe replay:
+    best safe rule selected=1/155 total residual gain=0.000105093877
+    max split overerase regret=0
+    selected split coverage: scut115=1, holdout40=0
+
+  decision: also not a product candidate. Mixed sampling reduces SCUT overerase but
+  worsens residual on both SCUT115 and holdout40. The safe replay window is too small
+  to justify further tuning of this exact anchor/mix setting.
 ```
 
 Joint selector replay:

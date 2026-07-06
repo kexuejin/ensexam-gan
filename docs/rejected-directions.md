@@ -158,6 +158,41 @@ Future probes can still use `lambda_outside_edit_size` with lower learning rate,
 or mixed patch sampling because the objective is more targeted than global preservation weight
 increases.
 
+## Low-Diff Outside-Edit Mix25 Step2 Promotion
+
+Rejected for promotion. A more conservative mixed-sampling probe used the lowdiff002 anchor with
+`patch_index_mix_ratio=0.25` for two steps. It successfully exercised the outside-edit objective,
+but it traded residual quality for minor overerase improvement and still failed the product gate.
+
+Strict-gate result:
+
+```text
+scut115: selected=4/115 residual=0.114540661017 overerase=0.003039349003
+holdout40: selected=3/40 residual=0.134347379815 overerase=0.002487066735
+```
+
+Compared with baseline, SCUT overerase improved but residual worsened, and holdout40 worsened on
+both residual and overerase:
+
+```text
+scut115 baseline residual=0.114224963938 overerase=0.003048296717
+scut115 mix25 residual=0.114540661017 overerase=0.003039349003
+holdout40 baseline residual=0.134026304621 overerase=0.002481606117
+holdout40 mix25 residual=0.134347379815 overerase=0.002487066735
+```
+
+Joint selector replay with `max-overerase-regret=0` found only one safe SCUT page:
+
+```text
+selected=1/155
+total residual gain=0.000105093877
+max split overerase regret=0
+selected split coverage: scut115=1, holdout40=0
+```
+
+Do not continue this exact lowdiff002 mix25 step2 path. If outside-edit training continues, vary the
+anchor or objective schedule rather than spending more cycles on selector replay for this candidate.
+
 ## Simple Candidate-Only Background Protection
 
 Rejected as a product inference switch. Local analysis of pages where the candidate improves residual
