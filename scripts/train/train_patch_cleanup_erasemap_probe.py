@@ -120,6 +120,30 @@ def masked_l1(pred: torch.Tensor, target: torch.Tensor, mask: torch.Tensor) -> t
     return per_sample.mean()
 
 
+def masked_mean(values: torch.Tensor, mask: torch.Tensor) -> torch.Tensor:
+    denom = mask.sum(dim=(1, 2, 3)).clamp_min(1.0)
+    per_sample = (values * mask).sum(dim=(1, 2, 3)) / denom
+    return per_sample.mean()
+
+
+def metric_hinge_proxy(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    inp: torch.Tensor,
+    mask: torch.Tensor,
+    args: argparse.Namespace,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Differentiable proxy for SCUT residual/overerase threshold metrics."""
+    threshold = args.metric_eval_threshold / 255.0
+    residual_delta = torch.abs(pred - target).mean(dim=1, keepdim=True)
+    overerase_delta = torch.abs(pred - inp).mean(dim=1, keepdim=True)
+    residual_hinge = F.relu(residual_delta - threshold)
+    overerase_hinge = F.relu(overerase_delta - threshold)
+    residual = masked_mean(residual_hinge, mask) * args.residual_proxy_weight
+    overerase = masked_mean(overerase_hinge, 1.0 - mask) * args.overerase_proxy_weight
+    return residual, overerase
+
+
 def dice_loss(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     inter = (pred * target).sum(dim=(1, 2, 3))
     denom = pred.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3))
@@ -144,7 +168,17 @@ def compute_loss_terms(
     )
     alpha_dice = dice_loss(alpha, mask) * args.alpha_dice_weight
     alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
-    loss = inside + outside + clean_inside + alpha_bce + alpha_dice + alpha_sparse
+    residual_proxy, overerase_proxy = metric_hinge_proxy(pred, target, inp, mask, args)
+    loss = (
+        inside
+        + outside
+        + clean_inside
+        + alpha_bce
+        + alpha_dice
+        + alpha_sparse
+        + residual_proxy
+        + overerase_proxy
+    )
     return {
         "loss": loss,
         "inside_l1": inside,
@@ -153,6 +187,8 @@ def compute_loss_terms(
         "alpha_bce": alpha_bce,
         "alpha_dice": alpha_dice,
         "alpha_sparsity": alpha_sparse,
+        "residual_proxy": residual_proxy,
+        "overerase_proxy": overerase_proxy,
     }
 
 
@@ -232,6 +268,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--alpha-positive-weight", type=float, default=8.0)
     parser.add_argument("--alpha-dice-weight", type=float, default=0.25)
     parser.add_argument("--alpha-sparsity-weight", type=float, default=0.02)
+    parser.add_argument("--metric-eval-threshold", type=float, default=12.0)
+    parser.add_argument("--residual-proxy-weight", type=float, default=2.0)
+    parser.add_argument("--overerase-proxy-weight", type=float, default=4.0)
     parser.add_argument("--alpha-init-bias", type=float, default=-6.0)
     return parser.parse_args()
 
@@ -309,6 +348,8 @@ def main() -> None:
             "alpha_bce",
             "alpha_dice",
             "alpha_sparsity",
+            "residual_proxy",
+            "overerase_proxy",
         ])
     val_history_path = output_dir / "cleanup_val_loss_history.csv"
     if val_loader is not None:
@@ -322,6 +363,8 @@ def main() -> None:
                 "alpha_bce",
                 "alpha_dice",
                 "alpha_sparsity",
+                "residual_proxy",
+                "overerase_proxy",
             ])
 
     start = time.time()
@@ -352,6 +395,8 @@ def main() -> None:
             train_terms["alpha_bce"],
             train_terms["alpha_dice"],
             train_terms["alpha_sparsity"],
+            train_terms["residual_proxy"],
+            train_terms["overerase_proxy"],
         ]
         with history_path.open("a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([row[0], *[f"{value:.8f}" for value in row[1:]]])
@@ -361,6 +406,7 @@ def main() -> None:
                 f"inside={row[2]:.6f} outside={row[3]:.6f} "
                 f"clean_inside={row[4]:.6f} alpha_bce={row[5]:.6f} "
                 f"alpha_dice={row[6]:.6f} alpha_sparse={row[7]:.6f} "
+                f"res_proxy={row[8]:.6f} over_proxy={row[9]:.6f} "
                 f"elapsed={time.time() - start:.1f}s",
                 flush=True,
             )
@@ -375,6 +421,8 @@ def main() -> None:
                 val_terms["alpha_bce"],
                 val_terms["alpha_dice"],
                 val_terms["alpha_sparsity"],
+                val_terms["residual_proxy"],
+                val_terms["overerase_proxy"],
             ]
             with val_history_path.open("a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([val_row[0], *[f"{value:.8f}" for value in val_row[1:]]])
@@ -382,7 +430,8 @@ def main() -> None:
                 f"val step={step}/{args.max_steps} loss={val_row[1]:.6f} "
                 f"inside={val_row[2]:.6f} outside={val_row[3]:.6f} "
                 f"clean_inside={val_row[4]:.6f} alpha_bce={val_row[5]:.6f} "
-                f"alpha_dice={val_row[6]:.6f} alpha_sparse={val_row[7]:.6f}",
+                f"alpha_dice={val_row[6]:.6f} alpha_sparse={val_row[7]:.6f} "
+                f"res_proxy={val_row[8]:.6f} over_proxy={val_row[9]:.6f}",
                 flush=True,
             )
             if best_val_loss is None or val_terms["loss"] < best_val_loss:

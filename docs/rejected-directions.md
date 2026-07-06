@@ -109,6 +109,19 @@ conservative gates only approach the primary-input result and remain worse than 
 second-stage baseline. Future cleanup work needs a stronger objective or architecture change, not
 more gate narrowing around this candidate family.
 
+An alpha-threshold 0.5 rerun confirmed this is not a hidden gate issue:
+
+```text
+SCUT115 alpha=0.5, base_edit=12, second_delta=2:
+  gate=0.000000
+  residual=0.118313
+  overerase=0.003048
+```
+
+This exactly falls back to the primary input and remains worse than the current second-stage
+baseline residual `0.114225`. Treat the current cleanup checkpoint family as closed unless the
+training objective or architecture changes.
+
 ## Patent-Style Standalone Mask Calibration
 
 Rejected as a standalone branch. SCUT pseudo-mask heads-only training worsened hardcase residual, indicating isolated mask branch tuning breaks erase gating.

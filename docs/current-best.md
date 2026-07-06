@@ -140,6 +140,27 @@ infrastructure; the current checkpoints are rejected for replacement or third-st
 next useful step is to change the cleanup objective itself, not tune selectors around this candidate
 family.
 
+## Metric-Aligned Cleanup Objective
+
+The cleanup training probe now includes differentiable proxy terms for the page-level SCUT metrics:
+`residual_proxy` penalizes above-threshold residual delta inside the erase mask, while
+`overerase_proxy` penalizes above-threshold changes outside the erase mask. This keeps the
+optimization closer to the promotion gate than patch L1/BCE alone.
+
+Validation smoke:
+
+```text
+script: scripts/train/train_patch_cleanup_erasemap_probe.py
+environment: source .env; $ENSEXAM_PYTHON
+device: mps
+smoke data: frozen ExamInk train24/val7 patches, current primary pred input
+result: 2-step train+val completed; history CSV includes residual_proxy and overerase_proxy
+```
+
+This is infrastructure only, not a promoted checkpoint. The next meaningful experiment is a bounded
+SCUT-calibrated cleanup run using these proxy terms, followed by SCUT115 validation against the
+current second-stage baseline.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
