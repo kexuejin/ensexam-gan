@@ -144,6 +144,26 @@ def metric_hinge_proxy(
     return residual, overerase
 
 
+def dark_preservation_loss(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    inp: torch.Tensor,
+    args: argparse.Namespace,
+) -> torch.Tensor:
+    """Penalize brightening where labels show the input is already too light."""
+    if args.dark_preserve_weight <= 0.0:
+        return pred.new_tensor(0.0)
+    pred_gray = pred.mean(dim=1, keepdim=True)
+    target_gray = target.mean(dim=1, keepdim=True)
+    inp_gray = inp.mean(dim=1, keepdim=True)
+    margin = args.dark_preserve_margin / 255.0
+    should_not_brighten = (target_gray + margin) < inp_gray
+    if not bool(should_not_brighten.any()):
+        return pred.new_tensor(0.0)
+    brighten = F.relu(pred_gray - inp_gray - margin)
+    return masked_mean(brighten, should_not_brighten.float()) * args.dark_preserve_weight
+
+
 def balanced_alpha_bce(alpha: torch.Tensor, mask: torch.Tensor, args: argparse.Namespace) -> torch.Tensor:
     """Mask-normalized alpha supervision so sparse erase pixels are not diluted."""
     alpha = alpha.clamp(1e-6, 1.0 - 1e-6)
@@ -175,6 +195,7 @@ def compute_loss_terms(
     alpha_dice = dice_loss(alpha, mask) * args.alpha_dice_weight
     alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
     residual_proxy, overerase_proxy = metric_hinge_proxy(pred, target, inp, mask, args)
+    dark_preserve = dark_preservation_loss(pred, target, inp, args)
     loss = (
         inside
         + outside
@@ -184,6 +205,7 @@ def compute_loss_terms(
         + alpha_sparse
         + residual_proxy
         + overerase_proxy
+        + dark_preserve
     )
     return {
         "loss": loss,
@@ -195,6 +217,7 @@ def compute_loss_terms(
         "alpha_sparsity": alpha_sparse,
         "residual_proxy": residual_proxy,
         "overerase_proxy": overerase_proxy,
+        "dark_preserve": dark_preserve,
     }
 
 
@@ -280,6 +303,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--metric-eval-threshold", type=float, default=12.0)
     parser.add_argument("--residual-proxy-weight", type=float, default=2.0)
     parser.add_argument("--overerase-proxy-weight", type=float, default=4.0)
+    parser.add_argument(
+        "--dark-preserve-weight",
+        type=float,
+        default=0.0,
+        help=(
+            "Optional training-only penalty for brightening pixels where the "
+            "target is darker than the cleanup input. Default keeps old training unchanged."
+        ),
+    )
+    parser.add_argument(
+        "--dark-preserve-margin",
+        type=float,
+        default=2.0,
+        help="Gray-level margin for deciding that target is darker and pred is over-brightened.",
+    )
     parser.add_argument("--alpha-init-bias", type=float, default=-6.0)
     return parser.parse_args()
 
@@ -359,6 +397,7 @@ def main() -> None:
             "alpha_sparsity",
             "residual_proxy",
             "overerase_proxy",
+            "dark_preserve",
         ])
     val_history_path = output_dir / "cleanup_val_loss_history.csv"
     if val_loader is not None:
@@ -374,6 +413,7 @@ def main() -> None:
                 "alpha_sparsity",
                 "residual_proxy",
                 "overerase_proxy",
+                "dark_preserve",
             ])
 
     start = time.time()
@@ -406,6 +446,7 @@ def main() -> None:
             train_terms["alpha_sparsity"],
             train_terms["residual_proxy"],
             train_terms["overerase_proxy"],
+            train_terms["dark_preserve"],
         ]
         with history_path.open("a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([row[0], *[f"{value:.8f}" for value in row[1:]]])
@@ -416,6 +457,7 @@ def main() -> None:
                 f"clean_inside={row[4]:.6f} alpha_bce={row[5]:.6f} "
                 f"alpha_dice={row[6]:.6f} alpha_sparse={row[7]:.6f} "
                 f"res_proxy={row[8]:.6f} over_proxy={row[9]:.6f} "
+                f"dark_preserve={row[10]:.6f} "
                 f"elapsed={time.time() - start:.1f}s",
                 flush=True,
             )
@@ -432,6 +474,7 @@ def main() -> None:
                 val_terms["alpha_sparsity"],
                 val_terms["residual_proxy"],
                 val_terms["overerase_proxy"],
+                val_terms["dark_preserve"],
             ]
             with val_history_path.open("a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([val_row[0], *[f"{value:.8f}" for value in val_row[1:]]])
@@ -440,7 +483,8 @@ def main() -> None:
                 f"inside={val_row[2]:.6f} outside={val_row[3]:.6f} "
                 f"clean_inside={val_row[4]:.6f} alpha_bce={val_row[5]:.6f} "
                 f"alpha_dice={val_row[6]:.6f} alpha_sparse={val_row[7]:.6f} "
-                f"res_proxy={val_row[8]:.6f} over_proxy={val_row[9]:.6f}",
+                f"res_proxy={val_row[8]:.6f} over_proxy={val_row[9]:.6f} "
+                f"dark_preserve={val_row[10]:.6f}",
                 flush=True,
             )
             if best_val_loss is None or val_terms["loss"] < best_val_loss:
