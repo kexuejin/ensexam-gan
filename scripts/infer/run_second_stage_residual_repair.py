@@ -69,6 +69,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--base-edit-threshold", type=float, default=12.0)
     parser.add_argument("--second-delta-threshold", type=float, default=32.0)
     parser.add_argument("--dark-threshold", type=int, default=0)
+    parser.add_argument(
+        "--max-brighten-delta",
+        type=float,
+        default=1e9,
+        help=(
+            "Optional inference-time safety cap for pixels where the second stage "
+            "brightens the primary prediction. The default disables this guard."
+        ),
+    )
     parser.add_argument("--change-threshold", type=int, default=12)
     parser.add_argument("--eval-threshold", type=int, default=12)
     parser.add_argument("--save-primary", action="store_true")
@@ -124,6 +133,7 @@ def gated_blend(
     base_edit_threshold: float,
     second_delta_threshold: float,
     dark_threshold: int,
+    max_brighten_delta: float,
 ) -> tuple[np.ndarray, np.ndarray]:
     base_edit = cv2.absdiff(primary_bgr, input_bgr).mean(axis=2)
     second_delta = cv2.absdiff(second_bgr, primary_bgr).mean(axis=2)
@@ -131,6 +141,10 @@ def gated_blend(
     if dark_threshold > 0:
         gray = cv2.cvtColor(input_bgr, cv2.COLOR_BGR2GRAY)
         gate &= gray <= dark_threshold
+    if max_brighten_delta < 1e9:
+        primary_gray = cv2.cvtColor(primary_bgr, cv2.COLOR_BGR2GRAY).astype(np.int16)
+        second_gray = cv2.cvtColor(second_bgr, cv2.COLOR_BGR2GRAY).astype(np.int16)
+        gate &= (second_gray - primary_gray) <= max_brighten_delta
     merged = primary_bgr.copy()
     merged[gate] = second_bgr[gate]
     return merged, gate
@@ -173,6 +187,7 @@ def main() -> None:
             base_edit_threshold=args.base_edit_threshold,
             second_delta_threshold=args.second_delta_threshold,
             dark_threshold=args.dark_threshold,
+            max_brighten_delta=args.max_brighten_delta,
         )
 
         pred_path = pred_dir / f"{image_path.stem}.png"
@@ -189,6 +204,7 @@ def main() -> None:
             "base_edit_threshold": args.base_edit_threshold,
             "second_delta_threshold": args.second_delta_threshold,
             "dark_threshold": args.dark_threshold,
+            "max_brighten_delta": args.max_brighten_delta,
             "gate_ratio": float(gate.mean()),
         }
         try:
