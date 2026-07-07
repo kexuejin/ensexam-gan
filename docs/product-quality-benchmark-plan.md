@@ -539,3 +539,49 @@ This is the first selector candidate in this branch that improves aggregate resi
 while selecting more than a tiny handful of pages. It is still below the 20-30% product-coverage
 target and includes 8 selected metric-loss pages, so it should be treated as a candidate for visual
 review and refinement, not a product default.
+
+A stricter zero-metric-loss refinement is also reproducible:
+
+```text
+active_gray_p25 >= 123
+AND active_baseline_edit_p95 <= 149
+AND candidate_delta_mean >= 0.0182428157494
+```
+
+Replay output:
+
+```text
+outputs/page_quality_selector_ai_provisional_40_20260707/fixed_rule_active_gray_p25_ge_123_refined_zero_loss_eval.csv
+```
+
+Result:
+
+```text
+SCUT115:
+  selected = 12 / 115
+  coverage = 10.4%
+  residual: 0.114225 -> 0.113242
+  residual_gain = 0.000983
+  overerase_delta = -0.00000668
+  selected metric wins/losses = 12 / 0
+
+holdout40:
+  selected = 1 / 40
+  coverage = 2.5%
+  residual: 0.130543 -> 0.129716
+  residual_gain = 0.000826
+  overerase_delta = -0.00000050
+  selected metric wins/losses = 1 / 0
+
+combined:
+  selected = 13 / 155
+  coverage = 8.4%
+  residual: 0.118436 -> 0.117494
+  residual_gain = 0.000942
+  overerase_delta = -0.00000509
+  selected metric wins/losses = 13 / 0
+```
+
+This refined rule is safer but too narrow, especially on holdout40. Use it as the conservative
+anchor when comparing future selectors: any broader rule should preserve the zero-loss behavior or
+provide visual evidence explaining why selected metric-loss pages are still acceptable.

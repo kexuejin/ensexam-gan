@@ -37,6 +37,12 @@ def parse_split(value: str) -> tuple[str, Path, Path, Path]:
 def selector_hit(row: dict[str, str], rule: str) -> bool:
     if rule == "active_gray_p25 >= 123":
         return float(row["active_gray_p25"]) >= 123.0
+    if rule == "active_gray_p25 >= 123 AND active_baseline_edit_p95 <= 149 AND candidate_delta_mean >= 0.0182428157494":
+        return (
+            float(row["active_gray_p25"]) >= 123.0
+            and float(row["active_baseline_edit_p95"]) <= 149.0
+            and float(row["candidate_delta_mean"]) >= 0.0182428157494
+        )
     if rule == "active_gray_p25 >= 111.6 AND candidate_delta_max <= 200.133333333":
         return float(row["active_gray_p25"]) >= 111.6 and float(row["candidate_delta_max"]) <= 200.133333333
     raise ValueError(f"Unsupported selector rule: {rule}")
