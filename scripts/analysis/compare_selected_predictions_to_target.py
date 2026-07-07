@@ -91,6 +91,12 @@ def compare_row(row: dict[str, str], args: argparse.Namespace) -> dict[str, str 
     hurt_px = int((changed & (improvement < -args.meaningful_improvement_threshold)).sum())
     neutral_px = int((changed & (np.abs(improvement) <= args.meaningful_improvement_threshold)).sum())
     changed_px = int(changed.sum())
+    hurt = changed & (improvement < -args.meaningful_improvement_threshold)
+    help_mask = changed & (improvement > args.meaningful_improvement_threshold)
+    candidate_brighter = (candidate_gray - baseline_gray) > args.candidate_change_threshold
+    candidate_darker = (baseline_gray - candidate_gray) > args.candidate_change_threshold
+    target_lighter = (target_gray - baseline_gray) > args.candidate_change_threshold
+    target_darker = (baseline_gray - target_gray) > args.candidate_change_threshold
 
     baseline_already_ok = baseline_error <= args.baseline_ok_threshold
     risk_px = int(
@@ -118,6 +124,14 @@ def compare_row(row: dict[str, str], args: argparse.Namespace) -> dict[str, str 
             & (np.abs(candidate_gray - target_gray) > np.abs(baseline_gray - target_gray))
         ).sum()
     )
+    hurt_brighter_px = int((hurt & candidate_brighter).sum())
+    hurt_darker_px = int((hurt & candidate_darker).sum())
+    hurt_base_ok_px = int((hurt & baseline_already_ok).sum())
+    hurt_target_lighter_px = int((hurt & target_lighter).sum())
+    hurt_target_darker_px = int((hurt & target_darker).sum())
+    hurt_target_same_px = int((hurt & ~(target_lighter | target_darker)).sum())
+    help_target_lighter_px = int((help_mask & target_lighter).sum())
+    help_target_darker_px = int((help_mask & target_darker).sum())
 
     source_changed_error = np.abs(source_gray - target_gray)
     source_active_error = float(source_changed_error[active].mean()) if active.any() else 0.0
@@ -138,6 +152,18 @@ def compare_row(row: dict[str, str], args: argparse.Namespace) -> dict[str, str 
         "residual_help_px": residual_help_px,
         "residual_hurt_px": residual_hurt_px,
         "residual_help_hurt_ratio": (residual_help_px + 1) / (residual_hurt_px + 1),
+        "hurt_brighter_px": hurt_brighter_px,
+        "hurt_darker_px": hurt_darker_px,
+        "hurt_base_ok_px": hurt_base_ok_px,
+        "hurt_target_lighter_px": hurt_target_lighter_px,
+        "hurt_target_darker_px": hurt_target_darker_px,
+        "hurt_target_same_px": hurt_target_same_px,
+        "help_target_lighter_px": help_target_lighter_px,
+        "help_target_darker_px": help_target_darker_px,
+        "hurt_brighter_ratio": hurt_brighter_px / max(hurt_px, 1),
+        "hurt_base_ok_ratio": hurt_base_ok_px / max(hurt_px, 1),
+        "hurt_target_darker_ratio": hurt_target_darker_px / max(hurt_px, 1),
+        "help_target_lighter_ratio": help_target_lighter_px / max(help_px, 1),
         "local_verdict": verdict(
             help_px,
             hurt_px,
