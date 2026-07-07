@@ -347,6 +347,46 @@ results improve both residual and overerase on SCUT115, holdout40, train160,
 and next120. Treat it as the benchmark candidate for the next visual/page-level
 review pack, not as a product default until visible regressions are checked.
 
+Build a four-split page review queue for balanced007 from metric CSV pairs:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_candidate_review_queue.py \
+  --candidate-name balanced007 \
+  --output-dir outputs/product_quality_review_balanced007_four_split_20260707 \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split train160:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/eval_train160_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split next120:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/eval_next120_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --max-win 8 \
+  --max-loss 8 \
+  --max-high-activity 8
+```
+
+Then render local page and crop review packs:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_product_quality_review_pack.py \
+  --review-csv outputs/product_quality_review_balanced007_four_split_20260707/review-pages.csv \
+  --output-dir outputs/product_quality_review_balanced007_four_split_20260707/page_pack \
+  --thumb-width 360 \
+  --thumb-height 260 \
+  --max-contact-rows 96
+
+$ENSEXAM_PYTHON scripts/analysis/build_product_quality_crop_review_pack.py \
+  --review-csv outputs/product_quality_review_balanced007_four_split_20260707/review-pages.csv \
+  --output-dir outputs/product_quality_review_balanced007_four_split_20260707/crop_pack \
+  --max-crops-per-row 4 \
+  --crop-size 320 \
+  --thumb-size 240 \
+  --include-target-residual \
+  --max-contact-crops 120
+```
+
+The first balanced007 review queue contains 96 pages: 24 per split, with 32
+metric wins, 32 metric losses/overerase risks, and 32 high-activity risk rows.
+The crop pack contains 384 local crops. Use these outputs for visible regression
+review before promoting balanced007.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:
