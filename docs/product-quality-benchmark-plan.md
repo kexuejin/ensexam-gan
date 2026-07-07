@@ -832,3 +832,26 @@ selected by split:
 Use the 37-page rule for metric-safe candidate discovery and the 30-page rule when the priority is
 avoiding local visual-proxy rejects. Both remain low-coverage selector paths rather than broad
 product defaults.
+
+Review CSVs for materialized selectors can be regenerated with:
+
+```bash
+python3 scripts/analysis/build_selector_review_csv.py \
+  --selection-csv outputs/materialized_local_noreject_selector_20260707/selection.csv \
+  --candidate-name residual_delta_local_noreject \
+  --bucket local_noreject_selected \
+  --review-pack outputs/local_noreject_selector_review_20260707 \
+  --output-csv outputs/local_noreject_selector_review_20260707/review-pages.csv \
+  --split scut115:data-links/samples/SCUT-EnsExam/test/all_images:data-links/samples/SCUT-EnsExam/test/all_labels:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --split holdout40:data-links/samples/SCUT-EnsExam/train/all_images:data-links/samples/SCUT-EnsExam/train/all_labels:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --split train160:data-links/samples/SCUT-EnsExam/train/all_images:data-links/samples/SCUT-EnsExam/train/all_labels:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/eval_scut_train160_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --split next120:data-links/samples/SCUT-EnsExam/train/all_images:data-links/samples/SCUT-EnsExam/train/all_labels:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/eval_scut_next120_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv
+```
+
+Verified regenerated no-reject review CSV:
+
+```text
+rows = 30
+selected keys match existing local_noreject review pack
+all source_input / baseline_pred / candidate_pred / target paths exist
+```
