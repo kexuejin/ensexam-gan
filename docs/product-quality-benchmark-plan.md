@@ -408,6 +408,8 @@ $ENSEXAM_PYTHON scripts/analysis/build_minimal_labeling_subset.py \
   --auto-suggest-csv outputs/product_quality_review_residual_delta_YYYYMMDD/labels-auto-suggest.csv \
   --review-index-csv outputs/product_quality_review_residual_delta_YYYYMMDD/review_pack/index.csv \
   --output-csv outputs/product_quality_review_residual_delta_YYYYMMDD/minimal-labeling-subset-40.csv \
+  --contact-sheet outputs/product_quality_review_residual_delta_YYYYMMDD/minimal-labeling-subset-40.png \
+  --chunk-dir outputs/product_quality_review_residual_delta_YYYYMMDD/minimal_subset_chunks \
   --max-total 40 \
   --min-per-split 12 \
   --min-per-bucket 6 \
@@ -435,6 +437,13 @@ auto_review_priority:
   medium = 6
   low = 2
 missing_review_images = 0
+contact_sheet:
+  outputs/product_quality_review_residual_delta_20260707/minimal-labeling-subset-40.png
+chunked sheets:
+  outputs/product_quality_review_residual_delta_20260707/minimal_subset_chunks/chunk_01.png
+  outputs/product_quality_review_residual_delta_20260707/minimal_subset_chunks/chunk_02.png
+  outputs/product_quality_review_residual_delta_20260707/minimal_subset_chunks/chunk_03.png
+  outputs/product_quality_review_residual_delta_20260707/minimal_subset_chunks/chunk_04.png
 ```
 
 Fill the `label`, `flags`, `reviewer`, `review_date`, and `comment` columns in this subset first.
