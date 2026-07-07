@@ -873,3 +873,40 @@ those patches with the current residual-delta objective turns into a conservativ
 model rather than a product-safe repair model. Do not repeat this mixed hard-negative setup as-is.
 If revisiting, separate it into an auxiliary signed-delta constraint or a selector/candidate
 ranking problem instead of merging it into the main cleanup patch objective.
+
+## Signed-Delta W1 Inside-Only Residual-Delta Cleanup
+
+Rejected as the next product path. A narrower training-only signed-delta direction loss avoids the
+mixed hard-negative data expansion problem, but the first `--signed-delta-weight 1.0
+--signed-delta-inside-only` run still did not beat the original residual-delta t4 or dark-preserve
+w2 candidates. It improved train160 and slightly improved next120 versus baseline, but regressed
+the SCUT115 test split and holdout40.
+
+Training/eval:
+
+```text
+checkpoint:
+  outputs/train_scut_residual_delta_signed_delta_w1_step150_20260707/cleanup_best.pt
+
+four-split metric result versus baseline:
+  scut115:   residual_delta=+0.000598372, overerase_delta=-0.000007248
+  holdout40: residual_delta=+0.000769251, overerase_delta=-0.000007612
+  train160:  residual_delta=-0.002021265, overerase_delta=-0.000012558
+  next120:   residual_delta=-0.000116853, overerase_delta=-0.000006055
+  combined:  residual_delta=-0.000546763, overerase_delta=-0.000008905
+
+reference residual-delta t4 combined:
+  residual_delta=-0.000935733, overerase_delta=-0.000005804
+
+dark-preserve w2 combined:
+  residual_delta=-0.000631727, overerase_delta=-0.000004482
+```
+
+The signed-delta w1 run lowered overerase more than t4, but residual improvement was weaker and
+less stable across splits. The average gate ratio also increased from the t4 reference
+`0.001316005` to `0.003895908`, so it is not yet a safer drop-in replacement.
+
+Interpretation: keep the default-disabled signed-delta loss as reusable training infrastructure,
+but do not promote `signed-delta-weight=1.0` inside-only step-150 as the main cleanup checkpoint.
+If revisiting, sweep lower weights/margins or combine with a selector/ranking stage, and require no
+SCUT115/holdout40 residual regression before local-proxy review.
