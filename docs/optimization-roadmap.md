@@ -151,6 +151,10 @@ Current region evidence:
 simple component rules: no <=5% train-reject-ratio rule found at useful scale
 best simple pair: held-out reject ratio 36.1%
 weak-label ranker: held-out reject ratio 37.0%
+weak-label materialized page result:
+  SCUT115 residual_gain=0.000001815, overerase_delta=0.000000000
+  holdout40 residual_gain=0.000007298, overerase_delta=0.000000000
+  status: bridge works, quality lift is negligible
 review pack seed: 20 accept / 20 review / 20 reject held-out component crops
 ```
 

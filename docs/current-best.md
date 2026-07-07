@@ -86,6 +86,15 @@ best simple pair:
 weak-label component ranker:
   test_selected=230/27047
   test_reject_ratio=37.0%
+
+weak-label ranker materialized to page predictions:
+  script: scripts/infer/materialize_region_component_selector.py
+  evaluator: scripts/eval/evaluate_prediction_directory.py
+  threshold: 0.7588800487801861
+  SCUT115: materialized_pages=33/115, components=181, selected_pixels=754
+  SCUT115: residual_gain=0.000001815, overerase_delta=0.000000000
+  holdout40: materialized_pages=9/40, components=49, selected_pixels=217
+  holdout40: residual_gain=0.000007298, overerase_delta=0.000000000
 ```
 
 Reusable workflow now exists:
@@ -111,6 +120,10 @@ outputs/region_component_review_pack_t4_heldout_20260707/
 
 Next selector progress should come from reviewed `keep` / `drop` / `review` labels and held-out
 reviewed validation, not more weak-label or hand-threshold tuning.
+The materialization/evaluation bridge is now proven usable, but the weak-label
+ranker result is effectively a no-op at page level. Treat it as workflow
+infrastructure only; real progress requires reviewed labels or a better
+candidate family before promotion.
 
 Do not add the current whiteout inpaint repair to the default pipeline. It can reduce residual metrics on correction-fluid pages, but visual review shows the repaired area may look dirtier than leaving a clean white patch.
 
