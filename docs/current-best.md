@@ -112,6 +112,7 @@ Reusable workflow now exists:
 ```text
 component extraction/rule probe: scripts/analysis/evaluate_region_component_selector.py
 review pack builder: scripts/analysis/build_region_component_review_pack.py
+impact review pack builder: scripts/analysis/build_region_component_impact_review_pack.py
 label validator: scripts/analysis/validate_region_component_labels.py
 reviewed-label ranker: scripts/analysis/train_region_component_ranker.py --label-csv
 label contract: docs/region-component-labeling.md
@@ -126,6 +127,13 @@ outputs/region_component_review_pack_t4_heldout_20260707/
   contact_sheet_high_gain_accept.png
   contact_sheet_borderline_review.png
   contact_sheet_hard_reject.png
+
+outputs/region_component_impact_review_pack_weak_t0513_20260707/
+  component-impact-labels-template.csv
+  contact_sheet_residual_help.png
+  contact_sheet_residual_hurt.png
+  contact_sheet_overerase_risk.png
+  contact_sheet_large_noop.png
 ```
 
 Next selector progress should come from reviewed `keep` / `drop` / `review` labels and held-out
@@ -136,6 +144,21 @@ threshold increases metric gain slightly, but only by selecting every page and
 still causing many page-level residual regressions. Treat this as workflow
 infrastructure only; real progress requires reviewed labels or a better
 candidate family before promotion.
+
+The impact-ranked pack is the preferred next labeling source because it ranks
+components by actual page-level residual and overerase pixel deltas. The first
+pack selected 76 high-impact components from 10,041 scored components:
+
+```text
+residual_help: 30
+residual_hurt: 30
+overerase_risk: 14
+large_noop: 2
+```
+
+Use it to spend review effort on components that can move page metrics. The
+older balanced weak-verdict pack remains useful for selector sanity checks, but
+it is less efficient for improving product-quality decisions.
 
 Do not add the current whiteout inpaint repair to the default pipeline. It can reduce residual metrics on correction-fluid pages, but visual review shows the repaired area may look dirtier than leaving a clean white patch.
 

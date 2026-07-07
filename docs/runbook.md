@@ -83,6 +83,43 @@ outputs/region_component_review_pack_t4_heldout_20260707/contact_sheet_hard_reje
 outputs/region_component_review_pack_t4_heldout_20260707/component-labels-template.csv
 ```
 
+Build an impact-ranked held-out review pack when review time is limited. This
+is preferred for the next selector pass because rows are prioritized by actual
+page-level residual / overerase pixel deltas rather than weak component verdict
+balance:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_region_component_impact_review_pack.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --score-csv outputs/region_component_ranker_t4_train160_next120_to_scut115_holdout40_20260707/predictions.csv \
+  --min-score 0.5130248089880388 \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --allowed-split scut115 \
+  --allowed-split holdout40 \
+  --output-dir outputs/region_component_impact_review_pack_weak_t0513_20260707 \
+  --max-total 80 \
+  --max-per-page 4 \
+  --crop-size 220 \
+  --thumb-size 180
+```
+
+Review these generated impact artifacts:
+
+```text
+outputs/region_component_impact_review_pack_weak_t0513_20260707/contact_sheet.png
+outputs/region_component_impact_review_pack_weak_t0513_20260707/contact_sheet_residual_help.png
+outputs/region_component_impact_review_pack_weak_t0513_20260707/contact_sheet_residual_hurt.png
+outputs/region_component_impact_review_pack_weak_t0513_20260707/contact_sheet_overerase_risk.png
+outputs/region_component_impact_review_pack_weak_t0513_20260707/contact_sheet_large_noop.png
+outputs/region_component_impact_review_pack_weak_t0513_20260707/component-impact-labels-template.csv
+```
+
+The 2026-07-07 weak-threshold impact pack selected 76 components from 10,041
+impact-scored rows: 30 residual_help, 30 residual_hurt, 14 overerase_risk, and
+2 large_noop. Use this pack before spending more time on weak-label threshold
+micro-tuning.
+
 Fill `component-labels-template.csv` using the contract in
 `docs/region-component-labeling.md`. Prefer labels `keep`, `drop`, and
 `review`; only `keep` and `drop` train the ranker by default.

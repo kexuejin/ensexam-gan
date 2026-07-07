@@ -138,11 +138,12 @@ Region selector workflow now available:
 
 ```text
 1. Generate component features with evaluate_region_component_selector.py.
-2. Build balanced component crops with build_region_component_review_pack.py.
-3. Label components as keep / drop / review using docs/region-component-labeling.md.
-4. Validate labels with validate_region_component_labels.py.
-5. Train with train_region_component_ranker.py --label-csv.
-6. Promote only after separate reviewed held-out labels show near-zero reject rate.
+2. Build impact-ranked component crops with build_region_component_impact_review_pack.py.
+3. Use the balanced build_region_component_review_pack.py output only as a sanity/backfill set.
+4. Label components as keep / drop / review using docs/region-component-labeling.md.
+5. Validate labels with validate_region_component_labels.py.
+6. Train with train_region_component_ranker.py --label-csv.
+7. Promote only after separate reviewed held-out labels show near-zero reject rate.
 ```
 
 Current region evidence:
@@ -161,6 +162,11 @@ weak-label threshold sweep:
   holdout40 residual_gain=0.000227216, worse_pages=13/40
   status: broader threshold is still too weak and too noisy for promotion
 review pack seed: 20 accept / 20 review / 20 reject held-out component crops
+impact review pack seed:
+  output: outputs/region_component_impact_review_pack_weak_t0513_20260707
+  selected: 76 components from 10041 impact-scored components
+  buckets: residual_help=30, residual_hurt=30, overerase_risk=14, large_noop=2
+  status: preferred next label source because rows are ranked by page-level metric impact
 ```
 
 This means the next selector milestone is not a better weak-label threshold; it
