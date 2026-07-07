@@ -105,6 +105,12 @@ weak-label ranker threshold sweep without writing PNGs:
   holdout40: materialized_pages=40/40, components=2898, selected_pixels=19102
   holdout40: residual_gain=0.000227216, overerase_delta=-0.000000027
   holdout40: improved_pages=22, worse_pages=13, over_reg_pages=0
+
+t4 residual-delta oracle ceiling:
+  script: scripts/analysis/evaluate_region_component_oracle_ceiling.py
+  SCUT115 best oracle residual_gain=0.000941709, worse_pages=0
+  holdout40 best oracle residual_gain=0.000452334, worse_pages=0
+  status: even perfect target-aware component selection has limited headroom
 ```
 
 Reusable workflow now exists:
@@ -159,6 +165,13 @@ large_noop: 2
 Use it to spend review effort on components that can move page metrics. The
 older balanced weak-verdict pack remains useful for selector sanity checks, but
 it is less efficient for improving product-quality decisions.
+
+The oracle ceiling check is now the stop condition for this t4 candidate family:
+selector work can still validate infrastructure, but it should not be expected
+to close the product-quality gap because the target-aware upper bound is below
+0.001 residual gain on SCUT115 and below 0.0005 on holdout40. Further quality
+work should prioritize a stronger candidate/generator objective before another
+selector-training loop.
 
 Do not add the current whiteout inpaint repair to the default pipeline. It can reduce residual metrics on correction-fluid pages, but visual review shows the repaired area may look dirtier than leaving a clean white patch.
 

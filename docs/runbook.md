@@ -120,6 +120,22 @@ impact-scored rows: 30 residual_help, 30 residual_hurt, 14 overerase_risk, and
 2 large_noop. Use this pack before spending more time on weak-label threshold
 micro-tuning.
 
+Measure the target-aware oracle ceiling before investing in another selector
+loop for the same candidate family:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/evaluate_region_component_oracle_ceiling.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --output-csv outputs/region_component_oracle_ceiling_t4_20260707/oracle_ceiling.csv
+```
+
+The 2026-07-07 t4 oracle ceiling is low even with target-aware component
+selection: SCUT115 best residual_gain is 0.000941709 and holdout40 best
+residual_gain is 0.000452334, both with zero worse pages. Treat this as the
+stop condition for more selector micro-tuning on this candidate family.
+
 Fill `component-labels-template.csv` using the contract in
 `docs/region-component-labeling.md`. Prefer labels `keep`, `drop`, and
 `review`; only `keep` and `drop` train the ranker by default.

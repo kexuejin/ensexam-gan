@@ -167,12 +167,18 @@ impact review pack seed:
   selected: 76 components from 10041 impact-scored components
   buckets: residual_help=30, residual_hurt=30, overerase_risk=14, large_noop=2
   status: preferred next label source because rows are ranked by page-level metric impact
+t4 oracle ceiling:
+  output: outputs/region_component_oracle_ceiling_t4_20260707/oracle_ceiling.csv
+  SCUT115 best residual_gain=0.000941709 with zero worse pages
+  holdout40 best residual_gain=0.000452334 with zero worse pages
+  status: selector improvements alone cannot make this candidate family product-quality
 ```
 
 This means the next selector milestone is not a better weak-label threshold; it
 is a reviewed component label set large enough to train and validate a region
-selector, or a better candidate family whose selected components have visible
-page-level effect.
+selector only after a stronger candidate family exists. For the current t4
+residual-delta candidate, the oracle ceiling is too low to justify more selector
+micro-tuning as a product-quality path.
 
 ### 4. Zoom Review Packs For Ambiguous Failures
 
