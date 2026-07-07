@@ -654,3 +654,32 @@ hurt ratios:
 This supports treating the broad-rule metric-loss pages as real risk pages rather than metric-only
 false negatives. The zero-loss refined selector should remain the safety anchor until a learned
 selector or improved candidate can recover coverage without selecting these hurt-heavy cases.
+
+The refined zero-loss selector can be materialized into prediction folders with:
+
+```bash
+python3 scripts/infer/materialize_fixed_page_selector.py \
+  --selector-rule 'active_gray_p25 >= 123 AND active_baseline_edit_p95 <= 149 AND candidate_delta_mean >= 0.0182428157494' \
+  --split scut115:outputs/selector_features_residual_delta_scut115_20260707_retry/page_features.csv:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --split holdout40:outputs/selector_features_residual_delta_holdout40_20260707/page_features.csv:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --output-dir outputs/materialized_refined_zero_loss_selector_YYYYMMDD
+```
+
+Verified materialized output:
+
+```text
+outputs/materialized_refined_zero_loss_selector_20260707/
+  selection.csv
+  scut115/pred/*.png
+  holdout40/pred/*.png
+
+rows = 155
+selected = 13
+selected metric wins/losses = 13 / 0
+scut115 pred files = 115
+holdout40 pred files = 40
+```
+
+Use this materialized folder for side-by-side visual review of the current safety anchor. It should
+not replace the current default pipeline until the selected pages are visually confirmed and the
+coverage limitation is accepted or improved.
