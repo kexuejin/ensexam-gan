@@ -45,6 +45,25 @@ EXCLUDED_SUBSTRINGS = (
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--components-csv", required=True)
+    parser.add_argument(
+        "--label-csv",
+        action="append",
+        default=[],
+        help="Optional reviewed labels CSV from build_region_component_review_pack.py. May be repeated.",
+    )
+    parser.add_argument("--label-column", default="label")
+    parser.add_argument(
+        "--positive-label",
+        action="append",
+        default=[],
+        help="Reviewed label value treated as positive. Defaults to accept/keep/safe/positive/1/yes.",
+    )
+    parser.add_argument(
+        "--negative-label",
+        action="append",
+        default=[],
+        help="Reviewed label value treated as negative. Defaults to reject/drop/unsafe/negative/0/no.",
+    )
     parser.add_argument("--train-split", action="append", required=True)
     parser.add_argument("--test-split", action="append", required=True)
     parser.add_argument("--output-dir", required=True)
@@ -61,6 +80,33 @@ def parse_args() -> argparse.Namespace:
 def read_rows(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def component_key(row: dict[str, str]) -> tuple[str, str, str]:
+    return row["split"], row["file"], row["component_id"]
+
+
+def normalized_label(value: str) -> str:
+    return value.strip().lower()
+
+
+def default_positive_labels(values: list[str]) -> set[str]:
+    return {normalized_label(value) for value in (values or ["accept", "keep", "safe", "positive", "1", "yes"])}
+
+
+def default_negative_labels(values: list[str]) -> set[str]:
+    return {normalized_label(value) for value in (values or ["reject", "drop", "unsafe", "negative", "0", "no"])}
+
+
+def read_review_labels(paths: list[str], label_column: str) -> dict[tuple[str, str, str], str]:
+    labels: dict[tuple[str, str, str], str] = {}
+    for path_text in paths:
+        for row in read_rows(Path(path_text)):
+            label = normalized_label(row.get(label_column, ""))
+            if not label:
+                continue
+            labels[component_key(row)] = label
+    return labels
 
 
 def write_csv(path: Path, rows: list[dict[str, object]], fields: list[str] | None = None) -> None:
@@ -99,6 +145,15 @@ def positive_label(row: dict[str, str], mode: str) -> bool:
     if mode == "accept":
         return row["component_verdict"] == "accept" and gain > 0.0 and hurt_ratio <= 0.10
     return row["component_verdict"] != "reject" and gain > 0.0 and hurt_ratio <= 0.25
+
+
+def reviewed_label_value(row: dict[str, str], positive_labels: set[str], negative_labels: set[str]) -> float | None:
+    label = normalized_label(row.get("__review_label", ""))
+    if label in positive_labels:
+        return 1.0
+    if label in negative_labels:
+        return 0.0
+    return None
 
 
 def build_matrix(rows: list[dict[str, str]], features: list[str]) -> np.ndarray:
@@ -222,10 +277,26 @@ def prediction_rows(rows: list[dict[str, str]], scores: np.ndarray, labels: np.n
 def main() -> None:
     args = parse_args()
     rows = read_rows(Path(args.components_csv))
+    review_labels = read_review_labels(args.label_csv, args.label_column)
+    if review_labels:
+        for row in rows:
+            label = review_labels.get(component_key(row))
+            if label is not None:
+                row["__review_label"] = label
+    positive_labels = default_positive_labels(args.positive_label)
+    negative_labels = default_negative_labels(args.negative_label)
     train_splits = set(args.train_split)
     test_splits = set(args.test_split)
     train_rows = [row for row in rows if row["split"] in train_splits]
     test_rows = [row for row in rows if row["split"] in test_splits]
+    if review_labels:
+        labeled_train_rows = []
+        for row in train_rows:
+            if reviewed_label_value(row, positive_labels, negative_labels) is not None:
+                labeled_train_rows.append(row)
+        if not labeled_train_rows:
+            raise ValueError("No train rows have usable reviewed labels")
+        train_rows = labeled_train_rows
     if not train_rows or not test_rows:
         raise ValueError("Both train and test rows are required")
 
@@ -236,8 +307,22 @@ def main() -> None:
     x, mean, std = standardize(train_x_raw, all_x)
     train_x = x[: len(train_rows)]
     test_x = x[len(train_rows) :]
-    train_y = np.asarray([positive_label(row, args.positive_mode) for row in train_rows], dtype=np.float64)
-    test_y = np.asarray([positive_label(row, args.positive_mode) for row in test_rows], dtype=np.float64)
+    if review_labels:
+        train_y = np.asarray(
+            [reviewed_label_value(row, positive_labels, negative_labels) for row in train_rows],
+            dtype=np.float64,
+        )
+        test_review_values = [reviewed_label_value(row, positive_labels, negative_labels) for row in test_rows]
+        test_y = np.asarray(
+            [
+                value if value is not None else positive_label(row, args.positive_mode)
+                for row, value in zip(test_rows, test_review_values)
+            ],
+            dtype=np.float64,
+        )
+    else:
+        train_y = np.asarray([positive_label(row, args.positive_mode) for row in train_rows], dtype=np.float64)
+        test_y = np.asarray([positive_label(row, args.positive_mode) for row in test_rows], dtype=np.float64)
 
     weights, bias = train_logistic(train_x, train_y, args.epochs, args.lr, args.l2)
     train_scores = score_rows(train_x, weights, bias)
@@ -280,6 +365,8 @@ def main() -> None:
         "train_positive": int(train_y.sum()),
         "test_positive": int(test_y.sum()),
         "positive_mode": args.positive_mode,
+        "label_source": "reviewed" if review_labels else "weak",
+        "review_label_rows": len(review_labels),
         "epochs": args.epochs,
         "lr": args.lr,
         "l2": args.l2,
