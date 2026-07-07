@@ -910,3 +910,50 @@ Interpretation: keep the default-disabled signed-delta loss as reusable training
 but do not promote `signed-delta-weight=1.0` inside-only step-150 as the main cleanup checkpoint.
 If revisiting, sweep lower weights/margins or combine with a selector/ranking stage, and require no
 SCUT115/holdout40 residual regression before local-proxy review.
+
+## Label-Free Hand-Ruled Selector From Train Splits
+
+Rejected as a product selector path in its current hand-ruled form. A split-validated selector
+check trained rules on train160+next120 and evaluated them on scut115+holdout40. The best rules
+that were clean on train splits did not generalize: both selected three test/holdout pages and all
+three were local-proxy rejects.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/validate_label_free_selector_rules.py
+
+input:
+  outputs/residual_delta_t4_local_proxy_20260707/local_target_comparison_with_diagnostics.csv
+  outputs/selector_features_residual_delta_t4_20260707/page_features.csv
+
+split:
+  train=train160,next120
+  test=scut115,holdout40
+
+best observed rules:
+  active_delta_mean <= 4.11656099509 AND candidate_delta_mean >= 0.00781938404494
+  active_delta_mean <= 4.11656099509 AND gate_ratio >= 0.00187798218501
+
+train result:
+  selected=10/280
+  metric_losses=0
+  accept=9
+  review=1
+  reject=0
+  residual_gain=+0.000340916470
+
+test/holdout result:
+  selected=3/155
+  metric_losses=3
+  accept=0
+  review=0
+  reject=3
+  residual_gain=-0.000039258120
+```
+
+Interpretation: current scalar, hand-mined label-free rules are not stable enough to be product
+selectors, even at very low coverage. Keep the split-validation script for guardrail testing, but
+do not spend more cycles widening hand-written rule searches unless a learned selector/ranking
+signal is introduced and validated on held-out pages.
