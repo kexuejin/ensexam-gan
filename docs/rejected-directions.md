@@ -957,3 +957,57 @@ Interpretation: current scalar, hand-mined label-free rules are not stable enoug
 selectors, even at very low coverage. Keep the split-validation script for guardrail testing, but
 do not spend more cycles widening hand-written rule searches unless a learned selector/ranking
 signal is introduced and validated on held-out pages.
+
+## Lightweight Learned Page Selector Ranker
+
+Rejected as a product selector path in its current feature/label form. A dependency-light
+logistic ranker trained on train160+next120 local-proxy supervision and validated on
+scut115+holdout40 improves over fully hand-mined rules in some settings, but it still does not
+reach the zero-reject / zero-metric-loss bar required for promotion.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/train_page_selector_ranker.py
+
+input:
+  outputs/residual_delta_t4_local_proxy_20260707/local_target_comparison_with_diagnostics.csv
+  outputs/selector_features_residual_delta_t4_20260707/page_features.csv
+
+split:
+  train=train160,next120
+  test=scut115,holdout40
+
+sweep:
+  positive_mode=safe,accept
+  lr=0.005,0.01,0.02
+  l2=0.01,0.05,0.1,0.2
+
+best sweep result:
+  mode=safe
+  lr=0.01
+  l2=0.01
+  threshold=0.833743115485
+  test_selected=2/155
+  test_accept=0
+  test_review=2
+  test_reject=0
+  test_metric_losses=1
+  test_residual_gain=+0.000000515789
+
+stable smoke after numeric fixes:
+  test_selected=4/155
+  test_accept=1
+  test_review=2
+  test_reject=1
+  test_metric_losses=2
+  test_residual_gain=-0.000211910547
+```
+
+Interpretation: a learned selector is directionally more appropriate than hand-written scalar
+rules, but the current page-level features and local-proxy labels are insufficient. Keep the
+ranker as reusable infrastructure for future feature/label experiments, but do not use this model
+or sweep as product gating. The next selector attempt should add stronger non-target inference-time
+features or a larger manually reviewed page set, then require held-out zero reject, zero metric
+loss, and meaningful coverage before promotion.
