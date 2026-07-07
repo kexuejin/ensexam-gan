@@ -623,3 +623,34 @@ Within the current two-condition feature search, allowing 1-3 metric-loss pages 
 extra coverage. The next coverage gain likely needs either visual acceptance of selected metric-loss
 pages, a learned selector using confirmed labels, or a better candidate model; further local
 threshold searching around these features is low-leverage.
+
+The eight metric-loss pages selected by the broad `active_gray_p25 >= 123` rule were diagnosed with
+local target-distance deltas:
+
+```bash
+python3 scripts/analysis/diagnose_selected_metric_losses.py \
+  --review-csv outputs/page_quality_selector_ai_provisional_40_20260707/active_gray_p25_ge_123_metric_losses_review.csv \
+  --output-csv outputs/page_quality_selector_ai_provisional_40_20260707/active_gray_p25_ge_123_metric_losses_diagnostics_script.csv
+```
+
+Result:
+
+```text
+rows = 8
+diag_heuristic_verdict:
+  likely_true_loss = 8
+
+hurt ratios:
+  holdout40/333.jpg = 0.720
+  holdout40/337.jpg = 0.460
+  scut115/174.jpg = 0.450
+  scut115/179.jpg = 0.749
+  scut115/189.jpg = 0.739
+  scut115/314.jpg = 0.406
+  scut115/315.jpg = 0.467
+  scut115/316.jpg = 0.412
+```
+
+This supports treating the broad-rule metric-loss pages as real risk pages rather than metric-only
+false negatives. The zero-loss refined selector should remain the safety anchor until a learned
+selector or improved candidate can recover coverage without selecting these hurt-heavy cases.
