@@ -155,11 +155,18 @@ weak-label materialized page result:
   SCUT115 residual_gain=0.000001815, overerase_delta=0.000000000
   holdout40 residual_gain=0.000007298, overerase_delta=0.000000000
   status: bridge works, quality lift is negligible
+weak-label threshold sweep:
+  best sampled shared threshold=0.5130248089880388
+  SCUT115 residual_gain=0.000231559, worse_pages=32/115
+  holdout40 residual_gain=0.000227216, worse_pages=13/40
+  status: broader threshold is still too weak and too noisy for promotion
 review pack seed: 20 accept / 20 review / 20 reject held-out component crops
 ```
 
-This means the next selector milestone is not a better threshold; it is a reviewed component label
-set large enough to train and validate a region selector.
+This means the next selector milestone is not a better weak-label threshold; it
+is a reviewed component label set large enough to train and validate a region
+selector, or a better candidate family whose selected components have visible
+page-level effect.
 
 ### 4. Zoom Review Packs For Ambiguous Failures
 

@@ -166,6 +166,22 @@ metrics as the hardcase evaluation scripts. It is for offline validation only;
 selector decisions should still use inference-time rules or reviewed ranker
 scores, not target-derived component fields.
 
+Sweep component-score thresholds without writing per-threshold PNGs:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/evaluate_region_component_threshold_sweep.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --predictions-csv outputs/region_component_ranker_reviewed_20260707/predictions.csv \
+  --threshold-summary-csv outputs/region_component_ranker_reviewed_20260707/threshold_summary.csv \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --output-csv outputs/region_component_reviewed_threshold_sweep_20260707/page_threshold_summary.csv
+```
+
+Use this before materializing many threshold candidates. It evaluates threshold
+effects by summing component-level residual and overerase pixel deltas in memory,
+which avoids filling the disk with repeated `pred/*.png` directories.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

@@ -95,6 +95,16 @@ weak-label ranker materialized to page predictions:
   SCUT115: residual_gain=0.000001815, overerase_delta=0.000000000
   holdout40: materialized_pages=9/40, components=49, selected_pixels=217
   holdout40: residual_gain=0.000007298, overerase_delta=0.000000000
+
+weak-label ranker threshold sweep without writing PNGs:
+  script: scripts/analysis/evaluate_region_component_threshold_sweep.py
+  best shared threshold in sampled ranker summary: 0.5130248089880388
+  SCUT115: materialized_pages=115/115, components=9144, selected_pixels=53746
+  SCUT115: residual_gain=0.000231559, overerase_delta=-0.000000055
+  SCUT115: improved_pages=75, worse_pages=32, over_reg_pages=0
+  holdout40: materialized_pages=40/40, components=2898, selected_pixels=19102
+  holdout40: residual_gain=0.000227216, overerase_delta=-0.000000027
+  holdout40: improved_pages=22, worse_pages=13, over_reg_pages=0
 ```
 
 Reusable workflow now exists:
@@ -121,7 +131,9 @@ outputs/region_component_review_pack_t4_heldout_20260707/
 Next selector progress should come from reviewed `keep` / `drop` / `review` labels and held-out
 reviewed validation, not more weak-label or hand-threshold tuning.
 The materialization/evaluation bridge is now proven usable, but the weak-label
-ranker result is effectively a no-op at page level. Treat it as workflow
+ranker result is effectively too small at page level. Lowering the score
+threshold increases metric gain slightly, but only by selecting every page and
+still causing many page-level residual regressions. Treat this as workflow
 infrastructure only; real progress requires reviewed labels or a better
 candidate family before promotion.
 
