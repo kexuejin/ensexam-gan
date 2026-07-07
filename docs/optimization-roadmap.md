@@ -32,12 +32,13 @@ overerase. Variants that reduce overerase more strongly, especially
 `mixed_td_w2_t4`, do so by worsening SCUT115 residual. Treat t4 as the
 regression baseline for future candidate objectives, not as the product path.
 
-The overguard scale0.06 follow-up is now the better conservative branch to
-investigate. It improves SCUT115 residual by 0.000786 with lower overerase and
-improves page win/loss count from 78/34 to 89/26. On holdout40 it removes t4's
-overerase regression entirely, but residual gain drops from 0.004008 to
-0.000832. The next objective should recover holdout40 coverage while preserving
-the overguard safety profile.
+The overguard scale0.06 follow-up proved the safer objective direction, but the
+balanced scale0.07 follow-up is now the stronger candidate. Balanced007 improves
+aggregate residual and aggregate overerase on all four checked splits:
+SCUT115, holdout40, train160, and next120. It beats t4's SCUT115 residual gain,
+removes t4's holdout40 overerase regression, and recovers more holdout residual
+coverage than overguard. It is still a research candidate until page/crop review
+confirms that the aggregate gains do not hide visible regressions.
 
 ## Most Promising Directions
 
@@ -211,6 +212,25 @@ holdout40: residual_delta=-0.000831641, overerase_delta=-0.000009240
 gate: alpha=0.3, second_delta=2 only; stricter gates are no-op
 next objective: recover holdout40 residual coverage without losing overerase safety
 ```
+
+Updated balanced residual-delta benchmark:
+
+```text
+candidate: outputs/train_scut_residual_delta_balanced_scale007_step80_20260707/cleanup_best.pt
+gate: alpha=0.3, base_edit=12, second_delta=2
+SCUT115: residual_delta=-0.001349386843, overerase_delta=-0.000020558496
+holdout40: residual_delta=-0.001418918619, overerase_delta=-0.000018467665
+train160: residual_delta=-0.004913059464, overerase_delta=-0.000024327035
+next120: residual_delta=-0.004139072483, overerase_delta=-0.000023137928
+status: current best residual-delta candidate; pending page/crop visual review
+```
+
+The next experiment should not be another blind scalar tweak. Build a focused
+review pack for balanced007 versus the current second-stage baseline, t4, and
+overguard. Prioritize high-gate pages, pages where balanced007 loses residual,
+and buckets that previously caused visible failures: correction-fluid white
+patches, gray backgrounds, low-contrast handwriting, printed-text protection,
+and paper-texture dirtying.
 
 ### 4. Zoom Review Packs For Ambiguous Failures
 

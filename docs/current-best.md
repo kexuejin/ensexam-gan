@@ -402,6 +402,51 @@ beats t4 on SCUT115 while avoiding holdout40 overerase regression. The remaining
 gap is holdout40 residual coverage: a product candidate needs to recover more of
 t4's holdout residual gain without reintroducing overerase.
 
+Balanced residual-delta follow-up:
+
+```text
+training output: outputs/train_scut_residual_delta_balanced_scale007_step80_20260707/
+checkpoint: outputs/train_scut_residual_delta_balanced_scale007_step80_20260707/cleanup_best.pt
+evaluation gate: cleanup_alpha_threshold=0.3, base_edit_threshold=12, second_delta_threshold=2
+
+objective changes from overguard:
+  residual_delta_scale: 0.07
+  outside_weight: 6.0
+  alpha_negative_weight: 5.0
+  alpha_sparsity_weight: 0.15
+  overerase_proxy_weight: 30.0
+  dark_preserve_weight: 0.75
+  signed_delta_weight: 0.35 inside mask
+
+SCUT115:
+  residual_delta=-0.001349386843
+  overerase_delta=-0.000020558496
+  gate=0.014204064
+
+holdout40:
+  residual_delta=-0.001418918619
+  overerase_delta=-0.000018467665
+  gate=0.011316136
+
+train160:
+  residual_delta=-0.004913059464
+  overerase_delta=-0.000024327035
+  gate=0.007661010
+
+next120:
+  residual_delta=-0.004139072483
+  overerase_delta=-0.000023137928
+  gate=0.017372110
+```
+
+Treat balanced scale0.07 as the current best residual-delta candidate, not yet
+as a product default. It is the first checked residual-delta branch that improves
+both aggregate residual and aggregate overerase across SCUT115, holdout40,
+train160, and next120. It beats t4's SCUT115 residual gain, removes t4's
+holdout40 overerase regression, and recovers more holdout residual coverage than
+overguard. The next required step is visual/page-level review on high-gate pages
+and worst residual-loss pages before promotion.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
