@@ -776,3 +776,59 @@ This is stronger than the earlier 13/155 safety anchor because it transfers to t
 validation splits without selected metric losses. It is still not product-quality default coverage:
 8.5% is useful for a safe optional selector path or review-pack generation, not enough for broad
 automatic cleanup.
+
+A 37-page review pack was generated for the extended selector:
+
+```text
+outputs/extended_zero_loss_selector_review_20260707/
+  review-pages.csv
+  page_pack/contact_sheet.png
+  crop_pack/contact_sheet.png
+  local_target_comparison.csv
+```
+
+The local target-distance review proxy flagged two selected pages as `reject` despite metric wins:
+
+```text
+local verdicts:
+  accept = 28
+  review = 7
+  reject = 2
+
+reject pages:
+  train160/87.jpg
+  next120/356.jpg
+```
+
+This means the 37-page rule is metric-safe, but not yet visually safe by the current local proxy.
+For a stricter no-reject review path, add one more label-free threshold:
+
+```text
+active_gray_p25 >= 123
+AND active_baseline_edit_p95 <= 149
+AND candidate_delta_mean >= 0.0276972656168
+AND baseline_edit_max >= 209.666666666
+```
+
+Verified 435-page local no-reject selector:
+
+```text
+combined pages = 435
+selected = 30
+coverage = 6.9%
+wins/losses = 30 / 0
+baseline residual = 0.140006
+selector residual = 0.138869
+residual gain = 0.001137
+overerase delta = -0.00000255
+
+selected by split:
+  scut115 = 10 / 115
+  holdout40 = 1 / 40
+  train160 = 7 / 160
+  next120 = 12 / 120
+```
+
+Use the 37-page rule for metric-safe candidate discovery and the 30-page rule when the priority is
+avoiding local visual-proxy rejects. Both remain low-coverage selector paths rather than broad
+product defaults.

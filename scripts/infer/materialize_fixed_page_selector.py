@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import operator
 import shutil
 from pathlib import Path
 
@@ -35,25 +36,28 @@ def parse_split(value: str) -> tuple[str, Path, Path, Path]:
     return parts[0], Path(parts[1]), Path(parts[2]), Path(parts[3])
 
 
+OPS = {
+    "<=": operator.le,
+    ">=": operator.ge,
+    "<": operator.lt,
+    ">": operator.gt,
+    "==": operator.eq,
+}
+
+
 def selector_hit(row: dict[str, str], rule: str) -> bool:
-    if rule == "active_gray_p25 >= 123":
-        return float(row["active_gray_p25"]) >= 123.0
-    if rule == "active_gray_p25 >= 123 AND active_baseline_edit_p95 <= 149 AND candidate_delta_mean >= 0.0182428157494":
-        return (
-            float(row["active_gray_p25"]) >= 123.0
-            and float(row["active_baseline_edit_p95"]) <= 149.0
-            and float(row["candidate_delta_mean"]) >= 0.0182428157494
-        )
-    if rule == "active_gray_p25 >= 123 AND active_baseline_edit_p95 <= 149 AND candidate_delta_mean >= 0.0182428157494 AND baseline_edit_max >= 209.666666666":
-        return (
-            float(row["active_gray_p25"]) >= 123.0
-            and float(row["active_baseline_edit_p95"]) <= 149.0
-            and float(row["candidate_delta_mean"]) >= 0.0182428157494
-            and float(row["baseline_edit_max"]) >= 209.666666666
-        )
-    if rule == "active_gray_p25 >= 111.6 AND candidate_delta_max <= 200.133333333":
-        return float(row["active_gray_p25"]) >= 111.6 and float(row["candidate_delta_max"]) <= 200.133333333
-    raise ValueError(f"Unsupported selector rule: {rule}")
+    for condition in (part.strip() for part in rule.split(" AND ")):
+        parts = condition.split()
+        if len(parts) != 3:
+            raise ValueError(f"Unsupported selector condition: {condition!r}")
+        feature, op_text, threshold_text = parts
+        if op_text not in OPS:
+            raise ValueError(f"Unsupported selector operator: {op_text!r}")
+        if feature not in row:
+            raise KeyError(f"Selector feature {feature!r} not found")
+        if not OPS[op_text](float(row[feature]), float(threshold_text)):
+            return False
+    return True
 
 
 def copy_prediction(src: Path, dst: Path) -> None:
