@@ -480,6 +480,39 @@ Balanced007 remains the best aggregate candidate and the right benchmark for
 review, but it is not product-ready without a selector/veto or visible-review
 pass that filters the high-risk pages.
 
+Balanced007 selector/veto checkpoint:
+
+```text
+rule:
+  active_baseline_edit_mean >= 96.6185399391
+  AND active_gray_p75 <= 192
+
+full four-split metrics:
+  pages=435
+  selected=26
+  coverage=6.0%
+  wins/losses=26/0
+  residual_gain=0.001247317
+  overerase_delta=-0.000002939
+
+split detail:
+  SCUT115: selected=4/115, wins/losses=4/0, residual_gain=0.000458754
+  holdout40: selected=2/40, wins/losses=2/0, residual_gain=0.000717984
+  train160: selected=12/160, wins/losses=12/0, residual_gain=0.001549166
+  next120: selected=8/120, wins/losses=8/0, residual_gain=0.001777002
+
+pressure-review proxy:
+  selected=20/96
+  accept=20
+  review=0
+  reject=0
+```
+
+This is the best current selector-shaped result for balanced007: it is much
+safer than applying the candidate broadly, but coverage is still only about 6%
+across the four validation splits. Treat it as a safe optional review benchmark,
+not enough for product-level coverage.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text

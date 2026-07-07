@@ -431,6 +431,31 @@ prioritize manual or visual-AI inspection of top rejects and high-activity pages
 before deciding whether balanced007 needs a selector/veto or another objective
 change.
 
+Evaluate candidate selector rules on full metric splits:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/evaluate_candidate_selector_rule.py \
+  --rule "active_baseline_edit_mean >= 96.6185399391 AND active_gray_p75 <= 192" \
+  --output-csv outputs/balanced007_selector_rule_eval_20260707/baseline_edit_mean_ge_96_gray_p75_le_192.csv \
+  --selected-output-csv outputs/balanced007_selector_rule_eval_20260707/baseline_edit_mean_ge_96_gray_p75_le_192_selected.csv \
+  --split scut115:outputs/balanced007_selector_features_20260707/scut115/page_features.csv:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split holdout40:outputs/balanced007_selector_features_20260707/holdout40/page_features.csv:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split train160:outputs/balanced007_selector_features_20260707/train160/page_features.csv:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/eval_train160_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split next120:outputs/balanced007_selector_features_20260707/next120/page_features.csv:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/eval_next120_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv
+```
+
+Current conservative balanced007 selector result:
+
+```text
+rule: active_baseline_edit_mean >= 96.6185399391 AND active_gray_p75 <= 192
+SCUT115: selected=4/115, wins/losses=4/0, residual_gain=0.000458754
+holdout40: selected=2/40, wins/losses=2/0, residual_gain=0.000717984
+train160: selected=12/160, wins/losses=12/0, residual_gain=0.001549166
+next120: selected=8/120, wins/losses=8/0, residual_gain=0.001777002
+all: selected=26/435, wins/losses=26/0, residual_gain=0.001247317, overerase_delta=-0.000002939
+pressure-review local proxy: selected=20/96, accept=20, reject=0
+```
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

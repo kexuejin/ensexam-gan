@@ -251,6 +251,27 @@ that separate the metric-win accepts from high-activity rejects, then validate a
 candidate-family-specific selector on the same four splits before another
 training tweak.
 
+Initial selector mining found a conservative balanced007 gate:
+
+```text
+rule: active_baseline_edit_mean >= 96.6185399391 AND active_gray_p75 <= 192
+full four-split result:
+  selected=26/435
+  wins/losses=26/0
+  residual_gain=0.001247317
+  overerase_delta=-0.000002939
+pressure-review local proxy:
+  selected=20/96
+  accept=20
+  reject=0
+```
+
+This is directionally useful because it converts balanced007 from a broad risky
+candidate into a small zero-loss selector on current metrics. It is still below
+the desired 20%-30% reliable coverage, so the next work should either widen this
+selector with additional features/review labels or improve the candidate
+objective. Do not treat the 6% safe gate as productized quality.
+
 ### 4. Zoom Review Packs For Ambiguous Failures
 
 Page-scale contact sheets miss small edge artifacts and low-contrast residuals. Add crop review packs
