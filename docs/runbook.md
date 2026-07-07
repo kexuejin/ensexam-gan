@@ -235,6 +235,27 @@ Use this before materializing many threshold candidates. It evaluates threshold
 effects by summing component-level residual and overerase pixel deltas in memory,
 which avoids filling the disk with repeated `pred/*.png` directories.
 
+Summarize residual-delta candidate families before launching another training
+or selector loop:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/summarize_candidate_metric_families.py \
+  --baseline scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv \
+  --baseline holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv \
+  --baseline train160:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv \
+  --baseline next120:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv \
+  --outputs-root outputs \
+  --name-contains residual_delta \
+  --output-csv outputs/candidate_family_summary_residual_delta_20260707/summary.csv \
+  --top-n-per-split 20
+```
+
+The 2026-07-07 residual-delta triage keeps `sweep_*_residual_delta_t4` as the
+best existing candidate benchmark, not a product default. A new candidate
+objective should beat t4 on SCUT115 residual and reduce the holdout40 overerase
+penalty; do not promote variants that mainly buy lower overerase by worsening
+SCUT115 residual.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

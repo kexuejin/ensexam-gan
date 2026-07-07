@@ -329,6 +329,40 @@ This shows the residual-delta branch has real but narrow page-level wins. The sa
 too low-coverage for productization, so the next useful path is a labeled page-level selector or a
 better candidate family, not more hand-mined threshold tightening.
 
+Residual-delta candidate-family triage:
+
+```text
+script: scripts/analysis/summarize_candidate_metric_families.py
+output: outputs/candidate_family_summary_residual_delta_20260707/summary.csv
+
+best current t4 sweep:
+  SCUT115 residual_delta=-0.000193191, overerase_delta=-0.000004219
+  holdout40 residual_delta=-0.004008179, overerase_delta=+0.000244709
+  train160 residual_delta=-0.001401817, overerase_delta=-0.000008722
+  next120 residual_delta=-0.001163004, overerase_delta=-0.000003471
+
+darkpreserve_w2_t4:
+  SCUT115 residual_delta=-0.000189791, overerase_delta=-0.000003162
+  holdout40 residual_delta=-0.003806695, overerase_delta=+0.000246228
+  status: slightly safer-looking but not materially better than t4
+
+signed_delta_w1_t4:
+  SCUT115 residual_delta=+0.000598372, overerase_delta=-0.000007248
+  holdout40 residual_delta=-0.002714538, overerase_delta=+0.000242788
+  status: improves some train/holdout behavior but regresses SCUT115 residual
+
+mixed_td_w2_t4:
+  SCUT115 residual_delta=+0.003735417, overerase_delta=-0.000178287
+  holdout40 residual_delta=-0.000530685, overerase_delta=+0.000092958
+  status: overerase-oriented tradeoff, not a handwriting-removal improvement path
+```
+
+The current t4 residual-delta sweep remains the best reusable candidate among
+existing residual-delta outputs, but it is not strong enough to be the next
+product-quality lever. Use it as a regression benchmark for future objectives:
+a new candidate should beat t4 on SCUT115 residual without introducing the
+holdout40 overerase penalty.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text

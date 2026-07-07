@@ -25,6 +25,13 @@ whiteout_inpaint_d10_g215_a120:
 This makes threshold-only tuning a low-leverage path. Future work should improve the candidate
 families that the selector can choose from, then score them with the product-quality label set.
 
+The residual-delta family comparison reinforces this direction. The current t4
+sweep is the best existing residual-removal candidate on SCUT115, but its
+SCUT115 residual gain is only 0.000193 while holdout40 pays +0.000245
+overerase. Variants that reduce overerase more strongly, especially
+`mixed_td_w2_t4`, do so by worsening SCUT115 residual. Treat t4 as the
+regression baseline for future candidate objectives, not as the product path.
+
 ## Most Promising Directions
 
 ### 1. Paper-Tone Harmonization For Correction Fluid
@@ -179,6 +186,15 @@ is a reviewed component label set large enough to train and validate a region
 selector only after a stronger candidate family exists. For the current t4
 residual-delta candidate, the oracle ceiling is too low to justify more selector
 micro-tuning as a product-quality path.
+
+Next candidate objective should be judged against t4 on four splits:
+
+```text
+SCUT115: must beat residual_delta=-0.000193191 without overerase regression
+holdout40: must keep the residual gain while reducing +0.000244709 overerase penalty
+train160/next120: must stay residual-positive, not just overerase-positive
+mixed_td-style tradeoff: reject if residual worsens to buy overerase reduction
+```
 
 ### 4. Zoom Review Packs For Ambiguous Failures
 
