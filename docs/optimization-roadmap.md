@@ -272,6 +272,26 @@ the desired 20%-30% reliable coverage, so the next work should either widen this
 selector with additional features/review labels or improve the candidate
 objective. Do not treat the 6% safe gate as productized quality.
 
+A first full-proxy page ranker did not solve the coverage gap:
+
+```text
+full proxy labels: accept=111, review=45, reject=279
+train160+next120 -> SCUT115+holdout40:
+  test selected=12/155
+  test metric_losses=0
+  test reject=1
+SCUT115+holdout40 -> train160+next120:
+  test selected=34/280
+  test metric_losses=6
+  test reject=6
+```
+
+This suggests the current proxy labels are noisy and split transfer remains
+weak. The next selector work should either add real reviewed labels around the
+safe26 boundary or look for explicit veto features for the remaining reject
+patterns. Do not replace safe26 with the ranker until held-out reject and
+metric-loss counts are zero at useful coverage.
+
 ### 4. Zoom Review Packs For Ambiguous Failures
 
 Page-scale contact sheets miss small edge artifacts and low-contrast residuals. Add crop review packs

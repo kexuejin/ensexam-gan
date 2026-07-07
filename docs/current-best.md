@@ -513,6 +513,38 @@ safer than applying the candidate broadly, but coverage is still only about 6%
 across the four validation splits. Treat it as a safe optional review benchmark,
 not enough for product-level coverage.
 
+Balanced007 full-proxy ranker check:
+
+```text
+full local proxy queue:
+  rows=435
+  accept=111
+  review=45
+  reject=279
+
+metric buckets:
+  metric_loss_or_overrisk: reject=90, review=1
+  metric_win: accept=111, review=44, reject=189
+
+ranker train=train160+next120, test=SCUT115+holdout40:
+  best listed held-out row selected=12/155
+  test metric_losses=0
+  test accept/review/reject=9/2/1
+  train selected=42/280, train reject=3
+
+ranker train=SCUT115+holdout40, test=train160+next120:
+  best listed held-out row selected=34/280
+  test metric_losses=6
+  test accept/review/reject=25/3/6
+  train selected=16/155, train reject=2
+```
+
+The learned page ranker is not yet better than the hand-mined safe26 rule. It
+can select more pages, but reject and metric-loss transfer is unstable across
+split directions. Keep safe26 as the current conservative selector benchmark
+and use full-proxy labels only for further feature analysis or a larger reviewed
+label set, not for product gating.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text

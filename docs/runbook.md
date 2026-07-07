@@ -456,6 +456,46 @@ all: selected=26/435, wins/losses=26/0, residual_gain=0.001247317, overerase_del
 pressure-review local proxy: selected=20/96, accept=20, reject=0
 ```
 
+Full-proxy ranker check:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/train_page_selector_ranker.py \
+  --local-comparison-csv outputs/balanced007_full_page_review_20260707/local_target_comparison.csv \
+  --feature-csv scut115:outputs/balanced007_selector_features_20260707/scut115/page_features.csv \
+  --feature-csv holdout40:outputs/balanced007_selector_features_20260707/holdout40/page_features.csv \
+  --feature-csv train160:outputs/balanced007_selector_features_20260707/train160/page_features.csv \
+  --feature-csv next120:outputs/balanced007_selector_features_20260707/next120/page_features.csv \
+  --train-split train160 \
+  --train-split next120 \
+  --test-split scut115 \
+  --test-split holdout40 \
+  --output-dir outputs/balanced007_page_ranker_20260707/train160_next120_to_scut115_holdout40 \
+  --epochs 4000 \
+  --lr 0.03 \
+  --l2 0.05 \
+  --positive-mode accept \
+  --min-train-selected 10 \
+  --min-test-selected 5 \
+  --max-rules 120
+```
+
+Initial ranker result:
+
+```text
+full local proxy: accept=111, review=45, reject=279
+train160+next120 -> SCUT115+holdout40:
+  selected=12/155 held-out pages
+  metric_losses=0
+  accept/review/reject=9/2/1
+SCUT115+holdout40 -> train160+next120:
+  selected=34/280 held-out pages
+  metric_losses=6
+  accept/review/reject=25/3/6
+```
+
+The current full-proxy ranker is not a replacement for safe26 because held-out
+rejects still transfer. Use it as diagnostics only.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:
