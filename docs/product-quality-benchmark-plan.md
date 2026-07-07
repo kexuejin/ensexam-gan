@@ -448,3 +448,94 @@ chunked sheets:
 
 Fill the `label`, `flags`, `reviewer`, `review_date`, and `comment` columns in this subset first.
 Once at least 40 rows are confirmed, use it as the first input to `calibrate_page_quality_selector.py`.
+
+## AI-Provisional Visual Labels
+
+An AI visual pass over the 40-row minimal subset produced a provisional label file:
+
+```text
+outputs/product_quality_review_residual_delta_20260707/minimal-labeling-subset-40-ai-provisional.csv
+```
+
+Provisional summary:
+
+```text
+slight_win = 22
+noop = 11
+slight_loss = 7
+clear_win = 0
+clear_loss = 0
+net_wins = 15
+```
+
+Bucket-level provisional signal:
+
+```text
+residual_delta_metric_win:
+  wins = 10 / 10
+  losses = 0 / 10
+residual_delta_joint_selector:
+  wins = 5 / 6
+  noop = 1 / 6
+  losses = 0 / 6
+residual_delta_metric_loss:
+  wins = 0 / 8
+  noop = 2 / 8
+  losses = 6 / 8
+residual_delta_high_activity_risk:
+  wins = 7 / 16
+  noop = 8 / 16
+  losses = 1 / 16
+```
+
+This is useful directionally but remains provisional. Do not merge it into the manual benchmark as a
+confirmed label set without review.
+
+## AI-Provisional Fixed Rule Replay
+
+The provisional 40-row selector calibration surfaced a simple candidate rule:
+
+```text
+active_gray_p25 >= 123
+```
+
+Full SCUT115 + holdout40 replay for this fixed rule:
+
+```text
+script:
+  scripts/analysis/evaluate_fixed_page_selector.py
+output:
+  outputs/page_quality_selector_ai_provisional_40_20260707/fixed_rule_active_gray_p25_ge_123_eval.csv
+
+SCUT115:
+  pages = 115
+  selected = 19
+  coverage = 16.5%
+  residual: 0.114225 -> 0.113408
+  residual_gain = 0.000817
+  overerase_delta = -0.00000782
+  selected metric wins/losses = 13 / 6
+
+holdout40:
+  pages = 40
+  selected = 5
+  coverage = 12.5%
+  residual: 0.130543 -> 0.129855
+  residual_gain = 0.000688
+  overerase_delta = -0.00000235
+  selected metric wins/losses = 3 / 2
+
+combined:
+  pages = 155
+  selected = 24
+  coverage = 15.5%
+  residual: 0.118436 -> 0.117653
+  residual_gain = 0.000783
+  overerase_delta = -0.00000641
+  selected metric wins/losses = 16 / 8
+```
+
+This is the first selector candidate in this branch that improves aggregate residual and overerase
+while selecting more than a tiny handful of pages. It is still below the 20-30% product-coverage
+target and includes 8 selected metric-loss pages, so it should be treated as a candidate for visual
+review and refinement, not a product default.
