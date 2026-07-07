@@ -25,12 +25,24 @@ DEFAULT_EXCLUDE_FEATURES = {
     "over_delta",
     "win",
 }
+DEFAULT_EXCLUDE_SUBSTRINGS = (
+    "target",
+    "label",
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--labels-csv", required=True)
-    parser.add_argument("--features-csv", action="append", required=True)
+    parser.add_argument(
+        "--features-csv",
+        action="append",
+        required=True,
+        help=(
+            "Feature CSV path. May be repeated. Use SPLIT:CSV to override "
+            "single-split files whose internal split column is empty/main."
+        ),
+    )
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--candidate", default="")
     parser.add_argument("--label-column", default="label")
@@ -60,10 +72,21 @@ def normalized_split(value: str) -> str:
     return "" if value == "main" else value
 
 
+def parse_feature_spec(value: str) -> tuple[str | None, Path]:
+    split, separator, path = value.partition(":")
+    if separator and split and path:
+        return split, Path(path)
+    return None, Path(value)
+
+
 def read_features(paths: list[str]) -> dict[tuple[str, str], dict[str, str]]:
     features: dict[tuple[str, str], dict[str, str]] = {}
-    for path in paths:
-        for row in read_rows(Path(path)):
+    for spec in paths:
+        split_override, path = parse_feature_spec(spec)
+        for row in read_rows(path):
+            row = dict(row)
+            if split_override is not None:
+                row["split"] = split_override
             features[(normalized_split(row.get("split", "")), row["file"])] = row
     return features
 
@@ -151,6 +174,8 @@ def feature_names(rows: list[dict[str, object]]) -> list[str]:
     names = []
     for key, value in rows[0].items():
         if key in DEFAULT_EXCLUDE_FEATURES or key.startswith("visual_") or key.startswith("is_"):
+            continue
+        if any(token in key for token in DEFAULT_EXCLUDE_SUBSTRINGS):
             continue
         if key in {"candidate", "bucket"}:
             continue
