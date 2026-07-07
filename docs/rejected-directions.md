@@ -1102,3 +1102,52 @@ the direction is better than pure score thresholding. This is still not enough t
 coverage over the full held-out set remains only 7/155 pages and the selected train set is small.
 Keep the veto evaluator as reusable infrastructure; the next quality lift should use more reviewed
 pages or a richer patch/region selector, not another hand-tuned page-level rule.
+
+## Region Component Selector Probe
+
+Not promoted. A connected-component selector was added to test whether the residual-delta candidate
+can be made safer by keeping only local edit components selected by inference-time features. This
+is a more appropriate granularity than whole-page thresholding, but simple component-level rules
+still do not separate safe edits well enough.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/evaluate_region_component_selector.py
+
+input:
+  baseline/candidate metrics for train160,next120,scut115,holdout40
+  candidate=residual_delta_t4
+
+components:
+  total=106489
+  train=79442
+  test=27047
+  features=20
+
+strict rule search:
+  max_train_reject_components=0
+  rules=0
+
+ratio rule search:
+  max_train_reject_ratio=0.05
+  min_train_components=500
+  rules=0
+
+best observed simple rules:
+  single: candidate_source_delta_mean >= 140.548663102
+    train_n=7945
+    train_reject_ratio=0.259
+    test_reject_ratio=0.474
+  pair: baseline_edit_mean >= 136 AND fill_ratio <= 0.25
+    train_n=792
+    train_reject_ratio=0.182
+    test_reject_ratio=0.361
+```
+
+Interpretation: region-level selection is still the right direction, but the current hand-written
+component features are not enough. The train/test reject-ratio gap is large, and even the best
+simple pair keeps too many harmful components. Do not continue hand-tuning component thresholds.
+The next viable step should be a learned patch/region selector with reviewed labels, or richer
+component features that include local context without target/label leakage.
