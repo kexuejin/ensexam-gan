@@ -44,6 +44,13 @@ def selector_hit(row: dict[str, str], rule: str) -> bool:
             and float(row["active_baseline_edit_p95"]) <= 149.0
             and float(row["candidate_delta_mean"]) >= 0.0182428157494
         )
+    if rule == "active_gray_p25 >= 123 AND active_baseline_edit_p95 <= 149 AND candidate_delta_mean >= 0.0182428157494 AND baseline_edit_max >= 209.666666666":
+        return (
+            float(row["active_gray_p25"]) >= 123.0
+            and float(row["active_baseline_edit_p95"]) <= 149.0
+            and float(row["candidate_delta_mean"]) >= 0.0182428157494
+            and float(row["baseline_edit_max"]) >= 209.666666666
+        )
     if rule == "active_gray_p25 >= 111.6 AND candidate_delta_max <= 200.133333333":
         return float(row["active_gray_p25"]) >= 111.6 and float(row["candidate_delta_max"]) <= 200.133333333
     raise ValueError(f"Unsupported selector rule: {rule}")

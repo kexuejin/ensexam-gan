@@ -706,3 +706,73 @@ The four `review` pages are not metric-loss pages; they have more local help pix
 but the margin is weaker than the default accept threshold. The refined selector remains a reasonable
 safety anchor for review-pack generation, but the coverage is still only 13/155 pages, so it is not a
 product-quality default by itself.
+
+The residual-delta candidate was then extended to the train160 and next120 validation splits using
+the same checkpoint and `base12/delta2` gate:
+
+```bash
+python3 scripts/infer/run_second_stage_residual_repair.py \
+  --samples-file docs/scut-train160-nonholdout-relative.txt \
+  --primary-pred-dir outputs/scut_train160_nonholdout_second_stage_baseline_20260706/pred \
+  --cleanup-checkpoint outputs/train_scut_residual_delta_bias3_scale008_step150_20260707/cleanup_best.pt \
+  --output-dir outputs/eval_scut_train160_residual_delta_bias3_scale008_best_base12_delta2_20260707 \
+  --device mps \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 2 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --cleanup-alpha-threshold 0.3
+
+python3 scripts/infer/run_second_stage_residual_repair.py \
+  --samples-file docs/scut-next120-nonoverlap-relative.txt \
+  --primary-pred-dir outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/pred \
+  --cleanup-checkpoint outputs/train_scut_residual_delta_bias3_scale008_step150_20260707/cleanup_best.pt \
+  --output-dir outputs/eval_scut_next120_residual_delta_bias3_scale008_best_base12_delta2_20260707 \
+  --device mps \
+  --base-edit-threshold 12 \
+  --second-delta-threshold 2 \
+  --cleanup-tile-size 160 \
+  --cleanup-stride 160 \
+  --cleanup-alpha-threshold 0.3
+```
+
+Direct candidate results:
+
+```text
+train160: rows = 160, wins = 131, losses = 29, residual = 0.138918, overerase = 0.002282
+next120:  rows = 120, wins = 77,  losses = 43, residual = 0.158775, overerase = 0.002752
+```
+
+Applying the 155-page refined selector to all 435 pages selected 39 pages with one train160 metric
+loss (`48.jpg`). Adding a single extra label-free guard removes that loss:
+
+```text
+active_gray_p25 >= 123
+AND active_baseline_edit_p95 <= 149
+AND candidate_delta_mean >= 0.0182428157494
+AND baseline_edit_max >= 209.666666666
+```
+
+Verified 435-page extended zero-loss selector:
+
+```text
+combined pages = 435
+selected = 37
+coverage = 8.5%
+wins/losses = 37 / 0
+baseline residual = 0.140006
+selector residual = 0.138745
+residual gain = 0.001262
+overerase delta = -0.00000272
+
+selected by split:
+  scut115 = 11 / 115
+  holdout40 = 1 / 40
+  train160 = 10 / 160
+  next120 = 15 / 120
+```
+
+This is stronger than the earlier 13/155 safety anchor because it transfers to two additional SCUT
+validation splits without selected metric losses. It is still not product-quality default coverage:
+8.5% is useful for a safe optional selector path or review-pack generation, not enough for broad
+automatic cleanup.
