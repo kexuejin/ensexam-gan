@@ -229,6 +229,28 @@ def safe_name(row: dict[str, str], rank: int) -> str:
     ).replace("/", "_")
 
 
+def resize_contact_row(image: np.ndarray, width: int) -> np.ndarray:
+    if image.shape[1] == width:
+        return image
+    scale = width / max(image.shape[1], 1)
+    return cv2.resize(
+        image,
+        (width, max(1, int(image.shape[0] * scale))),
+        interpolation=cv2.INTER_AREA,
+    )
+
+
+def write_contact_sheet(images: list[np.ndarray], output_path: Path, width: int) -> None:
+    if not images:
+        return
+    sheet_rows = [resize_contact_row(image, width) for image in images]
+    separator = np.full((10, width, 3), 230, dtype=np.uint8)
+    parts: list[np.ndarray] = []
+    for image in sheet_rows:
+        parts.extend([image, separator])
+    cv2.imwrite(str(output_path), np.concatenate(parts[:-1], axis=0))
+
+
 def main() -> None:
     args = parse_args()
     rows = read_rows(Path(args.components_csv))
@@ -245,6 +267,7 @@ def main() -> None:
 
     index_rows: list[dict[str, object]] = []
     contact_images: list[np.ndarray] = []
+    contact_images_by_bucket: dict[str, list[np.ndarray]] = {}
     image_cache: dict[tuple[str, str], dict[str, np.ndarray]] = {}
     for rank, row in enumerate(selected, start=1):
         key = (row["split"], row["file"])
@@ -275,6 +298,7 @@ def main() -> None:
         })
         index_rows.append(out)
         contact_images.append(rendered)
+        contact_images_by_bucket.setdefault(row["bucket"], []).append(rendered)
 
     fields = [
         "priority_rank",
@@ -308,19 +332,9 @@ def main() -> None:
     write_csv(output_dir / "component-review-index.csv", index_rows, fields)
     write_csv(output_dir / "component-labels-template.csv", index_rows, fields)
 
-    if contact_images:
-        width = args.contact_width
-        sheet_rows = []
-        for image in contact_images:
-            if image.shape[1] != width:
-                scale = width / max(image.shape[1], 1)
-                image = cv2.resize(image, (width, max(1, int(image.shape[0] * scale))), interpolation=cv2.INTER_AREA)
-            sheet_rows.append(image)
-        separator = np.full((10, width, 3), 230, dtype=np.uint8)
-        parts: list[np.ndarray] = []
-        for image in sheet_rows:
-            parts.extend([image, separator])
-        cv2.imwrite(str(output_dir / "contact_sheet.png"), np.concatenate(parts[:-1], axis=0))
+    write_contact_sheet(contact_images, output_dir / "contact_sheet.png", args.contact_width)
+    for bucket_name, images in sorted(contact_images_by_bucket.items()):
+        write_contact_sheet(images, output_dir / f"contact_sheet_{bucket_name}.png", args.contact_width)
 
     counts: dict[str, int] = {}
     for row in index_rows:
@@ -329,6 +343,8 @@ def main() -> None:
     print(f"index_csv={output_dir / 'component-review-index.csv'}")
     print(f"labels_template={output_dir / 'component-labels-template.csv'}")
     print(f"contact_sheet={output_dir / 'contact_sheet.png'}")
+    for bucket_name in sorted(contact_images_by_bucket):
+        print(f"contact_sheet_{bucket_name}={output_dir / f'contact_sheet_{bucket_name}.png'}")
 
 
 if __name__ == "__main__":
