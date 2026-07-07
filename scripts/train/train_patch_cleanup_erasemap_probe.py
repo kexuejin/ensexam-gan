@@ -164,6 +164,39 @@ def dark_preservation_loss(
     return masked_mean(brighten, should_not_brighten.float()) * args.dark_preserve_weight
 
 
+def signed_delta_direction_loss(
+    pred: torch.Tensor,
+    target: torch.Tensor,
+    inp: torch.Tensor,
+    mask: torch.Tensor,
+    args: argparse.Namespace,
+) -> torch.Tensor:
+    """Penalize edits that move opposite the target-vs-input direction."""
+    if args.signed_delta_weight <= 0.0:
+        return pred.new_tensor(0.0)
+
+    pred_gray = pred.mean(dim=1, keepdim=True)
+    target_gray = target.mean(dim=1, keepdim=True)
+    inp_gray = inp.mean(dim=1, keepdim=True)
+    margin = args.signed_delta_margin / 255.0
+
+    target_delta = target_gray - inp_gray
+    pred_delta = pred_gray - inp_gray
+
+    target_darker = target_delta < -margin
+    target_lighter = target_delta > margin
+    wrong_brighten = target_darker.float() * F.relu(pred_delta - margin)
+    wrong_darken = target_lighter.float() * F.relu(-pred_delta - margin)
+    wrong_direction = wrong_brighten + wrong_darken
+
+    direction_mask = (target_darker | target_lighter).float()
+    if args.signed_delta_inside_only:
+        direction_mask = direction_mask * mask
+    if not bool(direction_mask.any()):
+        return pred.new_tensor(0.0)
+    return masked_mean(wrong_direction, direction_mask) * args.signed_delta_weight
+
+
 def balanced_alpha_bce(alpha: torch.Tensor, mask: torch.Tensor, args: argparse.Namespace) -> torch.Tensor:
     """Mask-normalized alpha supervision so sparse erase pixels are not diluted."""
     alpha = alpha.clamp(1e-6, 1.0 - 1e-6)
@@ -196,6 +229,7 @@ def compute_loss_terms(
     alpha_sparse = alpha.mean() * args.alpha_sparsity_weight
     residual_proxy, overerase_proxy = metric_hinge_proxy(pred, target, inp, mask, args)
     dark_preserve = dark_preservation_loss(pred, target, inp, args)
+    signed_delta = signed_delta_direction_loss(pred, target, inp, mask, args)
     loss = (
         inside
         + outside
@@ -206,6 +240,7 @@ def compute_loss_terms(
         + residual_proxy
         + overerase_proxy
         + dark_preserve
+        + signed_delta
     )
     return {
         "loss": loss,
@@ -218,6 +253,7 @@ def compute_loss_terms(
         "residual_proxy": residual_proxy,
         "overerase_proxy": overerase_proxy,
         "dark_preserve": dark_preserve,
+        "signed_delta": signed_delta,
     }
 
 
@@ -318,6 +354,26 @@ def parse_args() -> argparse.Namespace:
         default=2.0,
         help="Gray-level margin for deciding that target is darker and pred is over-brightened.",
     )
+    parser.add_argument(
+        "--signed-delta-weight",
+        type=float,
+        default=0.0,
+        help=(
+            "Optional training-only penalty for edits whose signed gray delta moves "
+            "opposite the target-vs-input direction. Default keeps old training unchanged."
+        ),
+    )
+    parser.add_argument(
+        "--signed-delta-margin",
+        type=float,
+        default=2.0,
+        help="Gray-level margin for signed-delta direction supervision.",
+    )
+    parser.add_argument(
+        "--signed-delta-inside-only",
+        action="store_true",
+        help="Apply signed-delta direction loss only inside the erase mask.",
+    )
     parser.add_argument("--alpha-init-bias", type=float, default=-6.0)
     return parser.parse_args()
 
@@ -398,6 +454,7 @@ def main() -> None:
             "residual_proxy",
             "overerase_proxy",
             "dark_preserve",
+            "signed_delta",
         ])
     val_history_path = output_dir / "cleanup_val_loss_history.csv"
     if val_loader is not None:
@@ -414,6 +471,7 @@ def main() -> None:
                 "residual_proxy",
                 "overerase_proxy",
                 "dark_preserve",
+                "signed_delta",
             ])
 
     start = time.time()
@@ -447,6 +505,7 @@ def main() -> None:
             train_terms["residual_proxy"],
             train_terms["overerase_proxy"],
             train_terms["dark_preserve"],
+            train_terms["signed_delta"],
         ]
         with history_path.open("a", newline="", encoding="utf-8") as f:
             csv.writer(f).writerow([row[0], *[f"{value:.8f}" for value in row[1:]]])
@@ -457,7 +516,7 @@ def main() -> None:
                 f"clean_inside={row[4]:.6f} alpha_bce={row[5]:.6f} "
                 f"alpha_dice={row[6]:.6f} alpha_sparse={row[7]:.6f} "
                 f"res_proxy={row[8]:.6f} over_proxy={row[9]:.6f} "
-                f"dark_preserve={row[10]:.6f} "
+                f"dark_preserve={row[10]:.6f} signed_delta={row[11]:.6f} "
                 f"elapsed={time.time() - start:.1f}s",
                 flush=True,
             )
@@ -475,6 +534,7 @@ def main() -> None:
                 val_terms["residual_proxy"],
                 val_terms["overerase_proxy"],
                 val_terms["dark_preserve"],
+                val_terms["signed_delta"],
             ]
             with val_history_path.open("a", newline="", encoding="utf-8") as f:
                 csv.writer(f).writerow([val_row[0], *[f"{value:.8f}" for value in val_row[1:]]])
@@ -484,7 +544,7 @@ def main() -> None:
                 f"clean_inside={val_row[4]:.6f} alpha_bce={val_row[5]:.6f} "
                 f"alpha_dice={val_row[6]:.6f} alpha_sparse={val_row[7]:.6f} "
                 f"res_proxy={val_row[8]:.6f} over_proxy={val_row[9]:.6f} "
-                f"dark_preserve={val_row[10]:.6f}",
+                f"dark_preserve={val_row[10]:.6f} signed_delta={val_row[11]:.6f}",
                 flush=True,
             )
             if best_val_loss is None or val_terms["loss"] < best_val_loss:
