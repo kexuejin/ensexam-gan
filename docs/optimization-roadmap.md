@@ -232,6 +232,25 @@ and buckets that previously caused visible failures: correction-fluid white
 patches, gray backgrounds, low-contrast handwriting, printed-text protection,
 and paper-texture dirtying.
 
+Balanced007 local review triage is now available:
+
+```text
+output: outputs/product_quality_review_balanced007_four_split_20260707/
+review rows: 96 pressure-test pages, 24 per split
+crop rows: 384
+local target proxy: accept=38, review=3, reject=55
+metric-win bucket: accept=28, review=2, reject=2
+metric-loss/overrisk bucket: reject=32
+high-activity bucket: accept=10, review=1, reject=21
+```
+
+This does not overturn the aggregate result because the queue is deliberately
+risk-heavy. It does show that balanced007 should be promoted only behind a
+page/region selector or veto. The next higher-leverage step is to mine features
+that separate the metric-win accepts from high-activity rejects, then validate a
+candidate-family-specific selector on the same four splits before another
+training tweak.
+
 ### 4. Zoom Review Packs For Ambiguous Failures
 
 Page-scale contact sheets miss small edge artifacts and low-contrast residuals. Add crop review packs

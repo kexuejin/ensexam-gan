@@ -387,6 +387,50 @@ metric wins, 32 metric losses/overerase risks, and 32 high-activity risk rows.
 The crop pack contains 384 local crops. Use these outputs for visible regression
 review before promoting balanced007.
 
+Run deterministic local target-distance triage on the balanced007 review queue:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/compare_selected_predictions_to_target.py \
+  --review-csv outputs/product_quality_review_balanced007_four_split_20260707/review-pages.csv \
+  --output-csv outputs/product_quality_review_balanced007_four_split_20260707/local_target_comparison.csv \
+  --candidate-change-threshold 2 \
+  --meaningful-improvement-threshold 2 \
+  --baseline-ok-threshold 3 \
+  --risk-change-threshold 4 \
+  --accept-help-hurt-ratio 1.5 \
+  --max-risk-changed-ratio 0.35
+```
+
+Initial local target-distance triage:
+
+```text
+overall: accept=38, review=3, reject=55
+SCUT115: accept=10, reject=14
+holdout40: accept=6, review=2, reject=16
+train160: accept=13, review=1, reject=10
+next120: accept=9, reject=15
+metric_win bucket: accept=28, review=2, reject=2
+metric_loss_or_overrisk bucket: reject=32
+high_activity_risk bucket: accept=10, review=1, reject=21
+```
+
+Generate smaller focused packs from `local_target_comparison.csv` for visible
+review:
+
+```text
+outputs/product_quality_review_balanced007_four_split_20260707/top-rejects_page_pack/contact_sheet.png
+outputs/product_quality_review_balanced007_four_split_20260707/top-rejects_crop_pack/contact_sheet.png
+outputs/product_quality_review_balanced007_four_split_20260707/top-accepts_page_pack/contact_sheet.png
+outputs/product_quality_review_balanced007_four_split_20260707/top-accepts_crop_pack/contact_sheet.png
+outputs/product_quality_review_balanced007_four_split_20260707/borderline-review_page_pack/contact_sheet.png
+outputs/product_quality_review_balanced007_four_split_20260707/borderline-review_crop_pack/contact_sheet.png
+```
+
+The target-distance proxy is a triage aid, not a final visual label. Use it to
+prioritize manual or visual-AI inspection of top rejects and high-activity pages
+before deciding whether balanced007 needs a selector/veto or another objective
+change.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

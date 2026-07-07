@@ -447,6 +447,39 @@ holdout40 overerase regression, and recovers more holdout residual coverage than
 overguard. The next required step is visual/page-level review on high-gate pages
 and worst residual-loss pages before promotion.
 
+Balanced007 review triage:
+
+```text
+review queue: outputs/product_quality_review_balanced007_four_split_20260707/
+scope: 96 pressure-test rows, 24 per split
+page buckets:
+  metric wins: 32
+  metric losses / overerase risks: 32
+  high-activity risks: 32
+crop pack: 384 crops
+local target-comparison proxy:
+  accept=38
+  review=3
+  reject=55
+by split:
+  SCUT115: accept=10, reject=14
+  holdout40: accept=6, review=2, reject=16
+  train160: accept=13, review=1, reject=10
+  next120: accept=9, reject=15
+by bucket:
+  metric_win: accept=28, review=2, reject=2
+  metric_loss_or_overrisk: reject=32
+  high_activity_risk: accept=10, review=1, reject=21
+```
+
+Interpret this carefully: the queue intentionally oversamples wins, losses,
+and high-activity risk pages, so the 55 rejects are not a population reject
+rate. The important signal is that metric wins mostly pass the local proxy, but
+high-activity and metric-loss pages contain many obvious target-distance hurts.
+Balanced007 remains the best aggregate candidate and the right benchmark for
+review, but it is not product-ready without a selector/veto or visible-review
+pass that filters the high-risk pages.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
