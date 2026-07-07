@@ -152,6 +152,20 @@ pixels only inside selected connected components. It writes
 `selection.csv`, `component-selection.csv`, and per-split `pred/*.png`
 outputs for downstream page-level metric evaluation.
 
+Evaluate a materialized `pred` directory without rerunning a model:
+
+```bash
+$ENSEXAM_PYTHON scripts/eval/evaluate_prediction_directory.py \
+  --baseline-metrics outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv \
+  --pred-dir outputs/region_component_materialized_reviewed_20260707/holdout40/pred \
+  --output-csv outputs/region_component_materialized_reviewed_20260707/holdout40-evaluated-metrics.csv
+```
+
+The evaluator reuses the same SCUT target-derived residual and overerase
+metrics as the hardcase evaluation scripts. It is for offline validation only;
+selector decisions should still use inference-time rules or reviewed ranker
+scores, not target-derived component fields.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:
