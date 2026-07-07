@@ -1151,3 +1151,47 @@ component features are not enough. The train/test reject-ratio gap is large, and
 simple pair keeps too many harmful components. Do not continue hand-tuning component thresholds.
 The next viable step should be a learned patch/region selector with reviewed labels, or richer
 component features that include local context without target/label leakage.
+
+## Region Component Ranker Probe
+
+Not promoted. A lightweight NumPy logistic ranker was trained on the region-component features to
+test whether learned weighting improves over simple component thresholds. It improves coverage
+versus the strict threshold search, but still cannot separate harmful held-out components safely.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/train_region_component_ranker.py
+
+input:
+  outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv
+
+split:
+  train=train160,next120
+  test=scut115,holdout40
+
+training:
+  positive_mode=accept
+  epochs=2500
+  lr=0.01
+  l2=0.05
+
+best held-out threshold:
+  test_selected=230/27047 components
+  test_accept=129
+  test_review=16
+  test_reject=85
+  test_reject_ratio=0.369565
+  test_gain_per_component=+0.010094
+
+comparison:
+  best simple pair reject ratio: train=0.182, test=0.361
+  learned ranker reject ratio: test=0.370
+```
+
+Interpretation: the current component features contain some useful signal but not enough for a
+safe region selector. The ranker does not materially beat the best simple pair on held-out reject
+ratio, so weak target-derived component labels alone are insufficient. Keep the script for future
+experiments with reviewed region labels, but do not promote this ranker or use it for product
+gating.
