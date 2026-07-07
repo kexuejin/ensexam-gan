@@ -28,6 +28,103 @@ $ENSEXAM_PYTHON -m py_compile \
 
 Use `scripts/run_second_stage_residual_repair.py` with the primary checkpoint and the erasemap cleanup checkpoint registered in `docs/model-registry.md`.
 
+## Region Component Reviewed-Label Workflow
+
+Page-level selector tuning and weak component labels have reached a low-safety
+ceiling. Use this workflow when continuing toward a learned region selector.
+
+Generate component features and rule-probe outputs from the residual-delta t4
+candidate:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/evaluate_region_component_selector.py \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --split train160:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/sweep_train160_residual_delta_t4_20260707/metrics.csv \
+  --split next120:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/sweep_next120_residual_delta_t4_20260707/metrics.csv \
+  --train-split train160 \
+  --train-split next120 \
+  --test-split scut115 \
+  --test-split holdout40 \
+  --output-dir outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707 \
+  --max-conditions 2 \
+  --max-single-candidates 40 \
+  --max-rules 50 \
+  --min-train-components 500 \
+  --min-test-pages 1 \
+  --max-train-reject-components 100000 \
+  --max-train-reject-ratio 0.05
+```
+
+Build a balanced held-out review pack for component labels:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_region_component_review_pack.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --split train160:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/sweep_train160_residual_delta_t4_20260707/metrics.csv \
+  --split next120:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/sweep_next120_residual_delta_t4_20260707/metrics.csv \
+  --allowed-split scut115 \
+  --allowed-split holdout40 \
+  --output-dir outputs/region_component_review_pack_t4_heldout_20260707 \
+  --max-total 60 \
+  --max-per-page 3 \
+  --crop-size 220 \
+  --thumb-size 180
+```
+
+Review these generated artifacts:
+
+```text
+outputs/region_component_review_pack_t4_heldout_20260707/contact_sheet_high_gain_accept.png
+outputs/region_component_review_pack_t4_heldout_20260707/contact_sheet_borderline_review.png
+outputs/region_component_review_pack_t4_heldout_20260707/contact_sheet_hard_reject.png
+outputs/region_component_review_pack_t4_heldout_20260707/component-labels-template.csv
+```
+
+Fill `component-labels-template.csv` using the contract in
+`docs/region-component-labeling.md`. Prefer labels `keep`, `drop`, and
+`review`; only `keep` and `drop` train the ranker by default.
+
+Validate reviewed labels before training:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/validate_region_component_labels.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --label-csv outputs/region_component_review_pack_t4_heldout_20260707/component-labels-template.csv \
+  --require-positive 1 \
+  --require-negative 1 \
+  --fail-on-unknown-label \
+  --fail-on-unmatched \
+  --fail-on-duplicates \
+  --output-csv outputs/region_component_review_pack_t4_heldout_20260707/label-validation.csv
+```
+
+Train a reviewed-label region ranker:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/train_region_component_ranker.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --label-csv outputs/region_component_review_pack_t4_heldout_20260707/component-labels-template.csv \
+  --train-split scut115 \
+  --train-split holdout40 \
+  --test-split train160 \
+  --test-split next120 \
+  --output-dir outputs/region_component_ranker_reviewed_20260707 \
+  --epochs 2500 \
+  --lr 0.01 \
+  --l2 0.05 \
+  --positive-mode accept \
+  --min-train-selected 20 \
+  --min-test-selected 100 \
+  --max-rows 80
+```
+
+Do not promote a selector from weak local-proxy labels alone. Require reviewed
+held-out labels with near-zero reject rate at useful coverage before product
+gating.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:
