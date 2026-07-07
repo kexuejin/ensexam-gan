@@ -1057,3 +1057,48 @@ Interpretation: richer inference-time features are a real improvement because th
 held-out metric losses while increasing useful coverage. The remaining reject means this is still
 not product-safe. Keep these features, but require a second-stage risk veto or stronger reviewed
 labels before promoting a selector.
+
+## Enhanced Ranker Veto Search
+
+Not promoted yet. A label-free veto search on top of the enhanced residual-delta ranker found
+non-target feature rules that remove the remaining held-out reject, but the resulting coverage is
+still too low for product gating and the rule is based on a small selected set.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/evaluate_page_selector_veto.py
+
+input:
+  outputs/page_selector_ranker_t4_enhanced_train160_next120_to_scut115_holdout40_20260707/predictions.csv
+  outputs/selector_features_residual_delta_t4_enhanced_20260707/page_features.csv
+  outputs/residual_delta_t4_local_proxy_20260707/local_target_comparison_with_diagnostics.csv
+
+base selector:
+  enhanced ranker threshold=0.780156652583
+  train_selected=40
+  test_selected=9
+  test_accept=6
+  test_review=2
+  test_reject=1
+  test_metric_losses=0
+
+best train-mined veto/keep rule:
+  active_component_area_mean <= 3.36374043737
+  AND active_texture_p95 <= 138.780294495
+
+held-out after veto:
+  test_selected=7/9 selected pages
+  test_accept=5
+  test_review=2
+  test_reject=0
+  test_metric_losses=0
+  test_residual_gain=+0.004322267301 per selected-set denominator
+```
+
+Interpretation: the remaining reject is separable by inference-time component/texture features, so
+the direction is better than pure score thresholding. This is still not enough to promote because
+coverage over the full held-out set remains only 7/155 pages and the selected train set is small.
+Keep the veto evaluator as reusable infrastructure; the next quality lift should use more reviewed
+pages or a richer patch/region selector, not another hand-tuned page-level rule.
