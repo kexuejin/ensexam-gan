@@ -125,6 +125,33 @@ Do not promote a selector from weak local-proxy labels alone. Require reviewed
 held-out labels with near-zero reject rate at useful coverage before product
 gating.
 
+Materialize a component selector into page-level predictions after choosing a
+ranker threshold or fixed component rule:
+
+```bash
+THRESHOLD=$($ENSEXAM_PYTHON - <<'PY'
+import csv
+from pathlib import Path
+rows = list(csv.DictReader(Path("outputs/region_component_ranker_reviewed_20260707/threshold_summary.csv").open()))
+print(rows[0]["threshold"])
+PY
+)
+
+$ENSEXAM_PYTHON scripts/infer/materialize_region_component_selector.py \
+  --components-csv outputs/region_component_selector_t4_ratio05_train160_next120_to_scut115_holdout40_20260707/components.csv \
+  --predictions-csv outputs/region_component_ranker_reviewed_20260707/predictions.csv \
+  --score-threshold "$THRESHOLD" \
+  --split scut115:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/sweep_scut115_residual_delta_t4_20260707/metrics.csv \
+  --split holdout40:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/sweep_holdout40_residual_delta_t4_20260707/metrics.csv \
+  --output-dir outputs/region_component_materialized_reviewed_20260707 \
+  --write-empty-pages
+```
+
+The materializer starts from each baseline prediction and copies candidate
+pixels only inside selected connected components. It writes
+`selection.csv`, `component-selection.csv`, and per-split `pred/*.png`
+outputs for downstream page-level metric evaluation.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:
