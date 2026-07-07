@@ -585,3 +585,41 @@ combined:
 This refined rule is safer but too narrow, especially on holdout40. Use it as the conservative
 anchor when comparing future selectors: any broader rule should preserve the zero-loss behavior or
 provide visual evidence explaining why selected metric-loss pages are still acceptable.
+
+Pareto refinement around the broad `active_gray_p25 >= 123` rule is reproducible with:
+
+```bash
+python3 scripts/analysis/refine_fixed_page_selector.py \
+  --base-rule 'active_gray_p25 >= 123' \
+  --split scut115:outputs/selector_features_residual_delta_scut115_20260707_retry/page_features.csv:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --split holdout40:outputs/selector_features_residual_delta_holdout40_20260707/page_features.csv:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_bias3_scale008_best_base12_delta2_20260707/metrics.csv \
+  --output-csv outputs/page_quality_selector_ai_provisional_40_20260707/refine_active_gray_p25_ge_123_pareto_loss_le3_script.csv \
+  --max-losses 3 \
+  --min-selected 8 \
+  --top-features 10 \
+  --top-n 200
+```
+
+Search result:
+
+```text
+base rule:
+  selected = 24
+  wins/losses = 16 / 8
+
+best rule for loss_limit 0:
+  active_baseline_edit_p95 <= 149
+  AND candidate_delta_mean >= 0.0182428157494
+  selected = 13
+  wins/losses = 13 / 0
+  residual_gain = 0.000942
+  overerase_delta = -0.00000509
+
+best rule for loss_limit 1, 2, or 3:
+  same as loss_limit 0
+```
+
+Within the current two-condition feature search, allowing 1-3 metric-loss pages does not recover
+extra coverage. The next coverage gain likely needs either visual acceptance of selected metric-loss
+pages, a learned selector using confirmed labels, or a better candidate model; further local
+threshold searching around these features is low-leverage.
