@@ -400,3 +400,42 @@ best smoke rule:
 
 Only use rules mined from visually confirmed `label` values for promotion decisions. Rules mined
 from `auto_suggest_label` are smoke tests for plumbing and prioritization only.
+
+For the first calibration pass, build a balanced 40-row subset instead of reviewing all 142 pages:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_minimal_labeling_subset.py \
+  --auto-suggest-csv outputs/product_quality_review_residual_delta_YYYYMMDD/labels-auto-suggest.csv \
+  --review-index-csv outputs/product_quality_review_residual_delta_YYYYMMDD/review_pack/index.csv \
+  --output-csv outputs/product_quality_review_residual_delta_YYYYMMDD/minimal-labeling-subset-40.csv \
+  --max-total 40 \
+  --min-per-split 12 \
+  --min-per-bucket 6 \
+  --min-per-suggest-label 8
+```
+
+Verified residual-delta minimal subset:
+
+```text
+rows = 40
+splits:
+  holdout40 = 22
+  scut115 = 18
+buckets:
+  residual_delta_high_activity_risk = 16
+  residual_delta_metric_win = 10
+  residual_delta_metric_loss = 8
+  residual_delta_joint_selector = 6
+auto_suggest_label:
+  slight_win = 25
+  noop = 8
+  slight_loss = 7
+auto_review_priority:
+  high = 32
+  medium = 6
+  low = 2
+missing_review_images = 0
+```
+
+Fill the `label`, `flags`, `reviewer`, `review_date`, and `comment` columns in this subset first.
+Once at least 40 rows are confirmed, use it as the first input to `calibrate_page_quality_selector.py`.
