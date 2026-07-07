@@ -496,6 +496,44 @@ SCUT115+holdout40 -> train160+next120:
 The current full-proxy ranker is not a replacement for safe26 because held-out
 rejects still transfer. Use it as diagnostics only.
 
+Build the safe26 expansion review queue by subtracting safe26-selected pages
+from conservative ranker-selected pages:
+
+```text
+output: outputs/balanced007_safe26_expansion_review_20260707/
+ranker_not_safe26_candidates.csv
+expansion_accepts.csv
+expansion_reviews.csv
+expansion_rejects.csv
+```
+
+Generated focused review packs:
+
+```text
+outputs/balanced007_safe26_expansion_review_20260707/expansion_accepts_page_pack/contact_sheet.png
+outputs/balanced007_safe26_expansion_review_20260707/expansion_accepts_crop_pack/contact_sheet.png
+outputs/balanced007_safe26_expansion_review_20260707/expansion_reviews_page_pack/contact_sheet.png
+outputs/balanced007_safe26_expansion_review_20260707/expansion_reviews_crop_pack/contact_sheet.png
+outputs/balanced007_safe26_expansion_review_20260707/expansion_rejects_page_pack/contact_sheet.png
+outputs/balanced007_safe26_expansion_review_20260707/expansion_rejects_crop_pack/contact_sheet.png
+```
+
+Initial queue summary:
+
+```text
+ranker_not_safe26 rows=67
+accept=46
+review=10
+reject=11
+expansion_accepts focused pack: 32 pages / 128 crops
+expansion_reviews focused pack: 10 pages / 40 crops
+expansion_rejects focused pack: 11 pages / 44 crops
+```
+
+Review `expansion_accepts` first. If those are visually clean, they are the
+highest-value source for widening safe26. Review `expansion_rejects` second to
+extract veto features before trusting broader ranker-selected pages.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

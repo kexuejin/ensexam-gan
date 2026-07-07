@@ -292,6 +292,24 @@ safe26 boundary or look for explicit veto features for the remaining reject
 patterns. Do not replace safe26 with the ranker until held-out reject and
 metric-loss counts are zero at useful coverage.
 
+The immediate safe26 expansion set is now isolated:
+
+```text
+output: outputs/balanced007_safe26_expansion_review_20260707/
+ranker-selected but not safe26-selected pages: 67
+local proxy: accept=46, review=10, reject=11
+focused review packs:
+  expansion_accepts_page_pack/contact_sheet.png
+  expansion_accepts_crop_pack/contact_sheet.png
+  expansion_rejects_page_pack/contact_sheet.png
+  expansion_rejects_crop_pack/contact_sheet.png
+```
+
+Use this before more model work. The key question is whether the proxy accepts
+are true visual wins and whether the proxy rejects share simple veto features.
+If yes, the next selector milestone is safe26 plus vetted expansion accepts. If
+not, the bottleneck is still candidate generation, not selector calibration.
+
 ### 4. Zoom Review Packs For Ambiguous Failures
 
 Page-scale contact sheets miss small edge artifacts and low-contrast residuals. Add crop review packs

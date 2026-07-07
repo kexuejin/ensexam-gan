@@ -545,6 +545,32 @@ split directions. Keep safe26 as the current conservative selector benchmark
 and use full-proxy labels only for further feature analysis or a larger reviewed
 label set, not for product gating.
 
+Safe26 expansion review queue:
+
+```text
+output: outputs/balanced007_safe26_expansion_review_20260707/
+source: ranker-selected pages not selected by safe26
+rows=67
+local proxy:
+  accept=46
+  review=10
+  reject=11
+by split:
+  SCUT115: accept=9, review=4, reject=2
+  holdout40: accept=2, review=1, reject=0
+  train160: accept=16, review=4, reject=6
+  next120: accept=19, review=1, reject=3
+focused packs:
+  expansion_accepts: 32 pages, 128 crops
+  expansion_reviews: 10 pages, 40 crops
+  expansion_rejects: 11 pages, 44 crops
+```
+
+This is the next useful manual/visual-AI review surface. If the 32 expansion
+accepts are visually clean, safe26 can potentially widen materially without
+another training run. The 11 rejects should be mined as explicit veto patterns
+before accepting ranker-selected pages wholesale.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
