@@ -830,3 +830,46 @@ distribution barely moves and accepted pages lose useful cleanup strength. Do no
 `dark-preserve-weight=2.0` step-150 training as-is. If revisiting this direction, use it as one term
 inside a broader signed-delta or failure-bucket training set that explicitly preserves accepted
 high-gain brightening while targeting target-darker regressions.
+
+## Mixed Target-Darker Hard-Negative Residual-Delta Cleanup
+
+Rejected as the next product path. Mixing target-darker brightening hard negatives back into the
+metric patch training set caused the second-stage model to edit far more area while preserving less
+useful cleanup. It reduced aggregate overerase, but residual error regressed badly on every split,
+including the held-out SCUT115 test pages.
+
+Training/eval:
+
+```text
+checkpoint:
+  outputs/train_mixed_target_darker_residual_delta_w2_step150_20260707/cleanup_best.pt
+
+training patch index:
+  outputs/mixed_metric_target_darker_patch_index_20260707/train_patch_index.csv
+  rows=359
+  target_darker_brightening=256
+  metric=103
+
+four-split metric result versus baseline:
+  scut115:   residual_delta=+0.003735417, overerase_delta=-0.000178287
+  holdout40: residual_delta=+0.002953104, overerase_delta=-0.000157442
+  train160:  residual_delta=+0.011339396, overerase_delta=-0.000210210
+  next120:   residual_delta=+0.008812737, overerase_delta=-0.000147597
+  combined:  residual_delta=+0.007860986, overerase_delta=-0.000179646
+
+reference residual-delta t4 combined:
+  residual_delta=-0.000935733, overerase_delta=-0.000005804
+
+dark-preserve w2 combined:
+  residual_delta=-0.000631727, overerase_delta=-0.000004482
+```
+
+The mixed candidate's average gate ratio also jumped from the t4 reference `0.001316005` to
+`0.011182734`, which is consistent with over-broad second-stage edits rather than selective
+repair.
+
+Interpretation: the target-darker brightening failure bucket is real, but training directly on
+those patches with the current residual-delta objective turns into a conservative/over-broad edit
+model rather than a product-safe repair model. Do not repeat this mixed hard-negative setup as-is.
+If revisiting, separate it into an auxiliary signed-delta constraint or a selector/candidate
+ranking problem instead of merging it into the main cleanup patch objective.
