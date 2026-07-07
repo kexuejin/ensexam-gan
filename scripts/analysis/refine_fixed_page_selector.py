@@ -6,10 +6,19 @@ from __future__ import annotations
 import argparse
 import csv
 import itertools
+import operator
 from pathlib import Path
 
 
 EXCLUDE_FEATURES = {"split", "file", "gain", "over_delta", "win", "safe_win"}
+EXCLUDE_SUBSTRINGS = ("target", "label")
+OPS = {
+    "<=": operator.le,
+    ">=": operator.ge,
+    "<": operator.lt,
+    ">": operator.gt,
+    "==": operator.eq,
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -41,10 +50,19 @@ def parse_split(value: str) -> tuple[str, Path, Path, Path]:
     return parts[0], Path(parts[1]), Path(parts[2]), Path(parts[3])
 
 
-def base_rule_hit(row: dict[str, str], rule: str) -> bool:
-    if rule == "active_gray_p25 >= 123":
-        return float(row["active_gray_p25"]) >= 123.0
-    raise ValueError(f"Unsupported base rule: {rule}")
+def rule_hit(row: dict[str, str], rule: str) -> bool:
+    for condition in (part.strip() for part in rule.split(" AND ")):
+        parts = condition.split()
+        if len(parts) != 3:
+            raise ValueError(f"Unsupported selector condition: {condition!r}")
+        feature, op_text, threshold_text = parts
+        if op_text not in OPS:
+            raise ValueError(f"Unsupported selector operator: {op_text!r}")
+        if feature not in row:
+            raise KeyError(f"Selector feature {feature!r} not found")
+        if not OPS[op_text](float(row[feature]), float(threshold_text)):
+            return False
+    return True
 
 
 def threshold_candidates(values: list[float]) -> list[float]:
@@ -56,6 +74,8 @@ def numeric_features(row: dict[str, str]) -> list[str]:
     out = []
     for key, value in row.items():
         if key in EXCLUDE_FEATURES:
+            continue
+        if any(token in key for token in EXCLUDE_SUBSTRINGS):
             continue
         try:
             float(value)
@@ -140,7 +160,7 @@ def main() -> None:
         baseline_by_split[split] = {row["file"]: row for row in read_rows(baseline_metrics)}
         candidate_by_split[split] = {row["file"]: row for row in read_rows(candidate_metrics)}
         for row in read_rows(features_csv):
-            if not base_rule_hit(row, args.base_rule):
+            if not rule_hit(row, args.base_rule):
                 continue
             out = dict(row)
             out["split"] = split
@@ -173,7 +193,8 @@ def main() -> None:
     result_rows: list[dict[str, object]] = []
     seen = set()
     for conditions in condition_sets:
-        rule = " AND ".join(f"{feature} {op} {threshold:.12g}" for feature, op, threshold in conditions)
+        refinement_rule = " AND ".join(f"{feature} {op} {threshold:.12g}" for feature, op, threshold in conditions)
+        rule = f"{args.base_rule} AND {refinement_rule}"
         if rule in seen:
             continue
         seen.add(rule)
