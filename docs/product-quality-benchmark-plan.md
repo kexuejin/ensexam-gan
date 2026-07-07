@@ -683,3 +683,26 @@ holdout40 pred files = 40
 Use this materialized folder for side-by-side visual review of the current safety anchor. It should
 not replace the current default pipeline until the selected pages are visually confirmed and the
 coverage limitation is accepted or improved.
+
+The 13 selected pages were also checked with local target-distance comparison:
+
+```bash
+python3 scripts/analysis/compare_selected_predictions_to_target.py \
+  --review-csv outputs/refined_zero_loss_selector_review_20260707/review-pages.csv \
+  --output-csv outputs/refined_zero_loss_selector_review_20260707/local_target_comparison.csv
+```
+
+Result:
+
+```text
+rows = 13
+local verdicts:
+  accept = 9
+  review = 4
+  reject = 0
+```
+
+The four `review` pages are not metric-loss pages; they have more local help pixels than hurt pixels,
+but the margin is weaker than the default accept threshold. The refined selector remains a reasonable
+safety anchor for review-pack generation, but the coverage is still only 13/155 pages, so it is not a
+product-quality default by itself.
