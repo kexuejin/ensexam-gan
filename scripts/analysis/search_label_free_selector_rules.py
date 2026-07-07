@@ -27,10 +27,17 @@ EXCLUDED_FEATURES = {
     "gain",
     "over_delta",
     "win",
+    "safe_win",
 }
 
 EXCLUDED_SUBSTRINGS = (
+    "help",
+    "hurt",
+    "metric",
+    "oracle",
+    "residual_gain",
     "target",
+    "verdict",
     "label",
 )
 
@@ -85,9 +92,11 @@ def read_rows(path: Path) -> list[dict[str, str]]:
 
 
 def parse_feature_csv(value: str) -> tuple[str, Path]:
+    if ":" not in value:
+        return "", Path(value)
     parts = value.split(":", 1)
     if len(parts) != 2 or not parts[0] or not parts[1]:
-        raise ValueError(f"Invalid --feature-csv {value!r}; expected SPLIT:CSV")
+        raise ValueError(f"Invalid --feature-csv {value!r}; expected SPLIT:CSV or CSV with split column")
     return parts[0], Path(parts[1])
 
 
@@ -96,7 +105,10 @@ def load_feature_rows(feature_specs: list[str]) -> list[dict[str, str]]:
     for split, path in map(parse_feature_csv, feature_specs):
         for row in read_rows(path):
             row = dict(row)
-            row["split"] = split
+            if split:
+                row["split"] = split
+            elif not row.get("split"):
+                raise ValueError(f"Feature CSV requires split column when no SPLIT prefix is used: {path}")
             rows.append(row)
     return rows
 
