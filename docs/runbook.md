@@ -256,6 +256,51 @@ objective should beat t4 on SCUT115 residual and reduce the holdout40 overerase
 penalty; do not promote variants that mainly buy lower overerase by worsening
 SCUT115 residual.
 
+Run the current overguard residual-delta follow-up from the t4 checkpoint:
+
+```bash
+$ENSEXAM_PYTHON scripts/train/train_patch_cleanup_erasemap_probe.py \
+  --data-root data-links/samples/SCUT-EnsExam-targetdiff-explicit \
+  --split train \
+  --input-dir outputs/eval_scut_targetdiff_explicit_24_current_primary_20260707/pred \
+  --patch-index-file outputs/scut_metric_cleanup_dataset_20260707/train_patch_index.csv \
+  --val-data-root data-links/samples/SCUT-EnsExam-targetdiff-explicit \
+  --val-split train \
+  --val-input-dir outputs/eval_scut_targetdiff_explicit_24_current_primary_20260707/pred \
+  --val-patch-index-file outputs/scut_metric_cleanup_dataset_20260707/val_patch_index.csv \
+  --val-every 20 \
+  --output-dir outputs/train_scut_residual_delta_overguard_scale006_step80_20260707 \
+  --init-checkpoint outputs/train_scut_residual_delta_bias3_scale008_step150_20260707/cleanup_best.pt \
+  --model-type residual_delta \
+  --residual-delta-scale 0.06 \
+  --device mps \
+  --tile-size 256 \
+  --mask-threshold 12 \
+  --max-steps 80 \
+  --batch-size 1 \
+  --lr 2e-5 \
+  --inside-weight 4.0 \
+  --outside-weight 8.0 \
+  --clean-inside-weight 1.0 \
+  --alpha-bce-weight 0.5 \
+  --alpha-positive-weight 4.0 \
+  --alpha-negative-weight 6.0 \
+  --alpha-dice-weight 0.25 \
+  --alpha-sparsity-weight 0.2 \
+  --residual-proxy-weight 2.0 \
+  --overerase-proxy-weight 40.0 \
+  --dark-preserve-weight 1.0 \
+  --signed-delta-weight 0.5 \
+  --signed-delta-inside-only \
+  --alpha-init-bias -3.0
+```
+
+Evaluate it with `cleanup_alpha_threshold=0.3` and
+`second_delta_threshold=2`. The 2026-07-07 gate sweep showed that alpha=0.5 or
+delta>=4 collapses this checkpoint to no-op. Keep overguard as a conservative
+candidate branch: it improves SCUT115 more than t4 and removes holdout40
+overerase regression, but it does not recover t4's holdout40 residual coverage.
+
 ## Training Continuation Policy
 
 Do not restart full training by default. The one-day full-training result is already registered in this fork and can be used directly:

@@ -32,6 +32,13 @@ overerase. Variants that reduce overerase more strongly, especially
 `mixed_td_w2_t4`, do so by worsening SCUT115 residual. Treat t4 as the
 regression baseline for future candidate objectives, not as the product path.
 
+The overguard scale0.06 follow-up is now the better conservative branch to
+investigate. It improves SCUT115 residual by 0.000786 with lower overerase and
+improves page win/loss count from 78/34 to 89/26. On holdout40 it removes t4's
+overerase regression entirely, but residual gain drops from 0.004008 to
+0.000832. The next objective should recover holdout40 coverage while preserving
+the overguard safety profile.
+
 ## Most Promising Directions
 
 ### 1. Paper-Tone Harmonization For Correction Fluid
@@ -194,6 +201,15 @@ SCUT115: must beat residual_delta=-0.000193191 without overerase regression
 holdout40: must keep the residual gain while reducing +0.000244709 overerase penalty
 train160/next120: must stay residual-positive, not just overerase-positive
 mixed_td-style tradeoff: reject if residual worsens to buy overerase reduction
+```
+
+Updated overguard benchmark:
+
+```text
+SCUT115: residual_delta=-0.000786008, overerase_delta=-0.000009437
+holdout40: residual_delta=-0.000831641, overerase_delta=-0.000009240
+gate: alpha=0.3, second_delta=2 only; stricter gates are no-op
+next objective: recover holdout40 residual coverage without losing overerase safety
 ```
 
 ### 4. Zoom Review Packs For Ambiguous Failures

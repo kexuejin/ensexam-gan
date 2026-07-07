@@ -363,6 +363,45 @@ product-quality lever. Use it as a regression benchmark for future objectives:
 a new candidate should beat t4 on SCUT115 residual without introducing the
 holdout40 overerase penalty.
 
+Overguard residual-delta follow-up:
+
+```text
+training output: outputs/train_scut_residual_delta_overguard_scale006_step80_20260707/
+checkpoint: outputs/train_scut_residual_delta_overguard_scale006_step80_20260707/cleanup_best.pt
+analysis output: outputs/overguard_scale006_step80_analysis_20260707/
+evaluation gate: cleanup_alpha_threshold=0.3, second_delta_threshold=2
+
+objective changes from t4 source checkpoint:
+  init: outputs/train_scut_residual_delta_bias3_scale008_step150_20260707/cleanup_best.pt
+  residual_delta_scale: 0.06
+  outside_weight: 8.0
+  alpha_negative_weight: 6.0
+  alpha_sparsity_weight: 0.2
+  overerase_proxy_weight: 40.0
+  dark_preserve_weight: 1.0
+  signed_delta_weight: 0.5 inside mask
+
+SCUT115:
+  t4 residual_delta=-0.000193191, overerase_delta=-0.000004219, wins=78, losses=34
+  overguard residual_delta=-0.000786008, overerase_delta=-0.000009437, wins=89, losses=26
+  verdict: materially better than t4 on aggregate metrics and page win/loss count
+
+holdout40:
+  t4 residual_delta=-0.004008179, overerase_delta=+0.000244709, wins=30, losses=10, over_reg_pages=36
+  overguard residual_delta=-0.000831641, overerase_delta=-0.000009240, wins=31, losses=9, over_reg_pages=0
+  verdict: fixes t4 overerase regression but sacrifices most holdout residual gain
+
+gate sweep:
+  alpha=0.3, delta=2 is the only useful tested setting
+  alpha=0.5 or delta>=4 collapses to no-op on SCUT115 and holdout40
+```
+
+Treat overguard as the new conservative residual-delta branch to investigate,
+not a product default. It is the first residual-delta variant in this fork that
+beats t4 on SCUT115 while avoiding holdout40 overerase regression. The remaining
+gap is holdout40 residual coverage: a product candidate needs to recover more of
+t4's holdout residual gain without reintroducing overerase.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
