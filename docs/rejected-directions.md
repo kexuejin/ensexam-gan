@@ -1011,3 +1011,49 @@ ranker as reusable infrastructure for future feature/label experiments, but do n
 or sweep as product gating. The next selector attempt should add stronger non-target inference-time
 features or a larger manually reviewed page set, then require held-out zero reject, zero metric
 loss, and meaningful coverage before promotion.
+
+## Enhanced Non-Target Page Selector Features
+
+Not promoted yet. Adding inference-time-only direction, connected-component, edge, and texture
+features to the residual-delta selector feature extractor improved the learned ranker versus the
+initial page-level feature set, but it still did not clear the product safety gate.
+
+Validation:
+
+```text
+script:
+  scripts/analysis/analyze_residual_delta_selector_features.py
+  scripts/analysis/train_page_selector_ranker.py
+
+added non-target features:
+  active_brighten_ratio / active_darken_ratio
+  active_signed_delta_mean / active_signed_delta_abs_mean
+  active_brighten_mean / active_darken_mean
+  active_edge_mean / p75 / p95
+  active_texture_mean / p75 / p95
+  active_component_count / area_mean / area_p95 / area_max
+
+split:
+  train=train160,next120
+  test=scut115,holdout40
+
+enhanced ranker best held-out row:
+  test_selected=9/155
+  test_accept=6
+  test_review=2
+  test_reject=1
+  test_metric_losses=0
+  test_residual_gain=+0.000297278664
+  test_overerase_delta=-0.000000077781
+
+initial ranker best sweep:
+  test_selected=2/155
+  test_reject=0
+  test_metric_losses=1
+  test_residual_gain=+0.000000515789
+```
+
+Interpretation: richer inference-time features are a real improvement because they eliminate
+held-out metric losses while increasing useful coverage. The remaining reject means this is still
+not product-safe. Keep these features, but require a second-stage risk veto or stronger reviewed
+labels before promoting a selector.

@@ -80,6 +80,24 @@ def mean(values: np.ndarray) -> float:
     return float(values.mean()) if values.size else 0.0
 
 
+def component_stats(mask: np.ndarray) -> dict[str, float | int]:
+    if not mask.any():
+        return {
+            "active_component_count": 0,
+            "active_component_area_mean": 0.0,
+            "active_component_area_p95": 0.0,
+            "active_component_area_max": 0.0,
+        }
+    count, labels, stats, _centroids = cv2.connectedComponentsWithStats(mask.astype(np.uint8), connectivity=8)
+    areas = stats[1:count, cv2.CC_STAT_AREA].astype(np.float64)
+    return {
+        "active_component_count": int(len(areas)),
+        "active_component_area_mean": mean(areas),
+        "active_component_area_p95": percentile(areas, 95),
+        "active_component_area_max": float(areas.max()) if areas.size else 0.0,
+    }
+
+
 def extract_features(
     baseline_row: dict[str, str],
     candidate_row: dict[str, str],
@@ -102,11 +120,23 @@ def extract_features(
     baseline_edit = cv2.absdiff(baseline_bgr, image_bgr).mean(axis=2)
     candidate_delta = cv2.absdiff(candidate_bgr, baseline_bgr).mean(axis=2)
     image_gray = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2GRAY)
+    baseline_gray = cv2.cvtColor(baseline_bgr, cv2.COLOR_BGR2GRAY)
+    candidate_gray = cv2.cvtColor(candidate_bgr, cv2.COLOR_BGR2GRAY)
+    signed_candidate_delta = candidate_gray.astype(np.int16) - baseline_gray.astype(np.int16)
+    brighten = signed_candidate_delta > 0
+    darken = signed_candidate_delta < 0
+    edge = cv2.Sobel(image_gray, cv2.CV_32F, 1, 0, ksize=3)
+    edge = np.abs(edge) + np.abs(cv2.Sobel(image_gray, cv2.CV_32F, 0, 1, ksize=3))
+    local_mean = cv2.blur(image_gray.astype(np.float32), (15, 15))
+    texture = np.abs(image_gray.astype(np.float32) - local_mean)
     target_delta = cv2.absdiff(image_bgr, label_bgr).mean(axis=2)
     baseline_label_delta = cv2.absdiff(baseline_bgr, label_bgr).mean(axis=2)
 
     baseline_changed = baseline_edit >= base_edit_threshold
     active = baseline_changed & (candidate_delta >= candidate_delta_threshold)
+    active_px = int(active.sum())
+    active_brighten = active & brighten
+    active_darken = active & darken
 
     return {
         "split": split,
@@ -134,7 +164,20 @@ def extract_features(
         "active_gray_p75": percentile(image_gray[active], 75),
         "active_target_delta_mean": mean(target_delta[active]),
         "active_baseline_label_delta_mean": mean(baseline_label_delta[active]),
-        "active_px": int(active.sum()),
+        "active_px": active_px,
+        "active_brighten_ratio": float(active_brighten.sum() / max(active_px, 1)),
+        "active_darken_ratio": float(active_darken.sum() / max(active_px, 1)),
+        "active_signed_delta_mean": mean(signed_candidate_delta[active]),
+        "active_signed_delta_abs_mean": mean(np.abs(signed_candidate_delta[active])),
+        "active_brighten_mean": mean(signed_candidate_delta[active_brighten]),
+        "active_darken_mean": mean(-signed_candidate_delta[active_darken]),
+        "active_edge_mean": mean(edge[active]),
+        "active_edge_p75": percentile(edge[active], 75),
+        "active_edge_p95": percentile(edge[active], 95),
+        "active_texture_mean": mean(texture[active]),
+        "active_texture_p75": percentile(texture[active], 75),
+        "active_texture_p95": percentile(texture[active], 95),
+        **component_stats(active),
     }
 
 
