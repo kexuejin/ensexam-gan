@@ -103,8 +103,10 @@ overerase unchanged or lower on validation splits
 
 ### 3. Calibrated Selector, Not A Full Learned Model Yet
 
-The current label count is too small for a reliable learned selector. Use labels first to calibrate
-features and reject unsafe candidate families.
+The current page-label count is too small for a reliable black-box page selector. Region/component
+review packs are now available and should be used to build a small reviewed selector dataset before
+more model tuning. Weak target-derived component labels were tested and rejected as a selector
+training signal because held-out reject ratios remained too high.
 
 Useful features:
 
@@ -131,6 +133,29 @@ for each candidate family:
 ```
 
 Do not train a black-box selector until the review set has enough labeled pages per bucket.
+
+Region selector workflow now available:
+
+```text
+1. Generate component features with evaluate_region_component_selector.py.
+2. Build balanced component crops with build_region_component_review_pack.py.
+3. Label components as keep / drop / review using docs/region-component-labeling.md.
+4. Validate labels with validate_region_component_labels.py.
+5. Train with train_region_component_ranker.py --label-csv.
+6. Promote only after separate reviewed held-out labels show near-zero reject rate.
+```
+
+Current region evidence:
+
+```text
+simple component rules: no <=5% train-reject-ratio rule found at useful scale
+best simple pair: held-out reject ratio 36.1%
+weak-label ranker: held-out reject ratio 37.0%
+review pack seed: 20 accept / 20 review / 20 reject held-out component crops
+```
+
+This means the next selector milestone is not a better threshold; it is a reviewed component label
+set large enough to train and validate a region selector.
 
 ### 4. Zoom Review Packs For Ambiguous Failures
 

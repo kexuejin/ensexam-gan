@@ -66,6 +66,52 @@ Build a compact page-level product-quality benchmark before further model tuning
 Only after this benchmark exists should the project choose between a learned selector, a revised
 generator objective, or a specialized repair branch for correction-fluid / paper-tone restoration.
 
+## Region Selector Track
+
+The selector work has moved from page-level hand thresholds to a reviewed region/component workflow.
+The current evidence says weak target-derived component labels are not enough:
+
+```text
+region component rule probe:
+  components=106489
+  train=79442
+  test=27047
+  strict rules=0
+  ratio<=5% rules=0
+
+best simple pair:
+  train reject ratio=18.2%
+  held-out reject ratio=36.1%
+
+weak-label component ranker:
+  test_selected=230/27047
+  test_reject_ratio=37.0%
+```
+
+Reusable workflow now exists:
+
+```text
+component extraction/rule probe: scripts/analysis/evaluate_region_component_selector.py
+review pack builder: scripts/analysis/build_region_component_review_pack.py
+label validator: scripts/analysis/validate_region_component_labels.py
+reviewed-label ranker: scripts/analysis/train_region_component_ranker.py --label-csv
+label contract: docs/region-component-labeling.md
+commands: docs/runbook.md
+```
+
+Generated held-out review pack:
+
+```text
+outputs/region_component_review_pack_t4_heldout_20260707/
+  component-labels-template.csv
+  contact_sheet_high_gain_accept.png
+  contact_sheet_borderline_review.png
+  contact_sheet_hard_reject.png
+```
+
+Next selector progress should come from reviewed `keep` / `drop` / `review` labels and held-out
+reviewed validation, not more weak-label or hand-threshold tuning.
+
 Do not add the current whiteout inpaint repair to the default pipeline. It can reduce residual metrics on correction-fluid pages, but visual review shows the repaired area may look dirtier than leaving a clean white patch.
 
 The current optimization roadmap is in `docs/optimization-roadmap.md`. The highest-leverage next
