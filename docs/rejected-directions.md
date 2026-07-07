@@ -776,3 +776,57 @@ joint safe selector:
 Do not spend more cycles on scalar thresholds or global edit-strength increases for this candidate.
 The reusable part is `scripts/analysis/analyze_residual_delta_selector_features.py`; future work
 should train or label a page-level selector and require materially higher coverage before promotion.
+
+## Residual-Delta Dark-Preservation W2 Cleanup
+
+Rejected as the next product path. Adding `--dark-preserve-weight 2.0` to the residual-delta
+cleanup training reduced edit magnitude and slightly improved the average local proxy gain on
+original reject pages, but it did not materially change page-level local proxy verdicts and it
+gave up a large share of the original t4 residual metric improvement.
+
+Training/eval:
+
+```text
+checkpoint:
+  outputs/train_scut_residual_delta_darkpreserve_w2_step150_20260707/cleanup_best.pt
+
+four-split metric result versus baseline:
+  scut115:   residual_delta=-0.000189791, overerase_delta=-0.000003162
+  holdout40: residual_delta=-0.000322906, overerase_delta=-0.000004172
+  train160:  residual_delta=-0.000967412, overerase_delta=-0.000006834
+  next120:   residual_delta=-0.000710610, overerase_delta=-0.000002712
+  combined:  residual_delta=-0.000631727, overerase_delta=-0.000004482
+
+original residual-delta t4 combined:
+  residual_delta=-0.000935733, overerase_delta=-0.000005804
+```
+
+Local proxy verdicts changed only marginally:
+
+```text
+original t4:       accept=76, review=41, reject=318
+dark-preserve w2:  accept=76, review=44, reject=315
+
+verdict transitions:
+  reject -> reject: 310
+  accept -> accept: 74
+  review -> review: 34
+  reject -> review: 8
+  review -> reject: 5
+  review -> accept: 2
+  accept -> review: 2
+```
+
+Aggregate local-proxy effects:
+
+```text
+accept pages: delta_changed=-0.00095431, delta_gain=-0.01079021
+review pages: delta_changed=-0.00024989, delta_gain=-0.00045024
+reject pages: delta_changed=-0.00032377, delta_gain=+0.00624071
+```
+
+Interpretation: the loss does activate and makes reject pages less bad on average, but the verdict
+distribution barely moves and accepted pages lose useful cleanup strength. Do not repeat
+`dark-preserve-weight=2.0` step-150 training as-is. If revisiting this direction, use it as one term
+inside a broader signed-delta or failure-bucket training set that explicitly preserves accepted
+high-gain brightening while targeting target-darker regressions.
