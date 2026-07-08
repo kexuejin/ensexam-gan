@@ -571,6 +571,76 @@ accepts are visually clean, safe26 can potentially widen materially without
 another training run. The 11 rejects should be mined as explicit veto patterns
 before accepting ranker-selected pages wholesale.
 
+2026-07-08 continuation:
+
+The safe26 expansion search is now reproducible in the active repository:
+
+```text
+script: scripts/analysis/search_expansion_keep_rules.py
+repro output: outputs/balanced007_safe26_expansion_rule_search_repro_20260707/
+best expansion rule: help_hurt_ratio >= 1.515555555556
+expansion-only: 46 pages, accept/review/reject=46/0/0
+base safe26: 26 pages, accept/review/reject=21/2/3
+combined: 72 pages, accept/review/reject=67/2/3
+metric_losses=0
+residual_gain=0.002444313
+```
+
+Important interpretation: the combined 3 rejects are inherited from the base
+safe26 set, not introduced by the expansion rule. Use `added_reject` /
+`expansion_reject`, not raw `combined_reject`, when judging whether an
+incremental expansion source adds new reject pages.
+
+A second ranker-score expansion source was evaluated with
+`scripts/analysis/evaluate_ranker_expansion_sources.py`:
+
+```text
+source: t4_enh@0.88 + safe001@0.80
+output: outputs/balanced007_ranker_expansion_source_eval_20260708/
+incremental: 12 pages, accept/review/reject=8/4/0
+metric_losses=0
+residual_gain=0.000284985
+visual spot-check: 4 review pages pass_with_caution; no obvious printed-structure damage
+```
+
+The current recommended product-safe candidate is the zero-reject vetoed
+selector:
+
+```text
+selector: zero_reject_veto_79
+rule stack:
+  safe26 base gated by active_target_delta_mean > 96.00890552911
+  + best expansion rule above
+  + ranker-score bump above
+selected=79/435
+coverage=18.16%
+accept/review/reject=74/5/0
+metric_losses=0
+residual_gain=0.002609363
+```
+
+The higher-gain no-veto variant is not recommended as a product default:
+
+```text
+selector: no_veto_84
+selected=84/435
+coverage=19.31%
+accept/review/reject=75/6/3
+metric_losses=0
+residual_gain=0.002729299
+```
+
+Reason for rejection: it keeps the three known base safe26 reject pages
+(`scut115/17.jpg`, `train160/91.jpg`, `train160/160.jpg`). Prefer
+`zero_reject_veto_79` unless a later manual review overturns those local
+reject labels.
+
+Further single-feature mining after `zero_reject_veto_79` found only tiny clean
+third-bucket opportunities. The best was `active_edge_p95 <= 524`, adding just
+2 accept pages (`scut115/395.jpg`, `scut115/43.jpg`) with no rejects or metric
+losses. Do not complicate the default selector for this small gain unless a
+later packaging step needs every zero-risk page.
+
 Source-of-truth details for the historical migration remain in:
 
 ```text
