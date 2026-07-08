@@ -53,6 +53,64 @@ additional accept pages and then exhausted: after selecting 125 pages, the remai
 new `accept`-only, zero-reject, zero-metric-loss deployable increment in the searched ranker/feature
 space.
 
+Do not interpret selector coverage as "fully solved" page quality. The project has local source,
+baseline, candidate, and target images, so target-aware quality scoring should be the first-line
+quality gate and manual review should focus on borderline/contradictory pages:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/score_target_comparison_quality.py \
+  --review-csv outputs/balanced007_full_page_review_20260707/local_target_comparison.csv \
+  --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2.csv \
+  --summary-json outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2_summary.json
+
+$ENSEXAM_PYTHON scripts/analysis/summarize_selector_target_quality.py \
+  --quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2.csv \
+  --selector zero_reject_veto_125_accept_clean:outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_selected.csv \
+  --selector zero_reject_veto_134_manual_accept_whitelist:outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_134_manual_accept_whitelist_selected.csv \
+  --selector zero_reject_veto_auto_triage_promote_candidate:outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_auto_triage_promote_candidate_selected.csv \
+  --selector zero_reject_veto_147_visual_round2_candidate:outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_145_visual_round2_candidate_selected.csv \
+  --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/selector_target_quality_summary.csv
+```
+
+Current target-aware scorer results on all 435 pages:
+
+```text
+slight_win: 58
+borderline: 73
+slight_loss: 42
+clear_loss: 262
+clear_win/noop: 0
+```
+
+Selector coverage vs. target-confirmed quality:
+
+```text
+zero_reject_veto_125_accept_clean:
+  selected=125/435 selected_coverage=28.74%
+  target_confirmed_wins=54/435 target_win_coverage=12.41%
+  target_borderline=58 target_losses=13
+
+zero_reject_veto_134_manual_accept_whitelist:
+  selected=134/435 selected_coverage=30.80%
+  target_confirmed_wins=58/435 target_win_coverage=13.33%
+  target_borderline=63 target_losses=13
+
+zero_reject_veto_auto_triage_promote_candidate:
+  selected=137/435 selected_coverage=31.49%
+  target_confirmed_wins=58/435 target_win_coverage=13.33%
+  target_borderline=65 target_losses=14
+
+zero_reject_veto_147_visual_round2_candidate:
+  selected=147/435 selected_coverage=33.79%
+  target_confirmed_wins=58/435 target_win_coverage=13.33%
+  target_borderline=72 target_losses=17
+```
+
+This reframes the current bottleneck: growing selected coverage beyond `134` mostly adds borderline
+or loss-risk pages under the target-aware scorer. The next quality-improving step is not broader
+threshold search; it is reducing target-aware losses and converting borderline pages into confirmed
+wins through better candidate generation, calibrated scoring, or formal visual labels.
+
 Key comparison points:
 
 ```text
@@ -123,6 +181,8 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   zero_reject_veto_126_deployable_single_accept_page_review/contact_sheet.png
   zero_reject_veto_126_deployable_single_accept_crop_review/contact_sheet.png
   zero_reject_veto_auto_triage_promote_candidate_summary.json
+  target_quality_scoring_20260708/full435_target_quality_v2.csv
+  target_quality_scoring_20260708/selector_target_quality_summary.csv
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
