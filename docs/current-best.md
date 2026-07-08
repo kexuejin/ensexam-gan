@@ -111,6 +111,35 @@ or loss-risk pages under the target-aware scorer. The next quality-improving ste
 threshold search; it is reducing target-aware losses and converting borderline pages into confirmed
 wins through better candidate generation, calibrated scoring, or formal visual labels.
 
+For quality-first selector variants, derive reproducible CSVs from the target-aware labels instead of
+manually filtering outputs:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/derive_target_quality_selectors.py \
+  --base-selected-csv outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_selected.csv \
+  --quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2.csv \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors \
+  --name-prefix zero_reject_veto
+```
+
+Current quality-first derived selectors:
+
+```text
+zero_reject_veto_54_target_confirmed_wins:
+  selected=54/435 selected_coverage=12.41%
+  target_confirmed_wins=54 target_borderline=0 target_losses=0
+  use as the strict lower-bound quality baseline
+
+zero_reject_veto_112_zero_target_loss:
+  selected=112/435 selected_coverage=25.75%
+  target_confirmed_wins=54 target_borderline=58 target_losses=0
+  use as the quality-first default candidate before broader coverage work
+```
+
+The `112_zero_target_loss` variant is the immediate quality improvement over `125`: it removes the
+13 selected pages that the target-aware scorer flags as loss-risk while preserving all 54
+target-confirmed wins. The remaining 58 borderline pages are the next review/calibration target.
+
 Key comparison points:
 
 ```text
@@ -183,6 +212,8 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   zero_reject_veto_auto_triage_promote_candidate_summary.json
   target_quality_scoring_20260708/full435_target_quality_v2.csv
   target_quality_scoring_20260708/selector_target_quality_summary.csv
+  zero_reject_veto_54_target_confirmed_wins_summary.json
+  zero_reject_veto_112_zero_target_loss_summary.json
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
