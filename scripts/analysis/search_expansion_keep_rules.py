@@ -233,8 +233,7 @@ def main() -> None:
     local_by_key = {key(row): row for row in local_rows}
     denominator = len(local_rows)
 
-    summary_rows: list[dict[str, object]] = []
-    best_selected: list[dict[str, str]] = []
+    evaluated_rules: list[tuple[dict[str, object], list[dict[str, str]]]] = []
     for column, op, threshold in candidate_rules(expansion_rows):
         selected = selected_by_rule(expansion_rows, column, op, threshold)
         if len(selected) < args.min_expansion_selected:
@@ -247,13 +246,13 @@ def main() -> None:
         rule_text = f"{column} {op} {threshold:.13g}"
         summary["rule"] = rule_text
         summary["files"] = " ".join(f"{row['split']}/{row['file']}" for row in selected)
-        summary_rows.append(summary)
+        evaluated_rules.append((summary, selected))
 
-    summary_rows.sort(key=sortable_score)
-    if summary_rows:
-        best_rule = str(summary_rows[0]["rule"])
-        column, op, threshold_text = best_rule.split()
-        best_selected = selected_by_rule(expansion_rows, column, op, float(threshold_text))
+    evaluated_rules.sort(key=lambda item: sortable_score(item[0]))
+    summary_rows = [summary for summary, _selected in evaluated_rules]
+    best_selected: list[dict[str, str]] = []
+    if evaluated_rules:
+        best_selected = evaluated_rules[0][1]
 
     output_dir = Path(args.output_dir)
     fields = [
