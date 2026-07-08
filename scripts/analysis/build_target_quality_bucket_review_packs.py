@@ -28,6 +28,24 @@ def parse_args() -> argparse.Namespace:
         default=[],
         help="Triage bucket to include. May be repeated. Defaults to auto_win_candidate and ratio_noise_review.",
     )
+    parser.add_argument(
+        "--risk-trigger",
+        action="append",
+        default=[],
+        help="Optional risk_trigger value to include. May be repeated.",
+    )
+    parser.add_argument(
+        "--risk-px-tier",
+        action="append",
+        default=[],
+        help="Optional risk_px_tier value to include. May be repeated.",
+    )
+    parser.add_argument(
+        "--triage-subbucket",
+        action="append",
+        default=[],
+        help="Optional exact triage_subbucket value to include. May be repeated.",
+    )
     parser.add_argument("--name", default="high_priority")
     parser.add_argument("--thumb-width", type=int, default=520)
     parser.add_argument("--thumb-height", type=int, default=380)
@@ -104,11 +122,23 @@ def build_pack(
     ])
 
 
+def matches_filters(row: dict[str, str], args: argparse.Namespace, buckets: tuple[str, ...]) -> bool:
+    if row.get("triage_bucket") not in buckets:
+        return False
+    if args.risk_trigger and row.get("risk_trigger") not in set(args.risk_trigger):
+        return False
+    if args.risk_px_tier and row.get("risk_px_tier") not in set(args.risk_px_tier):
+        return False
+    if args.triage_subbucket and row.get("triage_subbucket") not in set(args.triage_subbucket):
+        return False
+    return True
+
+
 def main() -> None:
     args = parse_args()
     buckets = tuple(args.bucket) if args.bucket else DEFAULT_BUCKETS
     rows = read_rows(Path(args.triage_csv))
-    selected = [row for row in rows if row.get("triage_bucket") in buckets]
+    selected = [row for row in rows if matches_filters(row, args, buckets)]
     if not selected:
         raise ValueError(f"No rows matched buckets: {', '.join(buckets)}")
 

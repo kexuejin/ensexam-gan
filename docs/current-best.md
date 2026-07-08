@@ -184,6 +184,30 @@ This writes a combined 29-page pack plus per-bucket packs for `auto_win_candidat
 templates. Treat the generated packs as local review evidence only; commit the reusable commands and
 scripts, not the generated images/CSVs.
 
+For the remaining 25 `ratio_noise_review` pages, the current subbucket split is:
+
+```text
+risk trigger: overerase_ratio=18, dark_damage_ratio=7
+absolute risk tier: low_abs_risk=9, moderate_abs_risk=8, high_abs_risk=8
+
+low/moderate absolute-risk queue: 17 pages
+high absolute-risk queue: 8 pages
+```
+
+Prioritize the 17 low/moderate absolute-risk pages before the 8 high-risk pages:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_target_quality_bucket_review_packs.py \
+  --triage-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage.csv \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/ratio_noise_low_moderate_review_packs \
+  --bucket ratio_noise_review \
+  --risk-px-tier low_abs_risk \
+  --risk-px-tier moderate_abs_risk \
+  --name ratio_noise_low_moderate \
+  --max-crops-per-row 4 \
+  --max-contact-crops 120
+```
+
 After reviewing the `auto_win_candidate` pack, apply that reviewed promotion as an overlay instead of
 mutating the scorer output:
 

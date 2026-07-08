@@ -68,6 +68,27 @@ def fnum(row: dict[str, str], field: str, default: float = 0.0) -> float:
     return value if math.isfinite(value) else default
 
 
+def risk_trigger(row: dict[str, str], args: argparse.Namespace) -> str:
+    overerase_high = fnum(row, "overerase_changed_ratio") > args.max_low_overerase_changed_ratio
+    dark_damage_high = fnum(row, "target_dark_damage_changed_ratio") > args.max_low_dark_damage_changed_ratio
+    if overerase_high and dark_damage_high:
+        return "overerase_and_dark_damage"
+    if overerase_high:
+        return "overerase_ratio"
+    if dark_damage_high:
+        return "dark_damage_ratio"
+    return "low_ratio_risk"
+
+
+def risk_px_tier(row: dict[str, str]) -> str:
+    risk_px = fnum(row, "overerase_hurt_px") + fnum(row, "target_dark_damage_px")
+    if risk_px <= 750:
+        return "low_abs_risk"
+    if risk_px <= 1500:
+        return "moderate_abs_risk"
+    return "high_abs_risk"
+
+
 def classify(row: dict[str, str], args: argparse.Namespace) -> tuple[str, str]:
     local_verdict = row.get("local_verdict", "")
     gain = fnum(row, "mean_error_gain")
@@ -141,6 +162,9 @@ def main() -> None:
         out["triage_bucket"] = bucket
         out["triage_reason"] = reason
         out["risk_px_total"] = fnum(quality, "overerase_hurt_px") + fnum(quality, "target_dark_damage_px")
+        out["risk_trigger"] = risk_trigger(quality, args)
+        out["risk_px_tier"] = risk_px_tier(quality)
+        out["triage_subbucket"] = f"{bucket}__{out['risk_trigger']}__{out['risk_px_tier']}"
         triage_rows.append(out)
 
     triage_rows.sort(
@@ -153,6 +177,7 @@ def main() -> None:
         )
     )
     counts = Counter(str(row["triage_bucket"]) for row in triage_rows)
+    subbucket_counts = Counter(str(row["triage_subbucket"]) for row in triage_rows)
     local_counts = Counter(str(row.get("local_verdict", "")) for row in triage_rows)
     summary = {
         "name": args.name,
@@ -160,6 +185,7 @@ def main() -> None:
         "quality_rows": len(quality_rows),
         "borderline_rows": len(triage_rows),
         "bucket_counts": dict(sorted(counts.items())),
+        "subbucket_counts": dict(sorted(subbucket_counts.items())),
         "local_counts": dict(sorted(local_counts.items())),
         "thresholds": {
             "min_strong_gain": args.min_strong_gain,
