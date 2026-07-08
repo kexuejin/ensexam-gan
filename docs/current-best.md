@@ -184,6 +184,30 @@ This writes a combined 29-page pack plus per-bucket packs for `auto_win_candidat
 templates. Treat the generated packs as local review evidence only; commit the reusable commands and
 scripts, not the generated images/CSVs.
 
+After reviewing the `auto_win_candidate` pack, apply that reviewed promotion as an overlay instead of
+mutating the scorer output:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/apply_target_quality_promotions.py \
+  --quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2.csv \
+  --triage-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage.csv \
+  --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_promotions_20260708/full435_target_quality_v2_auto_win_promoted.csv \
+  --summary-json outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_promotions_20260708/full435_target_quality_v2_auto_win_promoted_summary.json \
+  --promote-bucket auto_win_candidate \
+  --promoted-label slight_win \
+  --expect-promoted 4 \
+  --promotion-note "local page/crop review pack auto-win promotion"
+```
+
+Then re-summarize the selector with the promoted quality CSV. Current verified result:
+
+```text
+zero_reject_veto_112_zero_target_loss with auto_win_candidate promotion:
+  selected=112/435 selected_coverage=25.75%
+  target_confirmed_wins=58/435 target_confirmed_win_pct=13.33%
+  target_borderline=54 target_losses=0
+```
+
 Key comparison points:
 
 ```text
@@ -265,6 +289,8 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   target_quality_borderline_triage_20260708/high_priority_review_packs/auto_win_candidate/crop_pack/contact_sheet.png
   target_quality_borderline_triage_20260708/high_priority_review_packs/ratio_noise_review/page_pack/contact_sheet.png
   target_quality_borderline_triage_20260708/high_priority_review_packs/ratio_noise_review/crop_pack/contact_sheet.png
+  target_quality_promotions_20260708/full435_target_quality_v2_auto_win_promoted_summary.json
+  target_quality_promotions_20260708/selector_target_quality_auto_win_promoted_summary.json
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
