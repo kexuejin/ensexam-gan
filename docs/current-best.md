@@ -140,6 +140,34 @@ The `112_zero_target_loss` variant is the immediate quality improvement over `12
 13 selected pages that the target-aware scorer flags as loss-risk while preserving all 54
 target-confirmed wins. The remaining 58 borderline pages are the next review/calibration target.
 
+To make that borderline pass reproducible, bucket the 58 pages with:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/triage_target_quality_borderline.py \
+  --quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_scoring_20260708/full435_target_quality_v2.csv \
+  --selected-csv outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_112_zero_target_loss_selected.csv \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708 \
+  --name zero_reject_veto_112_borderline_triage
+```
+
+Current borderline triage:
+
+```text
+auto_win_candidate: 4
+ratio_noise_review: 25
+accept_weak_win_review: 17
+manual_review_strong_metric: 1
+manual_review_mixed_metric: 9
+keep_borderline: 2
+
+local accept/review among borderline: 48/10
+```
+
+The first high-leverage quality pass is not more selector threshold search. It is reviewing the
+4 `auto_win_candidate` pages plus the 25 `ratio_noise_review` pages where local verdicts and target
+metrics are positive but conservative changed-area risk ratios kept them borderline. Confirmed pages
+can then be promoted into durable quality labels or a reviewed whitelist.
+
 Key comparison points:
 
 ```text
@@ -214,6 +242,7 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   target_quality_scoring_20260708/selector_target_quality_summary.csv
   zero_reject_veto_54_target_confirmed_wins_summary.json
   zero_reject_veto_112_zero_target_loss_summary.json
+  target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage_summary.json
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
