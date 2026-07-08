@@ -84,6 +84,33 @@ additional labels. Page and crop review for `scut115/228.jpg` did not show obvio
 regression, but the practical default remains `zero_reject_veto_125_accept_clean` until the 23
 review pages are labeled or candidate generation improves.
 
+To speed up that labeling loop, use the reusable queue triage helper:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/triage_selector_label_queue.py \
+  --queue-csv outputs/balanced007_ranker_expansion_source_eval_20260708/labeling_queue_post125_coverage_20260708/labeling_queue.csv \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/labeling_queue_post125_coverage_20260708/auto_triage \
+  --accept-verdict-promotes
+```
+
+Current triage on the 53-page labeling queue:
+
+```text
+promote_candidate: 16
+borderline_review: 26
+keep_review: 11
+reject_candidate: 0
+
+auto-triage promote candidate:
+  selected=137/435 coverage=31.49% accept/review/reject=110/27/0 metric_losses=0
+  added pages beyond zero_reject_veto_125_accept_clean: 12
+```
+
+The auto-triage `137` candidate is not a product default. It is a faster review target: inspect the
+16 promote candidates and 26 borderline pages, then convert confirmed pages into durable visual
+labels or a reviewed whitelist. Keep `zero_reject_veto_125_accept_clean` as the practical default
+until that confirmation step is complete.
+
 Generated evidence is intentionally local-only and should not be committed:
 
 ```text
@@ -95,6 +122,7 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   zero_reject_veto_126_deployable_single_accept_summary.json
   zero_reject_veto_126_deployable_single_accept_page_review/contact_sheet.png
   zero_reject_veto_126_deployable_single_accept_crop_review/contact_sheet.png
+  zero_reject_veto_auto_triage_promote_candidate_summary.json
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
