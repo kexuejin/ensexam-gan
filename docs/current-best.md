@@ -232,6 +232,23 @@ zero_reject_veto_112_zero_target_loss with auto_win_candidate promotion:
   target_borderline=54 target_losses=0
 ```
 
+For follow-on `ratio_noise_review` promotion, use explicit page whitelists rather than promoting an
+entire bucket:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/apply_target_quality_promotions.py \
+  --quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_promotions_20260708/full435_target_quality_v2_auto_win_promoted.csv \
+  --triage-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage.csv \
+  --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_promotions_20260708/full435_target_quality_v2_reviewed_ratio_noise_promoted.csv \
+  --promote-files-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/ratio_noise_low_moderate_review_packs/reviewed-promotions.csv \
+  --promoted-label slight_win \
+  --expect-promoted <reviewed_page_count> \
+  --promotion-note "reviewed ratio-noise page promotion"
+```
+
+This keeps each additional promotion tied to a reviewed page list and prevents accidental promotion
+of all 25 `ratio_noise_review` pages.
+
 Key comparison points:
 
 ```text

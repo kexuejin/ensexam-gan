@@ -26,10 +26,21 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-csv", required=True)
     parser.add_argument("--summary-json", default="")
     parser.add_argument(
+        "--promote-file",
+        action="append",
+        default=[],
+        help="Explicit split/file page to promote, e.g. train160/1.jpg. May be repeated.",
+    )
+    parser.add_argument(
+        "--promote-files-csv",
+        default="",
+        help="Optional CSV containing split/file columns or a file column with split/file values.",
+    )
+    parser.add_argument(
         "--promote-bucket",
         action="append",
         default=[],
-        help="Triage bucket to promote. May be repeated. Defaults to auto_win_candidate.",
+        help="Triage bucket to promote. May be repeated. Defaults to auto_win_candidate unless explicit files are provided.",
     )
     parser.add_argument("--promoted-label", default="slight_win", choices=QUALITY_LABELS)
     parser.add_argument("--require-local-verdict", default="accept")
@@ -67,12 +78,32 @@ def label_counts(rows: list[dict[str, str]]) -> dict[str, int]:
     return {label: counts.get(label, 0) for label in QUALITY_LABELS}
 
 
+def read_promote_files(path_text: str) -> set[str]:
+    if not path_text:
+        return set()
+    rows = read_rows(Path(path_text))
+    files: set[str] = set()
+    for row in rows:
+        if row.get("split") and row.get("file"):
+            files.add(f"{row['split']}/{row['file']}")
+        elif row.get("file", "").count("/") == 1:
+            files.add(row["file"])
+        elif row.get("page", "").count("/") == 1:
+            files.add(row["page"])
+    return files
+
+
 def main() -> None:
     args = parse_args()
-    promote_buckets = set(args.promote_bucket or ["auto_win_candidate"])
+    promote_files = set(args.promote_file) | read_promote_files(args.promote_files_csv)
+    promote_buckets = set(args.promote_bucket or ([] if promote_files else ["auto_win_candidate"]))
     quality_rows = read_rows(Path(args.quality_csv))
     triage_rows = read_rows(Path(args.triage_csv))
-    triage_by_key = {key(row): row for row in triage_rows if row.get("triage_bucket") in promote_buckets}
+    triage_by_key = {
+        key(row): row
+        for row in triage_rows
+        if row.get("triage_bucket") in promote_buckets or f"{row['split']}/{row['file']}" in promote_files
+    }
 
     before_counts = label_counts(quality_rows)
     promoted: list[str] = []
@@ -125,6 +156,7 @@ def main() -> None:
         "triage_csv": args.triage_csv,
         "output_csv": str(output_csv),
         "promote_buckets": sorted(promote_buckets),
+        "promote_files": sorted(promote_files),
         "promoted_label": args.promoted_label,
         "promoted_count": len(promoted),
         "promoted_files": promoted,
