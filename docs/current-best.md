@@ -22,8 +22,7 @@ The previous one-day full-training model is reusable in this new project through
 
 ## Current Productization Gap
 
-The recent union interval selector is the best current selector hypothesis, but it should not drive
-more threshold-only work:
+The recent union interval selector was safe but too narrow:
 
 ```text
 validated pages: SCUT115 + holdout40 + train160 + next120 = 435
@@ -32,10 +31,79 @@ new next120 coverage: 0/120
 status: safe and narrow, not broadly useful
 ```
 
+The latest selector-expansion pass materially improves coverage while preserving the current hard
+safety constraints:
+
+```text
+validated pages: SCUT115 + holdout40 + train160 + next120 = 435
+current clean high-coverage candidate: zero_reject_veto_125_accept_clean
+selected pages: 125/435
+coverage: 28.74%
+accept/review/reject: 102/23/0
+metric losses: 0
+residual_gain: 1.519751211
+overerase_delta: -0.003181883
+split coverage: holdout40=9, next120=41, scut115=22, train160=53
+```
+
+`zero_reject_veto_125_accept_clean` is the current best high-coverage selector candidate. It is built
+from the prior zero-reject veto stack plus deployable page-feature/ranker buckets, then a final
+accept-only union after `zero_reject_veto_121`. The final post-121 accept-only search found four
+additional accept pages and then exhausted: after selecting 125 pages, the remaining 310 pages had no
+new `accept`-only, zero-reject, zero-metric-loss deployable increment in the searched ranker/feature
+space.
+
+Key comparison points:
+
+```text
+zero_reject_veto_84:
+  selected=84/435 coverage=19.31% accept/review/reject=79/5/0 metric_losses=0
+
+zero_reject_veto_108:
+  selected=108/435 coverage=24.83% accept/review/reject=95/13/0 metric_losses=0
+
+zero_reject_veto_121:
+  selected=121/435 coverage=27.82% accept/review/reject=98/23/0 metric_losses=0
+
+zero_reject_veto_125_accept_clean:
+  selected=125/435 coverage=28.74% accept/review/reject=102/23/0 metric_losses=0
+```
+
+Post-125 coverage search found one additional deployable single-page accept rule:
+
+```text
+zero_reject_veto_126_deployable_single_accept:
+  selected=126/435 coverage=28.97% accept/review/reject=103/23/0 metric_losses=0
+  added=scut115/228.jpg
+  rule=active_edge_mean >= 636.286865234 AND score_accept_lr0.005_l20.01 <= 0.095072925224
+```
+
+This `126` candidate is useful as a measured upper-bound probe, not as the cleaner default: the
+increment is only one page, and the rule is too narrow to treat as a robust product selector without
+additional labels. Page and crop review for `scut115/228.jpg` did not show obvious visible
+regression, but the practical default remains `zero_reject_veto_125_accept_clean` until the 23
+review pages are labeled or candidate generation improves.
+
+Generated evidence is intentionally local-only and should not be committed:
+
+```text
+outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/
+  zero_reject_veto_125_accept_clean_selected.csv
+  zero_reject_veto_125_accept_clean_summary.json
+  zero_reject_veto_125_accept_clean_post121_page_review/contact_sheet.png
+  zero_reject_veto_125_accept_clean_post121_crop_review/contact_sheet.png
+  zero_reject_veto_126_deployable_single_accept_summary.json
+  zero_reject_veto_126_deployable_single_accept_page_review/contact_sheet.png
+  zero_reject_veto_126_deployable_single_accept_crop_review/contact_sheet.png
+```
+
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
 without visible regressions." Repeating one-step probes, hand-tuned intervals, or selector replay on
 the same candidate family is low-leverage unless it is tied to a new failure bucket, a new training
-objective, or a labeled page-level acceptance set.
+objective, or a labeled page-level acceptance set. Further selector work should either label the 23
+review pages or improve candidate generation; post-125 accept-only search is exhausted, and the wider
+deployable feature/ranker search found only a single-page `126` upper-bound increment for the current
+feature family.
 
 ## Stop Rule For Micro-Tuning
 
