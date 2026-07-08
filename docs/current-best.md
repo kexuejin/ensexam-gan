@@ -168,6 +168,22 @@ The first high-leverage quality pass is not more selector threshold search. It i
 metrics are positive but conservative changed-area risk ratios kept them borderline. Confirmed pages
 can then be promoted into durable quality labels or a reviewed whitelist.
 
+Build reproducible page/crop review packs for those 29 high-priority pages with:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_target_quality_bucket_review_packs.py \
+  --triage-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage.csv \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/high_priority_review_packs \
+  --name high_priority \
+  --max-crops-per-row 4 \
+  --max-contact-crops 120
+```
+
+This writes a combined 29-page pack plus per-bucket packs for `auto_win_candidate` and
+`ratio_noise_review`, including page-level contact sheets, crop-level contact sheets, and crop label
+templates. Treat the generated packs as local review evidence only; commit the reusable commands and
+scripts, not the generated images/CSVs.
+
 Key comparison points:
 
 ```text
@@ -243,6 +259,12 @@ outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_select
   zero_reject_veto_54_target_confirmed_wins_summary.json
   zero_reject_veto_112_zero_target_loss_summary.json
   target_quality_borderline_triage_20260708/zero_reject_veto_112_borderline_triage_summary.json
+  target_quality_borderline_triage_20260708/high_priority_review_packs/high_priority_29/page_pack/contact_sheet.png
+  target_quality_borderline_triage_20260708/high_priority_review_packs/high_priority_29/crop_pack/contact_sheet.png
+  target_quality_borderline_triage_20260708/high_priority_review_packs/auto_win_candidate/page_pack/contact_sheet.png
+  target_quality_borderline_triage_20260708/high_priority_review_packs/auto_win_candidate/crop_pack/contact_sheet.png
+  target_quality_borderline_triage_20260708/high_priority_review_packs/ratio_noise_review/page_pack/contact_sheet.png
+  target_quality_borderline_triage_20260708/high_priority_review_packs/ratio_noise_review/crop_pack/contact_sheet.png
 ```
 
 This means the project has moved past "find a safe tiny gate" and into "increase reliable coverage
