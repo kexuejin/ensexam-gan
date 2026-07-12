@@ -58,6 +58,22 @@ The command writes full queues plus `target_borderline_batch01.csv`,
 to the existing page/crop review-pack builders. The generated `outputs/` files are local review
 evidence and should not be committed.
 
+After manual labels are filled, merge them into overlay CSVs with:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/apply_quality_goal_review_labels.py \
+  --review-csv outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_YYYYMMDD/combined_next_review_batch01.csv \
+  --output-target-quality-csv outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_YYYYMMDD/full435_target_quality_v2_reviewed.csv \
+  --output-post125-csv outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_YYYYMMDD/auto_triage_labels_reviewed.csv \
+  --summary-json outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_YYYYMMDD/applied_review_labels_summary.json
+```
+
+Blank labels intentionally apply no changes. `confirm_win` moves target-borderline rows to a
+reviewed win label, `reject_selector_page` / `repair_needed` mark reviewed target losses, and
+post-125 labels are copied back only from explicit nonblank decisions. Re-run
+`summarize_selector_target_quality.py` and `report_quality_goal_status.py` against those overlay
+CSVs before any selector promotion.
+
 ## Sustainable Loop
 
 1. Run `report_quality_goal_status.py` and identify the first failing gate.
