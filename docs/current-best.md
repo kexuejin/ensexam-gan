@@ -344,6 +344,27 @@ The auto-triage `137` candidate is not a product default. It is a faster review 
 labels or a reviewed whitelist. Keep `zero_reject_veto_125_accept_clean` as the practical default
 until that confirmation step is complete.
 
+To apply reviewed post-125 label-queue promotions, mark only visually confirmed rows in the
+triage CSV with `manual_label=promote` (or another positive value such as `accept`, `approve`, or
+`yes`) and use the reviewed overlay helper. Blank rows and negative labels promote nothing, and
+new additions still must pass `metric_safe`, `gain > 0`, and `over_delta <= 0` guards:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/apply_selector_label_queue_promotions.py \
+  --base-selected-csv outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_selected.csv \
+  --reviewed-labels-csv outputs/balanced007_ranker_expansion_source_eval_20260708/labeling_queue_post125_coverage_20260708/auto_triage/promote_candidate.csv \
+  --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_reviewed_post125_selected.csv \
+  --summary-json outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_reviewed_post125_summary.json \
+  --expect-added <reviewed_new_page_count> \
+  --promotion-note "reviewed post-125 selector label promotion"
+```
+
+By default the helper only allows rows with `auto_triage_label=promote_candidate`; if a borderline
+page passes visual review, add `--require-auto-triage-label borderline_review` explicitly. Rows from
+`current125_review` may already be in the base `125` selector, so they are summarized as
+`already_selected_count` and do not increase coverage. Treat every generated reviewed selector as a
+local candidate until it is materialized and rechecked with page/crop review packs.
+
 Generated evidence is intentionally local-only and should not be committed:
 
 ```text
