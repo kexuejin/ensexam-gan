@@ -17,6 +17,7 @@ from pathlib import Path
 
 QUALITY_LABELS = ("clear_win", "slight_win", "noop", "borderline", "slight_loss", "clear_loss")
 LOSS_LABELS = {"clear_loss", "slight_loss"}
+POSITIVE_REVIEW_DECISIONS = ("promote", "accept", "approve", "approved", "yes", "y", "true", "1")
 
 
 def parse_args() -> argparse.Namespace:
@@ -35,6 +36,15 @@ def parse_args() -> argparse.Namespace:
         "--promote-files-csv",
         default="",
         help="Optional CSV containing split/file columns or a file column with split/file values.",
+    )
+    parser.add_argument(
+        "--accepted-review-decision",
+        action="append",
+        default=[],
+        help=(
+            "Accepted review_decision value in --promote-files-csv. May be repeated. "
+            "Defaults to promote/accept/approve/approved/yes/y/true/1 when the column exists."
+        ),
     )
     parser.add_argument(
         "--promote-bucket",
@@ -78,25 +88,63 @@ def label_counts(rows: list[dict[str, str]]) -> dict[str, int]:
     return {label: counts.get(label, 0) for label in QUALITY_LABELS}
 
 
-def read_promote_files(path_text: str) -> set[str]:
+def normalize_decision(value: str) -> str:
+    return value.strip().lower().replace(" ", "_")
+
+
+def promote_row_page(row: dict[str, str]) -> str:
+    if row.get("split") and row.get("file"):
+        return f"{row['split']}/{row['file']}"
+    if row.get("file", "").count("/") == 1:
+        return row["file"]
+    if row.get("page", "").count("/") == 1:
+        return row["page"]
+    return ""
+
+
+def read_promote_files(
+    path_text: str,
+    accepted_review_decisions: set[str],
+) -> tuple[set[str], list[dict[str, str]]]:
     if not path_text:
-        return set()
+        return set(), []
     rows = read_rows(Path(path_text))
     files: set[str] = set()
+    skipped: list[dict[str, str]] = []
     for row in rows:
-        if row.get("split") and row.get("file"):
-            files.add(f"{row['split']}/{row['file']}")
-        elif row.get("file", "").count("/") == 1:
-            files.add(row["file"])
-        elif row.get("page", "").count("/") == 1:
-            files.add(row["page"])
-    return files
+        page = promote_row_page(row)
+        if not page:
+            skipped.append({"file": "", "review_decision": row.get("review_decision", ""), "skip_reason": "missing_page"})
+            continue
+        if "review_decision" in row:
+            decision = normalize_decision(row.get("review_decision", ""))
+            if not decision:
+                skipped.append({"file": page, "review_decision": "", "skip_reason": "missing_review_decision"})
+                continue
+            if decision not in accepted_review_decisions:
+                skipped.append({
+                    "file": page,
+                    "review_decision": row.get("review_decision", ""),
+                    "skip_reason": "review_decision_not_accepted",
+                })
+                continue
+        files.add(page)
+    return files, skipped
 
 
 def main() -> None:
     args = parse_args()
-    promote_files = set(args.promote_file) | read_promote_files(args.promote_files_csv)
-    promote_buckets = set(args.promote_bucket or ([] if promote_files else ["auto_win_candidate"]))
+    accepted_review_decisions = {
+        normalize_decision(value)
+        for value in (args.accepted_review_decision or list(POSITIVE_REVIEW_DECISIONS))
+    }
+    csv_promote_files, skipped_promote_file_rows = read_promote_files(
+        args.promote_files_csv,
+        accepted_review_decisions,
+    )
+    explicit_file_source = bool(args.promote_file or args.promote_files_csv)
+    promote_files = set(args.promote_file) | csv_promote_files
+    promote_buckets = set(args.promote_bucket or ([] if explicit_file_source else ["auto_win_candidate"]))
     quality_rows = read_rows(Path(args.quality_csv))
     triage_rows = read_rows(Path(args.triage_csv))
     triage_by_key = {
@@ -157,6 +205,8 @@ def main() -> None:
         "output_csv": str(output_csv),
         "promote_buckets": sorted(promote_buckets),
         "promote_files": sorted(promote_files),
+        "accepted_review_decisions": sorted(accepted_review_decisions),
+        "skipped_promote_file_rows": skipped_promote_file_rows,
         "promoted_label": args.promoted_label,
         "promoted_count": len(promoted),
         "promoted_files": promoted,

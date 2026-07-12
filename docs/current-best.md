@@ -239,9 +239,11 @@ $ENSEXAM_PYTHON scripts/analysis/build_reviewed_promotion_template.py \
   --output-csv outputs/balanced007_ranker_expansion_source_eval_20260708/target_quality_borderline_triage_20260708/ratio_noise_low_moderate_review_packs/reviewed-promotions-template.csv
 ```
 
-This template ranks pages for review but leaves `review_decision` blank. Only copy reviewed rows into
-the promotion whitelist after page/crop inspection confirms no visible printed-text, paper-tone, or
-content-loss regression.
+This template ranks pages for review but leaves `review_decision` blank. Mark reviewed rows with a
+positive decision such as `promote`, `accept`, `approve`, or `yes`; blank or negative decisions are
+ignored by `apply_target_quality_promotions.py`. This prevents accidentally promoting the whole
+blank template. Only promote pages after page/crop inspection confirms no visible printed-text,
+paper-tone, or content-loss regression.
 
 After reviewing the `auto_win_candidate` pack, apply that reviewed promotion as an overlay instead of
 mutating the scorer output:
