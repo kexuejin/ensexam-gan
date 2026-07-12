@@ -168,6 +168,29 @@ The first high-leverage quality pass is not more selector threshold search. It i
 metrics are positive but conservative changed-area risk ratios kept them borderline. Confirmed pages
 can then be promoted into durable quality labels or a reviewed whitelist.
 
+To materialize the reviewed fixed selector directly from the selected-pages CSV, use
+`materialize_fixed_page_selector.py --selected-csv` instead of re-expressing the selector as one
+feature rule. This preserves per-row candidate prediction paths and metric-safe labels from the
+selector artifact:
+
+```bash
+$ENSEXAM_PYTHON scripts/infer/materialize_fixed_page_selector.py \
+  --selected-csv outputs/balanced007_ranker_expansion_source_eval_20260708/final_candidate_selectors/zero_reject_veto_125_accept_clean_selected.csv \
+  --split holdout40:outputs/selector_features_residual_delta_holdout40_20260707/page_features.csv:outputs/holdout40_second_stage_nearworst_safe_step1_t98_20260705/metrics.csv:outputs/eval_holdout40_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split next120:outputs/selector_features_residual_delta_next120_20260707/page_features.csv:outputs/scut_next120_nonoverlap_second_stage_baseline_20260706/metrics.csv:outputs/eval_next120_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split scut115:outputs/selector_features_residual_delta_scut115_20260707/page_features.csv:outputs/scut_test115_second_stage_baseline_20260705/metrics.csv:outputs/eval_scut115_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --split train160:outputs/selector_features_residual_delta_train160_20260707/page_features.csv:outputs/scut_train160_nonholdout_second_stage_baseline_20260706/metrics.csv:outputs/eval_train160_residual_delta_balanced_scale007_step80_base12_delta2_20260707/metrics.csv \
+  --output-dir outputs/materialized_zero_reject_veto_125_accept_clean_selected_YYYYMMDD
+```
+
+Verified selected-CSV materialization smoke:
+
+```text
+rows=435 selected=125 selected_wins=125 selected_losses=0
+pred files: holdout40=40 next120=120 scut115=115 train160=160
+source_mismatch=0 metric_mismatch=0 missing_outputs=0
+```
+
 Build reproducible page/crop review packs for those 29 high-priority pages with:
 
 ```bash
