@@ -44,6 +44,20 @@ $ENSEXAM_PYTHON scripts/analysis/report_quality_goal_status.py \
 
 Generated `outputs/` status files are local evidence and should not be committed. Commit only reusable scripts, docs, or consolidated decision records.
 
+## Review Queue Command
+
+Build the next prioritized target-borderline and post-125 review batches with:
+
+```bash
+$ENSEXAM_PYTHON scripts/analysis/build_quality_goal_review_queue.py \
+  --output-dir outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_YYYYMMDD
+```
+
+The command writes full queues plus `target_borderline_batch01.csv`,
+`post125_unresolved_batch01.csv`, and `combined_next_review_batch01.csv`. Use those CSVs as inputs
+to the existing page/crop review-pack builders. The generated `outputs/` files are local review
+evidence and should not be committed.
+
 ## Sustainable Loop
 
 1. Run `report_quality_goal_status.py` and identify the first failing gate.
