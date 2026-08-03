@@ -23,6 +23,62 @@ base threshold fallback: 70
 dilation: 0
 ```
 
+## Explicit-Domain Dual-Checkpoint Research Harness
+
+This is a caller-routed research surface, not an automatic router and not a
+product promotion. The caller must provide a strict UTF-8 CSV with exactly
+`image_path,domain`; the immutable mapping is:
+
+```text
+default -> artifacts/current-primary/micro_region_probe_step0001.pth
+unknown -> artifacts/current-primary/micro_region_probe_step0001.pth
+hw5k    -> Candidate 5 epoch_1.pth (requires --ack-research-specialist)
+```
+
+Registered entry point and artifact identities:
+
+```text
+script: scripts/infer/run_explicit_domain_dual_checkpoint.py
+
+default config:
+  artifacts/current-primary/config.yaml
+  sha256=8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e
+default checkpoint:
+  artifacts/current-primary/micro_region_probe_step0001.pth
+  sha256=e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae
+
+hw5k research config:
+  artifacts/trials/hw5k-mixed-scut130-hw5k130-50pct-guard-jointtail-lite-step6400-respress-bs4-20260730/ensexam/20260801_183409/config.yaml
+  sha256=c0ab5cc2a96dcaffa86dc75754c2a9bb9bfdc741c8ff7319e93bf8e2abc8adf8
+hw5k research checkpoint:
+  artifacts/trials/hw5k-mixed-scut130-hw5k130-50pct-guard-jointtail-lite-step6400-respress-bs4-20260730/ensexam/20260801_183409/epoch_1.pth
+  sha256=8da25117dd883f95059b6d7067e3dc3580da11339de365ef904f711db4a1f490
+```
+
+Command template:
+
+```bash
+source .env
+$ENSEXAM_PYTHON scripts/infer/run_explicit_domain_dual_checkpoint.py \
+  --manifest-csv /absolute/path/to/caller-domain.csv \
+  --output-dir outputs/explicit_domain_dual_checkpoint_<run-id> \
+  --ack-research-specialist \
+  --device auto
+```
+
+The acknowledgement is required only when an `hw5k` row is present. Both
+non-empty branches run strictly serially with the frozen current-primary
+inference gate above. The harness fails closed on invalid or missing domains,
+artifact drift, partial branch output, provenance mismatch, and prediction SHA
+mismatch; it never reads labels and never silently falls back between branches.
+
+Candidate 5 remains `research_only/gate_qualified_nonpromotion`. Product use of
+an explicit HW5K checkpoint requires a separate preregistered domain gate,
+source-risk report, caller contract, contamination audit, and fresh unseen
+HW5K-domain blind set. Automatic routing remains `not_authorized` and requires
+an independent routing contract. See
+`docs/decisions/2026-08-03-explicit-domain-dual-checkpoint-research-harness.md`.
+
 ## Full-Training Base Checkpoint
 
 The previous one-day full-training run is directly reusable in this fork. Do not repeat that full training by default.
