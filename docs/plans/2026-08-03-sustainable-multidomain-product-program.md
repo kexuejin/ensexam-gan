@@ -171,6 +171,27 @@ Bound:
 the sole remaining prerequisite before M3. `CONTRACT_FAIL` closes Candidate 5's
 specialist-promotion line without activating a router.
 
+M2 completed on 2026-08-03 as `CONTRACT_PASS`. The frozen contract is
+`docs/plans/2026-08-03-candidate5-specialist-product-contract.md`; the decision
+record is
+`docs/decisions/2026-08-03-candidate5-specialist-product-contract-freeze.md`.
+
+## Current Milestone: M2I Paired Blind Comparison Protocol
+
+Implement the smallest reusable protocol that proves both frozen checkpoints run
+source-only on the same registered samples before either prediction set is
+scored, verifies both completed runs and artifact identities, then applies the
+frozen six-metric gate including `>=20%` mean-residual improvement.
+
+Bound:
+
+- compose the existing blind registration, runbook, scoring, and completion
+  verification surfaces; do not create a parallel blind framework;
+- implementation and tests only, using synthetic fixtures and existing metrics;
+- no dataset download, model training, model inference, image review, or change
+  to either frozen checkpoint;
+- terminal is `PROTOCOL_READY` or `PROTOCOL_REJECTED`.
+
 ## Model Routing
 
 - `gpt-5.6-sol` with `xhigh`: program/milestone design, claim boundaries,
