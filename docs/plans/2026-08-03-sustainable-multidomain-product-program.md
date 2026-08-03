@@ -1,270 +1,243 @@
 # Sustainable Multi-Domain Product Program
 
-## Status
+## Status And Purpose
 
-Active program charter. This document is the durable north star and transition
-contract; it is not itself a never-ending experiment. Exactly one bounded
-milestone is active at a time.
+This document is the durable north star and transition registry for multi-domain
+product work. It is not an always-active runtime Goal. A runtime Goal contains
+exactly one bounded executable stage and closes when that stage reaches a
+declared terminal.
+
+The sole active stage is currently **G1 / M2I Paired Blind Protocol Closeout**.
+M1 and M2 are completed history. When G1 closes, the program must either open a
+new Goal whose entry conditions are already satisfied or stop running. It must
+not keep an idle Goal active while waiting for external evidence.
+
+Program states are:
+
+| State | Meaning |
+| --- | --- |
+| `active_stage` | Exactly one bounded Goal has runnable, locally authorized work. |
+| `parked_external_prerequisite` | No bounded Goal is active; a declared external event may reopen the program. |
+| `complete` | A release-eligible path passed its final promotion decision. |
+| `closed_no_viable_path` | Every authorized path has reached a kill terminal. |
+
+`parked_external_prerequisite` is visible program state, not an instruction to
+keep a runtime Goal alive and not authorization to invent another experiment.
 
 ## Requirements Summary
 
 Deliver a release-eligible handwriting-removal system for caller-known document
-domains while preserving the verified default behavior for unknown inputs.
-Progress must be evidence-driven and reproducible:
+domains while preserving the verified default behavior for unknown inputs:
 
 - keep `artifacts/current-primary` as the default until another product path
-  passes all of its preregistered gates;
-- do not reuse a consumed blind set for later model selection or promotion;
-- prefer the already implemented explicit caller-domain boundary over automatic
-  routing;
-- do not start broad retraining, scalar threshold rescue, or router work merely
-  because a milestone fails;
-- every experiment must either reduce a named uncertainty or kill a named path.
+  passes all preregistered gates;
+- do not reuse a consumed blind set for model selection or promotion;
+- keep Candidate 5 `research_only/gate_qualified_nonpromotion` until a fresh
+  blind comparison and end-to-end validation both pass;
+- prefer the implemented explicit caller-domain boundary over automatic routing;
+- do not start broad retraining, scalar threshold rescue, or router work because
+  a stage fails or an external prerequisite is absent;
+- require every experiment to reduce one named uncertainty or kill one named
+  path.
 
-The current research harness already proves strict caller-provided routing and
-artifact integrity, but it does not prove product safety
+The explicit-domain research harness proves caller-provided dispatch and
+artifact integrity, not product safety
 (`docs/decisions/2026-08-03-explicit-domain-dual-checkpoint-research-harness.md:99`).
 Candidate 5 is not a universal replacement because it failed both SCUT checks
-(`docs/decisions/2026-08-02-hw5k-mixed-candidate5-gate-b-rejection.md:3`).
-The official HW5K test cannot supply a new promotion claim because its one blind
-use is complete (`docs/decisions/2026-07-26-hw5k-final-blind-current-primary.md:56`).
+(`docs/decisions/2026-08-02-hw5k-mixed-candidate5-gate-b-rejection.md:3`). The
+official HW5K test cannot support a new promotion claim because its single blind
+use is complete
+(`docs/decisions/2026-07-26-hw5k-final-blind-current-primary.md:56`).
 
-## Program Definition Of Done
+## Program Completion And Closure
 
-The program completes only when one product path is release-eligible:
+The program becomes `complete` only when one product path is release-eligible:
 
-1. **Explicit specialist path:** caller-domain contract, HW5K-domain development
+1. **Explicit specialist path:** caller-domain contract, domain-development
    gate, source-risk report, contamination audit, fresh unseen HW5K-like blind
-   evaluation, and end-to-end system validation all pass with frozen artifacts.
-2. **Universal path:** a materially new, preregistered mechanism passes the
-   HW5K-domain gate, all SCUT/source guards, a fresh unseen blind evaluation, and
-   end-to-end system validation.
+   evaluation, and end-to-end explicit-domain system validation all pass with
+   frozen artifacts.
+2. **Universal path:** a materially new, separately preregistered mechanism
+   passes the HW5K-domain gate, all SCUT/source guards, a fresh unseen blind
+   evaluation, and end-to-end system validation.
 
-For either path, the final decision record must identify exact code/config/model
-hashes, input custody, fixed thresholds, metric outputs, failure policy, and
-rollback target. `artifacts/current-primary` is not replaced until that record is
-approved.
+The final decision must identify exact code/config/model hashes, input custody,
+fixed thresholds, metric outputs, failure policy, and rollback target.
+`artifacts/current-primary` is not replaced before that decision.
 
-If neither path can proceed because an external prerequisite is unavailable,
-the program is `blocked_external_prerequisite`, not complete and not silently
-redirected to an automatic router.
+If no runnable stage remains because fresh external evidence is unavailable,
+the program becomes `parked_external_prerequisite`. If every authorized path is
+killed, it becomes `closed_no_viable_path`. Neither state silently redirects to
+automatic routing.
 
-## Rolling Milestone Contract
+## Bounded Goal Contract
 
-Every active milestone must declare:
+Every active Goal must declare:
 
 1. one decision question;
-2. frozen eligible inputs and prohibited inputs;
-3. one reproducible evidence artifact;
-4. testable pass, kill, and prerequisite-needed outcomes;
-5. the only authorized successor for each outcome;
+2. frozen eligible and prohibited inputs;
+3. one reproducible evidence bundle;
+4. testable pass, kill, and prerequisite-needed outcomes where applicable;
+5. the only authorized successor for every terminal;
 6. a time, compute, or attempt bound;
-7. the model-routing lane used for decision versus execution.
+7. the Sol decision lane and Luna execution lane.
 
-Milestone statuses are:
-
-- `pass`: its claim is proved and the declared successor may start;
-- `kill`: the tested path is closed by evidence;
-- `prerequisite_needed`: the claim is not testable yet; this is not a model
-  failure and may only transition to a prerequisite-acquisition milestone.
-
-No milestone may remain active merely to keep trying variants. A failed gate
-closes the declared attempt; a new attempt requires a different mechanism and a
-new preregistration.
+An active Goal cannot absorb its successor, wait indefinitely for an entry
+event, or remain open to try variants. A different mechanism requires a new
+preregistration and a new Goal.
 
 ## Fork / Kill Graph
 
 ```text
-M0 evidence admission (complete: prerequisite_needed)
-  official HW5K test already consumed
-  ├─> M1 fresh blind source + custody admission
-  └─> M2 freeze Candidate 5 specialist promotion protocol
+COMPLETED HISTORY
+M0 evidence admission
+  -> prerequisite_needed: official HW5K test already consumed
 
-M1 ADMITTED ───────────────────────────────┐
-M1 NOT_FOUND_WITHIN_BOUND                  │
-  -> park data lane as external prerequisite
-M1 INVALID_SOURCE                         │
-  -> try next preregistered source within │
-     the same bounded shortlist           │
-                                          ├─> M3 one-shot frozen specialist eval
-M2 CONTRACT_PASS ─────────────────────────┘    (requires both M1 + M2)
-M2 CONTRACT_FAIL
-  -> kill Candidate 5 promotion line; do not infer
+M1 fresh source/custody admission
+  -> NOT_FOUND_WITHIN_BOUND
+  -> data lane parked as external prerequisite
 
-M3 METRIC_AND_RISK_PASS
-  -> M4 end-to-end explicit-domain system validation
-M3 FAIL
-  -> kill Candidate 5 promotion line; do not tune on blind outputs
+M2 specialist product-contract freeze
+  -> CONTRACT_PASS
 
-M4 PASS
-  -> product promotion decision
-M4 FAIL
-  -> bounded implementation correction only if model evidence remains valid;
-     otherwise kill the path
+SOLE ACTIVE GOAL
+G1 / M2I paired blind protocol closeout
+  ├─ PROTOCOL_READY
+  │    -> close G1 as research_ready
+  │    -> if no fresh source: program parked; no active Goal
+  │    -> if a fresh source is later admitted: G2 may be created
+  └─ PROTOCOL_REJECTED
+       -> close Candidate 5 specialist-promotion line
+       -> no router, retraining, threshold rescue, or blind reuse
+
+CONDITIONAL EXPLICIT-SPECIALIST BRANCH
+G2 one-shot frozen specialist comparison
+  entry requires:
+    G1 == PROTOCOL_READY
+    fresh paired source >= 200 pages formally admitted
+    caller-known product-owner need still explicit
+  ├─ specialist_promotable
+  │    -> explicit-domain end-to-end system validation may open
+  └─ specialist_not_promotable_line_closed
+       -> stop; do not tune on blind outputs
+
+G3 explicit-domain end-to-end system validation
+  ├─ PASS -> product promotion decision
+  └─ FAIL -> one separately bounded implementation correction only when model
+             evidence remains valid; otherwise close the explicit path
+
+SEPARATE CONDITIONAL BRANCH, NEVER AN AUTOMATIC SUCCESSOR
+R1 automatic-router feasibility
+  entry requires a separate Sol xhigh decision proving explicit caller routing
+  is insufficient, plus independent routing data, unknown-domain policy,
+  false-route cost, and rejection behavior
+  ├─ router_feasible -> separately preregister routed-system validation
+  └─ router_not_feasible -> keep explicit-only or close router branch
 ```
 
-The scheduler is work-conserving without being scope-expanding: when one lane
-ends in `prerequisite_needed`, park it and select the highest-value independent
-milestone whose prerequisites are already satisfied. After all independent
-milestones finish, an unresolved external prerequisite blocks the program. It
-does not authorize a new model or router branch.
+The universal path remains parked. It can open only through a separate Sol xhigh
+architecture decision naming a materially new mechanism and explaining why the
+explicit path cannot meet the product need. Neither G2 success nor G2 failure
+opens router work.
 
-The universal path remains parked. It may be activated only by a separate Sol
-xhigh architecture decision naming a materially new decoupling mechanism and
-showing why the explicit path cannot satisfy the product need. Automatic routing
-is outside this graph and requires its own independent routing data, unknown
-policy, false-route cost, and rejection contract
-(`docs/plans/2026-08-03-explicit-domain-dual-checkpoint-design.md:204`).
+## Completed History: M1 Fresh Blind Source And Custody Admission
 
-## Current Milestone: M1 Fresh Blind Source And Custody Admission
-
-Decision question: does a task-compatible, legally usable, genuinely unseen
-HW5K-like evaluation source exist that can be reserved before Candidate 5 sees
-any input or label?
-
-Bound:
-
-- inspect at most five credible public or user-controlled sources;
-- download no multi-gigabyte payload during source discovery;
-- run no model inference and inspect no target images;
-- stop when one source is admissible or the five-source shortlist is exhausted.
-
-Admission criteria:
-
-- paired contaminated-document input and clean target, or an upstream protocol
-  that can produce an equivalent objective reference without project tuning;
-- document-domain relevance to real handwriting/mark removal;
-- license and provenance recorded;
-- no prior appearance in this repository's training, development, outputs, or
-  target-aware review history;
-- a split/custody rule that can be frozen before inference;
-- sufficient sample count and diversity for a promotion claim, with the exact
-  minimum preregistered before download or scoring.
-
-Output: a source-admission decision record with `ADMITTED`, `INVALID_SOURCE`, or
-`NOT_FOUND_WITHIN_BOUND`, plus URLs, licenses, split candidates, contamination
-queries, and the sole next action. `ADMITTED` authorizes registration tooling,
-not Candidate 5 inference.
-
-M1 completed on 2026-08-03 as `NOT_FOUND_WITHIN_BOUND`. All locally known
-same-task sources are consumed, development-only, task-mismatched, or lack clean
-targets, and no new official source could be admitted from verifiable metadata.
-The data lane is parked as `external_data_prerequisite`; M2 is the only eligible
-independent successor. See
+M1 completed on 2026-08-03 as `NOT_FOUND_WITHIN_BOUND`. The bounded audit found
+the locally known same-task sources consumed, development-only, task-mismatched,
+or missing clean targets. It downloaded no payload, ran no inference, and opened
+no target images. The data lane is parked as an external prerequisite. See
 `docs/decisions/2026-08-03-fresh-blind-source-custody-admission.md`.
 
-## Current Milestone: M2 Specialist Product Contract Freeze
+The data lane may reopen only from either:
 
-Decision question: can Candidate 5's caller-known specialist claim, failure
-policy, source-risk boundary, fixed metrics, minimum fresh-set requirements, and
-one-shot evaluation order be frozen without using a new blind input or label?
+1. a user-controlled external root with paired inputs/clean targets and truthful
+   no-training/no-selection/no-review provenance; or
+2. a new public-source shortlist after official metadata access is restored.
 
-Bound:
+Admission authorizes registration and isolation checks, not inference.
 
-- one contract draft and one Sol xhigh review pass;
-- no training, inference, image review, threshold sweep, or checkpoint change;
-- reuse existing evaluation tooling and fixed thresholds unless a documented
-  incompatibility makes the contract unexecutable;
-- terminal is `CONTRACT_PASS` or `CONTRACT_FAIL`.
-
-`CONTRACT_PASS` does not promote Candidate 5. It makes the parked fresh-data lane
-the sole remaining prerequisite before M3. `CONTRACT_FAIL` closes Candidate 5's
-specialist-promotion line without activating a router.
+## Completed History: M2 Specialist Product Contract Freeze
 
 M2 completed on 2026-08-03 as `CONTRACT_PASS`. The frozen contract is
-`docs/plans/2026-08-03-candidate5-specialist-product-contract.md`; the decision
+`docs/plans/2026-08-03-candidate5-specialist-product-contract.md`; its decision
 record is
 `docs/decisions/2026-08-03-candidate5-specialist-product-contract-freeze.md`.
 
-## Current Milestone: M2I Paired Blind Comparison Protocol
+The contract fixes the caller-known claim, artifacts, wrong-route policy,
+minimum fresh-set size, comparison order, `>=20%` mean-residual requirement, and
+five aggregate/tail non-regression checks. It does not promote Candidate 5.
 
-Implement the smallest reusable protocol that proves both frozen checkpoints run
-source-only on the same registered samples before either prediction set is
-scored, verifies both completed runs and artifact identities, then applies the
-frozen six-metric gate including `>=20%` mean-residual improvement.
+## Sole Active Goal: G1 / M2I Paired Blind Protocol Closeout
 
-Bound:
+### Decision Question
 
-- compose the existing blind registration, runbook, scoring, and completion
-  verification surfaces; do not create a parallel blind framework;
-- implementation and tests only, using synthetic fixtures and existing metrics;
-- no dataset download, model training, model inference, image review, or change
-  to either frozen checkpoint;
-- terminal is `PROTOCOL_READY` or `PROTOCOL_REJECTED`.
+Can the existing blind registration, inference, scoring, gate, audit, and
+completion surfaces be composed into one fail-closed paired-checkpoint protocol
+that proves both prediction sets were frozen before either label score?
+
+### Frozen Scope
+
+Deliver and test only:
+
+- `scripts/analysis/manage_paired_blind_comparison.py` with `prepare`,
+  `seal-inference`, and `verify` stages;
+- `tests/test_manage_paired_blind_comparison.py`;
+- the already frozen `>=20%` mean-residual option in
+  `scripts/analysis/gate_dev_candidate_metrics.py` and its focused tests;
+- a compact terminal decision mapping every G1 acceptance criterion to evidence.
+
+The implementation must compose existing blind-evaluation surfaces rather than
+create a parallel framework. Synthetic fixtures are allowed. Dataset download,
+training, model inference, image review, checkpoint changes, threshold sweeps,
+automatic routing, and consumed blind data are prohibited.
+
+### Bound And Evidence
+
+Use one implementation design and one focused defect-repair pass. A repair may
+fix code against the same frozen contract; it cannot change the protocol,
+thresholds, candidate, or evidence requirements. If the contract remains
+unexecutable after that pass, terminate as `PROTOCOL_REJECTED`.
+
+The evidence bundle is:
+
+- exact diffs for the owned script and tests;
+- focused unit-test results for the paired protocol and gate;
+- relevant blind preparation/completion regression tests;
+- Python compile/static-import checks and scoped `git diff --check`;
+- a Sol xhigh acceptance audit. No quality or promotion claim is produced.
+
+### Terminals And Successors
+
+- `PROTOCOL_READY`: close G1 as `research_ready`. This authorizes no immediate
+  model work. With no admitted fresh source, set the program to
+  `parked_external_prerequisite` and leave no runtime Goal active. A future G2
+  may be created only after all three G2 entry conditions in the graph pass.
+- `PROTOCOL_REJECTED`: close Candidate 5's specialist-promotion line. Do not
+  rescue it with router work, retraining, new thresholds, old blind data, or a
+  second candidate under this contract.
 
 ## Model Routing
 
-- `gpt-5.6-sol` with `xhigh`: program/milestone design, claim boundaries,
-  preregistration, architecture, tradeoffs, promotion decisions, and final
-  verification.
-- `gpt-5.6-luna` with `max`: bounded repository inventories, source metadata
-  collection, implementation, tests, deterministic evaluation, MPS smoke, and
-  exact-path Git operations.
-- Execution subagents also use Luna max. When native child-agent model routing
-  cannot select Luna, launch a bounded `codex exec --model gpt-5.6-luna -c
-  'model_reasoning_effort="max"'` task instead.
-- Every Luna execution returns structured evidence to Sol; it does not broaden
-  the claim, change the milestone, or choose the next product path.
+- `gpt-5.6-sol` with `xhigh`: Goal design, claim boundaries, preregistration,
+  architecture, tradeoffs, promotion decisions, and final acceptance.
+- `gpt-5.6-luna` with `max`: bounded inventories, implementation, tests,
+  deterministic evaluation, MPS smoke, and exact-path Git operations.
+- Execution subagents use Luna max. If native child routing cannot select Luna,
+  use a bounded `codex exec --model gpt-5.6-luna -c
+  'model_reasoning_effort="max"'` task.
+- Luna returns structured evidence to Sol and cannot broaden the claim, change
+  the Goal, or select the next product branch.
 
-## Risks And Mitigations
+## Transition Verification
 
-- **Research drift:** one-question milestones, bounded attempts, and kill states.
-- **Blind-set laundering:** content/custody audit plus explicit consumed-set
-  registry before inference.
-- **Missing data misreported as model failure:** `prerequisite_needed` is a
-  first-class terminal state.
-- **Premature router complexity:** router is outside the graph and requires a
-  new authorization decision.
-- **Default regression:** current-primary remains the fallback and promotion
-  gates include source-domain evidence.
-- **Execution/decision role leakage:** Luna gathers or changes bounded artifacts;
-  Sol freezes claims and makes decisions.
+At every Goal terminal:
 
-## Verification Steps
-
-At each milestone transition:
-
-1. verify the evidence artifact exists and hashes or links resolve;
-2. verify prohibited datasets and actions were not used;
-3. run scoped tests/static checks for changed tooling;
+1. verify the named evidence bundle exists and referenced hashes resolve;
+2. verify prohibited data and actions were not used;
+3. run scoped tests and static checks for changed tooling;
 4. have Sol xhigh map every acceptance criterion to evidence;
-5. record the terminal status and exactly one authorized successor;
-6. update this graph only through a decision record, never through an ad hoc
-   execution fallback.
+5. record the terminal and its single authorized successor or stop state;
+6. close the runtime Goal before creating another one.
 
-## ADR
-
-### Decision
-
-Use a durable program charter with a rolling queue of finite, preregistered
-milestones. Treat missing evidence as a prerequisite outcome rather than forcing
-a pass/fail model verdict.
-
-### Drivers
-
-1. Product progress must survive individual experiment failures.
-2. Promotion claims require honest unseen evidence.
-3. The project must resist automatic scope expansion into training or routing.
-
-### Alternatives Considered
-
-- **One permanent active research Goal:** rejected because it has no auditable
-  terminal point and encourages indefinite variant search.
-- **Keep G2 and force a binary promotable/not-promotable result:** rejected
-  because the current blocker is missing admissible data, not a Candidate 5
-  measurement.
-- **Start automatic-router work now:** rejected because routing data and the
-  unknown-domain failure contract do not exist.
-
-### Consequences
-
-Progress is continuous at the program level but interruptible and verifiable at
-the milestone level. Some milestones can end without a model verdict. External
-data can legitimately block the program, and that state remains visible instead
-of being hidden by another experiment.
-
-### Follow-Ups
-
-Execute M2 while the M1 data lane is parked. If M2 passes, keep the frozen
-contract unchanged until a new source is admitted; if M2 fails, close Candidate
-5's promotion line. In neither case may the program open the router branch.
+The lifecycle rebase is recorded in
+`docs/decisions/2026-08-03-bounded-goal-lifecycle-rebase.md`.
