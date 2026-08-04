@@ -106,3 +106,14 @@ the rebase by checking that:
 
 The governing charter is
 `docs/plans/2026-08-03-sustainable-multidomain-product-program.md`.
+
+## Outcome On 2026-08-04
+
+G1 reached `PROTOCOL_REJECTED` after the one authorized repair pass left
+independently reproduced fail-open trust-boundary gaps. Candidate 5's
+specialist-promotion line is therefore closed, no successor Goal is active, and
+the program is `closed_no_viable_path`. This is the intended lifecycle behavior:
+the kill terminal stops execution instead of converting a failed protocol into
+router work, retraining, threshold rescue, blind reuse, or an unbounded second
+repair. The terminal evidence is recorded in
+`docs/decisions/2026-08-04-paired-blind-protocol-rejection.md`.

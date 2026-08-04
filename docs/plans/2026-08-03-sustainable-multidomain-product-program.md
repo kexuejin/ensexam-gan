@@ -7,10 +7,11 @@ product work. It is not an always-active runtime Goal. A runtime Goal contains
 exactly one bounded executable stage and closes when that stage reaches a
 declared terminal.
 
-The sole active stage is currently **G1 / M2I Paired Blind Protocol Closeout**.
-M1 and M2 are completed history. When G1 closes, the program must either open a
-new Goal whose entry conditions are already satisfied or stop running. It must
-not keep an idle Goal active while waiting for external evidence.
+There is currently **no active runtime Goal**. M1 and M2 completed, and G1 / M2I
+closed on 2026-08-04 as `PROTOCOL_REJECTED`. Candidate 5's specialist-promotion
+line is closed and the program is `closed_no_viable_path`. A materially new
+universal mechanism would require a new Sol xhigh architecture decision and a
+new bounded program; it is not a successor hidden inside this closed Goal.
 
 Program states are:
 
@@ -100,17 +101,14 @@ M1 fresh source/custody admission
 M2 specialist product-contract freeze
   -> CONTRACT_PASS
 
-SOLE ACTIVE GOAL
+COMPLETED HISTORY
 G1 / M2I paired blind protocol closeout
-  ├─ PROTOCOL_READY
-  │    -> close G1 as research_ready
-  │    -> if no fresh source: program parked; no active Goal
-  │    -> if a fresh source is later admitted: G2 may be created
-  └─ PROTOCOL_REJECTED
-       -> close Candidate 5 specialist-promotion line
-       -> no router, retraining, threshold rescue, or blind reuse
+  -> PROTOCOL_REJECTED on 2026-08-04
+  -> close Candidate 5 specialist-promotion line
+  -> program closed_no_viable_path; no active Goal
+  -> no router, retraining, threshold rescue, blind reuse, or second repair
 
-CONDITIONAL EXPLICIT-SPECIALIST BRANCH
+UNREACHABLE AFTER THE G1 KILL TERMINAL
 G2 one-shot frozen specialist comparison
   entry requires:
     G1 == PROTOCOL_READY
@@ -135,10 +133,10 @@ R1 automatic-router feasibility
   └─ router_not_feasible -> keep explicit-only or close router branch
 ```
 
-The universal path remains parked. It can open only through a separate Sol xhigh
-architecture decision naming a materially new mechanism and explaining why the
-explicit path cannot meet the product need. Neither G2 success nor G2 failure
-opens router work.
+The previous universal path is outside this closed program. It can be proposed
+only through a separate Sol xhigh architecture decision naming a materially new
+mechanism, followed by a new charter and bounded Goal. The G1 kill terminal does
+not open router or universal work.
 
 ## Completed History: M1 Fresh Blind Source And Custody Admission
 
@@ -167,7 +165,7 @@ The contract fixes the caller-known claim, artifacts, wrong-route policy,
 minimum fresh-set size, comparison order, `>=20%` mean-residual requirement, and
 five aggregate/tail non-regression checks. It does not promote Candidate 5.
 
-## Sole Active Goal: G1 / M2I Paired Blind Protocol Closeout
+## Completed History: G1 / M2I Paired Blind Protocol Closeout
 
 ### Decision Question
 
@@ -206,15 +204,20 @@ The evidence bundle is:
 - Python compile/static-import checks and scoped `git diff --check`;
 - a Sol xhigh acceptance audit. No quality or promotion claim is produced.
 
-### Terminals And Successors
+### Actual Terminal
 
-- `PROTOCOL_READY`: close G1 as `research_ready`. This authorizes no immediate
-  model work. With no admitted fresh source, set the program to
-  `parked_external_prerequisite` and leave no runtime Goal active. A future G2
-  may be created only after all three G2 entry conditions in the graph pass.
-- `PROTOCOL_REJECTED`: close Candidate 5's specialist-promotion line. Do not
-  rescue it with router work, retraining, new thresholds, old blind data, or a
-  second candidate under this contract.
+G1 closed on 2026-08-04 as `PROTOCOL_REJECTED`. The first Sol xhigh audit found
+four fail-closed gaps. The one authorized repair pass fixed minimum sample
+count, the exact 20% threshold, tolerance laundering, and stale inference-output
+directories. Focused and blind regression suites passed after the repair.
+
+The independent Critic then reproduced deeper trust-boundary bypasses: mutable
+parent gate configuration before sealing, self-asserted completion and gate
+JSON, incomplete binding of the frozen checkpoint/threshold/custody contract,
+and prediction paths not proven disjoint from labels. A forged worse candidate
+could therefore verify as passing. The bounded contract prohibits a second
+repair pass, so Candidate 5's specialist-promotion line is closed. See
+`docs/decisions/2026-08-04-paired-blind-protocol-rejection.md`.
 
 ## Model Routing
 
