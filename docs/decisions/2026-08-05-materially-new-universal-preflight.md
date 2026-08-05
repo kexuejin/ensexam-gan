@@ -3,17 +3,18 @@
 ## Decision Status
 
 ```text
-artifact_status = INTENDED_TERMINAL_PENDING_RUNTIME_RECONCILIATION
+artifact_status = OPERATIONALLY_FINALIZED
 preflight_terminal = PREREQUISITE_NEEDED
-operational_terminal_finalized = false
+operational_terminal_finalized = true
 implementation_handoff = disabled
 ```
 
 The preflight selects `PREREQUISITE_NEEDED` as its evidence-based terminal.
-Operational finalization is pending because the Goal control plane still reports
-a stale active P1/M1 handle even though the durable program closed as
-`closed_no_viable_path`. The stale handle is non-authorizing: it does not reopen
-P1/M1, admit another model mechanism, or permit implementation.
+Operational finalization is verified. After the same stale active P1/M1 handle
+conflicted with the durable `closed_no_viable_path` state on three consecutive
+resumed audit turns, the Goal was marked `blocked` and immediate control-plane
+readback confirmed that status. The blocked handle is non-authorizing: it does
+not reopen P1/M1, admit another model mechanism, or permit implementation.
 
 ## Decision Question
 
@@ -87,7 +88,7 @@ experiment now, and make the product decision the only external entry event.
 If that event occurs, Sol xhigh must still decide whether one named mechanism
 has a causal hypothesis and a bounded, development-safe pass/kill contract.
 
-## Durable State And Runtime Mismatch
+## Durable State And Runtime Reconciliation
 
 The authoritative durable state remains:
 
@@ -97,38 +98,39 @@ executable_runtime_goal = none
 implementation_handoff = disabled
 ```
 
-The control-plane observation on this preflight turn is recorded separately:
+The finalized control-plane state is recorded separately:
 
 ```text
-observed_runtime_handle = stale_active_P1_M1
-observed_runtime_status = active
+observed_runtime_handle = stale_P1_M1
+observed_runtime_status = blocked
 runtime_handle_authorizes_execution = false
-lifecycle_reconciliation = pending
-resumed_blocked_audit_turn = 1
-runtime_mutation_this_turn = none
-finalized_waiting_invariant = not_yet_assertable
+lifecycle_reconciliation = verified
+consecutive_resumed_recurrences = 3
+runtime_mutation_on_finalization = blocked
+goal_readback_status = blocked
+finalized_waiting_invariant = asserted
 ```
 
 This is an internal lifecycle mismatch, not a second product prerequisite and
-not an architecture deliverable. The unqualified statement that the runtime
-service reports no active handle would be false. The correct operational claim
-is narrower: no runtime Goal is executable or authorized by the durable
-program, and the stale handle remains unchanged on resumed audit turn 1.
+not an architecture deliverable. The runtime handle still exists as a blocked
+record, but no runtime Goal is executable or authorized by the durable program.
 
-## Runtime Finalization Protocol
+## Runtime Finalization Evidence
 
-1. On each later resumed audit turn, read the Goal state before acting.
-2. Count a recurrence only when the same stale-active P1/M1 conflict remains.
-3. Before three consecutive resumed recurrences, keep
-   `operational_terminal_finalized = false` and do not mutate the Goal.
-4. At recurrence 3, if the same blocker remains and no meaningful recovery path
-   exists, mark the stale Goal `blocked` through the Goal lifecycle surface.
-5. Immediately read the Goal state back.
-6. Assert the finalized waiting invariant only when readback proves a blocked,
-   non-executable Goal. Otherwise retain
-   `INTENDED_TERMINAL_PENDING_RUNTIME_RECONCILIATION`.
+1. Resumed audit turn 1 observed the stale active P1/M1 conflict and made no
+   runtime mutation.
+2. Resumed audit turn 2 reproduced the identical conflict, persisted the local
+   audit count, and made no runtime mutation.
+3. Resumed audit turn 3 reproduced the identical conflict. M1 was still durably
+   complete as `NOT_FOUND_WITHIN_BOUND`, G1 still had no automatic successor,
+   and no meaningful locally authorized recovery path existed.
+4. The third recurrence satisfied the blocked-transition threshold. The Goal
+   lifecycle surface accepted `status = blocked`.
+5. Immediate `get_goal` readback returned the same parent thread and
+   `status = blocked`, proving the Goal is non-executable.
 
-At every step, `implementation_handoff = disabled`.
+The finalized waiting invariant is therefore asserted, and
+`implementation_handoff = disabled` remains in force.
 
 ## Entry Predicate For Any Future Universal Work
 
@@ -142,7 +144,7 @@ true:
 4. a new program charter and one bounded Goal are approved.
 
 Fresh data alone, Candidate 5 failure, G1 closure, a renamed old mechanism, or
-the stale runtime handle satisfies none of these conditions.
+the blocked runtime handle satisfies none of these conditions.
 
 ## Prohibited Actions
 
@@ -178,30 +180,29 @@ Durable supporting records:
 
 ## ADR
 
-**Decision:** Record `PREREQUISITE_NEEDED` as the intended preflight terminal,
-pending runtime reconciliation, with no implementation handoff.
+**Decision:** Finalize `PREREQUISITE_NEEDED` as the preflight terminal after
+verified runtime reconciliation, with no implementation handoff.
 
 **Drivers:** The universal product requirement is absent; a distinct mechanism
-gap exists but is not admitted; the durable program is closed; and the runtime
-still exposes a stale non-authorizing handle.
+gap exists but is not admitted; the durable program is closed; and the stale
+runtime handle is now verified blocked and non-authorizing.
 
 **Alternatives considered:** Immediately admit the continuous three-expert
 mixture; declare that no materially-new mechanism exists; treat the stale Goal
-as executable; or block it prematurely on resumed audit turn 1.
+as executable; or block it before the third identical resumed recurrence.
 
 **Why chosen:** This is the only state that preserves the technical option,
-respects product authority and bounded-Goal lifecycle, and reports the current
-control-plane mismatch truthfully.
+respects product authority and bounded-Goal lifecycle, and reconciles the
+control plane only after the required repeated evidence.
 
 **Consequences:** No code or model work starts. The product owner can create the
 external entry event, but a later Sol admission decision and a new bounded
-program are still mandatory. Runtime reconciliation proceeds independently
-under its three-recurrence rule.
+program are still mandatory. The old P1/M1 Goal cannot execute while blocked.
 
 Confidence: high
 Scope-risk: narrow
 Reversibility: clean
-Directive: Do not interpret the stale P1/M1 handle or the untried mixture as execution authority; preserve the pending runtime-reconciliation status until Goal readback proves a blocked, non-executable state.
-Tested: Bounded Luna inventory, sequential Sol xhigh Planner-Architect-Critic consensus, durable-state comparison, and read-only Goal inspection
+Directive: Do not interpret the blocked P1/M1 handle or the untried mixture as execution authority; a future universal program still requires the explicit product-owner entry event and a new Sol admission decision.
+Tested: Bounded Luna inventory, sequential Sol xhigh Planner-Architect-Critic consensus, three consecutive parent-thread Goal audits, blocked transition, and immediate blocked-status readback
 Not-tested: No training, inference, image review, dataset download, checkpoint change, model admission, or product promotion was authorized
 Related: docs/decisions/2026-08-04-paired-blind-protocol-rejection.md
