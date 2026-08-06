@@ -174,7 +174,11 @@ class RefineNet(nn.Module):
             nn.BatchNorm2d(cnum // 2), nn.ReLU(inplace=True),
             nn.Conv2d(cnum // 2, 3, 3, padding=1))
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self,
+        x: torch.Tensor,
+        return_reconstruction_feature: bool = False,
+    ):
         x    = self.conva(x)
         x    = self.down1(x)
         x    = self.convc(x)
@@ -189,7 +193,112 @@ class RefineNet(nn.Module):
         x    = self.up1(torch.cat([x, x_c2], dim=1)) # H/2, 64
         x    = self.convm(x)
         x    = self.up2(torch.cat([x, x_c1], dim=1)) # H,   32
-        return torch.tanh(self.convn(x))
+        reconstruction_feature = self.convn[:-1](x)
+        Ire = torch.tanh(self.convn[-1](reconstruction_feature))
+        if return_reconstruction_feature:
+            return Ire, reconstruction_feature
+        return Ire
+
+
+class UniversalResidualAdapterSidecar(nn.Module):
+    """Continuous residual-only sidecar mixed from reconstruction features."""
+
+    def __init__(
+        self,
+        feature_channels: int = 16,
+        output_channels: int = 3,
+        adapter_count: int = 3,
+        hidden_channels: int = 16,
+        residual_bound: float = 12.0 / 255.0,
+        fallback_residual_abs_max: float | None = None,
+    ):
+        super().__init__()
+        if adapter_count != 3:
+            raise ValueError("adapter_count must be 3")
+        if residual_bound <= 0.0 or residual_bound > 12.0 / 255.0:
+            raise ValueError("residual_bound must be in (0, 12/255]")
+        if hidden_channels <= 0:
+            raise ValueError("hidden_channels must be positive")
+        self.adapter_count = int(adapter_count)
+        self.residual_bound = float(residual_bound)
+        self.fallback_residual_abs_max = (
+            float(fallback_residual_abs_max)
+            if fallback_residual_abs_max is not None
+            else float(residual_bound) * 4.0
+        )
+        self.gate = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
+            nn.Linear(feature_channels, hidden_channels),
+            nn.ReLU(inplace=True),
+            nn.Linear(hidden_channels, self.adapter_count),
+        )
+        self.adapters = nn.ModuleList(
+            [
+                nn.Sequential(
+                    nn.Conv2d(feature_channels, hidden_channels, 3, padding=1),
+                    nn.ReLU(inplace=True),
+                    nn.Conv2d(hidden_channels, output_channels, 1),
+                )
+                for _ in range(self.adapter_count)
+            ]
+        )
+        self.global_residual_scale = nn.Parameter(torch.zeros(()))
+        self.reset_residual_to_zero()
+
+    def reset_residual_to_zero(self) -> None:
+        for adapter in self.adapters:
+            nn.init.zeros_(adapter[-1].weight)
+            nn.init.zeros_(adapter[-1].bias)
+        nn.init.zeros_(self.global_residual_scale)
+
+    def forward(
+        self,
+        reconstruction_feature: torch.Tensor,
+        baseline_output: torch.Tensor,
+    ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+        gate_logits = self.gate(reconstruction_feature)
+        gate_weights = torch.softmax(gate_logits, dim=1)
+        adapter_residuals = torch.stack(
+            [adapter(reconstruction_feature) for adapter in self.adapters],
+            dim=1,
+        )
+        mixed_residual = (
+            gate_weights.view(gate_weights.shape[0], self.adapter_count, 1, 1, 1)
+            * adapter_residuals
+        ).sum(dim=1)
+        bounded_residual = self.residual_bound * torch.tanh(mixed_residual)
+        scaled_residual = torch.tanh(self.global_residual_scale) * bounded_residual
+        fallback_code = baseline_output.new_tensor(0.0)
+        invalid = (
+            not torch.isfinite(gate_weights).all()
+            or not torch.isfinite(scaled_residual).all()
+            or scaled_residual.shape != baseline_output.shape
+            or float(scaled_residual.detach().abs().max().cpu())
+            > self.fallback_residual_abs_max
+        )
+        if invalid:
+            candidate = baseline_output
+            fallback_code = baseline_output.new_tensor(1.0)
+            residual_for_telemetry = torch.zeros_like(baseline_output)
+        else:
+            residual_for_telemetry = scaled_residual
+            residual_is_zero = bool((scaled_residual.detach() == 0).all().cpu())
+            candidate = (
+                baseline_output
+                if residual_is_zero
+                else torch.clamp(baseline_output + scaled_residual, -1.0, 1.0)
+            )
+        gate_entropy = -(gate_weights * gate_weights.clamp_min(1e-12).log()).sum(dim=1)
+        telemetry = {
+            "ura_gate_entropy_mean": gate_entropy.mean(),
+            "ura_gate_max_mean": gate_weights.max(dim=1).values.mean(),
+            "ura_residual_abs_mean": residual_for_telemetry.detach().abs().mean(),
+            "ura_residual_abs_max": residual_for_telemetry.detach().abs().amax(),
+            "ura_residual_scale_abs": torch.tanh(self.global_residual_scale).detach().abs(),
+            "ura_fallback_code": fallback_code,
+        }
+        return candidate, telemetry
 
 
 class Generator(nn.Module):
@@ -205,9 +314,61 @@ class Generator(nn.Module):
         self.coarse = CoarseNet(in_channels=cfg['coarse_in_channels'],
                                 cbam_reduction=cfg['cbam_reduction'])
         self.refine = RefineNet(in_channels=cfg['refine_in_channels'])
+        sidecar_cfg = cfg.get("universal_residual_adapter_sidecar", {}) or {}
+        if isinstance(sidecar_cfg, bool):
+            sidecar_cfg = {"enabled": sidecar_cfg}
+        if not isinstance(sidecar_cfg, dict):
+            raise ValueError("universal_residual_adapter_sidecar must be a mapping")
+        self.universal_residual_adapter_sidecar_enabled = bool(
+            sidecar_cfg.get("enabled", False)
+        )
+        if self.universal_residual_adapter_sidecar_enabled:
+            self.universal_residual_adapter_sidecar = UniversalResidualAdapterSidecar(
+                feature_channels=int(sidecar_cfg.get("feature_channels", 16)),
+                output_channels=3,
+                adapter_count=int(sidecar_cfg.get("adapter_count", 3)),
+                hidden_channels=int(sidecar_cfg.get("hidden_channels", 16)),
+                residual_bound=float(sidecar_cfg.get("residual_bound", 12.0 / 255.0)),
+                fallback_residual_abs_max=sidecar_cfg.get("fallback_residual_abs_max"),
+            )
 
-    def forward(self, Iin: torch.Tensor):
+    def forward(
+        self,
+        Iin: torch.Tensor,
+        return_reconstruction_feature: bool = False,
+        return_universal_sidecar_telemetry: bool = False,
+    ):
         Ms, Mb, Ic4, Ic2, Ic1 = self.coarse(Iin)
-        Ire   = self.refine(torch.cat([Iin, Ms, Ic1], dim=1))
+        need_reconstruction_feature = (
+            return_reconstruction_feature
+            or self.universal_residual_adapter_sidecar_enabled
+        )
+        refine_input = torch.cat([Iin, Ms, Ic1], dim=1)
+        reconstruction_feature = None
+        if need_reconstruction_feature:
+            Ire, reconstruction_feature = self.refine(
+                refine_input,
+                return_reconstruction_feature=True,
+            )
+        else:
+            Ire = self.refine(refine_input)
         Icomp = Ire * Mb + Iin * (1 - Mb)
-        return Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp
+        universal_sidecar_telemetry = None
+        if self.universal_residual_adapter_sidecar_enabled:
+            Icomp, universal_sidecar_telemetry = self.universal_residual_adapter_sidecar(
+                reconstruction_feature,
+                Icomp,
+            )
+        elif return_universal_sidecar_telemetry:
+            universal_sidecar_telemetry = {
+                "ura_enabled": Icomp.new_tensor(0.0),
+                "ura_fallback_code": Icomp.new_tensor(0.0),
+            }
+        outputs = (Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp)
+        if return_reconstruction_feature and return_universal_sidecar_telemetry:
+            return outputs, reconstruction_feature, universal_sidecar_telemetry
+        if return_reconstruction_feature:
+            return outputs, reconstruction_feature
+        if return_universal_sidecar_telemetry:
+            return outputs, universal_sidecar_telemetry
+        return outputs

@@ -15,6 +15,7 @@ import contextlib
 import logging
 import os
 import random
+import re
 import sys
 from datetime import datetime
 
@@ -70,6 +71,173 @@ def load_optional_file_list(path: str) -> list[str] | None:
                 continue
             files.append(os.path.basename(line))
     return files
+
+
+def apply_generator_trainable_patterns(
+    model: nn.Module,
+    patterns: list[str] | tuple[str, ...] | None,
+) -> dict[str, object]:
+    """Freeze generator parameters except names matching configured regexes."""
+    if not patterns:
+        total = sum(parameter.numel() for parameter in model.parameters())
+        return {
+            "enabled": False,
+            "patterns": [],
+            "trainable_tensors": sum(1 for _ in model.parameters()),
+            "frozen_tensors": 0,
+            "trainable_params": total,
+            "total_params": total,
+        }
+
+    compiled = [re.compile(pattern) for pattern in patterns]
+    trainable_tensors = 0
+    frozen_tensors = 0
+    trainable_params = 0
+    total_params = 0
+    matched_patterns = {pattern: 0 for pattern in patterns}
+
+    for name, parameter in model.named_parameters():
+        total_params += parameter.numel()
+        matched = False
+        for raw_pattern, compiled_pattern in zip(patterns, compiled):
+            if compiled_pattern.search(name):
+                matched = True
+                matched_patterns[raw_pattern] += 1
+        parameter.requires_grad_(matched)
+        if matched:
+            trainable_tensors += 1
+            trainable_params += parameter.numel()
+        else:
+            frozen_tensors += 1
+
+    unused = [pattern for pattern, count in matched_patterns.items() if count == 0]
+    if unused:
+        raise ValueError(f"train.trainable_generator_patterns matched no parameters: {unused}")
+    if trainable_tensors == 0:
+        raise ValueError("train.trainable_generator_patterns froze every generator parameter")
+
+    return {
+        "enabled": True,
+        "patterns": list(patterns),
+        "trainable_tensors": trainable_tensors,
+        "frozen_tensors": frozen_tensors,
+        "trainable_params": trainable_params,
+        "total_params": total_params,
+    }
+
+
+def freeze_batchnorm_running_stats(model: nn.Module) -> int:
+    """Keep BatchNorm layers in eval mode while leaving affine params trainable."""
+    batchnorm_types = (
+        nn.BatchNorm1d,
+        nn.BatchNorm2d,
+        nn.BatchNorm3d,
+        nn.SyncBatchNorm,
+    )
+    frozen = 0
+    for module in model.modules():
+        if isinstance(module, batchnorm_types):
+            module.eval()
+            frozen += 1
+    return frozen
+
+
+def validate_checkpoint_strategy(resume: bool, init_checkpoint: str) -> None:
+    if resume and init_checkpoint:
+        raise ValueError("train.resume cannot combine with train.init_checkpoint")
+
+
+def uses_universal_residual_adapter_sidecar(model_cfg: dict | None) -> bool:
+    sidecar_cfg = (model_cfg or {}).get('universal_residual_adapter_sidecar', {})
+    if isinstance(sidecar_cfg, bool):
+        return sidecar_cfg
+    if not isinstance(sidecar_cfg, dict):
+        raise ValueError("model.universal_residual_adapter_sidecar must be a mapping")
+    return bool(sidecar_cfg.get('enabled', False))
+
+
+_UNIVERSAL_SIDECAR_FORBIDDEN_CONFIG_TOKENS = (
+    'domain',
+    'source',
+    'caller',
+    'path',
+    'route',
+    'expert',
+)
+
+
+def _validate_universal_sidecar_model_shape(model_cfg: dict) -> None:
+    sidecar_cfg = model_cfg.get('universal_residual_adapter_sidecar', {})
+    if isinstance(sidecar_cfg, bool):
+        sidecar_cfg = {'enabled': sidecar_cfg}
+    if not isinstance(sidecar_cfg, dict):
+        raise ValueError("model.universal_residual_adapter_sidecar must be a mapping")
+    bad_keys = sorted(
+        key for key in sidecar_cfg
+        if any(
+            token in str(key).lower()
+            for token in _UNIVERSAL_SIDECAR_FORBIDDEN_CONFIG_TOKENS
+        )
+    )
+    if bad_keys:
+        raise ValueError(
+            "universal sidecar config contains prohibited routing-like keys: "
+            f"{bad_keys}"
+        )
+    if int(sidecar_cfg.get('adapter_count', 3)) != 3:
+        raise ValueError("universal sidecar requires adapter_count=3")
+    residual_bound = float(sidecar_cfg.get('residual_bound', 12.0 / 255.0))
+    if residual_bound <= 0.0 or residual_bound > 12.0 / 255.0:
+        raise ValueError("universal sidecar residual_bound must be in (0, 12/255]")
+
+
+def validate_universal_sidecar_config(cfg: dict) -> None:
+    """Fail closed on future universal-sidecar training configs."""
+    model_cfg = cfg.get('model', {})
+    if not uses_universal_residual_adapter_sidecar(model_cfg):
+        return
+    _validate_universal_sidecar_model_shape(model_cfg)
+    train_cfg = cfg.get('train', {})
+    expected_init = normalize_path(
+        './artifacts/current-primary/micro_region_probe_step0001.pth'
+    )
+    if train_cfg.get('resume', False) or train_cfg.get('resume_path'):
+        raise ValueError("universal sidecar cannot resume optimizer state")
+    if normalize_path(train_cfg.get('init_checkpoint', '')) != expected_init:
+        raise ValueError(
+            "universal sidecar requires current-primary initialization"
+        )
+    patterns = train_cfg.get('trainable_generator_patterns') or []
+    if not patterns:
+        raise ValueError(
+            "universal sidecar requires sidecar-only trainable_generator_patterns"
+        )
+    parameter_names = [name for name, _ in Generator(cfg=model_cfg).named_parameters()]
+    for pattern in patterns:
+        compiled = re.compile(str(pattern))
+        matched = [name for name in parameter_names if compiled.search(name)]
+        if not matched:
+            raise ValueError(
+                "universal sidecar trainable pattern must match sidecar params"
+            )
+        if any(
+            not name.startswith('universal_residual_adapter_sidecar.')
+            for name in matched
+        ):
+            raise ValueError(
+                "universal sidecar trainable pattern must not match base params"
+            )
+    if train_cfg.get('freeze_generator_batchnorm_stats') is not True:
+        raise ValueError(
+            "universal sidecar requires BatchNorm freeze: "
+            "freeze_generator_batchnorm_stats=true"
+        )
+    if train_cfg.get('save_optimizer_state', True):
+        raise ValueError("universal sidecar must not save optimizer state")
+    if train_cfg.get('save_scheduler_state', True):
+        raise ValueError("universal sidecar must not save scheduler state")
+    if 'seed' not in train_cfg or train_cfg.get('reproducibility_mode') != 'strict':
+        raise ValueError("universal sidecar requires strict reproducibility")
 
 
 def set_seed(seed: int, mode: str = 'statistical'):
