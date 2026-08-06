@@ -72,6 +72,33 @@ class UniversalResidualAdapterSidecarTest(unittest.TestCase):
             self.assertTrue(torch.equal(expected, actual))
         self.assertEqual(float(telemetry["ura_fallback_code"]), 0.0)
 
+    def test_zero_output_sidecar_keeps_final_projection_gradients_alive(self) -> None:
+        torch.manual_seed(11)
+        sidecar = UniversalResidualAdapterSidecar(feature_channels=16).train()
+        feature = torch.randn(2, 16, 8, 8)
+        baseline = torch.zeros(2, 3, 8, 8)
+        target = torch.full_like(baseline, 0.25)
+
+        candidate, telemetry = sidecar(feature, baseline)
+        self.assertTrue(torch.equal(candidate.detach(), baseline))
+        self.assertEqual(float(telemetry["ura_fallback_code"]), 0.0)
+        self.assertGreater(
+            float(torch.tanh(sidecar.global_residual_scale).detach().abs()),
+            0.0,
+        )
+
+        loss = torch.nn.functional.mse_loss(candidate, target)
+        loss.backward()
+
+        final_bias_grads = [
+            adapter[-1].bias.grad.detach().abs().sum()
+            for adapter in sidecar.adapters
+        ]
+        self.assertTrue(
+            all(float(grad_sum) > 0.0 for grad_sum in final_bias_grads),
+            "zero-output sidecar must keep final projection bias gradients alive",
+        )
+
     def test_public_forward_surface_has_no_routing_arguments(self) -> None:
         forbidden = ("domain", "source", "caller", "route", "expert", "path")
         params = inspect.signature(Generator.forward).parameters

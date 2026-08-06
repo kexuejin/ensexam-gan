@@ -243,14 +243,17 @@ class UniversalResidualAdapterSidecar(nn.Module):
                 for _ in range(self.adapter_count)
             ]
         )
-        self.global_residual_scale = nn.Parameter(torch.zeros(()))
+        self.initial_global_residual_scale = 1e-3
+        self.global_residual_scale = nn.Parameter(
+            torch.tensor(self.initial_global_residual_scale, dtype=torch.float32)
+        )
         self.reset_residual_to_zero()
 
     def reset_residual_to_zero(self) -> None:
         for adapter in self.adapters:
             nn.init.zeros_(adapter[-1].weight)
             nn.init.zeros_(adapter[-1].bias)
-        nn.init.zeros_(self.global_residual_scale)
+        nn.init.constant_(self.global_residual_scale, self.initial_global_residual_scale)
 
     def forward(
         self,
@@ -283,12 +286,15 @@ class UniversalResidualAdapterSidecar(nn.Module):
             residual_for_telemetry = torch.zeros_like(baseline_output)
         else:
             residual_for_telemetry = scaled_residual
-            residual_is_zero = bool((scaled_residual.detach() == 0).all().cpu())
-            candidate = (
-                baseline_output
-                if residual_is_zero
-                else torch.clamp(baseline_output + scaled_residual, -1.0, 1.0)
-            )
+            if self.training:
+                candidate = torch.clamp(baseline_output + scaled_residual, -1.0, 1.0)
+            else:
+                residual_is_zero = bool((scaled_residual.detach() == 0).all().cpu())
+                candidate = (
+                    baseline_output
+                    if residual_is_zero
+                    else torch.clamp(baseline_output + scaled_residual, -1.0, 1.0)
+                )
         gate_entropy = -(gate_weights * gate_weights.clamp_min(1e-12).log()).sum(dim=1)
         telemetry = {
             "ura_gate_entropy_mean": gate_entropy.mean(),
