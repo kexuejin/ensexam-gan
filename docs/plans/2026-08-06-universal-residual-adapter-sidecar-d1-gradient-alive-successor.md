@@ -14,7 +14,7 @@
 
 ## Objective
 
-Fix the gradient dead zone in `UniversalResidualAdapterSidecar` while preserving exact output equivalence at initialization.  
+Fix the gradient dead zone in `UniversalResidualAdapterSidecar` while preserving exact output equivalence at initialization.
 Keep `single clean(image)` external interface, no domain label/caller hint/hard routing, `current-primary` default unchanged.
 
 ## Root Cause (from R1)

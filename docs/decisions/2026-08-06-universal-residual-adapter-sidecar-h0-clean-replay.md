@@ -70,4 +70,3 @@ git_diff_check = pass
 
 H0 is complete. Further work should proceed from the clean replay branch or be
 cherry-picked from it, not reconstructed from the dirty main worktree.
-
