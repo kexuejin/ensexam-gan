@@ -206,4 +206,3 @@ the objective is to test whether the now-gradient-alive sidecar can produce
 measurable residual lift without source-guard regression. Keep fresh blind and
 promotion out of scope until SCUT115 and holdout40 source guards pass.
 ```
-
