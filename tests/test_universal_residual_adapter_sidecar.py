@@ -1,9 +1,17 @@
 import inspect
+import tempfile
 import unittest
+from pathlib import Path
 
 import torch
 
+from networks.discriminator import Discriminator
 from networks.generator import Generator, UniversalResidualAdapterSidecar
+from train import (
+    apply_generator_trainable_patterns,
+    build_training_checkpoint,
+    load_initial_checkpoint,
+)
 
 
 def sidecar_cfg(**overrides):
@@ -98,6 +106,86 @@ class UniversalResidualAdapterSidecarTest(unittest.TestCase):
             all(float(grad_sum) > 0.0 for grad_sum in final_bias_grads),
             "zero-output sidecar must keep final projection bias gradients alive",
         )
+
+    def test_sidecar_trainable_pattern_freezes_base_generator(self) -> None:
+        generator = Generator(sidecar_cfg())
+        summary = apply_generator_trainable_patterns(
+            generator,
+            ["^universal_residual_adapter_sidecar\\."],
+        )
+        trainable_names = [
+            name for name, parameter in generator.named_parameters()
+            if parameter.requires_grad
+        ]
+        self.assertTrue(trainable_names)
+        self.assertTrue(
+            all(
+                name.startswith("universal_residual_adapter_sidecar.")
+                for name in trainable_names
+            )
+        )
+        self.assertGreater(summary["frozen_tensors"], 0)
+        self.assertGreater(summary["trainable_tensors"], 0)
+
+    def test_initial_checkpoint_allows_sidecar_only_missing_keys(self) -> None:
+        baseline_generator = Generator()
+        baseline_discriminator = Discriminator()
+        enabled_generator = Generator(sidecar_cfg())
+        enabled_discriminator = Discriminator()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            checkpoint_path = Path(tmpdir) / "baseline.pth"
+            torch.save(
+                {
+                    "G_state_dict": baseline_generator.state_dict(),
+                    "D_state_dict": baseline_discriminator.state_dict(),
+                },
+                checkpoint_path,
+            )
+            missing, unexpected = load_initial_checkpoint(
+                enabled_generator,
+                enabled_discriminator,
+                str(checkpoint_path),
+                torch.device("cpu"),
+            )
+
+        self.assertFalse(unexpected)
+        self.assertTrue(missing)
+        self.assertTrue(
+            all(
+                key.startswith("universal_residual_adapter_sidecar.")
+                for key in missing
+            )
+        )
+
+    def test_checkpoint_payload_can_omit_optimizer_and_scheduler_state(self) -> None:
+        generator = Generator(sidecar_cfg())
+        discriminator = Discriminator()
+        optimizer_g = torch.optim.Adam(generator.parameters(), lr=1e-4)
+        optimizer_d = torch.optim.Adam(discriminator.parameters(), lr=1e-4)
+        scheduler_g = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_g, T_max=1)
+        scheduler_d = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer_d, T_max=1)
+
+        checkpoint = build_training_checkpoint(
+            generator,
+            discriminator,
+            optimizer_g,
+            optimizer_d,
+            scheduler_g,
+            scheduler_d,
+            epoch=1,
+            avg_loss_G=1.0,
+            avg_loss_D=2.0,
+            val_loss=None,
+            save_optimizer_state=False,
+            save_scheduler_state=False,
+        )
+
+        self.assertIn("G_state_dict", checkpoint)
+        self.assertNotIn("optimizer_G", checkpoint)
+        self.assertNotIn("optimizer_D", checkpoint)
+        self.assertNotIn("scheduler_G", checkpoint)
+        self.assertNotIn("scheduler_D", checkpoint)
 
     def test_public_forward_surface_has_no_routing_arguments(self) -> None:
         forbidden = ("domain", "source", "caller", "route", "expert", "path")
