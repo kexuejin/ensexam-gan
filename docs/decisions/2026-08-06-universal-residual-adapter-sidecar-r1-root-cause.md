@@ -1,7 +1,8 @@
 # Universal Residual Adapter Sidecar R1 Root Cause
 
 ```text
-r1_terminal = ROOT_CAUSE_IDENTIFIED
+r1_terminal = PASS
+r1_result = ROOT_CAUSE_IDENTIFIED
 initial_u4c_kill_status = superseded_by_protocol_mismatch
 matched_copy_scut15 = equivalent_pass
 actual_root_cause = zero_init_gradient_dead_zone
@@ -133,4 +134,3 @@ D1 must:
 - ensure synthetic loss backprop produces nonzero gradients on residual final
   projections
 - fail closed on sidecar training configs that touch base generator parameters
-

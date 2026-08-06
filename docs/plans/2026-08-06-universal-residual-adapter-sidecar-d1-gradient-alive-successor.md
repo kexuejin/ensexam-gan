@@ -1,13 +1,15 @@
 # Universal Residual Adapter Sidecar D1 Gradient-Alive Successor
 
-**status = successor_candidate_selected**  
-**r1_terminal = ROOT_CAUSE_IDENTIFIED**  
-**initial_u4c_kill_status = superseded_by_protocol_mismatch**  
-**matched_copy_scut15 = equivalent_pass**  
-**actual_root_cause = zero_init_gradient_dead_zone**  
-**d1_terminal = D1_GRADIENT_ALIVE_ZERO_EQUIVALENCE_DESIGN**  
-**h0_clean_replay = complete**  
-**fresh_blind = disabled**  
+**status = successor_candidate_selected**
+**r1_terminal = PASS**
+**r1_result = ROOT_CAUSE_IDENTIFIED**
+**initial_u4c_kill_status = superseded_by_protocol_mismatch**
+**matched_copy_scut15 = equivalent_pass**
+**actual_root_cause = zero_init_gradient_dead_zone**
+**d1_terminal = PASS**
+**d1_result = D1_GRADIENT_ALIVE_ZERO_EQUIVALENCE_DESIGN**
+**h0_terminal = PASS**
+**fresh_blind = disabled**
 **promotion = disabled**
 
 ## Objective
