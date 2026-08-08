@@ -9,17 +9,21 @@
       {
         "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-d2d-step80-halflr-decision.md",
         "sha256": "cb65d9a705aec4419e721bc961d036d1f4744a40201b1f81bcc8af2ed8aee209"
+      },
+      {
+        "path": "docs/decisions/2026-08-08-universal-sidecar-baseline-tail-cache-prerequisite.md",
+        "sha256": "fff8e7db604dc92782d86f0469b2b318d940126b5a0ecd5ef7b32817709c4234"
       }
     ],
     "failure_bucket": "sidecar_measurable_movement_source_residual_regression",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-baseline-tail-nonregression",
-    "next_action": "Build an exact train-manifest current-primary baseline-support cache, validate its provenance and sidecar-only trainable scope, then run one bounded source-gated preflight.",
+    "next_action": "Generate the single-change baseline-tail sidecar preflight config, validate sidecar-only trainable scope, and run the leakage-safe SCUT inner-val15 structure/source guard.",
     "prerequisites": [
       {
-        "detail": "The cache or equivalent online frozen-teacher signal must be derived only from the frozen current-primary and the registered training manifest, with per-file provenance and no development, promotion, or blind labels.",
+        "detail": "The cache is derived only from the frozen current-primary and the registered training manifest, validates all 383 rows and mask hashes, and has no filename overlap with inner-val15.",
         "id": "exact_train_manifest_baseline_support",
-        "status": "pending"
+        "status": "passed"
       }
     ],
     "prohibited_before_first_gate": [
@@ -30,7 +34,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "PENDING"
   },
   "baseline": {
     "checkpoint": {
@@ -97,6 +101,18 @@
       "id": "universal-sidecar-d2d-step80-half-lr",
       "outcome": "safe_no_lift",
       "repeat_policy": "do_not_repeat",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-baseline-tail-cache-prerequisite.md",
+          "sha256": "fff8e7db604dc92782d86f0469b2b318d940126b5a0ecd5ef7b32817709c4234"
+        }
+      ],
+      "id": "universal-sidecar-baseline-tail-cache-prerequisite",
+      "outcome": "train_only_support_prerequisite_passed",
+      "repeat_policy": "reuse_exact_cache_only",
       "terminal": "PASS"
     }
   ],
