@@ -13,12 +13,20 @@
       {
         "path": "docs/decisions/2026-08-08-universal-sidecar-baseline-tail-cache-prerequisite.md",
         "sha256": "fff8e7db604dc92782d86f0469b2b318d940126b5a0ecd5ef7b32817709c4234"
+      },
+      {
+        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-preregistration.md",
+        "sha256": "2c883761671fa4dc7ace9bb3041d1a18227e6b5d7b6f2a27418db6c6ea1d5c69"
+      },
+      {
+        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-preflight-pass.md",
+        "sha256": "39c5deead4e66f57b10fffd28c26662ce664505c9db7d077481366f213422935"
       }
     ],
     "failure_bucket": "sidecar_measurable_movement_source_residual_regression",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-baseline-tail-nonregression",
-    "next_action": "Generate the single-change baseline-tail sidecar preflight config, validate sidecar-only trainable scope, and run the leakage-safe SCUT inner-val15 structure/source guard.",
+    "next_action": "Run exactly the registered D3 step80 training config, then evaluate the leakage-safe SCUT inner-val15 source guard before any development scoring.",
     "prerequisites": [
       {
         "detail": "The cache is derived only from the frozen current-primary and the registered training manifest, validates all 383 rows and mask hashes, and has no filename overlap with inner-val15.",

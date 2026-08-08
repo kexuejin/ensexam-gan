@@ -56,7 +56,8 @@ class EnsExamRealDataset(Dataset):
                  file_list: list = None,
                  phase: str = "train",
                  box_class_mode: str = "all",
-                 box_preserve_mode: str = "none"):
+                 box_preserve_mode: str = "none",
+                 cached_baseline_tail_dir: str = ""):
         """
         Args:
             file_list: 指定使用的图像文件名列表（仅文件名，不含路径）。
@@ -74,6 +75,23 @@ class EnsExamRealDataset(Dataset):
         self.phase = phase
         self.box_class_mode = box_class_mode
         self.box_preserve_mode = box_preserve_mode
+        self.cached_baseline_tail_dir = (
+            normalize_path(cached_baseline_tail_dir)
+            if cached_baseline_tail_dir else ''
+        )
+        self.has_cached_baseline_tail = bool(self.cached_baseline_tail_dir)
+        if self.has_cached_baseline_tail:
+            if not os.path.isdir(self.cached_baseline_tail_dir):
+                raise FileNotFoundError(
+                    "cached_baseline_tail_dir does not exist: "
+                    f"{self.cached_baseline_tail_dir}"
+                )
+            domain_cfg = self.aug_cfg.get('domain_augment', {})
+            if domain_cfg.get('enabled', False):
+                raise ValueError(
+                    "cached baseline-tail support cannot be combined with "
+                    "domain_augment"
+                )
 
         if self.augment:
             self.aug = get_train_augmentation(aug_cfg)
@@ -141,6 +159,24 @@ class EnsExamRealDataset(Dataset):
             path = os.path.join(self.mask_dir, stem + ext)
             if os.path.exists(path):
                 return path
+        return None
+
+    def _find_cached_baseline_tail_paths(
+        self,
+        fname: str,
+    ) -> tuple[str, str] | None:
+        """Return frozen baseline-safe residual and outside masks."""
+        if not self.has_cached_baseline_tail:
+            return None
+        stem = os.path.splitext(fname)[0] + '.png'
+        residual_path = os.path.join(
+            self.cached_baseline_tail_dir, 'residual_safe', stem
+        )
+        outside_path = os.path.join(
+            self.cached_baseline_tail_dir, 'outside_safe', stem
+        )
+        if os.path.isfile(residual_path) and os.path.isfile(outside_path):
+            return residual_path, outside_path
         return None
 
     def _apply_domain_augment(self,
@@ -270,6 +306,11 @@ class EnsExamRealDataset(Dataset):
             if not os.path.exists(gt_path):
                 continue
             mask_path = self._find_mask_path(fname)
+            cached_baseline_tail_paths = self._find_cached_baseline_tail_paths(fname)
+            if self.has_cached_baseline_tail and cached_baseline_tail_paths is None:
+                raise FileNotFoundError(
+                    f"Missing cached baseline-tail support for training page: {fname}"
+                )
 
             img_path = os.path.join(self.img_dir, fname)
             img_temp = cv2.imread(img_path)
@@ -306,6 +347,7 @@ class EnsExamRealDataset(Dataset):
                         'img_path':     img_path,
                         'gt_path':      gt_path,
                         'mask_path':    mask_path,
+                        'cached_baseline_tail_paths': cached_baseline_tail_paths,
                         'box_txt_path': box_txt,
                         'y1': y1, 'y2': y2,
                         'x1': x1, 'x2': x2,
@@ -330,11 +372,38 @@ class EnsExamRealDataset(Dataset):
             explicit_mask = cv2.imread(info['mask_path'], cv2.IMREAD_GRAYSCALE)
             if explicit_mask is None:
                 raise RuntimeError(f"Failed to read explicit mask: {info['mask_path']}")
+        cached_baseline_tail = None
+        if info.get('cached_baseline_tail_paths'):
+            residual_path, outside_path = info['cached_baseline_tail_paths']
+            residual_safe = cv2.imread(residual_path, cv2.IMREAD_GRAYSCALE)
+            outside_safe = cv2.imread(outside_path, cv2.IMREAD_GRAYSCALE)
+            if residual_safe is None or outside_safe is None:
+                raise RuntimeError(
+                    "Failed to read cached baseline-tail support: "
+                    f"{residual_path}, {outside_path}"
+                )
+            if (
+                residual_safe.shape != Iin.shape[:2]
+                or outside_safe.shape != Iin.shape[:2]
+            ):
+                raise ValueError(
+                    "Cached baseline-tail support shape does not match source image: "
+                    f"{residual_path}, {outside_path}"
+                )
+            cached_baseline_tail = np.stack(
+                [residual_safe, outside_safe], axis=2
+            )
         Iin = np.ascontiguousarray(Iin[info['y1']:info['y2'], info['x1']:info['x2']])
         Igt = np.ascontiguousarray(Igt[info['y1']:info['y2'], info['x1']:info['x2']])
         if explicit_mask is not None:
             explicit_mask = np.ascontiguousarray(
                 explicit_mask[info['y1']:info['y2'], info['x1']:info['x2']]
+            )
+        if cached_baseline_tail is not None:
+            cached_baseline_tail = np.ascontiguousarray(
+                cached_baseline_tail[
+                    info['y1']:info['y2'], info['x1']:info['x2'], :
+                ]
             )
 
         # 2. 边缘 padding（REPLICATE 比黑边伪影少）
@@ -346,6 +415,16 @@ class EnsExamRealDataset(Dataset):
             if explicit_mask is not None:
                 explicit_mask = cv2.copyMakeBorder(
                     explicit_mask, 0, pad_h, 0, pad_w, cv2.BORDER_CONSTANT, value=0
+                )
+            if cached_baseline_tail is not None:
+                cached_baseline_tail = cv2.copyMakeBorder(
+                    cached_baseline_tail,
+                    0,
+                    pad_h,
+                    0,
+                    pad_w,
+                    cv2.BORDER_CONSTANT,
+                    value=0,
                 )
 
         # 3. 生成 Mb（增强前，坐标在原图空间）
@@ -384,11 +463,16 @@ class EnsExamRealDataset(Dataset):
 
         # 5. albumentations 数据增强（Iin/Igt/Mb 施加相同的空间变换）
         if self.augment:
+            aug_args = {'image': Iin, 'gt': Igt, 'mb': Mb_pre}
             if Box_preserve_pre is not None:
-                result = self.aug(image=Iin, gt=Igt, mb=Mb_pre, box_preserve=Box_preserve_pre)
+                aug_args['box_preserve'] = Box_preserve_pre
+            if cached_baseline_tail is not None:
+                aug_args['cached_baseline_tail'] = cached_baseline_tail
+            result = self.aug(**aug_args)
+            if Box_preserve_pre is not None:
                 Box_preserve_pre = result['box_preserve']
-            else:
-                result = self.aug(image=Iin, gt=Igt, mb=Mb_pre)
+            if cached_baseline_tail is not None:
+                cached_baseline_tail = result['cached_baseline_tail']
             Iin, Igt, Mb_pre = result['image'], result['gt'], result['mb']
 
         # 6. 增强后从像素差值生成 Ms；Mb 直接用增强后的结果
@@ -405,6 +489,11 @@ class EnsExamRealDataset(Dataset):
         Box_preserve_gt = None
         if Box_preserve_pre is not None:
             Box_preserve_gt = torch.from_numpy(Box_preserve_pre.astype(np.float32)).unsqueeze(0).float()
+        Cached_baseline_tail_gt = None
+        if cached_baseline_tail is not None:
+            Cached_baseline_tail_gt = torch.from_numpy(
+                (cached_baseline_tail > 0).astype(np.float32)
+            ).permute(2, 0, 1).float()
 
         # 9. 多尺度 GT（1/4, 1/2, 1/1），供 CoarseNet 多尺度监督用
         Igt_u = Igt.unsqueeze(0)
@@ -415,5 +504,9 @@ class EnsExamRealDataset(Dataset):
         Igt1 = Igt
 
         if Box_preserve_gt is not None:
-            return Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt
-        return Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt
+            sample = (Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt)
+        else:
+            sample = (Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
+        if Cached_baseline_tail_gt is not None:
+            return (*sample, Cached_baseline_tail_gt)
+        return sample

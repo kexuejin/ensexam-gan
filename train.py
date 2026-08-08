@@ -311,6 +311,56 @@ def validate_universal_sidecar_config(cfg: dict) -> None:
         raise ValueError("universal sidecar requires strict reproducibility")
 
 
+def validate_cached_baseline_tail_config(cfg: dict) -> None:
+    """Require cached baseline-tail data and loss to be enabled together."""
+    loss_cfg = cfg.get('loss', {})
+    data_cfg = cfg.get('data', {})
+    weight = float(loss_cfg.get('lambda_cached_baseline_tail_nonregress', 0.0))
+    cache_dir = str(data_cfg.get('cached_baseline_tail_dir', '') or '').strip()
+    if weight < 0:
+        raise ValueError(
+            "loss.lambda_cached_baseline_tail_nonregress must be non-negative"
+        )
+    if weight > 0 and not cache_dir:
+        raise ValueError(
+            "positive cached baseline-tail loss requires "
+            "data.cached_baseline_tail_dir"
+        )
+    if cache_dir and weight <= 0:
+        raise ValueError(
+            "data.cached_baseline_tail_dir requires positive "
+            "loss.lambda_cached_baseline_tail_nonregress"
+        )
+    if weight <= 0:
+        return
+    fraction = float(loss_cfg.get('cached_baseline_tail_fraction', 1.0))
+    temperature = float(
+        loss_cfg.get('cached_baseline_tail_event_temperature_px', 0.25)
+    )
+    residual_threshold = float(
+        loss_cfg.get('cached_baseline_tail_residual_threshold_px', 12.0)
+    )
+    edit_threshold = float(
+        loss_cfg.get('cached_baseline_tail_edit_threshold_px', 12.0)
+    )
+    residual_alpha = float(
+        loss_cfg.get('cached_baseline_tail_residual_alpha', 1.0)
+    )
+    overerase_alpha = float(
+        loss_cfg.get('cached_baseline_tail_overerase_alpha', 1.0)
+    )
+    if not (0 < fraction <= 1.0):
+        raise ValueError("cached_baseline_tail_fraction must be in (0, 1]")
+    if temperature <= 0:
+        raise ValueError(
+            "cached_baseline_tail_event_temperature_px must be positive"
+        )
+    if residual_threshold < 0 or edit_threshold < 0:
+        raise ValueError("cached baseline-tail thresholds must be non-negative")
+    if residual_alpha < 0 or overerase_alpha < 0:
+        raise ValueError("cached baseline-tail alpha weights must be non-negative")
+
+
 def set_seed(seed: int, mode: str = 'statistical'):
     """固定随机源；支持 strict（严格可复现）与 statistical（统计可复现，默认更快）。"""
     random.seed(seed)
@@ -516,7 +566,8 @@ class CSVLogger:
                      'train_adv', 'train_lr', 'train_per', 'train_style',
                      'train_sn', 'train_block', 'train_input_preserve',
                      'train_mb_leak', 'train_box_preserve',
-                     'train_outside_edit_size', 'val_loss']
+                     'train_outside_edit_size',
+                     'train_cached_baseline_tail_nonregress', 'val_loss']
                 )
 
     def write(self, epoch: int, train_G: float, train_D: float,
@@ -617,6 +668,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     num_workers = train_cfg['num_workers']
     validate_checkpoint_strategy(resume, init_checkpoint)
     validate_universal_sidecar_config(cfg)
+    validate_cached_baseline_tail_config(cfg)
     # Linux 服务器上 num_workers=0 会成为数据加载瓶颈，自动提升
     if num_workers == 0 and os.name != 'nt':
         num_workers = min(4, os.cpu_count() or 1)
@@ -629,6 +681,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     mask_threshold = data_cfg['mask_threshold']
     box_class_mode = data_cfg.get('box_class_mode', 'all')
     box_preserve_mode = data_cfg.get('box_preserve_mode', 'none')
+    cached_baseline_tail_dir = data_cfg.get('cached_baseline_tail_dir', '')
     final_test_mode = eval_cfg.get('final_test_mode', 'both')
     skip_final_test = bool(eval_cfg.get('skip_final_test', False))
     skip_validation = bool(eval_cfg.get('skip_validation', False))
@@ -718,6 +771,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             aug_cfg=data_cfg.get('augmentation'), file_list=train_files, phase=phase,
             box_class_mode=box_class_mode,
             box_preserve_mode=box_preserve_mode,
+            cached_baseline_tail_dir=cached_baseline_tail_dir,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=True,
@@ -734,6 +788,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             aug_cfg=data_cfg.get('augmentation'), phase=phase,
             box_class_mode=box_class_mode,
             box_preserve_mode=box_preserve_mode,
+            cached_baseline_tail_dir=cached_baseline_tail_dir,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=False,
@@ -893,7 +948,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         # GPU 上累加损失，避免每 step .item() 导致的 CPU-GPU 同步
         sum_loss_G = torch.zeros(1, device=device)
         sum_loss_D = torch.zeros(1, device=device)
-        sum_parts  = torch.zeros(10, device=device)
+        sum_parts  = torch.zeros(11, device=device)
         n_steps = 0
 
         pbar = tqdm(train_prefetcher, total=len(train_loader),
@@ -903,7 +958,28 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         for batch in pbar:
             if max_steps_per_epoch is not None and n_steps >= int(max_steps_per_epoch):
                 break
-            if len(batch) == 8:
+            cached_baseline_tail_gt = None
+            if cached_baseline_tail_dir:
+                if len(batch) == 9:
+                    (
+                        Iin, Ms_gt, Mb_gt, Box_preserve_gt,
+                        Igt4, Igt2, Igt1, Igt, cached_baseline_tail_gt,
+                    ) = batch
+                    gt = (
+                        Iin, Ms_gt, Mb_gt, Box_preserve_gt,
+                        Igt4, Igt2, Igt1, Igt,
+                    )
+                elif len(batch) == 8:
+                    (
+                        Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt,
+                        cached_baseline_tail_gt,
+                    ) = batch
+                    gt = (Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
+                else:
+                    raise ValueError(
+                        "cached baseline-tail training batch must contain 8 or 9 tensors"
+                    )
+            elif len(batch) == 8:
                 Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt = batch
                 gt = (Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt)
             else:
@@ -938,7 +1014,12 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                 gen_out = G(Iin)
                 Icomp   = gen_out[-1]
                 fake_g, fake_l = D(Icomp, Mb_gt)
-                loss_G, parts  = criterion(gen_out, gt, (fake_g, fake_l))
+                loss_G, parts  = criterion(
+                    gen_out,
+                    gt,
+                    (fake_g, fake_l),
+                    cached_baseline_tail_gt=cached_baseline_tail_gt,
+                )
             loss_G.backward()
             optimizer_G.step()
 
@@ -985,7 +1066,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
                     f"box_preserve={avg_parts[8]:.4f}  "
-                    f"outside_edit={avg_parts[9]:.4f} | "
+                    f"outside_edit={avg_parts[9]:.4f}  "
+                    f"baseline_tail={avg_parts[10]:.4f} | "
                     f"PSNR={val_m['psnr']:.2f}  "
                     f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
                     f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
@@ -1002,7 +1084,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
                     f"box_preserve={avg_parts[8]:.4f}  "
-                    f"outside_edit={avg_parts[9]:.4f} | "
+                    f"outside_edit={avg_parts[9]:.4f}  "
+                    f"baseline_tail={avg_parts[10]:.4f} | "
                     f"Val=skipped | LR={current_lr:.2e}"
                 )
             csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, None if val_m is None else val_m['l1'])
@@ -1022,6 +1105,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     'train/mb_leak':    avg_parts[7],
                     'train/box_preserve': avg_parts[8],
                     'train/outside_edit_size': avg_parts[9],
+                    'train/cached_baseline_tail_nonregress': avg_parts[10],
                     'train/lr':         current_lr,
                 }
                 if should_validate:

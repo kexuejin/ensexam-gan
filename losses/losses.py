@@ -1,6 +1,8 @@
 """
 损失函数：LR Loss、SN Loss、Block Loss（Dice）、感知损失、风格损失、GAN Hinge Loss。
 """
+import math
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -59,6 +61,13 @@ class EnsExamLoss(nn.Module):
         'lambda_box_preserve': 0.0,
         'lambda_outside_edit_size': 0.0,
         'outside_edit_threshold_px': 12.0,
+        'lambda_cached_baseline_tail_nonregress': 0.0,
+        'cached_baseline_tail_residual_alpha': 1.0,
+        'cached_baseline_tail_overerase_alpha': 1.0,
+        'cached_baseline_tail_residual_threshold_px': 12.0,
+        'cached_baseline_tail_edit_threshold_px': 12.0,
+        'cached_baseline_tail_event_temperature_px': 0.25,
+        'cached_baseline_tail_fraction': 1.0,
     }
 
     def __init__(self, cfg: dict = None):
@@ -79,6 +88,27 @@ class EnsExamLoss(nn.Module):
         self.lambda_box_preserve = float(c.get('lambda_box_preserve', 0.0))
         self.lambda_outside_edit_size = float(c.get('lambda_outside_edit_size', 0.0))
         self.outside_edit_threshold_px = float(c.get('outside_edit_threshold_px', 12.0))
+        self.lambda_cached_baseline_tail_nonregress = float(
+            c.get('lambda_cached_baseline_tail_nonregress', 0.0)
+        )
+        self.cached_baseline_tail_residual_alpha = float(
+            c.get('cached_baseline_tail_residual_alpha', 1.0)
+        )
+        self.cached_baseline_tail_overerase_alpha = float(
+            c.get('cached_baseline_tail_overerase_alpha', 1.0)
+        )
+        self.cached_baseline_tail_residual_threshold_px = float(
+            c.get('cached_baseline_tail_residual_threshold_px', 12.0)
+        )
+        self.cached_baseline_tail_edit_threshold_px = float(
+            c.get('cached_baseline_tail_edit_threshold_px', 12.0)
+        )
+        self.cached_baseline_tail_event_temperature_px = float(
+            c.get('cached_baseline_tail_event_temperature_px', 0.25)
+        )
+        self.cached_baseline_tail_fraction = float(
+            c.get('cached_baseline_tail_fraction', 1.0)
+        )
 
     # ── 各分项损失 ────────────────────────────────────────────────────────
 
@@ -197,6 +227,78 @@ class EnsExamLoss(nn.Module):
         per_sample = excess.sum(dim=(1, 2, 3)) / (denom + 1e-6)
         return per_sample[valid].mean()
 
+    @staticmethod
+    def cached_baseline_tail_nonregress_loss(
+            Icomp: torch.Tensor,
+            Iin: torch.Tensor | None,
+            Igt: torch.Tensor | None,
+            cached_baseline_tail_gt: torch.Tensor | None,
+            residual_threshold_px: float,
+            edit_threshold_px: float,
+            event_temperature_px: float,
+            residual_alpha: float = 1.0,
+            overerase_alpha: float = 1.0,
+            tail_fraction: float = 1.0) -> torch.Tensor:
+        """Penalize student events where frozen current-primary was safe."""
+        if Iin is None or Igt is None or cached_baseline_tail_gt is None:
+            return Icomp.sum() * 0
+        if cached_baseline_tail_gt.ndim != 4 or cached_baseline_tail_gt.shape[1] < 2:
+            raise ValueError("cached_baseline_tail_gt must have at least 2 channels")
+        if not (0 < float(tail_fraction) <= 1.0):
+            raise ValueError("cached_baseline_tail_fraction must be in (0, 1]")
+        if residual_threshold_px < 0 or edit_threshold_px < 0:
+            raise ValueError("cached baseline-tail thresholds must be non-negative")
+        if residual_alpha < 0 or overerase_alpha < 0:
+            raise ValueError("cached baseline-tail alpha weights must be non-negative")
+        temperature = float(event_temperature_px) / 127.5
+        if temperature <= 0:
+            raise ValueError(
+                "cached_baseline_tail_event_temperature_px must be positive"
+            )
+
+        residual_support = (
+            cached_baseline_tail_gt[:, 0:1] > 0.5
+        ).to(dtype=Icomp.dtype)
+        overerase_support = (
+            cached_baseline_tail_gt[:, 1:2] > 0.5
+        ).to(dtype=Icomp.dtype)
+        residual_threshold = float(residual_threshold_px) / 127.5
+        edit_threshold = float(edit_threshold_px) / 127.5
+        residual_delta = torch.abs(Icomp - Igt).mean(dim=1, keepdim=True)
+        edit_delta = torch.abs(Icomp - Iin).mean(dim=1, keepdim=True)
+        residual_event = torch.sigmoid(
+            (residual_delta - residual_threshold) / temperature
+        )
+        overerase_event = torch.sigmoid(
+            (edit_delta - edit_threshold) / temperature
+        )
+
+        def tail_mean(values: torch.Tensor, valid: torch.Tensor) -> torch.Tensor:
+            selected = values[valid]
+            if selected.numel() == 0:
+                return Icomp.sum() * 0
+            if float(tail_fraction) >= 1.0 or selected.numel() <= 1:
+                return selected.mean()
+            k = max(1, int(math.ceil(selected.numel() * float(tail_fraction))))
+            return torch.topk(selected, k=k, largest=True).values.mean()
+
+        residual_denom = residual_support.sum(dim=(1, 2, 3))
+        overerase_denom = overerase_support.sum(dim=(1, 2, 3))
+        residual_ratio = (
+            (residual_event * residual_support).sum(dim=(1, 2, 3))
+            / (residual_denom + 1e-6)
+        )
+        overerase_ratio = (
+            (overerase_event * overerase_support).sum(dim=(1, 2, 3))
+            / (overerase_denom + 1e-6)
+        )
+        return (
+            float(residual_alpha)
+            * tail_mean(residual_ratio, residual_denom > 1.0)
+            + float(overerase_alpha)
+            * tail_mean(overerase_ratio, overerase_denom > 1.0)
+        )
+
     # ── GAN Hinge Loss ────────────────────────────────────────────────────
 
     @staticmethod
@@ -211,7 +313,14 @@ class EnsExamLoss(nn.Module):
 
     # ── 总损失 ────────────────────────────────────────────────────────────
 
-    def forward(self, gen_out: tuple, gt: tuple, disc_score: tuple):
+    def forward(
+        self,
+        gen_out: tuple,
+        gt: tuple,
+        disc_score: tuple,
+        *,
+        cached_baseline_tail_gt: torch.Tensor | None = None,
+    ):
         """
         Args:
             gen_out:    Generator 输出 (Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp)
@@ -223,7 +332,8 @@ class EnsExamLoss(nn.Module):
         Returns:
             L_total: 标量总损失
             parts:   各分项损失列表 [L_adv, L_lr, L_per, L_style, L_sn, L_block,
-                     L_preserve, L_mb_leak, L_box_preserve, L_outside_edit_size]
+                     L_preserve, L_mb_leak, L_box_preserve, L_outside_edit_size,
+                     L_cached_baseline_tail_nonregress]
         """
         Ms, Mb, Ic4, Ic2, Ic1, Ire, Icomp = gen_out
         Iin = None
@@ -248,11 +358,27 @@ class EnsExamLoss(nn.Module):
         L_outside_edit_size = (
             self.outside_edit_size_loss(Icomp, Iin, Mb_gt) * self.lambda_outside_edit_size
         )
+        L_cached_baseline_tail_nonregress = (
+            self.cached_baseline_tail_nonregress_loss(
+                Icomp,
+                Iin,
+                Igt,
+                cached_baseline_tail_gt,
+                self.cached_baseline_tail_residual_threshold_px,
+                self.cached_baseline_tail_edit_threshold_px,
+                self.cached_baseline_tail_event_temperature_px,
+                self.cached_baseline_tail_residual_alpha,
+                self.cached_baseline_tail_overerase_alpha,
+                self.cached_baseline_tail_fraction,
+            )
+            * self.lambda_cached_baseline_tail_nonregress
+        )
         L_adv   = (self.hinge_loss_G(global_score) + self.hinge_loss_G(local_score)) / 2
 
         L_total = (
             L_adv + L_lr + L_per + L_style + L_sn + L_block
             + L_preserve + L_mb_leak + L_box_preserve + L_outside_edit_size
+            + L_cached_baseline_tail_nonregress
         )
         return L_total, [
             L_adv,
@@ -265,4 +391,5 @@ class EnsExamLoss(nn.Module):
             L_mb_leak,
             L_box_preserve,
             L_outside_edit_size,
+            L_cached_baseline_tail_nonregress,
         ]
