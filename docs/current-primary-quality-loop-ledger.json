@@ -1,37 +1,25 @@
 {
   "active_iteration": {
-    "causal_change": "Add a train-only current-primary baseline-tail non-regression constraint to the universal sidecar while holding the architecture, data manifest, seed, step budget, optimizer, learning-rate schedule, and matched-copy inference protocol fixed.",
+    "causal_change": "Replace the free RGB universal-sidecar residual with a nonnegative per-pixel magnitude along the same-call current-primary source-to-clean edit vector, while holding the frozen primary, external interface, data roles, and first gate fixed.",
     "evidence": [
       {
-        "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-d2-step80-kill.md",
-        "sha256": "106c8b2ceb8fa515ee03493d756ada4db06a121c47d5d62b01eaba71ae2c66ef"
+        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
+        "sha256": "f129e860bdc6d473840cd41fd2375646b302c09aa65e7d8e504078ca643fa445"
       },
       {
-        "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-d2d-step80-halflr-decision.md",
-        "sha256": "cb65d9a705aec4419e721bc961d036d1f4744a40201b1f81bcc8af2ed8aee209"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-baseline-tail-cache-prerequisite.md",
-        "sha256": "fff8e7db604dc92782d86f0469b2b318d940126b5a0ecd5ef7b32817709c4234"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-preregistration.md",
-        "sha256": "2c883761671fa4dc7ace9bb3041d1a18227e6b5d7b6f2a27418db6c6ea1d5c69"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-preflight-pass.md",
-        "sha256": "39c5deead4e66f57b10fffd28c26662ce664505c9db7d077481366f213422935"
+        "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-r1-root-cause.md",
+        "sha256": "4b996cb5c5801ae71935484ba0b0f7c09bb9ef779f68aeb0c04459e4224adcc5"
       }
     ],
-    "failure_bucket": "sidecar_measurable_movement_source_residual_regression",
+    "failure_bucket": "free_rgb_sidecar_edit_direction_source_residual_regression",
     "first_gate": "scut_inner_val15",
-    "id": "universal-sidecar-baseline-tail-nonregression",
-    "next_action": "Run exactly the registered D3 step80 training config, then evaluate the leakage-safe SCUT inner-val15 source guard before any development scoring.",
+    "id": "universal-sidecar-primary-direction-restricted-residual",
+    "next_action": "Write and run a synthetic direction-restricted sidecar prerequisite; no training is admissible until exact equivalence, gradient liveness, bounded magnitude, sidecar-only scope, and no-opposed-direction properties pass.",
     "prerequisites": [
       {
-        "detail": "The cache is derived only from the frozen current-primary and the registered training manifest, validates all 383 rows and mask hashes, and has no filename overlap with inner-val15.",
-        "id": "exact_train_manifest_baseline_support",
-        "status": "passed"
+        "detail": "The successor must prove exact current-primary equivalence at initialization, nonzero first-step gradients, nonnegative bounded magnitude along the source-to-current-primary vector, and no new opposed RGB direction.",
+        "id": "direction_restricted_sidecar_synthetic_contract",
+        "status": "pending"
       }
     ],
     "prohibited_before_first_gate": [
@@ -42,7 +30,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PENDING"
+    "terminal": "PREREQUISITE_NEEDED"
   },
   "baseline": {
     "checkpoint": {
@@ -122,6 +110,18 @@
       "outcome": "train_only_support_prerequisite_passed",
       "repeat_policy": "reuse_exact_cache_only",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
+          "sha256": "f129e860bdc6d473840cd41fd2375646b302c09aa65e7d8e504078ca643fa445"
+        }
+      ],
+      "id": "universal-sidecar-d3-baseline-tail-step80",
+      "outcome": "same_page_source_residual_regression_as_d2",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1
