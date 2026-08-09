@@ -1,52 +1,52 @@
 {
   "active_iteration": {
-    "causal_change": "Run prerequisite-only, read-only diagnostics to distinguish whether D4's direction-restricted sidecar collapsed through raw direction-mode magnitude collapse, learned gate/support collapse, or matched-copy threshold suppression, while keeping the frozen current-primary baseline, exact D4 evidence, and first gate fixed.",
+    "causal_change": "Implement only the fail-closed folded primary-edit-direction magnitude prerequisite for a future D5 sidecar, preserving D4 semantics while proving that both raw residual signs fold into the same nonnegative primary-direction branch without losing exact zero initialization or baseline compatibility.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
+        "sha256": "5224c195193980f6e6d88e3b4d9333d834d7eaba9459457a28eda3db3b60377b"
+      },
+      {
+        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
+        "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+      },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
         "sha256": "c257cc5ff43e6cf8ddeb45a1227503f8c587438b6ac042e7aae24b4797b8ab1f"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-preregistration.md",
-        "sha256": "b5c7594b48529f97f2f117ce9003a5476973272472856a994cf808221bbc8c51"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
-        "sha256": "f129e860bdc6d473840cd41fd2375646b302c09aa65e7d8e504078ca643fa445"
-      },
-      {
-        "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-r1-root-cause.md",
-        "sha256": "4b996cb5c5801ae71935484ba0b0f7c09bb9ef779f68aeb0c04459e4224adcc5"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
-        "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
       },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d4-real-preflight-pass.md",
         "sha256": "86205ba3e063667072c9398fa02b1de7ab1e7762ce27275bd6f4ffde7e4f7510"
       },
       {
-        "path": "outputs/universal-sidecar-d4-preflight-20260809/preflight.json",
-        "sha256": "46ed97cb263a48189a5af10a480cce43637353efa6e3b610aea5ff3b2f94ed94"
+        "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
+        "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
       },
       {
-        "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
-        "sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937"
+        "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+        "sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78"
       },
       {
-        "path": "scripts/analysis/audit_primary_edit_direction_sidecar.py",
-        "sha256": "0718021ebd5c96929294c9942b432e49d3576b31504087a8188ec96f1a990693"
+        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+        "sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb"
+      },
+      {
+        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+        "sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab"
+      },
+      {
+        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+        "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
       }
     ],
-    "failure_bucket": "direction_restricted_sidecar_subthreshold_noop",
+    "failure_bucket": "raw_direction_mode_magnitude_collapse_zero_positive_support",
     "first_gate": "scut_inner_val15",
-    "id": "universal-sidecar-d4-subthreshold-noop-root-cause",
-    "next_action": "Run read-only D4 changed-pixel/gate/magnitude diagnostics and preregister at most one materially new successor; no training yet.",
+    "id": "universal-sidecar-d5-folded-direction-magnitude",
+    "next_action": "Implement folded-magnitude synthetic tests/tooling and run the fail-closed prerequisite preflight only; no D5 training, inference, or later-gate evaluation yet.",
     "prerequisites": [
       {
-        "detail": "Before any successor is proposed, the root-cause writeup must explain whether D4's zero-metric outcome is best attributed to raw direction-mode magnitude collapse, learned gate/support collapse, or matched-copy threshold suppression, and must preregister at most one materially new successor without opening training or later gates.",
-        "id": "d4_subthreshold_noop_root_cause",
+        "detail": "Before any D5 implementation is treated as runnable, a fail-closed synthetic prerequisite must prove exact zero initialization, strict current-primary compatibility, frozen base tensors, nonzero folded-direction gradients after either raw sign, nonzero global-scale movement by the second synthetic step, residual-bound preservation, zero-primary-edit no-op behavior, and no public interface regression.",
+        "id": "d5_folded_magnitude_synthetic_preflight",
         "status": "pending"
       }
     ],
@@ -166,6 +166,54 @@
       "outcome": "direction_restricted_sidecar_subthreshold_noop",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
+          "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
+          "sha256": "c257cc5ff43e6cf8ddeb45a1227503f8c587438b6ac042e7aae24b4797b8ab1f"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+          "sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+          "sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+          "sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+          "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
+        }
+      ],
+      "id": "universal-sidecar-d4-subthreshold-noop-root-cause",
+      "outcome": "raw_direction_mode_magnitude_collapse_zero_positive_support",
+      "repeat_policy": "do_not_repeat_reuse_read_only_evidence",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
+          "sha256": "5224c195193980f6e6d88e3b4d9333d834d7eaba9459457a28eda3db3b60377b"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
+          "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-magnitude-preregistration",
+      "outcome": "folded_direction_magnitude_preregistered_pending_fail_closed_synthetic_preflight",
+      "repeat_policy": "implement_and_run_fail_closed_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
     },
     {
       "evidence": [
