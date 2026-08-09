@@ -7,6 +7,7 @@ import torch
 
 from networks.discriminator import Discriminator
 from networks.generator import Generator, UniversalResidualAdapterSidecar
+from scripts.analysis.audit_universal_sidecar_checkpoint import audit_checkpoint
 from train import (
     apply_generator_trainable_patterns,
     build_training_checkpoint,
@@ -321,6 +322,32 @@ class UniversalResidualAdapterSidecarTest(unittest.TestCase):
         self.assertNotIn("optimizer_D", checkpoint)
         self.assertNotIn("scheduler_G", checkpoint)
         self.assertNotIn("scheduler_D", checkpoint)
+
+    def test_checkpoint_audit_preserves_signed_scalar_value(self) -> None:
+        baseline = Generator()
+        candidate = Generator(
+            sidecar_cfg(residual_parameterization="primary_edit_direction_folded")
+        )
+        candidate.load_state_dict(baseline.state_dict(), strict=False)
+        with torch.no_grad():
+            sidecar = candidate.universal_residual_adapter_sidecar
+            sidecar.global_residual_scale.fill_(-2.0e-5)
+            sidecar.adapters[0][-1].bias.fill_(1.0e-5)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            baseline_path = root / "baseline.pth"
+            candidate_path = root / "candidate.pth"
+            torch.save({"G_state_dict": baseline.state_dict()}, baseline_path)
+            torch.save({"G_state_dict": candidate.state_dict()}, candidate_path)
+            result = audit_checkpoint(
+                candidate_checkpoint=candidate_path,
+                baseline_checkpoint=baseline_path,
+            )
+
+        self.assertEqual(result["status"], "pass")
+        self.assertLess(result["global_residual_scale"]["value"], 0.0)
+        self.assertGreater(result["global_residual_scale"]["maxabs"], 0.0)
 
     def test_public_forward_surface_has_no_routing_arguments(self) -> None:
         forbidden = ("domain", "source", "caller", "route", "expert", "path")

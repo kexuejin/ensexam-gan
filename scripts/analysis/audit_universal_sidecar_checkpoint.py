@@ -23,10 +23,13 @@ SCHEDULER_KEYS = ("scheduler_G", "scheduler_D")
 
 def _tensor_stats(tensor: torch.Tensor) -> dict[str, float]:
     value = tensor.detach().float().cpu()
-    return {
+    stats = {
         "norm": float(value.norm()),
         "maxabs": float(value.abs().max()) if value.numel() else 0.0,
     }
+    if value.numel() == 1:
+        stats["value"] = float(value.item())
+    return stats
 
 
 def audit_checkpoint(
