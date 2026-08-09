@@ -11,6 +11,7 @@ from train import (
     apply_generator_trainable_patterns,
     build_training_checkpoint,
     load_initial_checkpoint,
+    validate_universal_sidecar_config,
 )
 
 
@@ -36,6 +37,140 @@ class UniversalResidualAdapterSidecarTest(unittest.TestCase):
             Generator(sidecar_cfg(adapter_count=4))
         with self.assertRaisesRegex(ValueError, "residual_bound"):
             Generator(sidecar_cfg(residual_bound=0.05))
+        with self.assertRaisesRegex(ValueError, "residual_parameterization"):
+            Generator(sidecar_cfg(residual_parameterization="opposed_rgb"))
+
+    def test_default_free_rgb_state_shape_is_unchanged(self) -> None:
+        implicit = Generator(sidecar_cfg())
+        explicit = Generator(sidecar_cfg(residual_parameterization="free_rgb"))
+        self.assertEqual(
+            {
+                key: tuple(value.shape)
+                for key, value in implicit.state_dict().items()
+            },
+            {
+                key: tuple(value.shape)
+                for key, value in explicit.state_dict().items()
+            },
+        )
+        for adapter in implicit.universal_residual_adapter_sidecar.adapters:
+            self.assertEqual(adapter[-1].out_channels, 3)
+
+    def test_direction_mode_zero_init_equivalence_and_gradient_liveness(self) -> None:
+        torch.manual_seed(23)
+        sidecar = UniversalResidualAdapterSidecar(
+            feature_channels=16,
+            residual_parameterization="primary_edit_direction",
+        ).train()
+        feature = torch.randn(2, 16, 8, 8)
+        input_image = torch.zeros(2, 3, 8, 8)
+        baseline = torch.full_like(input_image, 0.25)
+        target = torch.full_like(input_image, 0.5)
+
+        candidate, telemetry = sidecar(feature, baseline, input_image)
+        self.assertTrue(torch.equal(candidate.detach(), baseline))
+        self.assertEqual(float(telemetry["ura_fallback_code"]), 0.0)
+        loss = torch.nn.functional.mse_loss(candidate, target)
+        loss.backward()
+        final_bias_grads = [
+            adapter[-1].bias.grad.detach().abs().sum()
+            for adapter in sidecar.adapters
+        ]
+        self.assertTrue(all(float(value) > 0 for value in final_bias_grads))
+
+    def test_direction_mode_is_bounded_and_never_opposes_primary_edit(self) -> None:
+        sidecar = UniversalResidualAdapterSidecar(
+            feature_channels=16,
+            residual_bound=0.02,
+            residual_parameterization="primary_edit_direction",
+        ).eval()
+        with torch.no_grad():
+            sidecar.global_residual_scale.fill_(10.0)
+            for adapter in sidecar.adapters:
+                adapter[-1].bias.fill_(100.0)
+        feature = torch.zeros(1, 16, 4, 4)
+        input_image = torch.zeros(1, 3, 4, 4)
+        baseline = input_image.clone()
+        baseline[:, 0] = 0.4
+        baseline[:, 1] = -0.2
+        baseline[:, 2] = 0.1
+
+        candidate, telemetry = sidecar(feature, baseline, input_image)
+        delta = candidate - baseline
+        primary_edit = baseline - input_image
+        self.assertEqual(float(telemetry["ura_fallback_code"]), 0.0)
+        self.assertLessEqual(float(delta.detach().abs().max()), 0.02 + 1e-7)
+        self.assertTrue(torch.all(delta * primary_edit >= -1e-8))
+
+    def test_direction_mode_zero_primary_edit_is_noop(self) -> None:
+        sidecar = UniversalResidualAdapterSidecar(
+            feature_channels=16,
+            residual_parameterization="primary_edit_direction",
+        ).eval()
+        with torch.no_grad():
+            sidecar.global_residual_scale.fill_(10.0)
+            for adapter in sidecar.adapters:
+                adapter[-1].bias.fill_(100.0)
+        feature = torch.zeros(1, 16, 4, 4)
+        baseline = torch.randn(1, 3, 4, 4).clamp(-0.5, 0.5)
+        candidate, _ = sidecar(feature, baseline, baseline.clone())
+        self.assertTrue(torch.equal(candidate, baseline))
+
+    def test_direction_mode_negative_global_scale_cannot_reverse_edit(self) -> None:
+        sidecar = UniversalResidualAdapterSidecar(
+            feature_channels=16,
+            residual_parameterization="primary_edit_direction",
+        ).eval()
+        with torch.no_grad():
+            sidecar.global_residual_scale.fill_(-1.0)
+            for adapter in sidecar.adapters:
+                adapter[-1].bias.fill_(100.0)
+        feature = torch.zeros(1, 16, 4, 4)
+        input_image = torch.zeros(1, 3, 4, 4)
+        baseline = torch.full_like(input_image, 0.25)
+        candidate, telemetry = sidecar(feature, baseline, input_image)
+        self.assertTrue(torch.equal(candidate, baseline))
+        self.assertEqual(float(telemetry["ura_residual_scale_abs"]), 0.0)
+
+    def test_direction_mode_requires_matching_same_call_input(self) -> None:
+        sidecar = UniversalResidualAdapterSidecar(
+            feature_channels=16,
+            residual_parameterization="primary_edit_direction",
+        )
+        feature = torch.zeros(1, 16, 4, 4)
+        baseline = torch.zeros(1, 3, 4, 4)
+        with self.assertRaisesRegex(ValueError, "requires input_image"):
+            sidecar(feature, baseline)
+        with self.assertRaisesRegex(ValueError, "matching"):
+            sidecar(feature, baseline, torch.zeros(1, 3, 2, 2))
+
+    def test_training_config_accepts_only_registered_direction_mode(self) -> None:
+        cfg = {
+            "model": sidecar_cfg(
+                residual_parameterization="primary_edit_direction"
+            ),
+            "train": {
+                "resume": False,
+                "resume_path": "",
+                "init_checkpoint": (
+                    "./artifacts/current-primary/micro_region_probe_step0001.pth"
+                ),
+                "trainable_generator_patterns": [
+                    "^universal_residual_adapter_sidecar\\."
+                ],
+                "freeze_generator_batchnorm_stats": True,
+                "save_optimizer_state": False,
+                "save_scheduler_state": False,
+                "seed": 20260806,
+                "reproducibility_mode": "strict",
+            },
+        }
+        validate_universal_sidecar_config(cfg)
+        cfg["model"]["universal_residual_adapter_sidecar"][
+            "residual_parameterization"
+        ] = "opposed_rgb"
+        with self.assertRaisesRegex(ValueError, "residual_parameterization"):
+            validate_universal_sidecar_config(cfg)
 
     def test_default_generator_has_no_sidecar_params_or_shape_change(self) -> None:
         generator = Generator().eval()

@@ -211,6 +211,7 @@ class UniversalResidualAdapterSidecar(nn.Module):
         hidden_channels: int = 16,
         residual_bound: float = 12.0 / 255.0,
         fallback_residual_abs_max: float | None = None,
+        residual_parameterization: str = "free_rgb",
     ):
         super().__init__()
         if adapter_count != 3:
@@ -219,8 +220,14 @@ class UniversalResidualAdapterSidecar(nn.Module):
             raise ValueError("residual_bound must be in (0, 12/255]")
         if hidden_channels <= 0:
             raise ValueError("hidden_channels must be positive")
+        if residual_parameterization not in {"free_rgb", "primary_edit_direction"}:
+            raise ValueError(
+                "residual_parameterization must be free_rgb or "
+                "primary_edit_direction"
+            )
         self.adapter_count = int(adapter_count)
         self.residual_bound = float(residual_bound)
+        self.residual_parameterization = residual_parameterization
         self.fallback_residual_abs_max = (
             float(fallback_residual_abs_max)
             if fallback_residual_abs_max is not None
@@ -238,7 +245,12 @@ class UniversalResidualAdapterSidecar(nn.Module):
                 nn.Sequential(
                     nn.Conv2d(feature_channels, hidden_channels, 3, padding=1),
                     nn.ReLU(inplace=True),
-                    nn.Conv2d(hidden_channels, output_channels, 1),
+                    nn.Conv2d(
+                        hidden_channels,
+                        1 if residual_parameterization == "primary_edit_direction"
+                        else output_channels,
+                        1,
+                    ),
                 )
                 for _ in range(self.adapter_count)
             ]
@@ -259,6 +271,7 @@ class UniversalResidualAdapterSidecar(nn.Module):
         self,
         reconstruction_feature: torch.Tensor,
         baseline_output: torch.Tensor,
+        input_image: torch.Tensor | None = None,
     ) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
         gate_logits = self.gate(reconstruction_feature)
         gate_weights = torch.softmax(gate_logits, dim=1)
@@ -270,8 +283,44 @@ class UniversalResidualAdapterSidecar(nn.Module):
             gate_weights.view(gate_weights.shape[0], self.adapter_count, 1, 1, 1)
             * adapter_residuals
         ).sum(dim=1)
-        bounded_residual = self.residual_bound * torch.tanh(mixed_residual)
-        scaled_residual = torch.tanh(self.global_residual_scale) * bounded_residual
+        if self.residual_parameterization == "primary_edit_direction":
+            if input_image is None or input_image.shape != baseline_output.shape:
+                raise ValueError(
+                    "primary_edit_direction requires input_image matching "
+                    "baseline_output"
+                )
+            nonnegative_magnitude = torch.where(
+                mixed_residual >= 0,
+                mixed_residual,
+                torch.zeros_like(mixed_residual),
+            )
+            bounded_magnitude = self.residual_bound * torch.tanh(
+                nonnegative_magnitude
+            )
+            nonnegative_scale = torch.where(
+                self.global_residual_scale >= 0,
+                self.global_residual_scale,
+                torch.zeros_like(self.global_residual_scale),
+            )
+            applied_scale = torch.tanh(nonnegative_scale)
+            primary_edit = baseline_output - input_image
+            edit_norm = primary_edit.abs().amax(dim=1, keepdim=True)
+            primary_direction = torch.where(
+                edit_norm > 0,
+                primary_edit / edit_norm.clamp_min(1e-12),
+                torch.zeros_like(primary_edit),
+            )
+            scaled_residual = (
+                applied_scale
+                * bounded_magnitude
+                * primary_direction
+            )
+        else:
+            bounded_residual = self.residual_bound * torch.tanh(mixed_residual)
+            applied_scale = torch.tanh(self.global_residual_scale)
+            scaled_residual = (
+                applied_scale * bounded_residual
+            )
         fallback_code = baseline_output.new_tensor(0.0)
         invalid = (
             not torch.isfinite(gate_weights).all()
@@ -301,7 +350,7 @@ class UniversalResidualAdapterSidecar(nn.Module):
             "ura_gate_max_mean": gate_weights.max(dim=1).values.mean(),
             "ura_residual_abs_mean": residual_for_telemetry.detach().abs().mean(),
             "ura_residual_abs_max": residual_for_telemetry.detach().abs().amax(),
-            "ura_residual_scale_abs": torch.tanh(self.global_residual_scale).detach().abs(),
+            "ura_residual_scale_abs": applied_scale.detach().abs(),
             "ura_fallback_code": fallback_code,
         }
         return candidate, telemetry
@@ -336,6 +385,9 @@ class Generator(nn.Module):
                 hidden_channels=int(sidecar_cfg.get("hidden_channels", 16)),
                 residual_bound=float(sidecar_cfg.get("residual_bound", 12.0 / 255.0)),
                 fallback_residual_abs_max=sidecar_cfg.get("fallback_residual_abs_max"),
+                residual_parameterization=str(
+                    sidecar_cfg.get("residual_parameterization", "free_rgb")
+                ),
             )
 
     def forward(
@@ -364,6 +416,7 @@ class Generator(nn.Module):
             Icomp, universal_sidecar_telemetry = self.universal_residual_adapter_sidecar(
                 reconstruction_feature,
                 Icomp,
+                Iin,
             )
         elif return_universal_sidecar_telemetry:
             universal_sidecar_telemetry = {

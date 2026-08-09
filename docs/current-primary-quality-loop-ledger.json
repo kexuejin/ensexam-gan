@@ -9,17 +9,29 @@
       {
         "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-r1-root-cause.md",
         "sha256": "4b996cb5c5801ae71935484ba0b0f7c09bb9ef779f68aeb0c04459e4224adcc5"
+      },
+      {
+        "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
+        "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
+      },
+      {
+        "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
+        "sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937"
+      },
+      {
+        "path": "scripts/analysis/audit_primary_edit_direction_sidecar.py",
+        "sha256": "0718021ebd5c96929294c9942b432e49d3576b31504087a8188ec96f1a990693"
       }
     ],
     "failure_bucket": "free_rgb_sidecar_edit_direction_source_residual_regression",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-primary-direction-restricted-residual",
-    "next_action": "Write and run a synthetic direction-restricted sidecar prerequisite; no training is admissible until exact equivalence, gradient liveness, bounded magnitude, sidecar-only scope, and no-opposed-direction properties pass.",
+    "next_action": "D4 exact-D2-diff preregistration and fail-closed preflight with no training before pass.",
     "prerequisites": [
       {
         "detail": "The successor must prove exact current-primary equivalence at initialization, nonzero first-step gradients, nonnegative bounded magnitude along the source-to-current-primary vector, and no new opposed RGB direction.",
         "id": "direction_restricted_sidecar_synthetic_contract",
-        "status": "pending"
+        "status": "passed"
       }
     ],
     "prohibited_before_first_gate": [
@@ -30,7 +42,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "PENDING"
   },
   "baseline": {
     "checkpoint": {
@@ -75,6 +87,26 @@
     "reserved_blind_state": "disabled"
   },
   "records": [
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
+          "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
+        },
+        {
+          "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
+          "sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937"
+        },
+        {
+          "path": "scripts/analysis/audit_primary_edit_direction_sidecar.py",
+          "sha256": "0718021ebd5c96929294c9942b432e49d3576b31504087a8188ec96f1a990693"
+        }
+      ],
+      "id": "universal-sidecar-primary-edit-direction-prerequisite",
+      "outcome": "synthetic_direction_contract_passed",
+      "repeat_policy": "reuse_exact_mechanism_audit_no_parameter_family_sweep",
+      "terminal": "PASS"
+    },
     {
       "evidence": [
         {

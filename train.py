@@ -257,6 +257,14 @@ def _validate_universal_sidecar_model_shape(model_cfg: dict) -> None:
         )
     if int(sidecar_cfg.get('adapter_count', 3)) != 3:
         raise ValueError("universal sidecar requires adapter_count=3")
+    residual_parameterization = str(
+        sidecar_cfg.get('residual_parameterization', 'free_rgb')
+    )
+    if residual_parameterization not in {'free_rgb', 'primary_edit_direction'}:
+        raise ValueError(
+            "universal sidecar residual_parameterization must be free_rgb or "
+            "primary_edit_direction"
+        )
     residual_bound = float(sidecar_cfg.get('residual_bound', 12.0 / 255.0))
     if residual_bound <= 0.0 or residual_bound > 12.0 / 255.0:
         raise ValueError("universal sidecar residual_bound must be in (0, 12/255]")
