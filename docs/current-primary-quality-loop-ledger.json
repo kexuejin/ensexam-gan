@@ -19,6 +19,14 @@
         "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
       },
       {
+        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-real-preflight-pass.md",
+        "sha256": "86205ba3e063667072c9398fa02b1de7ab1e7762ce27275bd6f4ffde7e4f7510"
+      },
+      {
+        "path": "outputs/universal-sidecar-d4-preflight-20260809/preflight.json",
+        "sha256": "46ed97cb263a48189a5af10a480cce43637353efa6e3b610aea5ff3b2f94ed94"
+      },
+      {
         "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
         "sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937"
       },
@@ -30,12 +38,12 @@
     "failure_bucket": "free_rgb_sidecar_edit_direction_source_residual_regression",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-primary-direction-restricted-residual",
-    "next_action": "Run the real D4 fail-closed preflight only.",
+    "next_action": "Run one fixed D4 80-step MPS training followed by inner-val15 only.",
     "prerequisites": [
       {
         "detail": "The exact-D2-diff validator must fail closed unless D4 changes only direction mode and save_dir, keeps later gates disabled, preserves frozen current-primary hashes, and audits checkpoint/structure compatibility before any run.",
         "id": "d4_exact_diff_fail_closed_preflight",
-        "status": "pending"
+        "status": "passed"
       },
       {
         "detail": "The successor must prove exact current-primary equivalence at initialization, nonzero first-step gradients, nonnegative bounded magnitude along the source-to-current-primary vector, and no new opposed RGB direction.",
@@ -51,7 +59,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "PENDING"
   },
   "baseline": {
     "checkpoint": {
@@ -107,6 +115,22 @@
       "outcome": "exact_d2_diff_frozen_pending_real_preflight",
       "repeat_policy": "run_real_d4_preflight_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-real-preflight-pass.md",
+          "sha256": "86205ba3e063667072c9398fa02b1de7ab1e7762ce27275bd6f4ffde7e4f7510"
+        },
+        {
+          "path": "outputs/universal-sidecar-d4-preflight-20260809/preflight.json",
+          "sha256": "46ed97cb263a48189a5af10a480cce43637353efa6e3b610aea5ff3b2f94ed94"
+        }
+      ],
+      "id": "universal-sidecar-d4-real-preflight",
+      "outcome": "exact_d2_diff_fail_closed_preflight_passed",
+      "repeat_policy": "run_exact_registered_d4_step80_once",
+      "terminal": "PASS"
     },
     {
       "evidence": [
