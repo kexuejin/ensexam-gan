@@ -12,8 +12,10 @@ product default.
 ## Frozen Evidence Boundary
 
 This writeup is read-only and reuses the frozen D4 artifacts, metrics, and
-checkpoint audit already admitted by the ledger. No retraining, inference
-rerun, threshold sweep, learning-rate sweep, or later-gate evidence was opened.
+checkpoint audit already admitted by the ledger. It also uses the frozen
+in-memory `no_grad`/`eval` replay described below. No retraining, threshold
+sweep, learning-rate sweep, new prediction artifact, or quality-gate evidence
+was created.
 
 The checkpoint-level sidecar scale is effectively zero:
 
@@ -84,16 +86,17 @@ delta_pixels_gte_12 = 0
 ~~~
 
 Because the exact sidecar replay above contributes zero residual while still
-reproducing the frozen D4 PNGs, those byte-level differences should be phrased
-conservatively as execution/replay/uint8 variance rather than learned D4
-sidecar movement.
+reproducing the frozen D4 PNGs, the conservative inference is that those
+byte-level differences reflect execution/replay/uint8 variance rather than
+learned D4 sidecar movement. The available evidence does not isolate a more
+specific variance source.
 
 ## Adapter Bias Context
 
 The final checkpoint adapter final biases are all approximately
-`-3.8112e-05`, which is consistent with the observed non-positive mixed
-support. This supports the zero-positive-support diagnosis, but it does not
-justify an unmeasured step-by-step training-trajectory claim.
+`-3.8112e-05`, which is consistent with the observed final non-positive mixed
+support. This final-state evidence supports the zero-positive-support
+diagnosis, but it does not establish a step-by-step training trajectory.
 
 ## Root-Cause Conclusion
 
@@ -111,7 +114,7 @@ the allowed direction branch so that positive support is not annihilated before
 bounded scaling.
 
 Intent: Close the D4 causal investigation with a read-only root-cause finding that distinguishes magnitude collapse from gate collapse or threshold suppression.
-Constraint: Only frozen D4 artifacts, audits, and metrics are admissible in this closure; no new training or inference evidence may be created.
+Constraint: Only frozen D4 artifacts, audits, metrics, and the in-memory frozen replay are admissible in this closure; no new prediction artifacts or quality-gate evidence may be created.
 Rejected: Matched-copy threshold rescue | frozen replay shows zero pre-copy residual support, so thresholding is downstream of the dominant failure.
 Rejected: Gate-collapse diagnosis | gate maxima and entropy stay far from a hard collapsed branch while residual support remains zero.
 Rejected: Scalar rescue by more scale, learning rate, or steps | that would not close the measured causal question for exact D4.

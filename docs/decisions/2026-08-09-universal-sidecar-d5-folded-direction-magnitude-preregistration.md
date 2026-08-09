@@ -3,9 +3,10 @@
 ## Status
 
 `PREREQUISITE_NEEDED`. This record freezes the only admissible D5 successor
-after the D4 root-cause closure. It does not authorize implementation,
-preflight output creation, training, inference, later gates, or any change to
-`artifacts/current-primary`.
+after the D4 root-cause closure. It authorizes only implementation and
+execution of the fail-closed synthetic prerequisite. Real preflight, training,
+prediction artifact generation, every quality gate, and any change to
+`artifacts/current-primary` remain prohibited until that prerequisite passes.
 
 ## Successor Identity
 
@@ -27,9 +28,12 @@ train.save_dir = ./artifacts/trials/universal-sidecar-d5-d1-mixed-scut130-hw5k26
 For `primary_edit_direction_folded`, the residual path is preregistered as:
 
 ~~~text
+primary_direction = normalized_primary_edit_direction
 folded_magnitude = torch.where(mixed_residual >= 0, mixed_residual, -mixed_residual)
-bounded_magnitude = residual_bound * tanh(folded_magnitude)
-scaled_residual = nonnegative_global_scale * bounded_magnitude * normalized_primary_edit_direction
+bounded_magnitude = residual_bound * torch.tanh(folded_magnitude)
+nonnegative_scale = max(global_residual_scale, 0)
+applied_scale = torch.tanh(nonnegative_scale)
+scaled_residual = applied_scale * bounded_magnitude * primary_direction
 candidate = clamp(internal_baseline + scaled_residual)
 ~~~
 
@@ -58,8 +62,10 @@ D5 remains blocked until a synthetic prerequisite proves all of the following:
 - no public interface regression.
 
 This turn does not implement that prerequisite. The next admissible action is
-to implement the synthetic tests/tooling and run that fail-closed preflight
-only.
+to implement the synthetic tests/tooling and execute that fail-closed
+prerequisite only. Real preflight, training, prediction artifact generation,
+and every quality gate remain prohibited until the synthetic prerequisite
+passes.
 
 ## Future Real Preflight Boundary
 
@@ -105,14 +111,14 @@ Record these as rejected non-default paths:
 
 Intent: Gate the only admissible post-D4 successor behind a folded-magnitude synthetic prerequisite instead of opening another unbounded training branch.
 Constraint: Relative to frozen D4, only residual_parameterization and a unique save_dir may change in the future runnable config.
-Constraint: This preregistration does not authorize implementation, training, inference, or later-gate evaluation.
+Constraint: This preregistration authorizes only implementation and execution of the synthetic prerequisite; real preflight, training, prediction artifact generation, and every quality gate remain prohibited until it passes.
 Rejected: Direct real-run retry | the folded mechanism must first prove fail-closed synthetic behavior before any training is reconsidered.
 Rejected: Softplus or leaky signed rescue | those alternatives either break exact zero initialization or weaken the nonnegative direction contract.
 Rejected: Mutate D4 in place | D4 is frozen causal evidence and must remain unchanged.
 Confidence: high
 Scope-risk: narrow
 Reversibility: clean
-Directive: Implement only the synthetic folded-magnitude prerequisite next; do not create D5 train outputs or run a real D5 step budget until the synthetic and exact-diff preflights both pass.
+Directive: Implement and execute only the synthetic folded-magnitude prerequisite next; do not run real preflight, create prediction or train outputs, or open a quality gate until that prerequisite passes.
 Tested: Preregistration package only.
 Not-tested: D5 implementation, synthetic prerequisite execution, real preflight execution, 80-step training, inner-val15 metrics, SCUT115, holdout40, reserved blind, or promotion evidence.
 Related: docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md

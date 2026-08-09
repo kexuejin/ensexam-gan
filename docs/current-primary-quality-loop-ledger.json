@@ -4,11 +4,11 @@
     "evidence": [
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
-        "sha256": "5224c195193980f6e6d88e3b4d9333d834d7eaba9459457a28eda3db3b60377b"
+        "sha256": "9d63193dab2492ad3352534ea104b45195dd016d11e049f11b5a44a731fc1c39"
       },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
-        "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+        "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
       },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
@@ -42,13 +42,23 @@
     "failure_bucket": "raw_direction_mode_magnitude_collapse_zero_positive_support",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-d5-folded-direction-magnitude",
-    "next_action": "Implement folded-magnitude synthetic tests/tooling and run the fail-closed prerequisite preflight only; no D5 training, inference, or later-gate evaluation yet.",
+    "next_action": "Implement folded-magnitude synthetic tests/tooling and execute the fail-closed synthetic prerequisite only; no real preflight, training, prediction artifact generation, or quality-gate evaluation is authorized until it passes.",
     "prerequisites": [
       {
         "detail": "Before any D5 implementation is treated as runnable, a fail-closed synthetic prerequisite must prove exact zero initialization, strict current-primary compatibility, frozen base tensors, nonzero folded-direction gradients after either raw sign, nonzero global-scale movement by the second synthetic step, residual-bound preservation, zero-primary-edit no-op behavior, and no public interface regression.",
         "id": "d5_folded_magnitude_synthetic_preflight",
         "status": "pending"
       }
+    ],
+    "prohibited_before_synthetic_prerequisite_pass": [
+      "d5_real_preflight",
+      "d5_training",
+      "d5_prediction_artifact_generation",
+      "scut_inner_val15",
+      "scut115",
+      "holdout40",
+      "reserved_blind",
+      "current_primary_replacement"
     ],
     "prohibited_before_first_gate": [
       "scut115",
@@ -171,7 +181,7 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
-          "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+          "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
         },
         {
           "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
@@ -203,11 +213,11 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
-          "sha256": "5224c195193980f6e6d88e3b4d9333d834d7eaba9459457a28eda3db3b60377b"
+          "sha256": "9d63193dab2492ad3352534ea104b45195dd016d11e049f11b5a44a731fc1c39"
         },
         {
           "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
-          "sha256": "2f934e26c01a16dee64cddfe42b247c21ee8bd31133202f8f055436ed26078bf"
+          "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
         }
       ],
       "id": "universal-sidecar-d5-folded-direction-magnitude-preregistration",
