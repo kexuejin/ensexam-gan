@@ -1,7 +1,23 @@
 {
   "active_iteration": {
-    "causal_change": "Add only a synthetic sign-separated identity/brighten/darken second-stage residual representation with branch-isolated supervision, no global shutdown scalar, exact identity initialization, and a shared 0.08 residual bound before any real data or training is considered.",
+    "causal_change": "Freeze mutually exclusive page-level train, inner-val15, development, SCUT115, holdout40, and reserved-blind roles for sign-separated repair using metadata and hashes only, while keeping image/target decoding and training disabled.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
+        "sha256": "11df22c9d1970a6c47f00806a318a10d1247f2ad30b862ec8455770e2c3ceaed"
+      },
+      {
+        "path": "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json",
+        "sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5"
+      },
+      {
+        "path": "scripts/analysis/audit_sign_separated_residual_repair.py",
+        "sha256": "41e3d4544c590d657a440164014ab731bc1c259064cb064981ba7e4caf2d88eb"
+      },
+      {
+        "path": "tests/test_sign_separated_residual_repair.py",
+        "sha256": "6ce1e3c43c95a019a7d96f47e8ceb5449634ca65cfb9567397f59beb67a10e4b"
+      },
       {
         "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
         "sha256": "75df672f5aab164fde1cfe5fe97a7426f1e258a417639e571ad79ac67b577a9b"
@@ -16,7 +32,7 @@
       },
       {
         "path": "scripts/infer/patch_cleanup_erasemap.py",
-        "sha256": "af06c5f8829ac8d29febc6ac60819fed4142bcb02cfe2d26350883a7a2c26111"
+        "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
       },
       {
         "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
@@ -138,7 +154,7 @@
     "failure_bucket": "single_head_residual_brighten_darken_entanglement",
     "first_gate": "scut_inner_val15",
     "id": "sign-separated-residual-repair",
-    "next_action": "Implement deterministic CPU synthetic model tests and an audit for the exact identity/brighten/darken representation only; do not read real samples or construct a training manifest.",
+    "next_action": "Implement and execute a metadata-only split/data-role preflight that reads manifest paths, page identities, and hashes without decoding any image, mask, label, or target.",
     "prerequisites": [
       {
         "detail": "Frozen evidence ranks sign-separated residual representation above D5 scalar rescue, single-head loss retuning, selector-only continuation, and correction-fluid harmonization for the next bounded uncertainty.",
@@ -146,15 +162,22 @@
         "status": "passed"
       },
       {
-        "detail": "Before any real sample, data split, or training is admitted, prove exact identity initialization, branch-isolated gradients, correct signed output, shared bound preservation, serialization, and unchanged legacy cleanup interfaces on deterministic CPU tensors.",
+        "detail": "Deterministic CPU evidence proves exact identity initialization, branch-isolated gradients, correct signed output, shared bound preservation, nonzero serialization, unchanged legacy cleanup interfaces, and a closed training CLI.",
         "id": "sign_separated_residual_synthetic_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before image or target pixels, target-derived patches, or training are admitted, freeze mutually exclusive page roles and current-primary/current-second-stage baseline identities using metadata and hashes only.",
+        "id": "sign_separated_residual_data_role_preflight",
         "status": "pending"
       }
     ],
-    "prohibited_before_synthetic_preflight_pass": [
-      "real_sample_read",
-      "train_manifest_construction",
-      "data_role_assignment",
+    "prohibited_before_data_role_preflight_pass": [
+      "image_pixel_decode",
+      "mask_pixel_decode",
+      "label_or_target_pixel_decode",
+      "target_derived_patch_construction",
+      "training_cli_enablement",
       "training",
       "checkpoint_generation",
       "prediction_artifact_generation",
@@ -297,14 +320,6 @@
           "sha256": "67d34e5b4a5d81dd846c523002c26e106ec288afc1d0d9e8438a8aa42e24d972"
         },
         {
-          "path": "scripts/infer/patch_cleanup_erasemap.py",
-          "sha256": "af06c5f8829ac8d29febc6ac60819fed4142bcb02cfe2d26350883a7a2c26111"
-        },
-        {
-          "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
-          "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
-        },
-        {
           "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
           "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
         }
@@ -313,6 +328,34 @@
       "outcome": "identity_brighten_darken_representation_selected_pending_synthetic_preflight",
       "repeat_policy": "implement_and_run_synthetic_preflight_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
+          "sha256": "11df22c9d1970a6c47f00806a318a10d1247f2ad30b862ec8455770e2c3ceaed"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json",
+          "sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5"
+        },
+        {
+          "path": "scripts/infer/patch_cleanup_erasemap.py",
+          "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_residual_repair.py",
+          "sha256": "41e3d4544c590d657a440164014ab731bc1c259064cb064981ba7e4caf2d88eb"
+        },
+        {
+          "path": "tests/test_sign_separated_residual_repair.py",
+          "sha256": "6ce1e3c43c95a019a7d96f47e8ceb5449634ca65cfb9567397f59beb67a10e4b"
+        }
+      ],
+      "id": "sign-separated-residual-repair-synthetic-prerequisite",
+      "outcome": "identity_signed_routes_and_branch_isolation_contract_passed",
+      "repeat_policy": "reuse_exact_synthetic_audit_no_parameter_sweep",
+      "terminal": "PASS"
     },
     {
       "evidence": [
