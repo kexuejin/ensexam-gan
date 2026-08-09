@@ -1,7 +1,31 @@
 {
   "active_iteration": {
-    "causal_change": "No successor is selected after D5 folded-direction training drove its global scale negative and clamped the branch to an exact zero-output inner-val15 no-op; require read-only selection and preregistration of a materially different named failure bucket before any new run.",
+    "causal_change": "Add only a synthetic sign-separated identity/brighten/darken second-stage residual representation with branch-isolated supervision, no global shutdown scalar, exact identity initialization, and a shared 0.08 residual bound before any real data or training is considered.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
+        "sha256": "75df672f5aab164fde1cfe5fe97a7426f1e258a417639e571ad79ac67b577a9b"
+      },
+      {
+        "path": "docs/rejected-directions.md",
+        "sha256": "0a3a098355a65a3a3ae210d2e221d30fea1b0894b395b8e97a016e0d96f3bff9"
+      },
+      {
+        "path": "docs/product-quality-labels.csv",
+        "sha256": "67d34e5b4a5d81dd846c523002c26e106ec288afc1d0d9e8438a8aa42e24d972"
+      },
+      {
+        "path": "scripts/infer/patch_cleanup_erasemap.py",
+        "sha256": "af06c5f8829ac8d29febc6ac60819fed4142bcb02cfe2d26350883a7a2c26111"
+      },
+      {
+        "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+        "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+      },
+      {
+        "path": "docs/model-registry.md",
+        "sha256": "3521acbb247e32fcb5961c867b9e42234258982a1c01a14961e48d4f21a981f5"
+      },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
         "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
@@ -111,28 +135,31 @@
         "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
       }
     ],
-    "failure_bucket": "folded_direction_global_scale_crossed_negative_zero_applied_scale",
+    "failure_bucket": "single_head_residual_brighten_darken_entanglement",
     "first_gate": "scut_inner_val15",
-    "id": "post-d5-next-causal-bucket",
-    "next_action": "Use read-only evidence to inventory the remaining residual, overerase, paper-tone, and printed-text failure buckets, close the exhausted direction-sidecar family, and preregister at most one materially different causal change before any training.",
+    "id": "sign-separated-residual-repair",
+    "next_action": "Implement deterministic CPU synthetic model tests and an audit for the exact identity/brighten/darken representation only; do not read real samples or construct a training manifest.",
     "prerequisites": [
       {
-        "detail": "D5 completed its one authorized run and first gate; signed checkpoint evidence proves the learned global scale crossed negative, making applied scale and the entire sidecar residual exactly zero before matched-copy.",
-        "id": "d5_negative_scale_noop_family_closure",
+        "detail": "Frozen evidence ranks sign-separated residual representation above D5 scalar rescue, single-head loss retuning, selector-only continuation, and correction-fluid harmonization for the next bounded uncertainty.",
+        "id": "next_named_failure_bucket_preregistration",
         "status": "passed"
       },
       {
-        "detail": "Before any new implementation or run, choose a non-repeated named failure bucket from frozen evidence and preregister one materially different causal mechanism with explicit leakage-safe gates.",
-        "id": "next_named_failure_bucket_preregistration",
+        "detail": "Before any real sample, data split, or training is admitted, prove exact identity initialization, branch-isolated gradients, correct signed output, shared bound preservation, serialization, and unchanged legacy cleanup interfaces on deterministic CPU tensors.",
+        "id": "sign_separated_residual_synthetic_preflight",
         "status": "pending"
       }
     ],
-    "prohibited_before_next_preregistration": [
-      "new_training",
-      "new_prediction_artifact_generation",
-      "learning_rate_or_step_sweep",
-      "scale_floor_rescue",
-      "threshold_or_selector_rescue",
+    "prohibited_before_synthetic_preflight_pass": [
+      "real_sample_read",
+      "train_manifest_construction",
+      "data_role_assignment",
+      "training",
+      "checkpoint_generation",
+      "prediction_artifact_generation",
+      "visual_review",
+      "scut_inner_val15",
       "scut115",
       "holdout40",
       "reserved_blind",
@@ -254,6 +281,38 @@
       "outcome": "direction_restricted_sidecar_subthreshold_noop",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
+          "sha256": "75df672f5aab164fde1cfe5fe97a7426f1e258a417639e571ad79ac67b577a9b"
+        },
+        {
+          "path": "docs/rejected-directions.md",
+          "sha256": "0a3a098355a65a3a3ae210d2e221d30fea1b0894b395b8e97a016e0d96f3bff9"
+        },
+        {
+          "path": "docs/product-quality-labels.csv",
+          "sha256": "67d34e5b4a5d81dd846c523002c26e106ec288afc1d0d9e8438a8aa42e24d972"
+        },
+        {
+          "path": "scripts/infer/patch_cleanup_erasemap.py",
+          "sha256": "af06c5f8829ac8d29febc6ac60819fed4142bcb02cfe2d26350883a7a2c26111"
+        },
+        {
+          "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+          "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
+          "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
+        }
+      ],
+      "id": "sign-separated-residual-repair-preregistration",
+      "outcome": "identity_brighten_darken_representation_selected_pending_synthetic_preflight",
+      "repeat_policy": "implement_and_run_synthetic_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
     },
     {
       "evidence": [
