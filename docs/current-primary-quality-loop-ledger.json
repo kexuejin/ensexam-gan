@@ -3,6 +3,10 @@
     "causal_change": "Replace the free RGB universal-sidecar residual with a nonnegative per-pixel magnitude along the same-call current-primary source-to-clean edit vector, while holding the frozen primary, external interface, data roles, and first gate fixed.",
     "evidence": [
       {
+        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-preregistration.md",
+        "sha256": "b5c7594b48529f97f2f117ce9003a5476973272472856a994cf808221bbc8c51"
+      },
+      {
         "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
         "sha256": "f129e860bdc6d473840cd41fd2375646b302c09aa65e7d8e504078ca643fa445"
       },
@@ -26,8 +30,13 @@
     "failure_bucket": "free_rgb_sidecar_edit_direction_source_residual_regression",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-primary-direction-restricted-residual",
-    "next_action": "D4 exact-D2-diff preregistration and fail-closed preflight with no training before pass.",
+    "next_action": "Run the real D4 fail-closed preflight only.",
     "prerequisites": [
+      {
+        "detail": "The exact-D2-diff validator must fail closed unless D4 changes only direction mode and save_dir, keeps later gates disabled, preserves frozen current-primary hashes, and audits checkpoint/structure compatibility before any run.",
+        "id": "d4_exact_diff_fail_closed_preflight",
+        "status": "pending"
+      },
       {
         "detail": "The successor must prove exact current-primary equivalence at initialization, nonzero first-step gradients, nonnegative bounded magnitude along the source-to-current-primary vector, and no new opposed RGB direction.",
         "id": "direction_restricted_sidecar_synthetic_contract",
@@ -42,7 +51,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PENDING"
+    "terminal": "PREREQUISITE_NEEDED"
   },
   "baseline": {
     "checkpoint": {
@@ -87,6 +96,18 @@
     "reserved_blind_state": "disabled"
   },
   "records": [
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-preregistration.md",
+          "sha256": "b5c7594b48529f97f2f117ce9003a5476973272472856a994cf808221bbc8c51"
+        }
+      ],
+      "id": "universal-sidecar-d4-primary-edit-direction-preregistration",
+      "outcome": "exact_d2_diff_frozen_pending_real_preflight",
+      "repeat_policy": "run_real_d4_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
     {
       "evidence": [
         {
