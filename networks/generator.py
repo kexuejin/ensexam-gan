@@ -220,10 +220,14 @@ class UniversalResidualAdapterSidecar(nn.Module):
             raise ValueError("residual_bound must be in (0, 12/255]")
         if hidden_channels <= 0:
             raise ValueError("hidden_channels must be positive")
-        if residual_parameterization not in {"free_rgb", "primary_edit_direction"}:
+        if residual_parameterization not in {
+            "free_rgb",
+            "primary_edit_direction",
+            "primary_edit_direction_folded",
+        }:
             raise ValueError(
-                "residual_parameterization must be free_rgb or "
-                "primary_edit_direction"
+                "residual_parameterization must be free_rgb, "
+                "primary_edit_direction, or primary_edit_direction_folded"
             )
         self.adapter_count = int(adapter_count)
         self.residual_bound = float(residual_bound)
@@ -247,7 +251,10 @@ class UniversalResidualAdapterSidecar(nn.Module):
                     nn.ReLU(inplace=True),
                     nn.Conv2d(
                         hidden_channels,
-                        1 if residual_parameterization == "primary_edit_direction"
+                        1 if residual_parameterization in {
+                            "primary_edit_direction",
+                            "primary_edit_direction_folded",
+                        }
                         else output_channels,
                         1,
                     ),
@@ -283,7 +290,37 @@ class UniversalResidualAdapterSidecar(nn.Module):
             gate_weights.view(gate_weights.shape[0], self.adapter_count, 1, 1, 1)
             * adapter_residuals
         ).sum(dim=1)
-        if self.residual_parameterization == "primary_edit_direction":
+        if self.residual_parameterization == "primary_edit_direction_folded":
+            if input_image is None or input_image.shape != baseline_output.shape:
+                raise ValueError(
+                    "primary_edit_direction_folded requires input_image matching "
+                    "baseline_output"
+                )
+            folded_magnitude = torch.where(
+                mixed_residual >= 0,
+                mixed_residual,
+                -mixed_residual,
+            )
+            bounded_magnitude = self.residual_bound * torch.tanh(folded_magnitude)
+            nonnegative_scale = torch.where(
+                self.global_residual_scale >= 0,
+                self.global_residual_scale,
+                torch.zeros_like(self.global_residual_scale),
+            )
+            applied_scale = torch.tanh(nonnegative_scale)
+            primary_edit = baseline_output - input_image
+            edit_norm = primary_edit.abs().amax(dim=1, keepdim=True)
+            primary_direction = torch.where(
+                edit_norm > 0,
+                primary_edit / edit_norm.clamp_min(1e-12),
+                torch.zeros_like(primary_edit),
+            )
+            scaled_residual = (
+                applied_scale
+                * bounded_magnitude
+                * primary_direction
+            )
+        elif self.residual_parameterization == "primary_edit_direction":
             if input_image is None or input_image.shape != baseline_output.shape:
                 raise ValueError(
                     "primary_edit_direction requires input_image matching "

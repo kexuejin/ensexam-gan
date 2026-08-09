@@ -260,10 +260,14 @@ def _validate_universal_sidecar_model_shape(model_cfg: dict) -> None:
     residual_parameterization = str(
         sidecar_cfg.get('residual_parameterization', 'free_rgb')
     )
-    if residual_parameterization not in {'free_rgb', 'primary_edit_direction'}:
+    if residual_parameterization not in {
+        'free_rgb',
+        'primary_edit_direction',
+        'primary_edit_direction_folded',
+    }:
         raise ValueError(
-            "universal sidecar residual_parameterization must be free_rgb or "
-            "primary_edit_direction"
+            "universal sidecar residual_parameterization must be free_rgb, "
+            "primary_edit_direction, or primary_edit_direction_folded"
         )
     residual_bound = float(sidecar_cfg.get('residual_bound', 12.0 / 255.0))
     if residual_bound <= 0.0 or residual_bound > 12.0 / 255.0:

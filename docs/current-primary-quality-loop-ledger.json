@@ -1,7 +1,23 @@
 {
   "active_iteration": {
-    "causal_change": "Implement only the fail-closed folded primary-edit-direction magnitude prerequisite for a future D5 sidecar, preserving D4 semantics while proving that both raw residual signs fold into the same nonnegative primary-direction branch without losing exact zero initialization or baseline compatibility.",
+    "causal_change": "Admit only the preregistered D5 folded primary-edit-direction magnitude through a fail-closed real preflight after its synthetic mechanism prerequisite passed, preserving D4 semantics and every current-primary quality gate.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite-pass.md",
+        "sha256": "f438392b7aca1f135a1ddc4f3023e2bf7d0a9a9af23c387b254bebee19098ff8"
+      },
+      {
+        "path": "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json",
+        "sha256": "15dccea5c588052d9504439a6c48b7dfdc060b9155a19c615711453f66d3e9c9"
+      },
+      {
+        "path": "scripts/analysis/audit_primary_edit_direction_folded_sidecar.py",
+        "sha256": "1f0da0df3aec43e9334468181094443f98cebd4ab0f0372d78a6c114f45cbc3e"
+      },
+      {
+        "path": "tests/test_universal_sidecar_d5_folded_direction.py",
+        "sha256": "0fd8a7244c069c68ac52190f514539ab2717ed1d87d38aeb22508e3e63570833"
+      },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
         "sha256": "9d63193dab2492ad3352534ea104b45195dd016d11e049f11b5a44a731fc1c39"
@@ -42,16 +58,20 @@
     "failure_bucket": "raw_direction_mode_magnitude_collapse_zero_positive_support",
     "first_gate": "scut_inner_val15",
     "id": "universal-sidecar-d5-folded-direction-magnitude",
-    "next_action": "Implement folded-magnitude synthetic tests/tooling and execute the fail-closed synthetic prerequisite only; no real preflight, training, prediction artifact generation, or quality-gate evaluation is authorized until it passes.",
+    "next_action": "Implement and execute the exact fail-closed D5 real preflight only; no training, prediction artifact generation, or quality-gate evaluation is authorized until that preflight passes.",
     "prerequisites": [
       {
         "detail": "Before any D5 implementation is treated as runnable, a fail-closed synthetic prerequisite must prove exact zero initialization, strict current-primary compatibility, frozen base tensors, nonzero folded-direction gradients after either raw sign, nonzero global-scale movement by the second synthetic step, residual-bound preservation, zero-primary-edit no-op behavior, and no public interface regression.",
         "id": "d5_folded_magnitude_synthetic_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any D5 training, the real preflight must prove the exact preregistered D4-to-D5 semantic diff, clean train/inner-val split, unique absent save_dir, strict current-primary checkpoint compatibility, exactly 17 sidecar-only trainable tensors, frozen BatchNorm/base tensors, and disabled later gates.",
+        "id": "d5_real_preflight",
         "status": "pending"
       }
     ],
-    "prohibited_before_synthetic_prerequisite_pass": [
-      "d5_real_preflight",
+    "prohibited_before_real_preflight_pass": [
       "d5_training",
       "d5_prediction_artifact_generation",
       "scut_inner_val15",
@@ -224,6 +244,30 @@
       "outcome": "folded_direction_magnitude_preregistered_pending_fail_closed_synthetic_preflight",
       "repeat_policy": "implement_and_run_fail_closed_preflight_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite-pass.md",
+          "sha256": "f438392b7aca1f135a1ddc4f3023e2bf7d0a9a9af23c387b254bebee19098ff8"
+        },
+        {
+          "path": "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json",
+          "sha256": "15dccea5c588052d9504439a6c48b7dfdc060b9155a19c615711453f66d3e9c9"
+        },
+        {
+          "path": "scripts/analysis/audit_primary_edit_direction_folded_sidecar.py",
+          "sha256": "1f0da0df3aec43e9334468181094443f98cebd4ab0f0372d78a6c114f45cbc3e"
+        },
+        {
+          "path": "tests/test_universal_sidecar_d5_folded_direction.py",
+          "sha256": "0fd8a7244c069c68ac52190f514539ab2717ed1d87d38aeb22508e3e63570833"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite",
+      "outcome": "synthetic_folded_direction_both_sign_gradient_contract_passed",
+      "repeat_policy": "reuse_exact_mechanism_audit_no_parameter_family_sweep",
+      "terminal": "PASS"
     },
     {
       "evidence": [
