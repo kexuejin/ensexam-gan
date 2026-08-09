@@ -82,6 +82,7 @@ def synthetic_two_step_probe(raw_sign: int) -> dict:
         residual_bound=12.0 / 255.0,
         residual_parameterization=FOLDED_MODE,
     ).train()
+    initial_scale = float(sidecar.global_residual_scale.detach())
     optimizer = torch.optim.SGD(sidecar.parameters(), lr=0.25)
     feature = torch.ones(1, 16, 4, 4)
     input_image = torch.zeros(1, 3, 4, 4)
@@ -137,7 +138,7 @@ def synthetic_two_step_probe(raw_sign: int) -> dict:
         raise ValueError(f"raw_sign={raw_sign} second-step scale gradient died")
     optimizer.step()
     final_scale = float(sidecar.global_residual_scale.detach())
-    if final_scale == sidecar.initial_global_residual_scale:
+    if final_scale == initial_scale:
         raise ValueError(f"raw_sign={raw_sign} global scale did not move")
 
     return {
@@ -148,6 +149,7 @@ def synthetic_two_step_probe(raw_sign: int) -> dict:
         "mixed_residual_abs_max_after_first": float(mixed_after_first.abs().max()),
         "second_projection_gradient_min": min(second_bias_gradients),
         "second_scale_gradient_abs": second_scale_gradient,
+        "initial_global_residual_scale": initial_scale,
         "final_global_residual_scale": final_scale,
     }
 

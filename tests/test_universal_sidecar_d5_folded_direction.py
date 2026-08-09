@@ -98,6 +98,7 @@ class FoldedDirectionSidecarTest(unittest.TestCase):
             with self.subTest(expected_raw_sign=expected_raw_sign):
                 torch.manual_seed(20260809)
                 sidecar = self.make_sidecar().train()
+                initial_scale = float(sidecar.global_residual_scale.detach())
                 optimizer = torch.optim.SGD(sidecar.parameters(), lr=0.25)
                 feature = torch.ones(1, 16, 4, 4)
                 input_image = torch.zeros(1, 3, 4, 4)
@@ -151,7 +152,7 @@ class FoldedDirectionSidecarTest(unittest.TestCase):
                 optimizer.step()
                 self.assertNotEqual(
                     float(sidecar.global_residual_scale.detach()),
-                    sidecar.initial_global_residual_scale,
+                    initial_scale,
                 )
 
     def test_zero_primary_edit_is_noop(self) -> None:

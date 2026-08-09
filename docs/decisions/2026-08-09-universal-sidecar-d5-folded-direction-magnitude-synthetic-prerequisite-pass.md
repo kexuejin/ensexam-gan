@@ -36,7 +36,9 @@ Both preregistered two-step probes passed from exact zero initialization:
 The first-step scale gradient was exactly zero in both probes, as required
 while the magnitude branch was still zero. After the first projection update,
 both raw signs had nonzero support; at step two, projection and scale gradients
-were nonzero and the scale moved away from its float32 initialization.
+were nonzero and the scale moved away from its captured float32 initialization
+`0.0010000000474974513`. The audit compares the final parameter against that
+captured tensor value, not against a Python decimal approximation.
 
 Forced raw magnitudes `+2` and `-2` produced equal nonnegative
 primary-direction residuals. The maximum absolute residual was
@@ -50,13 +52,13 @@ zero rather than folding them.
 
 ~~~text
 scripts/analysis/audit_primary_edit_direction_folded_sidecar.py
-sha256 = 1f0da0df3aec43e9334468181094443f98cebd4ab0f0372d78a6c114f45cbc3e
+sha256 = e72511b8487c2bc8c0c04c95d5dbd6ef85c2d3174323ebef563df481ff95a666
 
 tests/test_universal_sidecar_d5_folded_direction.py
-sha256 = 0fd8a7244c069c68ac52190f514539ab2717ed1d87d38aeb22508e3e63570833
+sha256 = 2ee2ae0a9bb310cef4232095f0113b38f219aad438833e37d68ba6bee2db9ca1
 
 outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json
-sha256 = 15dccea5c588052d9504439a6c48b7dfdc060b9155a19c615711453f66d3e9c9
+sha256 = afe1eb4a500fd144f346ff6752285c574f49118318fab85e25668e2336371348
 ~~~
 
 Focused verification passed with `22` tests and `6` subtests across the D5
