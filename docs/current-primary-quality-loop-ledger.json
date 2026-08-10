@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Freeze mutually exclusive page-level train, inner-val15, development, SCUT115, holdout40, and reserved-blind roles for sign-separated repair using metadata and hashes only, while keeping image/target decoding and training disabled.",
+    "causal_change": "Keep the frozen mutually exclusive page-level roles and baseline hashes authoritative for sign-separated repair, then admit only a fail-closed training preflight while image/target decoding, patch construction, training, inference, and promotion remain disabled.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
@@ -17,6 +17,26 @@
       {
         "path": "tests/test_sign_separated_residual_repair.py",
         "sha256": "6ce1e3c43c95a019a7d96f47e8ceb5449634ca65cfb9567397f59beb67a10e4b"
+      },
+      {
+        "path": "docs/sign-separated-residual-data-roles.json",
+        "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+      },
+      {
+        "path": "scripts/analysis/validate_sign_separated_data_roles.py",
+        "sha256": "23b0fd092bb824cf9143fadaf4ac2265117f5c9ca14c2b2b712bd30f0f025c2f"
+      },
+      {
+        "path": "tests/test_validate_sign_separated_data_roles.py",
+        "sha256": "cb47027b4d2119bb0d589edccc205553c989345aec0106cbd5e1160fd58e3ae8"
+      },
+      {
+        "path": "outputs/sign-separated-residual-repair-data-role-preflight-20260809/preflight.json",
+        "sha256": "9bb38b018543db08f4e047bde08d2f0b2270bba1c2597e755917934f17539f0e"
+      },
+      {
+        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-data-role-preflight-pass.md",
+        "sha256": "b60b15b8cfc4c6a9f1cf98ab70ebe7229bfb8d45aa79f75009cf82e0535a4b4d"
       },
       {
         "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
@@ -154,7 +174,7 @@
     "failure_bucket": "single_head_residual_brighten_darken_entanglement",
     "first_gate": "scut_inner_val15",
     "id": "sign-separated-residual-repair",
-    "next_action": "Implement and execute a metadata-only split/data-role preflight that reads manifest paths, page identities, and hashes without decoding any image, mask, label, or target.",
+    "next_action": "Implement and execute the uniquely preregistered sign-separated residual training preflight; do not train, decode images, construct target-derived patches, generate predictions, or open any quality gate until it passes.",
     "prerequisites": [
       {
         "detail": "Frozen evidence ranks sign-separated residual representation above D5 scalar rescue, single-head loss retuning, selector-only continuation, and correction-fluid harmonization for the next bounded uncertainty.",
@@ -169,10 +189,15 @@
       {
         "detail": "Before image or target pixels, target-derived patches, or training are admitted, freeze mutually exclusive page roles and current-primary/current-second-stage baseline identities using metadata and hashes only.",
         "id": "sign_separated_residual_data_role_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any real image/target decode, target-derived patch construction, or training, prove the uniquely preregistered config, frozen baseline initialization, train-only effective role, exact step/device bounds, closed evaluation/promotion surfaces, and absent output destinations.",
+        "id": "sign_separated_residual_training_preflight",
         "status": "pending"
       }
     ],
-    "prohibited_before_data_role_preflight_pass": [
+    "prohibited_before_training_preflight_pass": [
       "image_pixel_decode",
       "mask_pixel_decode",
       "label_or_target_pixel_decode",
@@ -196,7 +221,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "PENDING"
   },
   "baseline": {
     "checkpoint": {
@@ -355,6 +380,34 @@
       "id": "sign-separated-residual-repair-synthetic-prerequisite",
       "outcome": "identity_signed_routes_and_branch_isolation_contract_passed",
       "repeat_policy": "reuse_exact_synthetic_audit_no_parameter_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-data-role-preflight-pass.md",
+          "sha256": "b60b15b8cfc4c6a9f1cf98ab70ebe7229bfb8d45aa79f75009cf82e0535a4b4d"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-data-role-preflight-20260809/preflight.json",
+          "sha256": "9bb38b018543db08f4e047bde08d2f0b2270bba1c2597e755917934f17539f0e"
+        },
+        {
+          "path": "docs/sign-separated-residual-data-roles.json",
+          "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_data_roles.py",
+          "sha256": "23b0fd092bb824cf9143fadaf4ac2265117f5c9ca14c2b2b712bd30f0f025c2f"
+        },
+        {
+          "path": "tests/test_validate_sign_separated_data_roles.py",
+          "sha256": "cb47027b4d2119bb0d589edccc205553c989345aec0106cbd5e1160fd58e3ae8"
+        }
+      ],
+      "id": "sign-separated-residual-data-role-preflight",
+      "outcome": "metadata_only_roles_baseline_hashes_and_zero_overlap_passed",
+      "repeat_policy": "reuse_frozen_role_plan_and_hashes_no_pixel_access",
       "terminal": "PASS"
     },
     {

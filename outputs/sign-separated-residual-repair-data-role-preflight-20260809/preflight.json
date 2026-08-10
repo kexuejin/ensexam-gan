@@ -1,0 +1,123 @@
+{
+  "baseline": {
+    "current_primary_checkpoint_sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae",
+    "current_primary_config_sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e",
+    "current_second_stage_checkpoint_sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7",
+    "current_second_stage_inference_sha256": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d"
+  },
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "metadata_only": true,
+  "overlap_count": 0,
+  "pixel_decoder_imports": [],
+  "planned_outputs_absent": [
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-inner-val15-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/artifacts/trials/sign-separated-residual-repair-v1"
+  ],
+  "reserved_blind_authorized": false,
+  "reserved_blind_state": "unavailable",
+  "role_counts": {
+    "development_next120": 112,
+    "development_train160": 156,
+    "holdout40": 40,
+    "inner_val15": 15,
+    "reserved_blind": 0,
+    "scut115": 115,
+    "train": 275
+  },
+  "role_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/sign-separated-residual-data-roles.json",
+  "role_summary": {
+    "development_next120": {
+      "count": 112,
+      "excluded_count": 8,
+      "identity_sha256": "da8f8d5caa31ab73713f8cd158f88659110a3d1c16f4abdb74d2e4691dba2864"
+    },
+    "development_train160": {
+      "count": 156,
+      "excluded_count": 4,
+      "identity_sha256": "ec28d39f691d1229c9609232189a73f005108f2b7e514e8bf77f1b66205f85df"
+    },
+    "holdout40": {
+      "count": 40,
+      "excluded_count": 0,
+      "identity_sha256": "552f6e3194ad5638ae957bd3d14d0ed8cd9e32380ca9805c9fac17915988d657"
+    },
+    "inner_val15": {
+      "count": 15,
+      "excluded_count": 0,
+      "identity_sha256": "86098752d80185792a1cbc627381139caedc006757c5d5ac6daeedf4905f1816"
+    },
+    "scut115": {
+      "count": 115,
+      "excluded_count": 0,
+      "identity_sha256": "500baa2493a4746d2e1cd393a709e8e05820ac6ad28d1a1bc7a175c56243baa5"
+    },
+    "train": {
+      "count": 275,
+      "domain_counts": {
+        "hw5k": 253,
+        "scut": 22
+      },
+      "excluded_count": 108,
+      "identity_sha256": "da9b90b9d344711d3dac2b202b7049ed4f921d003c8ee5a6c3531f1a9367e785"
+    }
+  },
+  "runnable": true,
+  "source_summary": {
+    "development_next120": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/scut-next120-nonoverlap-relative.txt",
+      "manifest_sha256": "7410febb1a085c3e5ecc90450eac150fc583eceea37648a077256f25eda8fe58",
+      "source_count": 120
+    },
+    "development_train160": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/scut-train160-nonholdout-relative.txt",
+      "manifest_sha256": "7d3ad05218462edf31c31f7ebbbf0e0a4bb495d58b5fe51712049f91830abe19",
+      "source_count": 160
+    },
+    "holdout40": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/scut_val_holdout_40.txt",
+      "manifest_sha256": "f76e1d4326fe40aac9cdcaf005c9ccd1c79f8622f81c12b3073bc1ef840f475d",
+      "source_count": 40
+    },
+    "inner_val15": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+      "manifest_sha256": "fb25bb2aef2f9285403f908deb3da6d88b07b5d1c2c812965ce9e0636ddc172e",
+      "source_count": 15
+    },
+    "scut115": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/scut-test115-relative.txt",
+      "manifest_sha256": "68e0ce32be4520f04d939506f3ed53a15b7b73cd4feaf74ec793f79fd8928e9b",
+      "source_count": 115
+    },
+    "train": {
+      "manifest": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/mixed_scut130_hw5k260_20260729.txt",
+      "manifest_sha256": "0385fb96aa7aee1812b95b90acd4198e2af39e96c895a7cd8cfb2681258470ca",
+      "source_count": 383,
+      "source_domain_counts": {
+        "hw5k": 253,
+        "scut": 130
+      }
+    }
+  },
+  "status": "pass",
+  "synthetic_authority": {
+    "audit_sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5",
+    "data_role_ledger_status": "passed",
+    "evidence_count": 5,
+    "record_id": "sign-separated-residual-repair-synthetic-prerequisite"
+  },
+  "terminal": "PASS",
+  "train_domain_counts": {
+    "hw5k": 253,
+    "scut": 22
+  },
+  "training_cli_enabled": false
+}
