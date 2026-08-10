@@ -45,12 +45,32 @@
       {
         "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
         "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-data-role-preflight-pass.md",
+        "sha256": "9475843bfda00a117e9382df0428b3b8b55f01c27a6b0193a5d53ab2e7c70436"
+      },
+      {
+        "path": "docs/monotonic-residual-erase-data-roles.json",
+        "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-data-role-preflight-20260810/preflight.json",
+        "sha256": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b"
+      },
+      {
+        "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
+        "sha256": "b81c19bf9657a303b54c3fd4a8296b1700491729550926b14d443515b47a346a"
+      },
+      {
+        "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
+        "sha256": "3fe0fedd67b9425b1ebff618aa4501a4ad5eed2fa512f41e12208c6e56ae354b"
       }
     ],
     "failure_bucket": "residual_brighten_support_competes_with_dark_preservation_correction",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Run a metadata-only data-role preflight that reuses the frozen mutually exclusive roles and defines train-only target-lighter edit support plus target-darker/identity preserve negatives; keep all pixel decode and training surfaces closed.",
+    "next_action": "Implement and run a metadata-only training/config preflight that freezes one dedicated trainer, train-only support semantics, identity initialization, one bounded schedule, and absent outputs without decoding pixels or enabling training.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -65,6 +85,11 @@
       {
         "detail": "Before any image, mask, label, or target pixel decode, reuse the frozen mutually exclusive roles and prove that only train-role targets may define target-lighter edit support while target-darker and identity pixels become preserve negatives.",
         "id": "monotonic_residual_erase_data_role_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any real pixel decode, target-derived patch construction, or training, freeze a dedicated trainer and exactly one model, schedule, loss, train-role, output, and application configuration while all quality gates remain closed.",
+        "id": "monotonic_residual_erase_training_preflight",
         "status": "pending"
       }
     ],
@@ -81,7 +106,7 @@
       "sign_separated_reserved_blind",
       "sign_separated_promotion"
     ],
-    "prohibited_before_data_role_preflight_pass": [
+    "prohibited_before_training_preflight_pass": [
       "image_pixel_decode",
       "mask_pixel_decode",
       "label_or_target_pixel_decode",
@@ -680,6 +705,34 @@
       "id": "monotonic-residual-erase-synthetic-prerequisite",
       "outcome": "identity_initialized_nonnegative_bounded_erase_contract_passed",
       "repeat_policy": "reuse_exact_synthetic_audit_no_training_or_parameter_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-data-role-preflight-pass.md",
+          "sha256": "9475843bfda00a117e9382df0428b3b8b55f01c27a6b0193a5d53ab2e7c70436"
+        },
+        {
+          "path": "docs/monotonic-residual-erase-data-roles.json",
+          "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-data-role-preflight-20260810/preflight.json",
+          "sha256": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b"
+        },
+        {
+          "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
+          "sha256": "b81c19bf9657a303b54c3fd4a8296b1700491729550926b14d443515b47a346a"
+        },
+        {
+          "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
+          "sha256": "3fe0fedd67b9425b1ebff618aa4501a4ad5eed2fa512f41e12208c6e56ae354b"
+        }
+      ],
+      "id": "monotonic-residual-erase-data-role-preflight",
+      "outcome": "exact_frozen_roles_and_train_only_monotonic_supervision_passed_without_pixel_decode",
+      "repeat_policy": "reuse_exact_role_contract_no_split_or_target_access_drift",
       "terminal": "PASS"
     }
   ],

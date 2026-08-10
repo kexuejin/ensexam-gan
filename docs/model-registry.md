@@ -676,3 +676,16 @@ darken output that collapsed sign-separated v2, while treating target-darker
 and identity pixels as preserve negatives. Keep current-primary and the current
 second stage unchanged; no training, prediction, quality gate, visual review,
 reserved blind, or promotion is authorized by the synthetic result.
+
+Metadata/data-role preflight subsequently passed without pixel decode:
+
+```text
+plan: docs/monotonic-residual-erase-data-roles.json
+train: 275 pages (253 HW5K + 22 SCUT)
+inner/development/SCUT115/holdout40: 15 / 156+112 / 115 / 40
+pairwise effective-role overlap: 0
+target access: train only
+preserve negatives: target-darker, identity, submargin target-lighter
+training CLI enabled: false
+next action: training/config preflight only
+```

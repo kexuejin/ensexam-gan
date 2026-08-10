@@ -1,0 +1,89 @@
+{
+  "authorization": {
+    "checkpoint_generation": "prohibited",
+    "current_primary_replacement": "prohibited",
+    "image_mask_or_target_pixel_decode": "prohibited",
+    "prediction_generation": "prohibited",
+    "quality_gates": "prohibited",
+    "reserved_blind": "unavailable",
+    "training": "prohibited"
+  },
+  "evidence": {
+    "base_role_contract": {
+      "path": "docs/sign-separated-residual-data-roles.json",
+      "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+    },
+    "model": {
+      "path": "scripts/infer/monotonic_residual_erase.py",
+      "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+    },
+    "preregistration": {
+      "path": "docs/decisions/2026-08-10-monotonic-residual-erase-preregistration.md",
+      "sha256": "17d0ec3aebb4b2937022bb7b0d67f52a8b69e61f3daf7acd54e2a93edf421544"
+    },
+    "synthetic_audit": {
+      "path": "outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json",
+      "sha256": "3a43b2a180642ebfe3edb1a7ef75f443e128ea760f2d2c17ccc40097beacd601"
+    },
+    "synthetic_decision": {
+      "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
+      "sha256": "e37a6f8ef3eac00f468fb9a55da208b4fadb60c32b857909366d953e9a27e198"
+    }
+  },
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "identity_format": "<domain>/<split>/<basename>",
+  "iteration_id": "monotonic-residual-erase-support",
+  "planned_outputs_must_be_absent": {
+    "target_derived_patch_index": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+    "training_output": "artifacts/trials/monotonic-residual-erase-v1",
+    "training_plan": "docs/monotonic-residual-erase-training-plan.json",
+    "training_preflight": "outputs/monotonic-residual-erase-training-preflight-20260810"
+  },
+  "role_contract_mode": "reuse_exact_frozen_effective_roles",
+  "schema_version": 1,
+  "state": "metadata_only_preregistered",
+  "supervision_contract": {
+    "edit_positive": "target_luma_minus_input_luma_gt_margin",
+    "inference_allowed_inputs": [
+      "frozen_current_primary_plus_current_second_stage_prediction"
+    ],
+    "inference_forbidden_inputs": [
+      "target",
+      "label",
+      "mask",
+      "split",
+      "domain",
+      "route_override"
+    ],
+    "luminance_margin_gray": 2,
+    "model_output": "bounded_nonnegative_luminance_delta",
+    "preserve_negative": "target_luma_minus_input_luma_le_margin",
+    "preserve_negative_includes": [
+      "target_darker",
+      "identity",
+      "submargin_target_lighter"
+    ],
+    "residual_delta_bound": 0.08,
+    "target_access_roles": [
+      "train"
+    ],
+    "target_forbidden_roles": [
+      "inner_val15",
+      "development_train160",
+      "development_next120",
+      "scut115",
+      "holdout40",
+      "reserved_blind"
+    ]
+  },
+  "target_or_image_pixel_access": "prohibited",
+  "training_cli_model_type_enabled": false
+}
