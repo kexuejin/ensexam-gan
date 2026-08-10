@@ -657,3 +657,22 @@ This checkpoint is local rejected evidence, not a product artifact. Keep
 `artifacts/current-primary` and `artifacts/current-second-stage-best.pt` unchanged. Do not run the
 candidate on inner-val15, SCUT115, holdout40, or reserved blind, and do not rescue it with threshold
 or optimization sweeps.
+
+## Monotonic Residual Erase Synthetic Prerequisite
+
+```text
+model type: monotonic_residual_erase
+representation: identity-initialized preserve-or-brighten luminance delta
+bound: 0.08
+synthetic audit: outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json
+terminal: PASS
+training CLI enabled: false
+real data accessed: false
+next action: metadata/data-role preflight only
+```
+
+This is not a candidate or a measured quality lift. It removes the competing
+darken output that collapsed sign-separated v2, while treating target-darker
+and identity pixels as preserve negatives. Keep current-primary and the current
+second stage unchanged; no training, prediction, quality gate, visual review,
+reserved blind, or promotion is authorized by the synthetic result.

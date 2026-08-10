@@ -1,7 +1,31 @@
 {
   "active_iteration": {
-    "causal_change": "Close the sign-separated route/magnitude family after its only real checkpoint collapsed to darken on every audited train-patch pixel; require a new materially different failure-bucket preregistration before any further experiment.",
+    "causal_change": "Replace the competing identity/brighten/darken route space with an identity-initialized preserve-or-brighten model whose only edit is a bounded nonnegative luminance delta; target-darker and identity pixels become preserve negatives rather than darken outputs.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
+        "sha256": "e37a6f8ef3eac00f468fb9a55da208b4fadb60c32b857909366d953e9a27e198"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json",
+        "sha256": "3a43b2a180642ebfe3edb1a7ef75f443e128ea760f2d2c17ccc40097beacd601"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_prerequisite.py",
+        "sha256": "b5151cbc43dcfa07fc500fa30330eeac9a86f7f90f8905c0edddfe9ae89f2aad"
+      },
+      {
+        "path": "scripts/infer/monotonic_residual_erase.py",
+        "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_prerequisite.py",
+        "sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-preregistration.md",
+        "sha256": "17d0ec3aebb4b2937022bb7b0d67f52a8b69e61f3daf7acd54e2a93edf421544"
+      },
       {
         "path": "docs/decisions/2026-08-10-sign-separated-residual-v2-checkpoint-kill.md",
         "sha256": "54735b3b1579b923df2c25bef80b43ee4354ed068e6a839c1f5997b8c1041052"
@@ -11,297 +35,36 @@
         "sha256": "3889612efe6ded767e1ecbb1fb44cad563dfbd6f04b0a76107b098e7060b6b3d"
       },
       {
-        "path": "scripts/analysis/audit_sign_separated_residual_checkpoint.py",
-        "sha256": "245f3ea65b71b05b2c93cf7b1e56ce33997cfbaab44430dd06302a09986d6212"
-      },
-      {
-        "path": "tests/test_sign_separated_residual_checkpoint_audit.py",
-        "sha256": "513f494f4fbd1f590b40fab89374b80430c10e2c3ae3717a88ed12d820c6e36b"
-      },
-      {
-        "path": "docs/decisions/2026-08-10-sign-separated-residual-candidate-application-preflight-pass.md",
-        "sha256": "519dfbfe9ae2e84639c936546e709ef07c3d606146c7c4c4e20daf5294d237af"
-      },
-      {
-        "path": "outputs/sign-separated-residual-candidate-application-preflight-20260810/preflight.json",
-        "sha256": "e7d35ec3a3bb5090a2bb8335e2b8fb2086eb5d310cbb9e33f70951c890de933a"
-      },
-      {
-        "path": "docs/sign-separated-residual-candidate-plan-v2.json",
-        "sha256": "7f2c35a86efe05fb50c91008bba055c1ea5dd6d3578eee1256813721d707e205"
-      },
-      {
-        "path": "scripts/infer/run_sign_separated_residual_candidate.py",
-        "sha256": "2993e1dbfb739e9e883d0bac75c099cc9a79986c293e8a27215c8bae811f5550"
-      },
-      {
-        "path": "scripts/analysis/validate_sign_separated_candidate_application_preflight.py",
-        "sha256": "05c6d6e4c2ad4b8a7df718893bef5922526c34479a679583b7c2e0fcd896d7db"
-      },
-      {
-        "path": "tests/test_sign_separated_candidate_application_preflight.py",
-        "sha256": "f7cda0f97c3103524065319d43e2c19adad8c52f1a497b2f05563430935ca2a7"
-      },
-      {
-        "path": "docs/decisions/2026-08-10-sign-separated-residual-train275-materialization-pass.md",
-        "sha256": "f0113da1c798edeee0a01e30bbe64a650a9df996abca5c93a3e5074cd74dd807"
-      },
-      {
-        "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
-        "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
-      },
-      {
         "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train-patches-v1.csv",
         "sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9"
-      },
-      {
-        "path": "scripts/analysis/audit_sign_separated_train_materialization.py",
-        "sha256": "d57b351f7ea1d14e420e208ce77d6647d551d377f88e5e32e3cc07b1d36c352c"
-      },
-      {
-        "path": "tests/test_sign_separated_train_materialization.py",
-        "sha256": "76e997a827816e1875883429897f5a21e5de2279ebbf86a2503f6aa0a4eeb343"
-      },
-      {
-        "path": "docs/decisions/2026-08-10-sign-separated-residual-training-preflight-pass.md",
-        "sha256": "cc015866e722c4cc050cb62845224a8a19b49e8418d11d6b41f2a5ce7da6c56f"
-      },
-      {
-        "path": "outputs/sign-separated-residual-repair-training-preflight-20260810/preflight.json",
-        "sha256": "80511bc9d117fb61a4276dee05fa10a04c40b471d64dc494e09a3d540238246b"
-      },
-      {
-        "path": "docs/sign-separated-residual-training-plan.json",
-        "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
-      },
-      {
-        "path": "scripts/train/train_sign_separated_residual_probe.py",
-        "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
-      },
-      {
-        "path": "scripts/analysis/build_sign_separated_residual_patch_index.py",
-        "sha256": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056"
-      },
-      {
-        "path": "scripts/analysis/validate_sign_separated_training_preflight.py",
-        "sha256": "82862ffff19e24a12261ce02d5ab759111533191e819be532346ba60012ace7a"
-      },
-      {
-        "path": "tests/test_validate_sign_separated_training_preflight.py",
-        "sha256": "1056097f04bb14bffb52d0c546e5295cb784b4a93be0dd6463b1593a558c7e5d"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
-        "sha256": "11df22c9d1970a6c47f00806a318a10d1247f2ad30b862ec8455770e2c3ceaed"
-      },
-      {
-        "path": "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json",
-        "sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5"
-      },
-      {
-        "path": "scripts/analysis/audit_sign_separated_residual_repair.py",
-        "sha256": "41e3d4544c590d657a440164014ab731bc1c259064cb064981ba7e4caf2d88eb"
-      },
-      {
-        "path": "tests/test_sign_separated_residual_repair.py",
-        "sha256": "6ce1e3c43c95a019a7d96f47e8ceb5449634ca65cfb9567397f59beb67a10e4b"
       },
       {
         "path": "docs/sign-separated-residual-data-roles.json",
         "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
       },
       {
-        "path": "scripts/analysis/validate_sign_separated_data_roles.py",
-        "sha256": "23b0fd092bb824cf9143fadaf4ac2265117f5c9ca14c2b2b712bd30f0f025c2f"
-      },
-      {
-        "path": "tests/test_validate_sign_separated_data_roles.py",
-        "sha256": "cb47027b4d2119bb0d589edccc205553c989345aec0106cbd5e1160fd58e3ae8"
-      },
-      {
-        "path": "outputs/sign-separated-residual-repair-data-role-preflight-20260809/preflight.json",
-        "sha256": "9bb38b018543db08f4e047bde08d2f0b2270bba1c2597e755917934f17539f0e"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-data-role-preflight-pass.md",
-        "sha256": "b60b15b8cfc4c6a9f1cf98ab70ebe7229bfb8d45aa79f75009cf82e0535a4b4d"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
-        "sha256": "75df672f5aab164fde1cfe5fe97a7426f1e258a417639e571ad79ac67b577a9b"
-      },
-      {
-        "path": "docs/rejected-directions.md",
-        "sha256": "0907cabb76bec1ca338a3d31c9c6c968f683ef10e2b60c6ae27df70b06ecd10c"
-      },
-      {
-        "path": "docs/product-quality-labels.csv",
-        "sha256": "67d34e5b4a5d81dd846c523002c26e106ec288afc1d0d9e8438a8aa42e24d972"
-      },
-      {
-        "path": "scripts/infer/patch_cleanup_erasemap.py",
-        "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
-      },
-      {
         "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
         "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
-      },
-      {
-        "path": "docs/model-registry.md",
-        "sha256": "a8c865554d631357521751d0260d7384e682c3dcdf9960303fade8b5dd731cc0"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
-        "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
-      },
-      {
-        "path": "artifacts/trials/universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-20260809/ensexam/20260809_112035/epoch_1.pth",
-        "sha256": "875feb5b9f824b5075746b03415d07f1cfb9a1addb062d6d57181a3c9555c87b"
-      },
-      {
-        "path": "outputs/universal-sidecar-d5-step80-20260809/train.log",
-        "sha256": "2a13892194328df8d634b60081eb8f48c9c41bf8a464b37166f8047f6b4542dd"
-      },
-      {
-        "path": "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json",
-        "sha256": "b63ac6aee002386f9d2dea5c756a4780b11fc67aaeaab3440dafd1257b6b71ae"
-      },
-      {
-        "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/frozen_predictions/metrics.csv",
-        "sha256": "a13dafc92bf0accae8e901eb86c355d8a2f7e38ce714ea4b5c118a7384773654"
-      },
-      {
-        "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/post_freeze_metrics.csv",
-        "sha256": "13565b1dbd156b7dd797403a0d6fbd7132c6938313bd0a74b52b94a5e01bbe72"
-      },
-      {
-        "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json",
-        "sha256": "4e17003441c3e5a68a9f5e944ff351505f2bb150d65246611649697f0edc37ce"
-      },
-      {
-        "path": "scripts/analysis/audit_universal_sidecar_checkpoint.py",
-        "sha256": "59c6b087dadc76f8310c67da92b0273914ec72aba8e6026c0b5481ba4ca20cd2"
-      },
-      {
-        "path": "tests/test_universal_residual_adapter_sidecar.py",
-        "sha256": "198272623c6f62e23f2f52160616541023becaac7abe3c23bedda5a7e78aece0"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-real-preflight-pass.md",
-        "sha256": "a0440a9b07095c45f150501342d075be67685872aefc84d5adc9ac38c2d40ee4"
-      },
-      {
-        "path": "outputs/universal-sidecar-d5-preflight-20260809/preflight.json",
-        "sha256": "7d8518e57b290a3b9a2de09d4953e83958894d65c1165113778b73a635c330c5"
-      },
-      {
-        "path": "configs/local/config.local-universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-mps.yaml",
-        "sha256": "602c91ccfa48bd71a6dee78c280a754f4f2342034ced7f554579537b2fc77f65"
-      },
-      {
-        "path": "scripts/analysis/validate_universal_sidecar_d5_preflight.py",
-        "sha256": "bc26a358b5335766d4225656f7801af2786430a6613307397449fc4f2c3cf1fe"
-      },
-      {
-        "path": "tests/test_universal_sidecar_d5_real_preflight.py",
-        "sha256": "e7048366df3316f1f6093bb22bda2cf7e9f67a3cee5d1b701f4d90344fbc292b"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite-pass.md",
-        "sha256": "837e4434a1b19c6449bf0824683b02dc27b42945a60bdd160b33848cdf069a48"
-      },
-      {
-        "path": "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json",
-        "sha256": "afe1eb4a500fd144f346ff6752285c574f49118318fab85e25668e2336371348"
-      },
-      {
-        "path": "scripts/analysis/audit_primary_edit_direction_folded_sidecar.py",
-        "sha256": "e72511b8487c2bc8c0c04c95d5dbd6ef85c2d3174323ebef563df481ff95a666"
-      },
-      {
-        "path": "tests/test_universal_sidecar_d5_folded_direction.py",
-        "sha256": "2ee2ae0a9bb310cef4232095f0113b38f219aad438833e37d68ba6bee2db9ca1"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
-        "sha256": "9d63193dab2492ad3352534ea104b45195dd016d11e049f11b5a44a731fc1c39"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
-        "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
-        "sha256": "c257cc5ff43e6cf8ddeb45a1227503f8c587438b6ac042e7aae24b4797b8ab1f"
-      },
-      {
-        "path": "docs/decisions/2026-08-09-universal-sidecar-d4-real-preflight-pass.md",
-        "sha256": "86205ba3e063667072c9398fa02b1de7ab1e7762ce27275bd6f4ffde7e4f7510"
-      },
-      {
-        "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
-        "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
-      },
-      {
-        "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
-        "sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78"
-      },
-      {
-        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
-        "sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb"
-      },
-      {
-        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
-        "sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab"
-      },
-      {
-        "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
-        "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
       }
     ],
-    "failure_bucket": "single_head_residual_brighten_darken_entanglement",
+    "failure_bucket": "residual_brighten_support_competes_with_dark_preservation_correction",
     "first_gate": "scut_inner_val15",
-    "id": "sign-separated-residual-repair",
-    "next_action": "Preregister the next materially different named failure bucket from remaining residual handwriting, printed-text preservation, overerase, or paper-tone evidence; do not rescue or repeat the killed sign-separated family.",
+    "id": "monotonic-residual-erase-support",
+    "next_action": "Run a metadata-only data-role preflight that reuses the frozen mutually exclusive roles and defines train-only target-lighter edit support plus target-darker/identity preserve negatives; keep all pixel decode and training surfaces closed.",
     "prerequisites": [
       {
-        "detail": "Frozen evidence ranks sign-separated residual representation above D5 scalar rescue, single-head loss retuning, selector-only continuation, and correction-fluid harmonization for the next bounded uncertainty.",
-        "id": "next_named_failure_bucket_preregistration",
+        "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
+        "id": "monotonic_residual_erase_preregistration",
         "status": "passed"
       },
       {
-        "detail": "Deterministic CPU evidence proves exact identity initialization, branch-isolated gradients, correct signed output, shared bound preservation, nonzero serialization, unchanged legacy cleanup interfaces, and a closed training CLI.",
-        "id": "sign_separated_residual_synthetic_preflight",
+        "detail": "Deterministic CPU evidence proves exact identity, nonnegative bounded output, live brighten support and magnitude gradients, exact no-op preserve optimization, serialization, legacy compatibility, and a closed historical training CLI.",
+        "id": "monotonic_residual_erase_synthetic_prerequisite",
         "status": "passed"
       },
       {
-        "detail": "Before image or target pixels, target-derived patches, or training are admitted, freeze mutually exclusive page roles and current-primary/current-second-stage baseline identities using metadata and hashes only.",
-        "id": "sign_separated_residual_data_role_preflight",
-        "status": "passed"
-      },
-      {
-        "detail": "Before any real image/target decode, target-derived patch construction, or training, prove the uniquely preregistered config, frozen baseline initialization, train-only effective role, exact step/device bounds, closed evaluation/promotion surfaces, and absent output destinations.",
-        "id": "sign_separated_residual_training_preflight",
-        "status": "passed"
-      },
-      {
-        "detail": "Before training, prove that the materialized sample manifest, primary and frozen second-stage prediction sets, and target-derived patch index contain exactly the effective train275 role and match registered pipeline, coordinate, direction-support, and content hashes.",
-        "id": "sign_separated_residual_train_materialization_audit",
-        "status": "passed"
-      },
-      {
-        "detail": "Before training, freeze and synthetically prove a third-stage application protocol whose meaningful-delta gate is reachable under the 0.08 bound, preserves identity initialization as a no-op, and cannot reuse the incompatible legacy 32-gray threshold.",
-        "id": "sign_separated_residual_candidate_application_preflight",
-        "status": "passed"
-      },
-      {
-        "detail": "After the single registered v2 run and before inner-val15, prove exact step/config provenance, finite five-term history, nonzero checkpoint movement, bounded signed behavior on audited train patches, and unchanged baseline hashes.",
-        "id": "sign_separated_residual_checkpoint_audit",
-        "status": "passed"
-      },
-      {
-        "detail": "The v2 checkpoint audit executed and returned KILL for all-darken route collapse; select and preregister one materially different remaining failure bucket before any further implementation or data access.",
-        "id": "post_sign_separated_next_failure_bucket_preregistration",
+        "detail": "Before any image, mask, label, or target pixel decode, reuse the frozen mutually exclusive roles and prove that only train-role targets may define target-lighter edit support while target-darker and identity pixels become preserve negatives.",
+        "id": "monotonic_residual_erase_data_role_preflight",
         "status": "pending"
       }
     ],
@@ -318,50 +81,7 @@
       "sign_separated_reserved_blind",
       "sign_separated_promotion"
     ],
-    "authorized_after_candidate_application_preflight_pass": [
-      "single_sign_separated_residual_v2_training_run",
-      "sign_separated_residual_v2_checkpoint_generation",
-      "sign_separated_residual_checkpoint_audit"
-    ],
-    "prohibited_before_checkpoint_audit_pass": [
-      "scut_inner_val15",
-      "development_gate",
-      "scut115",
-      "holdout40",
-      "visual_review",
-      "reserved_blind",
-      "current_primary_replacement"
-    ],
-    "authorized_after_training_preflight_pass": [
-      "train275_sample_manifest_materialization",
-      "train275_current_primary_prediction_generation",
-      "train275_frozen_second_stage_prediction_generation",
-      "train275_target_difference_patch_index_construction",
-      "train275_materialization_audit"
-    ],
-    "prohibited_before_materialization_audit_pass": [
-      "training",
-      "checkpoint_generation",
-      "scut_inner_val15",
-      "development_gate",
-      "scut115",
-      "holdout40",
-      "visual_review",
-      "reserved_blind",
-      "current_primary_replacement"
-    ],
-    "prohibited_before_candidate_application_preflight_pass": [
-      "training",
-      "checkpoint_generation",
-      "scut_inner_val15",
-      "development_gate",
-      "scut115",
-      "holdout40",
-      "visual_review",
-      "reserved_blind",
-      "current_primary_replacement"
-    ],
-    "prohibited_before_training_preflight_pass": [
+    "prohibited_before_data_role_preflight_pass": [
       "image_pixel_decode",
       "mask_pixel_decode",
       "label_or_target_pixel_decode",
@@ -370,19 +90,23 @@
       "training",
       "checkpoint_generation",
       "prediction_artifact_generation",
-      "visual_review",
       "scut_inner_val15",
+      "development_gate",
       "scut115",
       "holdout40",
+      "visual_review",
       "reserved_blind",
       "current_primary_replacement"
     ],
     "prohibited_before_first_gate": [
+      "development_gate",
       "scut115",
       "holdout40",
+      "visual_review",
       "reserved_blind",
       "threshold_rescue",
       "learning_rate_or_step_sweep",
+      "loss_weight_sweep",
       "current_primary_replacement"
     ],
     "terminal": "PREREQUISITE_NEEDED"
@@ -566,7 +290,7 @@
         },
         {
           "path": "tests/test_validate_sign_separated_data_roles.py",
-          "sha256": "cb47027b4d2119bb0d589edccc205553c989345aec0106cbd5e1160fd58e3ae8"
+          "sha256": "4e2e80b57c6c041fc0221f0dea73782a1ea1525263dc306136255849f4030273"
         }
       ],
       "id": "sign-separated-residual-data-role-preflight",
@@ -602,7 +326,7 @@
         },
         {
           "path": "tests/test_validate_sign_separated_training_preflight.py",
-          "sha256": "1056097f04bb14bffb52d0c546e5295cb784b4a93be0dd6463b1593a558c7e5d"
+          "sha256": "ff725026bc224ec31d21e174d59e81f4c1dab9faba0c99e28a27851bd631a1b1"
         }
       ],
       "id": "sign-separated-residual-training-preflight",
@@ -638,7 +362,7 @@
         },
         {
           "path": "tests/test_sign_separated_train_materialization.py",
-          "sha256": "76e997a827816e1875883429897f5a21e5de2279ebbf86a2503f6aa0a4eeb343"
+          "sha256": "82b851c6982d344c36cd4ff8094a15b67c34ea82072a6cf9e8c589a8934f0a83"
         }
       ],
       "id": "sign-separated-residual-train275-materialization-audit",
@@ -670,7 +394,7 @@
         },
         {
           "path": "tests/test_sign_separated_candidate_application_preflight.py",
-          "sha256": "f7cda0f97c3103524065319d43e2c19adad8c52f1a497b2f05563430935ca2a7"
+          "sha256": "8e111af45845e56bf4247d35e174207fc239383ba6b7014da7b9cacf0031e570"
         }
       ],
       "id": "sign-separated-residual-candidate-application-preflight",
@@ -913,6 +637,50 @@
       "outcome": "same_page_source_residual_regression_as_d2",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-preregistration.md",
+          "sha256": "17d0ec3aebb4b2937022bb7b0d67f52a8b69e61f3daf7acd54e2a93edf421544"
+        }
+      ],
+      "id": "monotonic-residual-erase-preregistration",
+      "outcome": "preserve_or_brighten_representation_selected_pending_synthetic_prerequisite",
+      "repeat_policy": "implement_and_run_exact_cpu_synthetic_prerequisite_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
+          "sha256": "e37a6f8ef3eac00f468fb9a55da208b4fadb60c32b857909366d953e9a27e198"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json",
+          "sha256": "3a43b2a180642ebfe3edb1a7ef75f443e128ea760f2d2c17ccc40097beacd601"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_prerequisite.py",
+          "sha256": "b5151cbc43dcfa07fc500fa30330eeac9a86f7f90f8905c0edddfe9ae89f2aad"
+        },
+        {
+          "path": "scripts/infer/monotonic_residual_erase.py",
+          "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_prerequisite.py",
+          "sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7"
+        },
+        {
+          "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+          "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+        }
+      ],
+      "id": "monotonic-residual-erase-synthetic-prerequisite",
+      "outcome": "identity_initialized_nonnegative_bounded_erase_contract_passed",
+      "repeat_policy": "reuse_exact_synthetic_audit_no_training_or_parameter_sweep",
+      "terminal": "PASS"
     }
   ],
   "schema_version": 1

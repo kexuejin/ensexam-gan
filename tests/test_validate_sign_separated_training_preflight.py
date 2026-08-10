@@ -29,21 +29,31 @@ class SignSeparatedTrainingPreflightTest(unittest.TestCase):
 
     def mutated_ledger(self, root: Path) -> tuple[dict, Path]:
         ledger = json.loads((ROOT / LEDGER_PATH).read_text(encoding="utf-8"))
+        ledger["active_iteration"] = {
+            "id": "sign-separated-residual-repair",
+            "prerequisites": [
+                {
+                    "id": "sign_separated_residual_synthetic_preflight",
+                    "status": "passed",
+                },
+                {
+                    "id": "sign_separated_residual_data_role_preflight",
+                    "status": "passed",
+                },
+                {
+                    "id": "sign_separated_residual_training_preflight",
+                    "status": "passed",
+                },
+            ],
+        }
         path = root / "ledger.json"
         return ledger, path
 
-    def test_actual_training_preflight_passes_without_real_data_decode(self) -> None:
+    def test_killed_family_cannot_reopen_training_preflight(self) -> None:
         result = run_preflight(repo_root=ROOT)
-        self.assertEqual(result["terminal"], "PASS", result)
-        self.assertTrue(result["runnable"])
-        self.assertFalse(result["real_image_decode"])
-        self.assertFalse(result["target_decode"])
-        self.assertFalse(result["training_started"])
-        self.assertFalse(result["prediction_artifacts_generated"])
-        self.assertEqual(result["train_files"]["effective_train_count"], 275)
-        self.assertEqual(
-            result["train_files"]["domain_counts"], {"hw5k": 253, "scut": 22}
-        )
+        self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED", result)
+        self.assertFalse(result["runnable"])
+        self.assertIn("active iteration", result["reason"])
 
     def test_training_preflight_can_be_reverified_after_ledger_pass(self) -> None:
         with TemporaryDirectory() as raw:
@@ -91,10 +101,14 @@ class SignSeparatedTrainingPreflightTest(unittest.TestCase):
         with TemporaryDirectory() as raw:
             root = Path(raw)
             plan, plan_path = self.mutated_plan(root)
+            _ledger, ledger_path = self.mutated_ledger(root)
             plan["evidence"]["trainer"]["sha256"] = "0" * 64
             self.write_json(plan_path, plan)
+            self.write_json(ledger_path, _ledger)
             result = run_preflight(
-                repo_root=ROOT, training_plan_path=plan_path
+                repo_root=ROOT,
+                training_plan_path=plan_path,
+                ledger_path=ledger_path,
             )
             self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
             self.assertIn("artifact hash mismatch", result["reason"])

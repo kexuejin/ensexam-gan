@@ -144,22 +144,11 @@ class SignSeparatedDataRolePreflightTest(unittest.TestCase):
             json.dumps(plan, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
 
-    def test_actual_role_plan_has_frozen_effective_counts(self) -> None:
+    def test_killed_family_cannot_reopen_data_role_preflight(self) -> None:
         result = run_preflight(repo_root=ROOT)
-        self.assertEqual(result["terminal"], "PASS", result)
-        self.assertEqual(
-            result["role_counts"],
-            {
-                "development_next120": 112,
-                "development_train160": 156,
-                "holdout40": 40,
-                "inner_val15": 15,
-                "reserved_blind": 0,
-                "scut115": 115,
-                "train": 275,
-            },
-        )
-        self.assertEqual(result["train_domain_counts"], {"hw5k": 253, "scut": 22})
+        self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED", result)
+        self.assertFalse(result["runnable"])
+        self.assertIn("active iteration", result["reason"])
 
     def test_synthetic_fixture_passes(self) -> None:
         with TemporaryDirectory() as raw:

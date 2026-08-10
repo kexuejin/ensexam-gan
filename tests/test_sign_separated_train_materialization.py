@@ -18,17 +18,19 @@ from scripts.analysis.materialize_sign_separated_train_inputs import (
     rewrite_metrics_paths,
     validate_authority,
 )
+from scripts.analysis.validate_sign_separated_training_preflight import (
+    PreflightError,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 class SignSeparatedTrainMaterializationTest(unittest.TestCase):
-    def test_actual_authority_admits_only_materialization(self) -> None:
+    def test_killed_family_cannot_reopen_materialization(self) -> None:
         ledger = json.loads((ROOT / LEDGER_PATH).read_text(encoding="utf-8"))
-        authority = validate_authority(ROOT, ledger)
-        self.assertEqual(authority["training_preflight"], "passed")
-        self.assertEqual(authority["materialization_audit"], "passed")
+        with self.assertRaisesRegex(PreflightError, "active iteration"):
+            validate_authority(ROOT, ledger)
         self.assertEqual(
             STAGES, ("manifest", "primary", "second_stage", "patch_index")
         )

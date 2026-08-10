@@ -20,24 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class SignSeparatedCandidateApplicationPreflightTest(unittest.TestCase):
-    def test_actual_preflight_proves_reachability_without_real_training(self) -> None:
+    def test_killed_family_cannot_reopen_application_preflight(self) -> None:
         result = run_preflight(repo_root=ROOT)
-        self.assertEqual(result["terminal"], "PASS", result)
-        self.assertTrue(result["runnable"])
-        self.assertFalse(result["real_image_decode"])
-        self.assertFalse(result["target_decode"])
-        self.assertFalse(result["training"]["real_training_started"])
-        self.assertTrue(
-            result["candidate_application"]["reachable_delta_applied"]
-        )
-        threshold = result["candidate_application"][
-            "minimum_delta_threshold"
-        ]
-        for case in result["synthetic_reachability"]["legacy_cases"]:
-            self.assertLess(case["delta_abs_max"], threshold)
-        for case in result["synthetic_reachability"]["registered_cases"]:
-            self.assertGreaterEqual(case["delta_abs_max"], threshold)
-            self.assertEqual(case["opposed_pixel_count"], 0)
+        self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED", result)
+        self.assertFalse(result["runnable"])
+        self.assertEqual(result["reason"], "active iteration changed")
 
     def test_inference_surface_has_no_legacy_gate_or_label_option(self) -> None:
         parser = build_parser()
