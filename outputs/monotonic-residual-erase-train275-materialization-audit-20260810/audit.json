@@ -1,0 +1,97 @@
+{
+  "artifact_hashes": {
+    "base_role_contract": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d",
+    "current_primary_checkpoint": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae",
+    "current_primary_config": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e",
+    "current_second_stage_checkpoint": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7",
+    "data_role_decision": "7b8931ef180a4e4d334e92cd922b876f67fb0954cbc079302026183a9fcec8e1",
+    "data_role_plan": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a",
+    "data_role_preflight": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b",
+    "model": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b",
+    "patch_builder": "2e8179cafb459a647aa27189d9d3cc73caf0fe3c9cf53ba8291319b7d7c925b8",
+    "primary_inference": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8",
+    "second_stage_inference": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d",
+    "trainer": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+  },
+  "authority": {
+    "materialization_audit": "pending",
+    "training_preflight": "passed"
+  },
+  "checkpoint_generated": false,
+  "first_quality_gate_started": false,
+  "later_gates_enabled": false,
+  "patch_summary": {
+    "candidate_count": 52645,
+    "input_content_sha256": "90e0ec3b7f5e676801d2cab2f9f0a7af9d1aff053ca01154d810258b3692004e",
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "page_count": 24,
+    "patch_count": 256,
+    "patch_index": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+    "patch_index_sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943",
+    "positive_ratio_max": 0.9453582763671875,
+    "positive_ratio_min": 0.3106536865234375,
+    "preserve_ratio_max": 0.6893463134765625,
+    "preserve_ratio_min": 0.0546417236328125,
+    "selection": "top_target_lighter_support_only",
+    "status": "pass",
+    "terminal": "PASS",
+    "train_role_count": 275,
+    "train_role_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+  },
+  "primary_metrics": {
+    "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "row_count": 275
+  },
+  "primary_predictions": {
+    "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "promotion_enabled": false,
+  "real_train_pixels_audited": true,
+  "reserved_blind_state": "unavailable",
+  "reuse_source": {
+    "audit_path": "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+    "audit_sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741",
+    "manifest_sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f",
+    "primary_metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "primary_predictions": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "second_stage_metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "second_stage_predictions": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    }
+  },
+  "runnable": true,
+  "sample_manifest_sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f",
+  "second_stage_metrics": {
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "row_count": 275
+  },
+  "second_stage_predictions": {
+    "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "stage_record_hashes": {
+    "manifest": "1115ccdeabc1b2afb9d2046964ef8a062b3d481a3a97a8e1fb282b5bd9028a2e",
+    "patch_index": "6522dc267629bb563a63e2271859194ac6cb7a003fe7bfb3a6648684651b0d64",
+    "primary": "4cf932820424b862d620ab7e0f1fb245218e221d91b5d214b22f62372bdd5f0d",
+    "second_stage": "118bb89287e5dd9cbfe2fe009aa0999d6a40f02393049813a64a0a0aa8dac702"
+  },
+  "status": "pass",
+  "target_decode_roles": [
+    "train"
+  ],
+  "terminal": "PASS",
+  "train_count": 275,
+  "train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457",
+  "training_started": false
+}

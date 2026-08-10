@@ -45,6 +45,15 @@ TRAINING_RECORD_ID = "monotonic-residual-erase-training-preflight"
 TRAINING_OUTCOME = (
     "class_balanced_monotonic_train275_configuration_passed_without_pixel_decode"
 )
+MATERIALIZATION_PREREQUISITE_ID = (
+    "monotonic_residual_erase_train_materialization_audit"
+)
+MATERIALIZATION_RECORD_ID = (
+    "monotonic-residual-erase-train275-materialization-audit"
+)
+MATERIALIZATION_OUTCOME = (
+    "exact_train275_frozen_pipeline_and_brighten_only_patch_materialization_passed"
+)
 DEDICATED_TRAINER_PATH = Path("scripts/train/train_monotonic_residual_erase.py")
 
 
@@ -307,10 +316,61 @@ def validate_training_cli_closed(
     return True
 
 
+def validate_materialization_authority(
+    repo_root: Path,
+    ledger: dict[str, Any],
+) -> bool:
+    prerequisites = {
+        item.get("id"): item.get("status")
+        for item in ledger.get("active_iteration", {}).get("prerequisites", [])
+        if isinstance(item, dict)
+    }
+    status = prerequisites.get(MATERIALIZATION_PREREQUISITE_ID)
+    if status == "pending":
+        return False
+    if status != "passed":
+        raise PreflightError("monotonic materialization authority is invalid")
+
+    records = [
+        record
+        for record in ledger.get("records", [])
+        if isinstance(record, dict)
+        and record.get("id") == MATERIALIZATION_RECORD_ID
+    ]
+    if len(records) != 1:
+        raise PreflightError(
+            "ledger requires one monotonic materialization PASS record"
+        )
+    record = records[0]
+    if (
+        record.get("terminal") != "PASS"
+        or record.get("outcome") != MATERIALIZATION_OUTCOME
+    ):
+        raise PreflightError("monotonic materialization record has wrong authority")
+    evidence = record.get("evidence")
+    if not isinstance(evidence, list) or not evidence:
+        raise PreflightError("monotonic materialization PASS record lacks evidence")
+    validated = [
+        validate_artifact(repo_root, item, "monotonic materialization record evidence")
+        for item in evidence
+    ]
+    patch_index = repo_path(
+        repo_root,
+        EXPECTED_ABSENT_OUTPUTS["target_derived_patch_index"],
+        "materialized target-derived patch index",
+    )
+    if patch_index not in validated:
+        raise PreflightError(
+            "monotonic materialization PASS record lacks target-derived patch index"
+        )
+    return True
+
+
 def validate_outputs_absent(
     repo_root: Path,
     *,
     allow_training_preflight_outputs: bool = False,
+    allow_materialized_patch_index: bool = False,
 ) -> list[str]:
     absent = []
     for label, raw_path in sorted(EXPECTED_ABSENT_OUTPUTS.items()):
@@ -318,6 +378,8 @@ def validate_outputs_absent(
             "training_plan",
             "training_preflight",
         }:
+            continue
+        if allow_materialized_patch_index and label == "target_derived_patch_index":
             continue
         path = repo_path(repo_root, raw_path, f"planned output {label}")
         if path.exists():
@@ -358,9 +420,14 @@ def run_preflight(
                 f"metadata validator imports pixel decoder modules: {decoder_imports}"
             )
         training_cli_enabled = validate_training_cli_closed(repo_root, ledger)
+        target_patch_materialized = validate_materialization_authority(
+            repo_root,
+            ledger,
+        )
         absent_outputs = validate_outputs_absent(
             repo_root,
             allow_training_preflight_outputs=training_cli_enabled,
+            allow_materialized_patch_index=target_patch_materialized,
         )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as exc:
         return {
@@ -399,7 +466,7 @@ def run_preflight(
         "real_image_decode": False,
         "mask_decode": False,
         "target_decode": False,
-        "target_patch_materialized": False,
+        "target_patch_materialized": target_patch_materialized,
         "training_started": False,
         "checkpoint_generated": False,
         "prediction_artifacts_generated": False,

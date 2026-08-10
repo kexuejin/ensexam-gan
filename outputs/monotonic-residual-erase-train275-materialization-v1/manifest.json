@@ -1,0 +1,17 @@
+{
+  "command": [
+    "write-exact-manifest"
+  ],
+  "link_target": null,
+  "outputs": [
+    {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    }
+  ],
+  "reuse_source": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train275-v1.txt",
+  "stage": "manifest",
+  "terminal": "PASS",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+}

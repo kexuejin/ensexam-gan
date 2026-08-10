@@ -43,6 +43,15 @@ DATA_ROLE_RECORD_ID = "monotonic-residual-erase-data-role-preflight"
 DATA_ROLE_OUTCOME = (
     "exact_frozen_roles_and_train_only_monotonic_supervision_passed_without_pixel_decode"
 )
+MATERIALIZATION_PREREQUISITE_ID = (
+    "monotonic_residual_erase_train_materialization_audit"
+)
+MATERIALIZATION_RECORD_ID = (
+    "monotonic-residual-erase-train275-materialization-audit"
+)
+MATERIALIZATION_OUTCOME = (
+    "exact_train275_frozen_pipeline_and_brighten_only_patch_materialization_passed"
+)
 EXPECTED_AUTHORIZATION = {
     "candidate_inference": "prohibited_until_checkpoint_audit_pass",
     "checkpoint_generation": "prohibited_until_materialization_audit_pass",
@@ -265,6 +274,9 @@ def validate_ledger_authority(
     training_status = prerequisites.get("monotonic_residual_erase_training_preflight")
     if training_status not in {"pending", "passed"}:
         raise PreflightError("training preflight status must be pending or passed")
+    materialization_status = prerequisites.get(MATERIALIZATION_PREREQUISITE_ID)
+    if materialization_status not in {"pending", "passed"}:
+        raise PreflightError("materialization audit status must be pending or passed")
 
     records = [
         record
@@ -286,10 +298,35 @@ def validate_ledger_authority(
     role_plan = repo_root / "docs/monotonic-residual-erase-data-roles.json"
     if role_plan not in validated_paths:
         raise PreflightError("data-role PASS record lacks the monotonic role plan")
+    if materialization_status == "passed":
+        materialization_records = [
+            record
+            for record in ledger.get("records", [])
+            if isinstance(record, dict)
+            and record.get("id") == MATERIALIZATION_RECORD_ID
+        ]
+        if len(materialization_records) != 1:
+            raise PreflightError(
+                "ledger requires exactly one monotonic materialization PASS record"
+            )
+        materialization_record = materialization_records[0]
+        if (
+            materialization_record.get("terminal") != "PASS"
+            or materialization_record.get("outcome") != MATERIALIZATION_OUTCOME
+        ):
+            raise PreflightError("monotonic materialization record has wrong authority")
+        materialization_evidence = materialization_record.get("evidence")
+        if not isinstance(materialization_evidence, list) or not materialization_evidence:
+            raise PreflightError("monotonic materialization PASS record lacks evidence")
+        for item in materialization_evidence:
+            validate_artifact(
+                repo_root, item, "monotonic materialization record evidence"
+            )
     return {
         "record_id": DATA_ROLE_RECORD_ID,
         "evidence_count": len(validated_paths),
         "training_preflight_ledger_status": training_status,
+        "materialization_audit_ledger_status": materialization_status,
     }
 
 
@@ -521,9 +558,22 @@ def synthetic_training_audit(plan: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def validate_outputs_absent(repo_root: Path, plan: dict[str, Any]) -> list[str]:
+def validate_outputs_absent(
+    repo_root: Path,
+    plan: dict[str, Any],
+    *,
+    allow_materialized_train_inputs: bool = False,
+) -> list[str]:
     absent = []
     for label, value in sorted(plan["planned_outputs_must_be_absent"].items()):
+        if allow_materialized_train_inputs and label in {
+            "patch_index",
+            "patch_index_summary_dir",
+            "primary_prediction_dir",
+            "sample_manifest",
+            "training_input_dir",
+        }:
+            continue
         path = repo_path(repo_root, value, f"planned_outputs.{label}")
         if path.exists():
             raise PreflightError(f"planned output must be absent: {path}")
@@ -562,7 +612,14 @@ def run_preflight(
             raise PreflightError("monotonic model regained a prohibited branch")
         if not torch.backends.mps.is_available():
             raise PreflightError("registered MPS training device is unavailable")
-        absent_outputs = validate_outputs_absent(repo_root, plan)
+        materialization_passed = (
+            authority["materialization_audit_ledger_status"] == "passed"
+        )
+        absent_outputs = validate_outputs_absent(
+            repo_root,
+            plan,
+            allow_materialized_train_inputs=materialization_passed,
+        )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as exc:
         return {
             "reason": str(exc),
@@ -584,7 +641,7 @@ def run_preflight(
         "mps_available": True,
         "real_image_decode": False,
         "target_decode": False,
-        "target_patch_materialized": False,
+        "target_patch_materialized": materialization_passed,
         "training_started": False,
         "checkpoint_generated": False,
         "prediction_artifacts_generated": False,

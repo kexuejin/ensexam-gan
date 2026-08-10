@@ -58,6 +58,7 @@ class MonotonicResidualEraseDataRolePreflightTest(unittest.TestCase):
         self.assertFalse(result["real_image_decode"])
         self.assertFalse(result["mask_decode"])
         self.assertFalse(result["target_decode"])
+        self.assertTrue(result["target_patch_materialized"])
         self.assertFalse(result["training_started"])
         self.assertFalse(result["quality_gate_started"])
         self.assertFalse(result["promotion_enabled"])
@@ -140,6 +141,38 @@ class MonotonicResidualEraseDataRolePreflightTest(unittest.TestCase):
             result = run_preflight(repo_root=ROOT, ledger_path=path)
             self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
             self.assertIn("before training preflight PASS", result["reason"])
+
+    def test_materialized_patch_fails_closed_if_ledger_returns_to_pending(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger, path = self.mutated_ledger(root)
+            prerequisite = next(
+                item
+                for item in ledger["active_iteration"]["prerequisites"]
+                if item["id"]
+                == "monotonic_residual_erase_train_materialization_audit"
+            )
+            prerequisite["status"] = "pending"
+            self.write_json(path, ledger)
+            result = run_preflight(repo_root=ROOT, ledger_path=path)
+            self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
+            self.assertIn("planned output must be absent", result["reason"])
+
+    def test_materialization_evidence_hash_drift_fails_closed(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger, path = self.mutated_ledger(root)
+            record = next(
+                item
+                for item in ledger["records"]
+                if item.get("id")
+                == "monotonic-residual-erase-train275-materialization-audit"
+            )
+            record["evidence"][0]["sha256"] = "0" * 64
+            self.write_json(path, ledger)
+            result = run_preflight(repo_root=ROOT, ledger_path=path)
+            self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
+            self.assertIn("artifact hash mismatch", result["reason"])
 
     def test_existing_planned_output_fails_closed(self) -> None:
         with TemporaryDirectory() as raw:

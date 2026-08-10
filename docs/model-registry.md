@@ -709,3 +709,23 @@ This PASS is configuration evidence, not a quality result. It authorizes only
 the named train-role prediction and patch-index materialization. Training,
 inner-val15, later gates, visual review, reserved blind, promotion, and changes
 to the default artifacts remain prohibited until their preceding gates pass.
+
+Train275 materialization subsequently passed:
+
+```text
+manifest: 275 pages (253 HW5K + 22 SCUT)
+primary / frozen second-stage predictions: 275 / 275
+prediction provenance: byte-identical reuse of the prior audited frozen archive
+target-lighter candidates: 52,645
+selected patches / pages: 256 / 24
+positive support ratio: 0.310654 .. 0.945358
+preserve-negative ratio: 0.054642 .. 0.689346
+training / checkpoint / quality gate: false / false / false
+terminal: PASS
+next action: candidate application preflight only
+```
+
+The `0.08` output bound cannot satisfy the legacy `32`-gray delta threshold,
+so this PASS does not authorize training. Freeze a target-free third-stage
+application protocol before optimization; no post-result threshold rescue is
+allowed.

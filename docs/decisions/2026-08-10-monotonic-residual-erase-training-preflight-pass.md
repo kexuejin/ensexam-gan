@@ -85,13 +85,13 @@ scripts/analysis/build_monotonic_residual_erase_patch_index.py
 sha256 = 2e8179cafb459a647aa27189d9d3cc73caf0fe3c9cf53ba8291319b7d7c925b8
 
 scripts/analysis/validate_monotonic_residual_erase_training_preflight.py
-sha256 = b74d926ef26cba31ddcbbb2f8b729bd62cf24020844b8fa4394da5064ec263f6
+sha256 = d859b478b0ce717aaa2161a9b4b84a2a4c2085ac3013bdf51470e0c5003458eb
 
 tests/test_monotonic_residual_erase_training.py
 sha256 = e0bc7ca8e05298117ba16fe9cf32ce09e4950bb9d514de56c96e1203ddf05a0b
 
 tests/test_validate_monotonic_residual_erase_training_preflight.py
-sha256 = b8f0bfd2d3dfd2ab4eabc64ab5c998cfc7e9e8070cef53c4dba932e3405f412c
+sha256 = 36f03a0a71bc7d8a2c606230631a1d2b8a5cccd4bd1379b6ff50a15cc45a8bde
 
 outputs/monotonic-residual-erase-training-preflight-20260810/preflight.json
 sha256 = eb34260fd05e3f56fac5a9d2ddbddb146d049692ce2b5d8f87649995a4fe12f5
@@ -110,6 +110,12 @@ content-hash disagreement.
 Training, checkpoint creation, inner-val15, development gates, SCUT115,
 holdout40, visual review, reserved-blind access, threshold or parameter sweeps,
 promotion, and default artifact replacement remain closed.
+
+Stage progression note: after the materialization audit records PASS, this
+preflight remains replayable and permits only the exact manifest, frozen
+prediction links, patch index, and summary whose hashes are present in that
+PASS record. It continues to require the training output and first quality
+gate output to be absent.
 
 Intent: Admit one class-balanced train275 materialization path without admitting training prematurely.
 Constraint: Reserved blind data is unavailable, and current-primary/current-second-stage remain immutable defaults.

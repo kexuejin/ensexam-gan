@@ -1,0 +1,19 @@
+{
+  "command": [
+    "reuse-frozen-output",
+    "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+    "outputs/monotonic-residual-erase-train275-frozen-pipeline-v1"
+  ],
+  "link_target": "archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+  "outputs": [
+    {
+      "path": "outputs/monotonic-residual-erase-train275-frozen-pipeline-v1/metrics.csv",
+      "sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d"
+    }
+  ],
+  "reuse_source": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+  "stage": "second_stage",
+  "terminal": "PASS",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+}

@@ -60,15 +60,15 @@
       },
       {
         "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
-        "sha256": "2d617657c3e2b5094f2d841a0d8d72a5bef8a71560248bf9765fd7943814edc4"
+        "sha256": "ffa22d36971249490494b38b500192411fd8fb62b009bdb4aa0ac37263920f26"
       },
       {
         "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
-        "sha256": "32336df1ade448a3df5cb55dfd01fb8891fbd17a6134e0d8659fd0b35ede9dfa"
+        "sha256": "665ee6d7dac64835044dd4aa58a4639d2bc219d6a8e06bcff73553684f991301"
       },
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-training-preflight-pass.md",
-        "sha256": "e7c9ce579c49ab06ede72aea32104b6509305455e454613314350cc717a88dc9"
+        "sha256": "03f650cc9ac42c07417555f7d765e1b36016b8e27aff326d74c69383f1d5373c"
       },
       {
         "path": "docs/monotonic-residual-erase-training-plan.json",
@@ -84,7 +84,7 @@
       },
       {
         "path": "scripts/analysis/validate_monotonic_residual_erase_training_preflight.py",
-        "sha256": "b74d926ef26cba31ddcbbb2f8b729bd62cf24020844b8fa4394da5064ec263f6"
+        "sha256": "d859b478b0ce717aaa2161a9b4b84a2a4c2085ac3013bdf51470e0c5003458eb"
       },
       {
         "path": "scripts/train/train_monotonic_residual_erase.py",
@@ -96,13 +96,61 @@
       },
       {
         "path": "tests/test_validate_monotonic_residual_erase_training_preflight.py",
-        "sha256": "b8f0bfd2d3dfd2ab4eabc64ab5c998cfc7e9e8070cef53c4dba932e3405f412c"
+        "sha256": "36f03a0a71bc7d8a2c606230631a1d2b8a5cccd4bd1379b6ff50a15cc45a8bde"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-train275-materialization-pass.md",
+        "sha256": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622"
+      },
+      {
+        "path": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+        "sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943"
+      },
+      {
+        "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+        "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train-patches-v1/summary.json",
+        "sha256": "7373dfe313eb5c290b44c69950fdb0de6df9bec5b79bc5d4d79b9ba7949de2a2"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+        "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/manifest.json",
+        "sha256": "1115ccdeabc1b2afb9d2046964ef8a062b3d481a3a97a8e1fb282b5bd9028a2e"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/patch_index.json",
+        "sha256": "6522dc267629bb563a63e2271859194ac6cb7a003fe7bfb3a6648684651b0d64"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/primary.json",
+        "sha256": "4cf932820424b862d620ab7e0f1fb245218e221d91b5d214b22f62372bdd5f0d"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/second_stage.json",
+        "sha256": "118bb89287e5dd9cbfe2fe009aa0999d6a40f02393049813a64a0a0aa8dac702"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
+        "sha256": "28e7cd35f26d94fa24648fb6cf1b3bf9476c7266a73f0819b0fe000d7cbcf4db"
+      },
+      {
+        "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
+        "sha256": "fa63587d47d3d34f99d4976fbd9512ada076f23739e3b7b348d8e52ea6c28d8f"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_train_materialization.py",
+        "sha256": "4063c8d1f5381956240813e08ea357c01360ae3be62b53de4e3e6709170da6ea"
       }
     ],
     "failure_bucket": "residual_brighten_support_competes_with_dark_preservation_correction",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Materialize the exact train275 manifest, frozen current-primary plus current-second-stage predictions, and top-256 target-lighter patch index, then audit membership, pipeline hashes, patch bounds, positive support, preserve-negative coverage, and content hashes before enabling training.",
+    "next_action": "Implement and run a target-free candidate application preflight that freezes one third-stage protocol compatible with the 0.08 output bound before training; keep all quality gates closed and prohibit post-result threshold rescue.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -127,6 +175,11 @@
       {
         "detail": "Before training, materialize only the exact train275 frozen pipeline and registered top-target-lighter patches, then prove role membership, content hashes, patch bounds, target-lighter support, and preserve-negative coverage.",
         "id": "monotonic_residual_erase_train_materialization_audit",
+        "status": "passed"
+      },
+      {
+        "detail": "Before training, freeze one target-free third-stage application path whose meaningful-delta threshold is reachable under the 0.08 model bound and whose identity initialization is an exact no-op.",
+        "id": "monotonic_residual_erase_candidate_application_preflight",
         "status": "pending"
       }
     ],
@@ -143,7 +196,7 @@
       "sign_separated_reserved_blind",
       "sign_separated_promotion"
     ],
-    "prohibited_before_materialization_audit_pass": [
+    "prohibited_before_candidate_application_preflight_pass": [
       "training",
       "checkpoint_generation",
       "candidate_inference",
@@ -755,11 +808,11 @@
         },
         {
           "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
-          "sha256": "2d617657c3e2b5094f2d841a0d8d72a5bef8a71560248bf9765fd7943814edc4"
+          "sha256": "ffa22d36971249490494b38b500192411fd8fb62b009bdb4aa0ac37263920f26"
         },
         {
           "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
-          "sha256": "32336df1ade448a3df5cb55dfd01fb8891fbd17a6134e0d8659fd0b35ede9dfa"
+          "sha256": "665ee6d7dac64835044dd4aa58a4639d2bc219d6a8e06bcff73553684f991301"
         }
       ],
       "id": "monotonic-residual-erase-data-role-preflight",
@@ -771,7 +824,7 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-10-monotonic-residual-erase-training-preflight-pass.md",
-          "sha256": "e7c9ce579c49ab06ede72aea32104b6509305455e454613314350cc717a88dc9"
+          "sha256": "03f650cc9ac42c07417555f7d765e1b36016b8e27aff326d74c69383f1d5373c"
         },
         {
           "path": "docs/monotonic-residual-erase-training-plan.json",
@@ -787,7 +840,7 @@
         },
         {
           "path": "scripts/analysis/validate_monotonic_residual_erase_training_preflight.py",
-          "sha256": "b74d926ef26cba31ddcbbb2f8b729bd62cf24020844b8fa4394da5064ec263f6"
+          "sha256": "d859b478b0ce717aaa2161a9b4b84a2a4c2085ac3013bdf51470e0c5003458eb"
         },
         {
           "path": "scripts/train/train_monotonic_residual_erase.py",
@@ -799,12 +852,68 @@
         },
         {
           "path": "tests/test_validate_monotonic_residual_erase_training_preflight.py",
-          "sha256": "b8f0bfd2d3dfd2ab4eabc64ab5c998cfc7e9e8070cef53c4dba932e3405f412c"
+          "sha256": "36f03a0a71bc7d8a2c606230631a1d2b8a5cccd4bd1379b6ff50a15cc45a8bde"
         }
       ],
       "id": "monotonic-residual-erase-training-preflight",
       "outcome": "class_balanced_monotonic_train275_configuration_passed_without_pixel_decode",
       "repeat_policy": "reuse_exact_plan_and_hashes_no_parameter_data_role_or_patch_selection_drift",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-train275-materialization-pass.md",
+          "sha256": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622"
+        },
+        {
+          "path": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+          "sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943"
+        },
+        {
+          "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+          "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train-patches-v1/summary.json",
+          "sha256": "7373dfe313eb5c290b44c69950fdb0de6df9bec5b79bc5d4d79b9ba7949de2a2"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+          "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/manifest.json",
+          "sha256": "1115ccdeabc1b2afb9d2046964ef8a062b3d481a3a97a8e1fb282b5bd9028a2e"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/patch_index.json",
+          "sha256": "6522dc267629bb563a63e2271859194ac6cb7a003fe7bfb3a6648684651b0d64"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/primary.json",
+          "sha256": "4cf932820424b862d620ab7e0f1fb245218e221d91b5d214b22f62372bdd5f0d"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/second_stage.json",
+          "sha256": "118bb89287e5dd9cbfe2fe009aa0999d6a40f02393049813a64a0a0aa8dac702"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
+          "sha256": "28e7cd35f26d94fa24648fb6cf1b3bf9476c7266a73f0819b0fe000d7cbcf4db"
+        },
+        {
+          "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
+          "sha256": "fa63587d47d3d34f99d4976fbd9512ada076f23739e3b7b348d8e52ea6c28d8f"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_train_materialization.py",
+          "sha256": "4063c8d1f5381956240813e08ea357c01360ae3be62b53de4e3e6709170da6ea"
+        }
+      ],
+      "id": "monotonic-residual-erase-train275-materialization-audit",
+      "outcome": "exact_train275_frozen_pipeline_and_brighten_only_patch_materialization_passed",
+      "repeat_policy": "reuse_exact_materialized_hashes_no_rebuild_or_patch_reselection",
       "terminal": "PASS"
     }
   ],

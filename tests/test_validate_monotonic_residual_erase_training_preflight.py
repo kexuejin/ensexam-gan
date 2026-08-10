@@ -30,12 +30,13 @@ class MonotonicResidualEraseTrainingPreflightTest(unittest.TestCase):
         ledger = json.loads((ROOT / LEDGER_PATH).read_text(encoding="utf-8"))
         return ledger, root / "ledger.json"
 
-    def test_current_registered_preflight_passes_without_outputs(self) -> None:
+    def test_current_registered_preflight_replays_after_materialization(self) -> None:
         result = run_preflight(repo_root=ROOT)
         self.assertEqual(result["terminal"], "PASS", result)
         self.assertTrue(result["runnable"])
         self.assertTrue(result["metadata_only"])
         self.assertEqual(result["train_files"]["effective_train_count"], 275)
+        self.assertTrue(result["target_patch_materialized"])
         self.assertFalse(result["training_started"])
         self.assertFalse(result["checkpoint_generated"])
 
@@ -56,6 +57,22 @@ class MonotonicResidualEraseTrainingPreflightTest(unittest.TestCase):
                 result["ledger_authority"]["training_preflight_ledger_status"],
                 "passed",
             )
+
+    def test_materialized_inputs_fail_closed_while_audit_is_pending(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger, ledger_path = self.mutated_ledger(root)
+            prerequisite = next(
+                item
+                for item in ledger["active_iteration"]["prerequisites"]
+                if item["id"]
+                == "monotonic_residual_erase_train_materialization_audit"
+            )
+            prerequisite["status"] = "pending"
+            self.write_json(ledger_path, ledger)
+            result = run_preflight(repo_root=ROOT, ledger_path=ledger_path)
+            self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
+            self.assertIn("planned output must be absent", result["reason"])
 
     def test_learning_rate_drift_fails_closed(self) -> None:
         with TemporaryDirectory() as raw:
