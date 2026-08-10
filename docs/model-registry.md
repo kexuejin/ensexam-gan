@@ -729,3 +729,21 @@ The `0.08` output bound cannot satisfy the legacy `32`-gray delta threshold,
 so this PASS does not authorize training. Freeze a target-free third-stage
 application protocol before optimization; no post-result threshold rescue is
 allowed.
+
+Candidate application preflight subsequently passed with a v2-only
+reachability correction:
+
+```text
+legacy learning rate / max delta: 2e-5 / 0.023543 gray
+registered learning rate / steps: 1e-4 / 80
+registered max delta / bound: 20.399681 / 20.4 gray
+edit probability / delta gate: 0.5 / 12 gray
+direction guard: reject any candidate channel darker than baseline
+identity / target-darker: exact no-op / exact no-op
+real training / checkpoint / quality gate: false / false / false
+terminal: PASS
+```
+
+The next authorized action is one exact v2 training run on the audited
+train275 patch index. Candidate inference and inner-val15 remain closed until
+the resulting checkpoint passes a separate structural audit.

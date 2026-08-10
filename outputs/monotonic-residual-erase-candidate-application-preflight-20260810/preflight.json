@@ -1,0 +1,78 @@
+{
+  "authority": {
+    "candidate_application": "pending",
+    "materialization": "passed"
+  },
+  "candidate_application": {
+    "baseline_input": "frozen_current_primary_plus_current_second_stage_prediction",
+    "darker_candidate_rejected": true,
+    "edit_probability_threshold": 0.5,
+    "identity_noop": true,
+    "minimum_delta_threshold": 12.0,
+    "reachable_brighten_applied": true,
+    "target_or_route_options_absent": true
+  },
+  "checkpoint_generated": false,
+  "evidence_hashes": {
+    "base_training_plan": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457",
+    "candidate_inference": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636",
+    "materialization_audit": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882",
+    "materialization_decision": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622",
+    "model": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b",
+    "trainer": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+  },
+  "later_gates_enabled": false,
+  "mps_available": true,
+  "plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-candidate-plan-v2.json",
+  "plan_sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56",
+  "planned_outputs_absent": [
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-v2-inner-val15-baseline-pipeline",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-v2-inner-val15-baseline-primary",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-v2-inner-val15-candidate",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-v2-inner-val15-score",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/artifacts/trials/monotonic-residual-erase-v2"
+  ],
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "real_image_decode": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "status": "pass",
+  "synthetic_reachability": {
+    "legacy_case": {
+      "delta_max_gray": 0.023543234914541245,
+      "delta_mean_gray": 0.022658390924334526,
+      "edit_probability_mean": 0.5006554126739502,
+      "loss": 0.771686315536499,
+      "negative_delta_pixel_count": 0
+    },
+    "preserve_cases": [
+      {
+        "delta_max_gray": 0.0,
+        "exact_identity_output": true,
+        "target_delta": 0.0
+      },
+      {
+        "delta_max_gray": 0.0,
+        "exact_identity_output": true,
+        "target_delta": -0.08
+      }
+    ],
+    "registered_case": {
+      "delta_max_gray": 20.399681091308594,
+      "delta_mean_gray": 19.78778648376465,
+      "edit_probability_mean": 0.9792361259460449,
+      "loss": 0.03958636522293091,
+      "negative_delta_pixel_count": 0
+    }
+  },
+  "target_decode": false,
+  "terminal": "PASS",
+  "training": {
+    "device": "mps",
+    "learning_rate": 0.0001,
+    "real_training_started": false,
+    "steps": 80
+  }
+}

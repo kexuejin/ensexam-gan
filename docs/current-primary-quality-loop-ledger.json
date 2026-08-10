@@ -145,12 +145,36 @@
       {
         "path": "tests/test_monotonic_residual_erase_train_materialization.py",
         "sha256": "4063c8d1f5381956240813e08ea357c01360ae3be62b53de4e3e6709170da6ea"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
+        "sha256": "c81c23062d2f897e9ec2dd007a3f3c3187a82ea7e81a06ab64886f0c02c3835b"
+      },
+      {
+        "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
+        "sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-candidate-application-preflight-20260810/preflight.json",
+        "sha256": "7e2a519210244544c94d5753980e9945690a46b964d6a7801eebc337168e27e8"
+      },
+      {
+        "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
+        "sha256": "8cc30657fbe63936091c73540b18a1f0d04594221a94a6c8c1b6fd66300bbf82"
+      },
+      {
+        "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+        "sha256": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
+        "sha256": "121b67d18c6a16dbeaf29a28545f01ba40c9207dc4017941e2e715addfb4dd33"
       }
     ],
     "failure_bucket": "residual_brighten_support_competes_with_dark_preservation_correction",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run a target-free candidate application preflight that freezes one third-stage protocol compatible with the 0.08 output bound before training; keep all quality gates closed and prohibit post-result threshold rescue.",
+    "next_action": "Run the exact registered monotonic residual-erase v2 training once at lr=1e-4 for 80 steps on the audited train275 inputs, then audit the checkpoint before any candidate inference or inner-val15 evaluation.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -178,9 +202,9 @@
         "status": "passed"
       },
       {
-        "detail": "Before training, freeze one target-free third-stage application path whose meaningful-delta threshold is reachable under the 0.08 model bound and whose identity initialization is an exact no-op.",
+        "detail": "Deterministic evidence rejects the sub-integer v1 learning path and proves one target-free v2 application with a 12-gray reachable gate, exact preserve no-op, and a no-darkening runtime guard.",
         "id": "monotonic_residual_erase_candidate_application_preflight",
-        "status": "pending"
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
@@ -196,9 +220,7 @@
       "sign_separated_reserved_blind",
       "sign_separated_promotion"
     ],
-    "prohibited_before_candidate_application_preflight_pass": [
-      "training",
-      "checkpoint_generation",
+    "prohibited_before_checkpoint_audit_pass": [
       "candidate_inference",
       "scut_inner_val15",
       "development_gate",
@@ -219,7 +241,7 @@
       "loss_weight_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "PENDING"
   },
   "baseline": {
     "checkpoint": {
@@ -914,6 +936,38 @@
       "id": "monotonic-residual-erase-train275-materialization-audit",
       "outcome": "exact_train275_frozen_pipeline_and_brighten_only_patch_materialization_passed",
       "repeat_policy": "reuse_exact_materialized_hashes_no_rebuild_or_patch_reselection",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
+          "sha256": "c81c23062d2f897e9ec2dd007a3f3c3187a82ea7e81a06ab64886f0c02c3835b"
+        },
+        {
+          "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
+          "sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-candidate-application-preflight-20260810/preflight.json",
+          "sha256": "7e2a519210244544c94d5753980e9945690a46b964d6a7801eebc337168e27e8"
+        },
+        {
+          "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
+          "sha256": "8cc30657fbe63936091c73540b18a1f0d04594221a94a6c8c1b6fd66300bbf82"
+        },
+        {
+          "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+          "sha256": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
+          "sha256": "121b67d18c6a16dbeaf29a28545f01ba40c9207dc4017941e2e715addfb4dd33"
+        }
+      ],
+      "id": "monotonic-residual-erase-candidate-application-preflight",
+      "outcome": "v1_unreachable_learning_and_legacy_gate_rejected_v2_monotonic_application_passed",
+      "repeat_policy": "run_exact_v2_once_no_learning_rate_step_loss_or_application_threshold_sweep",
       "terminal": "PASS"
     }
   ],

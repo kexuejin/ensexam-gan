@@ -1,0 +1,121 @@
+{
+  "authorization": {
+    "current_primary_replacement": "disabled",
+    "quality_gates": "disabled_until_checkpoint_audit_pass",
+    "reserved_blind": "unavailable",
+    "state": "candidate_application_preflight_pending",
+    "training": "prohibited_until_candidate_application_preflight_pass"
+  },
+  "candidate_application": {
+    "baseline_input": "frozen_current_primary_plus_current_second_stage_prediction",
+    "device": "mps",
+    "direction_enforcement": "candidate_must_not_darken_any_channel",
+    "edit_probability_threshold": 0.5,
+    "inference_script": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+    "minimum_delta_threshold": 12.0,
+    "model_output_bound_gray": 20.4,
+    "stride": 160,
+    "tile_size": 256
+  },
+  "evidence": {
+    "base_training_plan": {
+      "path": "docs/monotonic-residual-erase-training-plan.json",
+      "sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+    },
+    "candidate_inference": {
+      "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+      "sha256": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636"
+    },
+    "materialization_audit": {
+      "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+      "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+    },
+    "materialization_decision": {
+      "path": "docs/decisions/2026-08-10-monotonic-residual-erase-train275-materialization-pass.md",
+      "sha256": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622"
+    },
+    "model": {
+      "path": "scripts/infer/monotonic_residual_erase.py",
+      "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+    },
+    "trainer": {
+      "path": "scripts/train/train_monotonic_residual_erase.py",
+      "sha256": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+    }
+  },
+  "first_quality_gate": {
+    "manifest": "hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+    "manifest_sha256": "fb25bb2aef2f9285403f908deb3da6d88b07b5d1c2c812965ce9e0636ddc172e",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true,
+    "role": "inner_val15"
+  },
+  "iteration_id": "monotonic-residual-erase-support-v2",
+  "materialized_training_inputs": {
+    "frozen_pipeline_prediction_content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "input_dir": "outputs/monotonic-residual-erase-train275-frozen-pipeline-v1/pred",
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "patch_count": 256,
+    "patch_index": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+    "patch_index_sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943",
+    "train_count": 275,
+    "train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+  },
+  "model": {
+    "direction": "preserve_or_brighten_only",
+    "model_type": "monotonic_residual_erase",
+    "residual_delta_bound": 0.08
+  },
+  "planned_outputs_must_be_absent": {
+    "checkpoint_audit": "outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810",
+    "first_gate_baseline_pipeline": "outputs/monotonic-residual-erase-v2-inner-val15-baseline-pipeline",
+    "first_gate_baseline_primary": "outputs/monotonic-residual-erase-v2-inner-val15-baseline-primary",
+    "first_gate_candidate": "outputs/monotonic-residual-erase-v2-inner-val15-candidate",
+    "first_gate_score": "outputs/monotonic-residual-erase-v2-inner-val15-score",
+    "training_output_dir": "artifacts/trials/monotonic-residual-erase-v2"
+  },
+  "schema_version": 1,
+  "supersedes": {
+    "reason": "The v1 learning rate produces only 0.0236 gray synthetic movement after 80 steps, while the legacy 32-gray application gate is impossible under the 0.08 output bound.",
+    "training_plan": "docs/monotonic-residual-erase-training-plan.json",
+    "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+  },
+  "synthetic_reachability": {
+    "identity_target_must_remain_exact": true,
+    "legacy_learning_rate": 0.00002,
+    "legacy_output_must_remain_below_minimum_delta": true,
+    "minimum_delta_threshold": 12.0,
+    "registered_learning_rate": 0.0001,
+    "registered_output_must_reach_minimum_delta": true,
+    "steps": 80,
+    "target_delta": 0.08
+  },
+  "trainer": {
+    "batch_size": 1,
+    "class_balance": "per_sample_separate_positive_and_preserve_means",
+    "device": "mps",
+    "input_dir": "outputs/monotonic-residual-erase-train275-frozen-pipeline-v1/pred",
+    "log_every": 10,
+    "lr": 0.0001,
+    "luminance_margin_gray": 2.0,
+    "magnitude_weight": 1.0,
+    "mask_source": "target_luma_delta",
+    "max_steps": 80,
+    "model_type": "monotonic_residual_erase",
+    "output_dir": "artifacts/trials/monotonic-residual-erase-v2",
+    "patch_index_file": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+    "preserve_delta_weight": 1.0,
+    "residual_delta_bound": 0.08,
+    "save_every": 0,
+    "seed": 42,
+    "split": "train",
+    "support_positive_weight": 1.0,
+    "support_preserve_weight": 1.0,
+    "tile_size": 256,
+    "validation_enabled": false
+  }
+}
