@@ -1,0 +1,91 @@
+{
+  "artifact_hashes": {
+    "cleanup_model": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727",
+    "current_primary_checkpoint": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae",
+    "current_primary_config": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e",
+    "current_second_stage_checkpoint": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7",
+    "data_role_plan": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d",
+    "patch_builder": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056",
+    "primary_inference": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8",
+    "second_stage_inference": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d",
+    "trainer": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+  },
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "later_gates_enabled": false,
+  "ledger_authority": {
+    "evidence_count": 5,
+    "record_id": "sign-separated-residual-data-role-preflight",
+    "training_preflight_ledger_status": "pending"
+  },
+  "mps_available": true,
+  "planned_outputs_absent": [
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-inner-val15-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-train-patches-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-train275-primary-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/sign-separated-residual-repair-train275-v1.txt",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/artifacts/trials/sign-separated-residual-repair-v1"
+  ],
+  "prediction_artifacts_generated": false,
+  "promotion_enabled": false,
+  "real_image_decode": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "status": "pass",
+  "synthetic_training_audit": {
+    "exact_identity_init": true,
+    "gradient_cases": [
+      {
+        "delta_abs_max": 0.0002288818359375,
+        "direction": 1,
+        "matching_magnitude_gradient": 0.07999999821186066,
+        "opposed_pixel_count": 0,
+        "opposite_magnitude_gradient": 0.0,
+        "route_gradient": 1.3333332538604736
+      },
+      {
+        "delta_abs_max": 0.00022906064987182617,
+        "direction": -1,
+        "matching_magnitude_gradient": 0.07999999821186066,
+        "opposed_pixel_count": 0,
+        "opposite_magnitude_gradient": 0.0,
+        "route_gradient": 1.3333332538604736
+      }
+    ],
+    "has_global_scale": false,
+    "parameter_count": 389253,
+    "state_tensor_count": 36
+  },
+  "target_decode": false,
+  "target_patch_materialized": false,
+  "terminal": "PASS",
+  "train_files": {
+    "domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_count": 275,
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "label_file_count": 275,
+    "source_file_count": 275
+  },
+  "training_cli": {
+    "device": "mps",
+    "mask_source": "target_delta",
+    "max_steps": 80,
+    "model_type": "sign_separated_residual_delta",
+    "validation_enabled": false
+  },
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/sign-separated-residual-training-plan.json",
+  "training_plan_sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b",
+  "training_started": false
+}

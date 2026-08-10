@@ -1,7 +1,95 @@
 {
   "active_iteration": {
-    "causal_change": "Keep the frozen mutually exclusive page-level roles and baseline hashes authoritative for sign-separated repair, then admit only a fail-closed training preflight while image/target decoding, patch construction, training, inference, and promotion remain disabled.",
+    "causal_change": "Close the sign-separated route/magnitude family after its only real checkpoint collapsed to darken on every audited train-patch pixel; require a new materially different failure-bucket preregistration before any further experiment.",
     "evidence": [
+      {
+        "path": "docs/decisions/2026-08-10-sign-separated-residual-v2-checkpoint-kill.md",
+        "sha256": "54735b3b1579b923df2c25bef80b43ee4354ed068e6a839c1f5997b8c1041052"
+      },
+      {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json",
+        "sha256": "3889612efe6ded767e1ecbb1fb44cad563dfbd6f04b0a76107b098e7060b6b3d"
+      },
+      {
+        "path": "scripts/analysis/audit_sign_separated_residual_checkpoint.py",
+        "sha256": "245f3ea65b71b05b2c93cf7b1e56ce33997cfbaab44430dd06302a09986d6212"
+      },
+      {
+        "path": "tests/test_sign_separated_residual_checkpoint_audit.py",
+        "sha256": "513f494f4fbd1f590b40fab89374b80430c10e2c3ae3717a88ed12d820c6e36b"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-sign-separated-residual-candidate-application-preflight-pass.md",
+        "sha256": "519dfbfe9ae2e84639c936546e709ef07c3d606146c7c4c4e20daf5294d237af"
+      },
+      {
+        "path": "outputs/sign-separated-residual-candidate-application-preflight-20260810/preflight.json",
+        "sha256": "e7d35ec3a3bb5090a2bb8335e2b8fb2086eb5d310cbb9e33f70951c890de933a"
+      },
+      {
+        "path": "docs/sign-separated-residual-candidate-plan-v2.json",
+        "sha256": "7f2c35a86efe05fb50c91008bba055c1ea5dd6d3578eee1256813721d707e205"
+      },
+      {
+        "path": "scripts/infer/run_sign_separated_residual_candidate.py",
+        "sha256": "2993e1dbfb739e9e883d0bac75c099cc9a79986c293e8a27215c8bae811f5550"
+      },
+      {
+        "path": "scripts/analysis/validate_sign_separated_candidate_application_preflight.py",
+        "sha256": "05c6d6e4c2ad4b8a7df718893bef5922526c34479a679583b7c2e0fcd896d7db"
+      },
+      {
+        "path": "tests/test_sign_separated_candidate_application_preflight.py",
+        "sha256": "f7cda0f97c3103524065319d43e2c19adad8c52f1a497b2f05563430935ca2a7"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-sign-separated-residual-train275-materialization-pass.md",
+        "sha256": "f0113da1c798edeee0a01e30bbe64a650a9df996abca5c93a3e5074cd74dd807"
+      },
+      {
+        "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+        "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
+      },
+      {
+        "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train-patches-v1.csv",
+        "sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9"
+      },
+      {
+        "path": "scripts/analysis/audit_sign_separated_train_materialization.py",
+        "sha256": "d57b351f7ea1d14e420e208ce77d6647d551d377f88e5e32e3cc07b1d36c352c"
+      },
+      {
+        "path": "tests/test_sign_separated_train_materialization.py",
+        "sha256": "76e997a827816e1875883429897f5a21e5de2279ebbf86a2503f6aa0a4eeb343"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-sign-separated-residual-training-preflight-pass.md",
+        "sha256": "cc015866e722c4cc050cb62845224a8a19b49e8418d11d6b41f2a5ce7da6c56f"
+      },
+      {
+        "path": "outputs/sign-separated-residual-repair-training-preflight-20260810/preflight.json",
+        "sha256": "80511bc9d117fb61a4276dee05fa10a04c40b471d64dc494e09a3d540238246b"
+      },
+      {
+        "path": "docs/sign-separated-residual-training-plan.json",
+        "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+      },
+      {
+        "path": "scripts/train/train_sign_separated_residual_probe.py",
+        "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+      },
+      {
+        "path": "scripts/analysis/build_sign_separated_residual_patch_index.py",
+        "sha256": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056"
+      },
+      {
+        "path": "scripts/analysis/validate_sign_separated_training_preflight.py",
+        "sha256": "82862ffff19e24a12261ce02d5ab759111533191e819be532346ba60012ace7a"
+      },
+      {
+        "path": "tests/test_validate_sign_separated_training_preflight.py",
+        "sha256": "1056097f04bb14bffb52d0c546e5295cb784b4a93be0dd6463b1593a558c7e5d"
+      },
       {
         "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
         "sha256": "11df22c9d1970a6c47f00806a318a10d1247f2ad30b862ec8455770e2c3ceaed"
@@ -44,7 +132,7 @@
       },
       {
         "path": "docs/rejected-directions.md",
-        "sha256": "0a3a098355a65a3a3ae210d2e221d30fea1b0894b395b8e97a016e0d96f3bff9"
+        "sha256": "0907cabb76bec1ca338a3d31c9c6c968f683ef10e2b60c6ae27df70b06ecd10c"
       },
       {
         "path": "docs/product-quality-labels.csv",
@@ -60,7 +148,7 @@
       },
       {
         "path": "docs/model-registry.md",
-        "sha256": "3521acbb247e32fcb5961c867b9e42234258982a1c01a14961e48d4f21a981f5"
+        "sha256": "a8c865554d631357521751d0260d7384e682c3dcdf9960303fade8b5dd731cc0"
       },
       {
         "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
@@ -174,7 +262,7 @@
     "failure_bucket": "single_head_residual_brighten_darken_entanglement",
     "first_gate": "scut_inner_val15",
     "id": "sign-separated-residual-repair",
-    "next_action": "Implement and execute the uniquely preregistered sign-separated residual training preflight; do not train, decode images, construct target-derived patches, generate predictions, or open any quality gate until it passes.",
+    "next_action": "Preregister the next materially different named failure bucket from remaining residual handwriting, printed-text preservation, overerase, or paper-tone evidence; do not rescue or repeat the killed sign-separated family.",
     "prerequisites": [
       {
         "detail": "Frozen evidence ranks sign-separated residual representation above D5 scalar rescue, single-head loss retuning, selector-only continuation, and correction-fluid harmonization for the next bounded uncertainty.",
@@ -194,8 +282,84 @@
       {
         "detail": "Before any real image/target decode, target-derived patch construction, or training, prove the uniquely preregistered config, frozen baseline initialization, train-only effective role, exact step/device bounds, closed evaluation/promotion surfaces, and absent output destinations.",
         "id": "sign_separated_residual_training_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before training, prove that the materialized sample manifest, primary and frozen second-stage prediction sets, and target-derived patch index contain exactly the effective train275 role and match registered pipeline, coordinate, direction-support, and content hashes.",
+        "id": "sign_separated_residual_train_materialization_audit",
+        "status": "passed"
+      },
+      {
+        "detail": "Before training, freeze and synthetically prove a third-stage application protocol whose meaningful-delta gate is reachable under the 0.08 bound, preserves identity initialization as a no-op, and cannot reuse the incompatible legacy 32-gray threshold.",
+        "id": "sign_separated_residual_candidate_application_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "After the single registered v2 run and before inner-val15, prove exact step/config provenance, finite five-term history, nonzero checkpoint movement, bounded signed behavior on audited train patches, and unchanged baseline hashes.",
+        "id": "sign_separated_residual_checkpoint_audit",
+        "status": "passed"
+      },
+      {
+        "detail": "The v2 checkpoint audit executed and returned KILL for all-darken route collapse; select and preregister one materially different remaining failure bucket before any further implementation or data access.",
+        "id": "post_sign_separated_next_failure_bucket_preregistration",
         "status": "pending"
       }
+    ],
+    "killed_family_prohibitions": [
+      "sign_separated_residual_v1_training",
+      "sign_separated_residual_v2_repeat_training",
+      "sign_separated_learning_rate_rescue",
+      "sign_separated_step_count_rescue",
+      "sign_separated_loss_weight_rescue",
+      "sign_separated_application_threshold_rescue",
+      "sign_separated_inner_val15",
+      "sign_separated_scut115",
+      "sign_separated_holdout40",
+      "sign_separated_reserved_blind",
+      "sign_separated_promotion"
+    ],
+    "authorized_after_candidate_application_preflight_pass": [
+      "single_sign_separated_residual_v2_training_run",
+      "sign_separated_residual_v2_checkpoint_generation",
+      "sign_separated_residual_checkpoint_audit"
+    ],
+    "prohibited_before_checkpoint_audit_pass": [
+      "scut_inner_val15",
+      "development_gate",
+      "scut115",
+      "holdout40",
+      "visual_review",
+      "reserved_blind",
+      "current_primary_replacement"
+    ],
+    "authorized_after_training_preflight_pass": [
+      "train275_sample_manifest_materialization",
+      "train275_current_primary_prediction_generation",
+      "train275_frozen_second_stage_prediction_generation",
+      "train275_target_difference_patch_index_construction",
+      "train275_materialization_audit"
+    ],
+    "prohibited_before_materialization_audit_pass": [
+      "training",
+      "checkpoint_generation",
+      "scut_inner_val15",
+      "development_gate",
+      "scut115",
+      "holdout40",
+      "visual_review",
+      "reserved_blind",
+      "current_primary_replacement"
+    ],
+    "prohibited_before_candidate_application_preflight_pass": [
+      "training",
+      "checkpoint_generation",
+      "scut_inner_val15",
+      "development_gate",
+      "scut115",
+      "holdout40",
+      "visual_review",
+      "reserved_blind",
+      "current_primary_replacement"
     ],
     "prohibited_before_training_preflight_pass": [
       "image_pixel_decode",
@@ -221,7 +385,7 @@
       "learning_rate_or_step_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PENDING"
+    "terminal": "PREREQUISITE_NEEDED"
   },
   "baseline": {
     "checkpoint": {
@@ -338,7 +502,7 @@
         },
         {
           "path": "docs/rejected-directions.md",
-          "sha256": "0a3a098355a65a3a3ae210d2e221d30fea1b0894b395b8e97a016e0d96f3bff9"
+          "sha256": "0907cabb76bec1ca338a3d31c9c6c968f683ef10e2b60c6ae27df70b06ecd10c"
         },
         {
           "path": "docs/product-quality-labels.csv",
@@ -409,6 +573,134 @@
       "outcome": "metadata_only_roles_baseline_hashes_and_zero_overlap_passed",
       "repeat_policy": "reuse_frozen_role_plan_and_hashes_no_pixel_access",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-training-preflight-pass.md",
+          "sha256": "cc015866e722c4cc050cb62845224a8a19b49e8418d11d6b41f2a5ce7da6c56f"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-training-preflight-20260810/preflight.json",
+          "sha256": "80511bc9d117fb61a4276dee05fa10a04c40b471d64dc494e09a3d540238246b"
+        },
+        {
+          "path": "docs/sign-separated-residual-training-plan.json",
+          "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+        },
+        {
+          "path": "scripts/train/train_sign_separated_residual_probe.py",
+          "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+        },
+        {
+          "path": "scripts/analysis/build_sign_separated_residual_patch_index.py",
+          "sha256": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_training_preflight.py",
+          "sha256": "82862ffff19e24a12261ce02d5ab759111533191e819be532346ba60012ace7a"
+        },
+        {
+          "path": "tests/test_validate_sign_separated_training_preflight.py",
+          "sha256": "1056097f04bb14bffb52d0c546e5295cb784b4a93be0dd6463b1593a558c7e5d"
+        }
+      ],
+      "id": "sign-separated-residual-training-preflight",
+      "outcome": "dedicated_train275_identity_initialized_training_path_passed_without_pixel_decode",
+      "repeat_policy": "reuse_exact_plan_and_hashes_no_parameter_or_data_role_drift",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-train275-materialization-pass.md",
+          "sha256": "f0113da1c798edeee0a01e30bbe64a650a9df996abca5c93a3e5074cd74dd807"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+          "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
+        },
+        {
+          "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train-patches-v1.csv",
+          "sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9"
+        },
+        {
+          "path": "outputs/archive/sign-separated-residual-repair-20260810/train-patches/summary.json",
+          "sha256": "783124b6fff121d1591565fb14c5e6316ec036ccefb8a0178dd1e920a8c0e75a"
+        },
+        {
+          "path": "scripts/analysis/materialize_sign_separated_train_inputs.py",
+          "sha256": "cbc3d107f9410f83d1698b17cd56c3b6121b3b698cdff7f66914ff960bcf19ec"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_train_materialization.py",
+          "sha256": "d57b351f7ea1d14e420e208ce77d6647d551d377f88e5e32e3cc07b1d36c352c"
+        },
+        {
+          "path": "tests/test_sign_separated_train_materialization.py",
+          "sha256": "76e997a827816e1875883429897f5a21e5de2279ebbf86a2503f6aa0a4eeb343"
+        }
+      ],
+      "id": "sign-separated-residual-train275-materialization-audit",
+      "outcome": "exact_train275_frozen_pipeline_and_direction_balanced_patch_materialization_passed",
+      "repeat_policy": "reuse_exact_materialized_hashes_no_rebuild_or_patch_reselection",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-candidate-application-preflight-pass.md",
+          "sha256": "519dfbfe9ae2e84639c936546e709ef07c3d606146c7c4c4e20daf5294d237af"
+        },
+        {
+          "path": "outputs/sign-separated-residual-candidate-application-preflight-20260810/preflight.json",
+          "sha256": "e7d35ec3a3bb5090a2bb8335e2b8fb2086eb5d310cbb9e33f70951c890de933a"
+        },
+        {
+          "path": "docs/sign-separated-residual-candidate-plan-v2.json",
+          "sha256": "7f2c35a86efe05fb50c91008bba055c1ea5dd6d3578eee1256813721d707e205"
+        },
+        {
+          "path": "scripts/infer/run_sign_separated_residual_candidate.py",
+          "sha256": "2993e1dbfb739e9e883d0bac75c099cc9a79986c293e8a27215c8bae811f5550"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_candidate_application_preflight.py",
+          "sha256": "05c6d6e4c2ad4b8a7df718893bef5922526c34479a679583b7c2e0fcd896d7db"
+        },
+        {
+          "path": "tests/test_sign_separated_candidate_application_preflight.py",
+          "sha256": "f7cda0f97c3103524065319d43e2c19adad8c52f1a497b2f05563430935ca2a7"
+        }
+      ],
+      "id": "sign-separated-residual-candidate-application-preflight",
+      "outcome": "v1_unreachable_scale_rejected_and_v2_bounded_third_stage_application_passed",
+      "repeat_policy": "run_exact_v2_once_no_learning_rate_step_or_gate_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-v2-checkpoint-kill.md",
+          "sha256": "54735b3b1579b923df2c25bef80b43ee4354ed068e6a839c1f5997b8c1041052"
+        },
+        {
+          "path": "outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json",
+          "sha256": "3889612efe6ded767e1ecbb1fb44cad563dfbd6f04b0a76107b098e7060b6b3d"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_residual_checkpoint.py",
+          "sha256": "245f3ea65b71b05b2c93cf7b1e56ce33997cfbaab44430dd06302a09986d6212"
+        },
+        {
+          "path": "tests/test_sign_separated_residual_checkpoint_audit.py",
+          "sha256": "513f494f4fbd1f590b40fab89374b80430c10e2c3ae3717a88ed12d820c6e36b"
+        }
+      ],
+      "id": "sign-separated-residual-v2-checkpoint",
+      "outcome": "all_train_patch_routes_collapsed_to_darken_before_inner_val15",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     },
     {
       "evidence": [

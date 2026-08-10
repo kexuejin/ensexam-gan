@@ -640,3 +640,20 @@ baseline primary residual=0.136111 overerase=0.002482
 best candidate by score: step0001 residual=0.138113 overerase=0.002797 score=-0.004524
 decision: no promotion; keep artifacts/current-primary unchanged
 ```
+
+## Sign-Separated Residual v2 Structural KILL
+
+```text
+plan: docs/sign-separated-residual-candidate-plan-v2.json
+checkpoint: artifacts/archive/sign-separated-residual-repair-20260810/training-output/sign_separated_probe.pt
+checkpoint sha256: e9d75a525173a7ddf913f01765d7b5bdbc2bdb228deebfc742a24607292d05fc
+audit: outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json
+terminal: KILL before inner-val15
+route argmax identity / brighten / darken: 0 / 0 / 33,554,432
+application-eligible brighten / darken: 0 / 8,514,478
+```
+
+This checkpoint is local rejected evidence, not a product artifact. Keep
+`artifacts/current-primary` and `artifacts/current-second-stage-best.pt` unchanged. Do not run the
+candidate on inner-val15, SCUT115, holdout40, or reserved blind, and do not rescue it with threshold
+or optimization sweeps.
