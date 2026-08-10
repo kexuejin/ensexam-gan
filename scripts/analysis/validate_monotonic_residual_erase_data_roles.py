@@ -40,6 +40,12 @@ SYNTHETIC_OUTCOME = (
     "identity_initialized_nonnegative_bounded_erase_contract_passed"
 )
 DATA_ROLE_PREREQUISITE_ID = "monotonic_residual_erase_data_role_preflight"
+TRAINING_PREREQUISITE_ID = "monotonic_residual_erase_training_preflight"
+TRAINING_RECORD_ID = "monotonic-residual-erase-training-preflight"
+TRAINING_OUTCOME = (
+    "class_balanced_monotonic_train275_configuration_passed_without_pixel_decode"
+)
+DEDICATED_TRAINER_PATH = Path("scripts/train/train_monotonic_residual_erase.py")
 
 
 EXPECTED_AUTHORIZATION = {
@@ -250,19 +256,69 @@ def pixel_decoder_imports() -> list[str]:
     return sorted(imported & FORBIDDEN_PIXEL_MODULES)
 
 
-def validate_training_cli_closed(repo_root: Path) -> bool:
-    enabled = any(
-        MODEL_TYPE in path.read_text(encoding="utf-8")
+def validate_training_cli_closed(
+    repo_root: Path,
+    ledger: dict[str, Any] | None = None,
+) -> bool:
+    if ledger is None:
+        ledger = read_json(repo_root / LEDGER_PATH)
+    enabled = [
+        path
         for path in sorted((repo_root / "scripts/train").glob("*.py"))
-    )
-    if enabled:
-        raise PreflightError("monotonic model is enabled in a training CLI")
-    return False
+        if MODEL_TYPE in path.read_text(encoding="utf-8")
+    ]
+    prerequisites = {
+        item.get("id"): item.get("status")
+        for item in ledger.get("active_iteration", {}).get("prerequisites", [])
+        if isinstance(item, dict)
+    }
+    status = prerequisites.get(TRAINING_PREREQUISITE_ID)
+    if status == "pending":
+        if enabled:
+            raise PreflightError("monotonic model is enabled before training preflight PASS")
+        return False
+    if status != "passed":
+        raise PreflightError("monotonic training preflight authority is invalid")
+
+    expected_trainer = repo_root / DEDICATED_TRAINER_PATH
+    if enabled != [expected_trainer]:
+        raise PreflightError(
+            f"training CLI set changed after preflight PASS: {enabled}"
+        )
+    records = [
+        record
+        for record in ledger.get("records", [])
+        if isinstance(record, dict) and record.get("id") == TRAINING_RECORD_ID
+    ]
+    if len(records) != 1:
+        raise PreflightError("ledger requires one monotonic training PASS record")
+    record = records[0]
+    if record.get("terminal") != "PASS" or record.get("outcome") != TRAINING_OUTCOME:
+        raise PreflightError("monotonic training record has wrong authority")
+    evidence = record.get("evidence")
+    if not isinstance(evidence, list) or not evidence:
+        raise PreflightError("monotonic training PASS record lacks evidence")
+    validated = [
+        validate_artifact(repo_root, item, "monotonic training record evidence")
+        for item in evidence
+    ]
+    if expected_trainer not in validated:
+        raise PreflightError("monotonic training PASS record lacks dedicated trainer")
+    return True
 
 
-def validate_outputs_absent(repo_root: Path) -> list[str]:
+def validate_outputs_absent(
+    repo_root: Path,
+    *,
+    allow_training_preflight_outputs: bool = False,
+) -> list[str]:
     absent = []
     for label, raw_path in sorted(EXPECTED_ABSENT_OUTPUTS.items()):
+        if allow_training_preflight_outputs and label in {
+            "training_plan",
+            "training_preflight",
+        }:
+            continue
         path = repo_path(repo_root, raw_path, f"planned output {label}")
         if path.exists():
             raise PreflightError(f"planned output must be absent: {path}")
@@ -301,8 +357,11 @@ def run_preflight(
             raise PreflightError(
                 f"metadata validator imports pixel decoder modules: {decoder_imports}"
             )
-        training_cli_enabled = validate_training_cli_closed(repo_root)
-        absent_outputs = validate_outputs_absent(repo_root)
+        training_cli_enabled = validate_training_cli_closed(repo_root, ledger)
+        absent_outputs = validate_outputs_absent(
+            repo_root,
+            allow_training_preflight_outputs=training_cli_enabled,
+        )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as exc:
         return {
             "reason": str(exc),

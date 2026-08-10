@@ -122,9 +122,24 @@ class MonotonicResidualEraseDataRolePreflightTest(unittest.TestCase):
             self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
             self.assertIn("synthetic PASS record", result["reason"])
 
-    def test_validator_and_trainers_keep_pixel_and_model_surfaces_closed(self) -> None:
+    def test_validator_allows_only_the_registered_post_preflight_trainer(self) -> None:
         self.assertEqual(pixel_decoder_imports(), [])
-        self.assertFalse(validate_training_cli_closed(ROOT))
+        self.assertTrue(validate_training_cli_closed(ROOT))
+
+    def test_trainer_fails_closed_if_ledger_returns_to_pending(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger, path = self.mutated_ledger(root)
+            prerequisite = next(
+                item
+                for item in ledger["active_iteration"]["prerequisites"]
+                if item["id"] == "monotonic_residual_erase_training_preflight"
+            )
+            prerequisite["status"] = "pending"
+            self.write_json(path, ledger)
+            result = run_preflight(repo_root=ROOT, ledger_path=path)
+            self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED")
+            self.assertIn("before training preflight PASS", result["reason"])
 
     def test_existing_planned_output_fails_closed(self) -> None:
         with TemporaryDirectory() as raw:

@@ -689,3 +689,23 @@ preserve negatives: target-darker, identity, submargin target-lighter
 training CLI enabled: false
 next action: training/config preflight only
 ```
+
+The metadata-only training/config preflight also passed:
+
+```text
+plan: docs/monotonic-residual-erase-training-plan.json
+preflight: outputs/monotonic-residual-erase-training-preflight-20260810/preflight.json
+train role: 275 pages (253 HW5K + 22 SCUT)
+model: exact-identity, nonnegative delta only, bound 0.08
+schedule: 80 steps, batch 1, lr 0.00002, seed 42, MPS
+support loss: separate per-sample target-lighter and preserve means
+patch selection: top 256 target-lighter-support train patches
+real pixels decoded / training / checkpoint: false / false / false
+terminal: PASS
+next action: exact train275 materialization audit only
+```
+
+This PASS is configuration evidence, not a quality result. It authorizes only
+the named train-role prediction and patch-index materialization. Training,
+inner-val15, later gates, visual review, reserved blind, promotion, and changes
+to the default artifacts remain prohibited until their preceding gates pass.

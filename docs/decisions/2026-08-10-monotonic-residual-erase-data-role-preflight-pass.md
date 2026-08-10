@@ -71,6 +71,13 @@ docs/monotonic-residual-erase-training-plan.json
 outputs/monotonic-residual-erase-training-preflight-20260810
 ~~~
 
+Stage progression note: after the training/config preflight records PASS, this
+validator remains replayable but permits exactly the dedicated trainer whose
+path and SHA-256 are present in that PASS record. It still rejects the trainer
+while the prerequisite is pending and rejects every additional or drifted
+training CLI. The persisted data-role preflight JSON above remains the
+historical pre-trainer result; it is not rewritten by later stages.
+
 ## First Quality Gate
 
 Inner-val15 remains first and unchanged:
@@ -101,10 +108,10 @@ docs/monotonic-residual-erase-data-roles.json
 sha256 = f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a
 
 scripts/analysis/validate_monotonic_residual_erase_data_roles.py
-sha256 = b81c19bf9657a303b54c3fd4a8296b1700491729550926b14d443515b47a346a
+sha256 = 2d617657c3e2b5094f2d841a0d8d72a5bef8a71560248bf9765fd7943814edc4
 
 tests/test_validate_monotonic_residual_erase_data_roles.py
-sha256 = 3fe0fedd67b9425b1ebff618aa4501a4ad5eed2fa512f41e12208c6e56ae354b
+sha256 = 32336df1ade448a3df5cb55dfd01fb8891fbd17a6134e0d8659fd0b35ede9dfa
 
 outputs/monotonic-residual-erase-data-role-preflight-20260810/preflight.json
 sha256 = e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b
