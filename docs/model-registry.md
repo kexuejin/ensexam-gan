@@ -786,3 +786,22 @@ Only a passing diagnostic may authorize a separate dual-input data/training
 preflight; it cannot authorize training, candidate inference, or evaluation by
 itself. Future checkpoint metadata must serialize `Path` values as strings and
 pass the default weights-only load before candidate admission.
+
+The exact train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.648757 / 0.608393
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.004251
+macro median page AUC: 0.686132
+aggregate AUC gate / ablation-margin gate: FAIL / FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat the 13-channel diagnostic or rescue it by changing features,
+folds, sampling, ridge lambda, probe class, or thresholds. The next eligible
+uncertainty is a separately preregistered train-only audit of pixel-aligned
+frozen primary `mb`/`ms` mask evidence. That direction is not yet implemented
+or authorized.

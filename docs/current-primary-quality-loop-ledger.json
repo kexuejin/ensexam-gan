@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Before another optimizer run, replace the killed second-stage-RGB-only support input with a preregistered 13-channel target-free representation over frozen primary RGB, frozen second-stage RGB, their signed RGB difference, and four broadcast pipeline gate features; require page-grouped train-only separability evidence.",
+    "causal_change": "After the 13-channel dual-input diagnostic failed its independent ablation margin, keep that family closed and require a new preregistration that tests pixel-aligned frozen primary mask evidence before any model optimizer or candidate surface can reopen.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -193,12 +193,28 @@
       {
         "path": "docs/dual-input-support-separation-prerequisite-v1.json",
         "sha256": "702b0f4cb68e371589177f5b0013a106ef38ff9c73528b6f2325f38c01245585"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-dual-input-support-separation-diagnostic-kill.md",
+        "sha256": "64c52693cc60bab60d33586e73a46a3789d0dcbd24a3b1f4492a88fc654f94d9"
+      },
+      {
+        "path": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+        "sha256": "415dd3720bbb70db541979a9675c938730c5da6d62a223127fe40997a40b92ff"
+      },
+      {
+        "path": "scripts/analysis/audit_dual_input_support_separation.py",
+        "sha256": "fd2dd33d7e730cbc0a38401ec95d21851016f3c328f84556f7136f58fda8a1ed"
+      },
+      {
+        "path": "tests/test_dual_input_support_separation_prerequisite.py",
+        "sha256": "cd16796d33c25c49b0132c175a1dbd61fbc0838d6697ea225cecfb81760e157b"
       }
     ],
-    "failure_bucket": "real_patch_monotonic_support_separation_collapse",
+    "failure_bucket": "dual_input_context_ablation_margin_collapse",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run only the exact page-grouped train275 dual-input support-separation diagnostic; keep all candidate and quality surfaces closed until every preregistered AUC and separation condition passes.",
+    "next_action": "Preregister one pixel-aligned frozen-primary mask-evidence prerequisite that proves train-only mb/ms maps are hash-stable and materially separate target-lighter from preserve pixels; do not implement or train before that record.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -236,8 +252,13 @@
         "status": "passed"
       },
       {
-        "detail": "Run the exact train275-only full-versus-second-stage-RGB ablation with frozen folds, coordinate sampling, lambda, AUC gates, artifact hashes, and portable-checkpoint handoff while every candidate and evaluation surface remains closed.",
+        "detail": "The exact train275 diagnostic completed to KILL: full mean AUC was 0.648757 and its margin over second-stage RGB was only 0.004251, so the 13-channel family is closed without training or candidate inference.",
         "id": "dual_input_support_separation_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any mask materialization or target decode, freeze one pixel-aligned mb/ms evidence contract, exact train role, content hashes, separability ablation, acceptance gates, and downstream portable-checkpoint boundary.",
+        "id": "spatial_primary_mask_support_preregistration",
         "status": "pending"
       }
     ],
@@ -261,7 +282,13 @@
       "monotonic_residual_erase_v2_application_threshold_rescue",
       "monotonic_residual_erase_v2_candidate_inference",
       "monotonic_residual_erase_v2_inner_val15",
-      "monotonic_residual_erase_v2_promotion"
+      "monotonic_residual_erase_v2_promotion",
+      "dual_input_support_separation_v1_repeat_diagnostic",
+      "dual_input_support_separation_v1_feature_fold_sampling_lambda_or_threshold_rescue",
+      "dual_input_support_separation_v1_training",
+      "dual_input_support_separation_v1_candidate_inference",
+      "dual_input_support_separation_v1_quality_gate",
+      "dual_input_support_separation_v1_promotion"
     ],
     "prohibited_before_successor_preregistration": [
       "training",
@@ -1062,6 +1089,30 @@
       "outcome": "thirteen_channel_dual_pipeline_support_diagnostic_frozen_pending_train_only_execution",
       "repeat_policy": "implement_and_run_exact_train275_closed_form_diagnostic_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-dual-input-support-separation-diagnostic-kill.md",
+          "sha256": "64c52693cc60bab60d33586e73a46a3789d0dcbd24a3b1f4492a88fc654f94d9"
+        },
+        {
+          "path": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+          "sha256": "415dd3720bbb70db541979a9675c938730c5da6d62a223127fe40997a40b92ff"
+        },
+        {
+          "path": "scripts/analysis/audit_dual_input_support_separation.py",
+          "sha256": "fd2dd33d7e730cbc0a38401ec95d21851016f3c328f84556f7136f58fda8a1ed"
+        },
+        {
+          "path": "tests/test_dual_input_support_separation_prerequisite.py",
+          "sha256": "cd16796d33c25c49b0132c175a1dbd61fbc0838d6697ea225cecfb81760e157b"
+        }
+      ],
+      "id": "dual-input-support-separation-train275-diagnostic",
+      "outcome": "page_broadcast_dual_pipeline_features_failed_independent_ablation_margin",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1
