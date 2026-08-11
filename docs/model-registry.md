@@ -764,3 +764,25 @@ Do not repeat this v2 family or rescue it with learning-rate, step-count,
 loss-weight, patch-selection, or threshold sweeps. A successor must prove
 real-patch target-lighter versus preserve support separation before training
 and must serialize portable checkpoint metadata.
+
+## Dual-Input Support-Separation Preregistration
+
+```text
+family: dual_input_support_separation
+state: PREREQUISITE_NEEDED
+representation: primary RGB + second-stage RGB + signed RGB delta + four broadcast gate features
+feature count: 13
+diagnostic: page-grouped closed-form ridge, train275 only, full vs second-stage-RGB ablation
+plan: docs/dual-input-support-separation-prerequisite-v1.json
+decision: docs/decisions/2026-08-11-dual-input-support-separation-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact train-only support-separation diagnostic
+```
+
+This is a preregistered evidence boundary, not a model implementation or
+quality result. Keep the current-primary checkpoint as the product default.
+Only a passing diagnostic may authorize a separate dual-input data/training
+preflight; it cannot authorize training, candidate inference, or evaluation by
+itself. Future checkpoint metadata must serialize `Path` values as strings and
+pass the default weights-only load before candidate admission.

@@ -1,0 +1,182 @@
+{
+  "acceptance": {
+    "full_auc_ablation_margin_min": 0.03,
+    "full_fold_auc_min": 0.55,
+    "full_mean_fold_auc_min": 0.65,
+    "macro_median_page_auc_min": 0.6,
+    "positive_mean_above_preserve_min_folds": 4,
+    "required_fold_count": 5,
+    "required_terminal_on_pass": "PASS"
+  },
+  "authorization": {
+    "candidate_checkpoint": false,
+    "candidate_inference": false,
+    "development_gate": false,
+    "diagnostic_implementation": true,
+    "diagnostic_output_only": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "train_target_decode_for_diagnostic_labels_only": true,
+    "visual_review": false
+  },
+  "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "effective_train_count": 275,
+    "effective_train_domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "manifest": {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "split": "train",
+    "target_access": "diagnostic_labels_only",
+    "target_lighter_margin_gray": 2.0
+  },
+  "diagnostic": {
+    "ablation_features": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b"
+    ],
+    "auc_tie_policy": "average_rank",
+    "class_balance": "equal_per_page_target_lighter_and_preserve",
+    "coordinate_rank": "splitmix64(row_major_index XOR first_64_bits(sha256(utf8_basename))) then unsigned_hash_y_x",
+    "fold_assignment": "int(sha256(utf8_basename), 16) % 5",
+    "fold_count": 5,
+    "full_feature_count": 13,
+    "lambda": 1.0,
+    "local_context_policy": "deterministic_derivatives_of_registered_channels_only_not_used_by_v1_probe",
+    "luma_definition": "arithmetic_mean_rgb_gray_units",
+    "max_samples_per_class_per_page": 1024,
+    "numeric_type": "float64",
+    "optimizer": "none_closed_form_ridge",
+    "output_reports": [
+      "per_fold_auc",
+      "per_page_auc",
+      "positive_score_mean",
+      "preserve_score_mean",
+      "feature_availability",
+      "fold_membership",
+      "sample_counts",
+      "copy_mask_cov8_quartile_strata",
+      "primary_edit_px_quartile_strata",
+      "primary_p95_edit_delta_quartile_strata",
+      "second_stage_gate_ratio_quartile_strata"
+    ],
+    "ridge_intercept": "unpenalized",
+    "primary_edit_feature_definition": "mean_abs_source_vs_primary_rgb_delta_ge_12_gray_and_p95_of_same_delta",
+    "sampling_count": "min(1024, target_lighter_count, preserve_count) per class per page",
+    "standardization": "fitting_fold_mean_and_standard_deviation_only",
+    "target_encoding": {
+      "preserve": -1,
+      "target_lighter": 1
+    },
+    "threshold_derivation": "prohibited"
+  },
+  "evidence": {
+    "current_primary_checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "current_primary_config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "current_second_stage_checkpoint": {
+      "path": "artifacts/current-second-stage-best.pt",
+      "sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7"
+    },
+    "killed_checkpoint_decision": {
+      "path": "docs/decisions/2026-08-11-monotonic-residual-erase-v2-checkpoint-kill.md",
+      "sha256": "fffe2a0357f0a7de5b59bdb893b9f29ac15c6e1c27da72dd7b013f9890c75802"
+    },
+    "materialization_audit": {
+      "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+      "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+    },
+    "primary_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary/metrics.csv",
+      "sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846"
+    },
+    "primary_prediction_set": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "directory": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary/pred",
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "role_plan": {
+      "path": "docs/monotonic-residual-erase-data-roles.json",
+      "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+    },
+    "second_stage_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/metrics.csv",
+      "sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d"
+    },
+    "second_stage_prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "directory": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "train_label_set": {
+      "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+      "count": 275,
+      "directory": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+    }
+  },
+  "fail_closed": [
+    "artifact_or_role_hash_drift",
+    "feature_unavailable",
+    "nonfinite_feature_or_result",
+    "page_crosses_folds",
+    "fitting_statistics_leak_into_held_out_fold",
+    "empty_target_lighter_or_preserve_class",
+    "unregistered_feature_or_local_context",
+    "changed_sample_cap_coordinate_hash_fold_or_lambda",
+    "acceptance_condition_failed",
+    "candidate_checkpoint_prediction_or_quality_output_created"
+  ],
+  "future_portable_checkpoint_contract": {
+    "default_weights_only_load_required": true,
+    "path_metadata_serialization": "string",
+    "required_before": "candidate_inference",
+    "status": "future_training_preflight_only"
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "next_boundary_on_pass": "dual_input_support_data_and_training_preflight_only",
+  "planned_implementation": {
+    "audit_output": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+    "audit_script": "scripts/analysis/audit_dual_input_support_separation.py",
+    "test": "tests/test_dual_input_support_separation_prerequisite.py"
+  },
+  "representation": {
+    "channels": [
+      "primary_r",
+      "primary_g",
+      "primary_b",
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "second_stage_minus_primary_r",
+      "second_stage_minus_primary_g",
+      "second_stage_minus_primary_b",
+      "copy_mask_cov8_broadcast",
+      "primary_edit_px_broadcast",
+      "primary_p95_edit_delta_broadcast",
+      "second_stage_gate_ratio_broadcast"
+    ],
+    "feature_count": 13,
+    "page_features_are_target_free": true,
+    "pixel_features_are_target_free": true,
+    "single_causal_change": "second_stage_rgb_only_to_dual_pipeline_plus_gate_context"
+  },
+  "schema_version": 1,
+  "state": "preregistered_pending_train_only_diagnostic"
+}
