@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "After the 13-channel dual-input diagnostic failed its independent ablation margin, keep that family closed and require a new preregistration that tests pixel-aligned frozen primary mask evidence before any model optimizer or candidate surface can reopen.",
+    "causal_change": "Replace the failed coarse page-broadcast context with exactly four pixel-aligned target-free channels derived from the frozen primary mb/ms maps, and require label-free mask materialization plus page-grouped train-only separability before any model optimizer can reopen.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -209,12 +209,20 @@
       {
         "path": "tests/test_dual_input_support_separation_prerequisite.py",
         "sha256": "cd16796d33c25c49b0132c175a1dbd61fbc0838d6697ea225cecfb81760e157b"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md",
+        "sha256": "03c02ab2f373dcf0ee4542dd9fca9e952afa5d7f3ca34401ae5ea3e64ced134e"
+      },
+      {
+        "path": "docs/spatial-primary-mask-support-prerequisite-v1.json",
+        "sha256": "577de835e7a37799b4feb4ee0f2b8ebd138bffdb766c3d41db143aacb7aa3082"
       }
     ],
-    "failure_bucket": "dual_input_context_ablation_margin_collapse",
+    "failure_bucket": "spatial_primary_mask_support_unproven_after_context_ablation_collapse",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Preregister one pixel-aligned frozen-primary mask-evidence prerequisite that proves train-only mb/ms maps are hash-stable and materially separate target-lighter from preserve pixels; do not implement or train before that record.",
+    "next_action": "Implement and run only the exact label-free train275 mb/ms materialization and preregistered page-grouped mask-support diagnostic; keep all model and quality surfaces closed until every mask provenance and AUC gate passes.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -257,8 +265,13 @@
         "status": "passed"
       },
       {
-        "detail": "Before any mask materialization or target decode, freeze one pixel-aligned mb/ms evidence contract, exact train role, content hashes, separability ablation, acceptance gates, and downstream portable-checkpoint boundary.",
+        "detail": "The exact train275 label-free mb/ms materialization, four-channel pixel representation, fixed second-stage-RGB ablation, page folds, sampling, AUC gates, and portable-checkpoint handoff are frozen without execution.",
         "id": "spatial_primary_mask_support_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "Materialize only frozen train275 mb/ms maps without targets, pin their provenance and content hashes, then run the exact train-label-only separability diagnostic while all training and evaluation surfaces remain closed.",
+        "id": "spatial_primary_mask_support_train_only_diagnostic",
         "status": "pending"
       }
     ],
@@ -1113,6 +1126,22 @@
       "outcome": "page_broadcast_dual_pipeline_features_failed_independent_ablation_margin",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md",
+          "sha256": "03c02ab2f373dcf0ee4542dd9fca9e952afa5d7f3ca34401ae5ea3e64ced134e"
+        },
+        {
+          "path": "docs/spatial-primary-mask-support-prerequisite-v1.json",
+          "sha256": "577de835e7a37799b4feb4ee0f2b8ebd138bffdb766c3d41db143aacb7aa3082"
+        }
+      ],
+      "id": "spatial-primary-mask-support-preregistration",
+      "outcome": "pixel_aligned_frozen_mb_ms_support_diagnostic_frozen_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_mask_materialization_and_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1

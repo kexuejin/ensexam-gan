@@ -805,3 +805,23 @@ folds, sampling, ridge lambda, probe class, or thresholds. The next eligible
 uncertainty is a separately preregistered train-only audit of pixel-aligned
 frozen primary `mb`/`ms` mask evidence. That direction is not yet implemented
 or authorized.
+
+## Spatial Primary Mask Support Preregistration
+
+```text
+family: spatial_primary_mask_support
+state: PREREQUISITE_NEEDED
+materialization: frozen current-primary mb/ms, train275 sources only, no labels
+representation: mb + ms + signed mb-ms + mb*ms
+diagnostic: page-grouped closed-form ridge, full masks vs fixed second-stage-RGB ablation
+plan: docs/spatial-primary-mask-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact label-free mask materialization and train-only support diagnostic
+```
+
+This is a preregistered evidence boundary, not a mask result or candidate. The
+current-primary product default is unchanged. A PASS can authorize only a later
+mask-aware data/training preflight with portable checkpoint metadata; it cannot
+authorize training or evaluation directly.
