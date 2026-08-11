@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Replace the failed coarse page-broadcast context with exactly four pixel-aligned target-free channels derived from the frozen primary mb/ms maps, and require label-free mask materialization plus page-grouped train-only separability before any model optimizer can reopen.",
+    "causal_change": "Close both the failed coarse page-broadcast context and the weaker frozen primary mb/ms support family, then require a separately preregistered target-free causal source with an independent train-only ablation before any optimizer can reopen.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -136,7 +136,7 @@
       },
       {
         "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
-        "sha256": "28e7cd35f26d94fa24648fb6cf1b3bf9476c7266a73f0819b0fe000d7cbcf4db"
+        "sha256": "02925b0e26a2fb046b43eeea0ddfe827adb45ca3306df334b9478660c98710ca"
       },
       {
         "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
@@ -217,12 +217,36 @@
       {
         "path": "docs/spatial-primary-mask-support-prerequisite-v1.json",
         "sha256": "577de835e7a37799b4feb4ee0f2b8ebd138bffdb766c3d41db143aacb7aa3082"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-diagnostic-kill.md",
+        "sha256": "5da07daa99b6efb8783f4a5c0ef1f37edd2a6b50f36c9e5d21e8a200de42820a"
+      },
+      {
+        "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+        "sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e"
+      },
+      {
+        "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+        "sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7"
+      },
+      {
+        "path": "scripts/analysis/materialize_primary_masks_train_only.py",
+        "sha256": "76812498214ba2e6ebe387b10f9a65ab3c93d6f17e56599b91a5a8883f208b16"
+      },
+      {
+        "path": "scripts/analysis/audit_spatial_primary_mask_support.py",
+        "sha256": "45add93e2944590c3b9abbbd562bbdb09b08161edc35b221afecbe658d9e9c7a"
+      },
+      {
+        "path": "tests/test_spatial_primary_mask_support_prerequisite.py",
+        "sha256": "5075d7b8ada2296652e60a25f89212c1310616f00e2004653e1b47b6fe1966a9"
       }
     ],
-    "failure_bucket": "spatial_primary_mask_support_unproven_after_context_ablation_collapse",
+    "failure_bucket": "frozen_primary_masks_underperform_second_stage_rgb_support_ablation",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run only the exact label-free train275 mb/ms materialization and preregistered page-grouped mask-support diagnostic; keep all model and quality surfaces closed until every mask provenance and AUC gate passes.",
+    "next_action": "Review evidence and preregister only a materially new target-free causal support source with an independent train-only ablation; do not rescue either closed support family or open training and quality surfaces.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -270,9 +294,9 @@
         "status": "passed"
       },
       {
-        "detail": "Materialize only frozen train275 mb/ms maps without targets, pin their provenance and content hashes, then run the exact train-label-only separability diagnostic while all training and evaluation surfaces remain closed.",
+        "detail": "The label-free 275-page mb/ms materialization passed, but the exact diagnostic KILLed the family: mean AUC 0.580727, median page AUC 0.584623, and full-minus-RGB-ablation margin -0.063779. No training or quality surface opened.",
         "id": "spatial_primary_mask_support_train_only_diagnostic",
-        "status": "pending"
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
@@ -301,7 +325,14 @@
       "dual_input_support_separation_v1_training",
       "dual_input_support_separation_v1_candidate_inference",
       "dual_input_support_separation_v1_quality_gate",
-      "dual_input_support_separation_v1_promotion"
+      "dual_input_support_separation_v1_promotion",
+      "spatial_primary_mask_support_v1_repeat_diagnostic",
+      "spatial_primary_mask_support_v1_mask_channel_or_transform_rescue",
+      "spatial_primary_mask_support_v1_threshold_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "spatial_primary_mask_support_v1_training",
+      "spatial_primary_mask_support_v1_candidate_inference",
+      "spatial_primary_mask_support_v1_quality_gate",
+      "spatial_primary_mask_support_v1_promotion"
     ],
     "prohibited_before_successor_preregistration": [
       "training",
@@ -1007,7 +1038,7 @@
         },
         {
           "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
-          "sha256": "28e7cd35f26d94fa24648fb6cf1b3bf9476c7266a73f0819b0fe000d7cbcf4db"
+          "sha256": "02925b0e26a2fb046b43eeea0ddfe827adb45ca3306df334b9478660c98710ca"
         },
         {
           "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
@@ -1142,6 +1173,38 @@
       "outcome": "pixel_aligned_frozen_mb_ms_support_diagnostic_frozen_pending_train_only_execution",
       "repeat_policy": "implement_and_run_exact_train275_mask_materialization_and_diagnostic_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-diagnostic-kill.md",
+          "sha256": "5da07daa99b6efb8783f4a5c0ef1f37edd2a6b50f36c9e5d21e8a200de42820a"
+        },
+        {
+          "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+          "sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e"
+        },
+        {
+          "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+          "sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7"
+        },
+        {
+          "path": "scripts/analysis/materialize_primary_masks_train_only.py",
+          "sha256": "76812498214ba2e6ebe387b10f9a65ab3c93d6f17e56599b91a5a8883f208b16"
+        },
+        {
+          "path": "scripts/analysis/audit_spatial_primary_mask_support.py",
+          "sha256": "45add93e2944590c3b9abbbd562bbdb09b08161edc35b221afecbe658d9e9c7a"
+        },
+        {
+          "path": "tests/test_spatial_primary_mask_support_prerequisite.py",
+          "sha256": "5075d7b8ada2296652e60a25f89212c1310616f00e2004653e1b47b6fe1966a9"
+        }
+      ],
+      "id": "spatial-primary-mask-support-train275-diagnostic",
+      "outcome": "frozen_primary_masks_have_weak_signal_but_underperform_second_stage_rgb_ablation",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1

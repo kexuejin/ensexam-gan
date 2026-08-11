@@ -825,3 +825,26 @@ This is a preregistered evidence boundary, not a mask result or candidate. The
 current-primary product default is unchanged. A PASS can authorize only a later
 mask-aware data/training preflight with portable checkpoint metadata; it cannot
 authorize training or evaluation directly.
+
+The exact materialization passed and the train275 diagnostic subsequently
+returned KILL:
+
+```text
+materialized mb / ms pages: 275 / 275
+materialization target access: false
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.580727 / 0.565196
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: -0.063779
+macro median page AUC: 0.584623
+aggregate / page / ablation-margin gates: FAIL / FAIL / FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the four-channel `mb`/`ms` family through mask
+selection, transforms, thresholds, neighborhoods, folds, sampling, ridge
+lambda, nonlinear probes, or training. A successor requires separate
+preregistration of a materially new target-free causal support source and an
+independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.

@@ -103,8 +103,8 @@ def validate_authority(ledger: dict[str, Any]) -> None:
         raise AuditError("dual-input preregistration is not passed")
     if prerequisites.get(DIAGNOSTIC_ID) != "passed":
         raise AuditError("train-only diagnostic KILL is not recorded")
-    if prerequisites.get(NEXT_PREREGISTRATION_ID) != "pending":
-        raise AuditError("next support preregistration is not pending")
+    if prerequisites.get(NEXT_PREREGISTRATION_ID) != "passed":
+        raise AuditError("next support preregistration is not passed")
 
 
 def validate_plan(plan: dict[str, Any]) -> None:

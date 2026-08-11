@@ -192,6 +192,15 @@ def validate_patch_index(
     actual = read_csv_rows(patch_csv)
     compare_selected_rows(actual, expected)
     summary = read_json(patch_json)
+    registered_patch_index = Path(str(summary.get("patch_index", "")))
+    expected_relative = Path(config["output_csv"])
+    if (
+        len(registered_patch_index.parts) < len(expected_relative.parts)
+        or registered_patch_index.parts[-len(expected_relative.parts) :]
+        != expected_relative.parts
+    ):
+        raise AuditError("monotonic patch summary path changed")
+    summary["patch_index"] = str(patch_csv)
     exact = {
         "status": "pass",
         "terminal": "PASS",
@@ -254,6 +263,30 @@ def expected_stage_command(
     raise AuditError(f"unknown materialization stage: {stage}")
 
 
+def relocate_recorded_command(command: Any, repo_root: Path) -> Any:
+    if not isinstance(command, list) or "--repo-root" not in command:
+        return command
+    root_index = command.index("--repo-root") + 1
+    if root_index >= len(command):
+        return command
+    registered_root = Path(str(command[root_index]))
+    if not registered_root.is_absolute():
+        return command
+    relocated: list[Any] = []
+    for value in command:
+        if not isinstance(value, str):
+            relocated.append(value)
+            continue
+        path = Path(value)
+        try:
+            relative = path.relative_to(registered_root)
+        except ValueError:
+            relocated.append(value)
+        else:
+            relocated.append(str(repo_root / relative))
+    return relocated
+
+
 def validate_stage_records(
     repo_root: Path, plan: dict[str, Any], plan_path: Path
 ) -> dict[str, str]:
@@ -265,7 +298,12 @@ def validate_stage_records(
             raise AuditError(f"materialization stage record failed: {stage}")
         if record.get("training_plan_sha256") != sha256_file(plan_path):
             raise AuditError(f"materialization stage plan hash changed: {stage}")
-        if record.get("command") != expected_stage_command(
+        recorded_command = record.get("command")
+        if stage == "patch_index":
+            recorded_command = relocate_recorded_command(
+                recorded_command, repo_root
+            )
+        if recorded_command != expected_stage_command(
             repo_root=repo_root, plan=plan, stage=stage
         ):
             raise AuditError(f"materialization command changed: {stage}")
