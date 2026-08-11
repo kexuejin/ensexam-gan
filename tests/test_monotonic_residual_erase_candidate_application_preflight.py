@@ -35,6 +35,7 @@ class MonotonicResidualEraseCandidateApplicationPreflightTest(unittest.TestCase)
         result = run_preflight(repo_root=ROOT)
         self.assertEqual(result["terminal"], "PASS", result)
         self.assertTrue(result["runnable"])
+        self.assertTrue(result["checkpoint_killed"])
         self.assertEqual(result["training"]["learning_rate"], 0.0001)
         self.assertFalse(result["training"]["real_training_started"])
         reachability = result["synthetic_reachability"]

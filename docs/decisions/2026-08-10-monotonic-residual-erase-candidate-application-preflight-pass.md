@@ -20,6 +20,14 @@ No real image or target was decoded, no training or checkpoint was started,
 and no quality gate, visual review, reserved-blind access, promotion, or
 default artifact replacement occurred.
 
+## Post-KILL Replay
+
+After the exact v2 run was audited and recorded as KILL, this preflight remains
+replayable by accepting only the hash-registered v2 training output and
+checkpoint audit from that KILL record. Candidate inference and all quality
+outputs remain absent and closed. This continuity rule records stage
+progression; it does not reopen the killed family.
+
 ## Frozen V2 Contract
 
 ~~~text
@@ -65,10 +73,10 @@ scripts/infer/run_monotonic_residual_erase_candidate.py
 sha256 = 87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636
 
 scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py
-sha256 = 8cc30657fbe63936091c73540b18a1f0d04594221a94a6c8c1b6fd66300bbf82
+sha256 = ffc753cfd2ca20335158197d776eebdc1afa8909dfeb72c6cd0df2b31f66fb39
 
 tests/test_monotonic_residual_erase_candidate_application_preflight.py
-sha256 = 121b67d18c6a16dbeaf29a28545f01ba40c9207dc4017941e2e715addfb4dd33
+sha256 = 87406a9b610133cc385467814afeb8e0b64502148afc7644db34ae4604950ed6
 
 outputs/monotonic-residual-erase-candidate-application-preflight-20260810/preflight.json
 sha256 = 7e2a519210244544c94d5753980e9945690a46b964d6a7801eebc337168e27e8

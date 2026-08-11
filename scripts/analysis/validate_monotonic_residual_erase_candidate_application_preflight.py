@@ -59,6 +59,8 @@ APPLICATION_RECORD_ID = (
 APPLICATION_OUTCOME = (
     "v1_unreachable_learning_and_legacy_gate_rejected_v2_monotonic_application_passed"
 )
+CHECKPOINT_RECORD_ID = "monotonic-residual-erase-v2-checkpoint"
+CHECKPOINT_KILL_OUTCOME = "real_train_patch_gate_collapsed_to_subthreshold_noop"
 
 
 EXPECTED_AUTHORIZATION = {
@@ -262,6 +264,33 @@ def validate_ledger_authority(
         "materialization": "passed",
         "candidate_application": application_status,
     }
+
+
+def validate_checkpoint_kill_authority(
+    repo_root: Path,
+    ledger: dict[str, Any],
+) -> bool:
+    records = [
+        item
+        for item in ledger.get("records", [])
+        if isinstance(item, dict) and item.get("id") == CHECKPOINT_RECORD_ID
+    ]
+    if not records:
+        return False
+    if len(records) != 1:
+        raise PreflightError("monotonic checkpoint KILL record count changed")
+    record = records[0]
+    if (
+        record.get("terminal") != "KILL"
+        or record.get("outcome") != CHECKPOINT_KILL_OUTCOME
+    ):
+        raise PreflightError("monotonic checkpoint record has wrong authority")
+    evidence = record.get("evidence")
+    if not isinstance(evidence, list) or not evidence:
+        raise PreflightError("monotonic checkpoint KILL record lacks evidence")
+    for item in evidence:
+        validate_artifact(repo_root, item, "monotonic checkpoint KILL evidence")
+    return True
 
 
 def training_args(repo_root: Path, plan: dict[str, Any]) -> argparse.Namespace:
@@ -508,9 +537,19 @@ def validate_application(plan: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def validate_outputs_absent(repo_root: Path, plan: dict[str, Any]) -> list[str]:
+def validate_outputs_absent(
+    repo_root: Path,
+    plan: dict[str, Any],
+    *,
+    allow_checkpoint_kill_outputs: bool = False,
+) -> list[str]:
     absent: list[str] = []
     for label, value in sorted(plan["planned_outputs_must_be_absent"].items()):
+        if allow_checkpoint_kill_outputs and label in {
+            "checkpoint_audit",
+            "training_output_dir",
+        }:
+            continue
         path = repo_path(repo_root, value, f"planned output {label}")
         if path.exists():
             raise PreflightError(f"planned output must be absent: {path}")
@@ -531,6 +570,7 @@ def run_preflight(
         plan = validate_plan(resolved_plan)
         ledger = read_json(resolved_ledger)
         authority = validate_ledger_authority(repo_root, ledger)
+        checkpoint_killed = validate_checkpoint_kill_authority(repo_root, ledger)
         evidence = validate_evidence(repo_root, plan)
         args = training_args(repo_root, plan)
         if (
@@ -543,7 +583,11 @@ def run_preflight(
         application = validate_application(plan)
         if not torch.backends.mps.is_available():
             raise PreflightError("registered MPS device is unavailable")
-        absent = validate_outputs_absent(repo_root, plan)
+        absent = validate_outputs_absent(
+            repo_root,
+            plan,
+            allow_checkpoint_kill_outputs=checkpoint_killed,
+        )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as exc:
         return {
             "terminal": "PREREQUISITE_NEEDED",
@@ -557,6 +601,7 @@ def run_preflight(
         "plan": str(resolved_plan),
         "plan_sha256": sha256_file(resolved_plan),
         "authority": authority,
+        "checkpoint_killed": checkpoint_killed,
         "evidence_hashes": evidence,
         "training": {
             "learning_rate": args.lr,

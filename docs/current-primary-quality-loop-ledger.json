@@ -148,7 +148,7 @@
       },
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
-        "sha256": "c81c23062d2f897e9ec2dd007a3f3c3187a82ea7e81a06ab64886f0c02c3835b"
+        "sha256": "3289c9f0fe5e4c4028bf1958b98f7e93912ace6fa3d337230f38ca719fb6ea13"
       },
       {
         "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
@@ -160,7 +160,7 @@
       },
       {
         "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
-        "sha256": "8cc30657fbe63936091c73540b18a1f0d04594221a94a6c8c1b6fd66300bbf82"
+        "sha256": "ffc753cfd2ca20335158197d776eebdc1afa8909dfeb72c6cd0df2b31f66fb39"
       },
       {
         "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
@@ -168,13 +168,29 @@
       },
       {
         "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
-        "sha256": "121b67d18c6a16dbeaf29a28545f01ba40c9207dc4017941e2e715addfb4dd33"
+        "sha256": "87406a9b610133cc385467814afeb8e0b64502148afc7644db34ae4604950ed6"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-monotonic-residual-erase-v2-checkpoint-kill.md",
+        "sha256": "fffe2a0357f0a7de5b59bdb893b9f29ac15c6e1c27da72dd7b013f9890c75802"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810/audit.json",
+        "sha256": "73782017723a75279f0d0fe1b69481835ac41570f60c655025c15a01edf6184a"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_v2_checkpoint.py",
+        "sha256": "e9d9dfbe81f30a07e0e0b862ae448f10a493360cac6a158c3b67547a094a28a3"
+      },
+      {
+        "path": "tests/test_audit_monotonic_residual_erase_v2_checkpoint.py",
+        "sha256": "f6184e1ea64ea83f84c3497013344338d581a2195f413c78e059b2746e44f0be"
       }
     ],
-    "failure_bucket": "residual_brighten_support_competes_with_dark_preservation_correction",
+    "failure_bucket": "real_patch_monotonic_support_separation_collapse",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Run the exact registered monotonic residual-erase v2 training once at lr=1e-4 for 80 steps on the audited train275 inputs, then audit the checkpoint before any candidate inference or inner-val15 evaluation.",
+    "next_action": "Preregister one materially different train-only support-separation mechanism that proves real-patch target-lighter support separates from preserve pixels before another optimizer run; require portable checkpoint metadata at the same boundary.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -205,6 +221,11 @@
         "detail": "Deterministic evidence rejects the sub-integer v1 learning path and proves one target-free v2 application with a 12-gray reachable gate, exact preserve no-op, and a no-darkening runtime guard.",
         "id": "monotonic_residual_erase_candidate_application_preflight",
         "status": "passed"
+      },
+      {
+        "detail": "The exact v2 checkpoint is structurally KILL: no train patch reaches the frozen 12-gray gate and preserve pixels receive more mean brightening than positive pixels. A successor must prove real-patch support separation before training.",
+        "id": "monotonic_residual_erase_support_separation_preregistration",
+        "status": "pending"
       }
     ],
     "killed_family_prohibitions": [
@@ -218,9 +239,20 @@
       "sign_separated_scut115",
       "sign_separated_holdout40",
       "sign_separated_reserved_blind",
-      "sign_separated_promotion"
+      "sign_separated_promotion",
+      "monotonic_residual_erase_v2_training",
+      "monotonic_residual_erase_v2_learning_rate_rescue",
+      "monotonic_residual_erase_v2_step_count_rescue",
+      "monotonic_residual_erase_v2_loss_weight_rescue",
+      "monotonic_residual_erase_v2_patch_selection_rescue",
+      "monotonic_residual_erase_v2_application_threshold_rescue",
+      "monotonic_residual_erase_v2_candidate_inference",
+      "monotonic_residual_erase_v2_inner_val15",
+      "monotonic_residual_erase_v2_promotion"
     ],
-    "prohibited_before_checkpoint_audit_pass": [
+    "prohibited_before_successor_preregistration": [
+      "training",
+      "checkpoint_generation",
       "candidate_inference",
       "scut_inner_val15",
       "development_gate",
@@ -241,7 +273,7 @@
       "loss_weight_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PENDING"
+    "terminal": "PREREQUISITE_NEEDED"
   },
   "baseline": {
     "checkpoint": {
@@ -942,7 +974,7 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
-          "sha256": "c81c23062d2f897e9ec2dd007a3f3c3187a82ea7e81a06ab64886f0c02c3835b"
+          "sha256": "3289c9f0fe5e4c4028bf1958b98f7e93912ace6fa3d337230f38ca719fb6ea13"
         },
         {
           "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
@@ -954,7 +986,7 @@
         },
         {
           "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
-          "sha256": "8cc30657fbe63936091c73540b18a1f0d04594221a94a6c8c1b6fd66300bbf82"
+          "sha256": "ffc753cfd2ca20335158197d776eebdc1afa8909dfeb72c6cd0df2b31f66fb39"
         },
         {
           "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
@@ -962,13 +994,45 @@
         },
         {
           "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
-          "sha256": "121b67d18c6a16dbeaf29a28545f01ba40c9207dc4017941e2e715addfb4dd33"
+          "sha256": "87406a9b610133cc385467814afeb8e0b64502148afc7644db34ae4604950ed6"
         }
       ],
       "id": "monotonic-residual-erase-candidate-application-preflight",
       "outcome": "v1_unreachable_learning_and_legacy_gate_rejected_v2_monotonic_application_passed",
       "repeat_policy": "run_exact_v2_once_no_learning_rate_step_loss_or_application_threshold_sweep",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-monotonic-residual-erase-v2-checkpoint-kill.md",
+          "sha256": "fffe2a0357f0a7de5b59bdb893b9f29ac15c6e1c27da72dd7b013f9890c75802"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810/audit.json",
+          "sha256": "73782017723a75279f0d0fe1b69481835ac41570f60c655025c15a01edf6184a"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_v2_checkpoint.py",
+          "sha256": "e9d9dfbe81f30a07e0e0b862ae448f10a493360cac6a158c3b67547a094a28a3"
+        },
+        {
+          "path": "tests/test_audit_monotonic_residual_erase_v2_checkpoint.py",
+          "sha256": "f6184e1ea64ea83f84c3497013344338d581a2195f413c78e059b2746e44f0be"
+        },
+        {
+          "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_residual_erase_probe.pt",
+          "sha256": "b12f358bc8457e7a90f7f7220e44867c531a810ad7f17fea2f52c71c18358c0e"
+        },
+        {
+          "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_loss_history.csv",
+          "sha256": "93392e60a82a008305aa3e6af13ebb79587f81ef5ec8d6070d2025dd9cf1bc13"
+        }
+      ],
+      "id": "monotonic-residual-erase-v2-checkpoint",
+      "outcome": "real_train_patch_gate_collapsed_to_subthreshold_noop",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1

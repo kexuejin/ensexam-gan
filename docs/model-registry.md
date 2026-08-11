@@ -747,3 +747,20 @@ terminal: PASS
 The next authorized action is one exact v2 training run on the audited
 train275 patch index. Candidate inference and inner-val15 remain closed until
 the resulting checkpoint passes a separate structural audit.
+
+The exact v2 checkpoint was subsequently killed before candidate inference:
+
+```text
+real train patches / reachable gates: 256 / 0
+maximum real brighten delta: 2.667739 gray
+positive / preserve delta mean: 1.482286 / 2.030916 gray
+positive / preserve support >= 0.5: 0.024918 / 0.001735
+negative deltas: 0
+candidate inference / inner-val15: not started / not started
+terminal: KILL
+```
+
+Do not repeat this v2 family or rescue it with learning-rate, step-count,
+loss-weight, patch-selection, or threshold sweeps. A successor must prove
+real-patch target-lighter versus preserve support separation before training
+and must serialize portable checkpoint metadata.
