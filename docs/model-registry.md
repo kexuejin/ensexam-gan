@@ -944,7 +944,7 @@ promotion closure, and reserved-blind closure remain unchanged.
 
 ```text
 family: second_stage_alpha_support
-state: PREREQUISITE_NEEDED
+state: KILL
 representation: frozen final second-stage RGB + raw erasemap sigmoid alpha before every threshold
 ablation: frozen final second-stage RGB only
 diagnostic: label-free train275 alpha materialization, then five-fold page-grouped closed-form ridge
@@ -952,7 +952,7 @@ plan: docs/second-stage-alpha-support-prerequisite-v1.json
 decision: docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md
 data execution / training / candidate: alpha materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
-next action: implement and run the exact target-free alpha materialization and four-channel audit once
+next action: do not repeat or rescue; preregister only a materially new target-free causal source
 ```
 
 This family tests the frozen erasemap edit-confidence surface that the product
@@ -963,3 +963,26 @@ all optimizer or quality work. A PASS can authorize only a separately
 preregistered alpha-conditioned data/training/application preflight with
 portable checkpoint metadata; it cannot authorize training, candidate
 inference, or any quality split directly.
+
+The label-free materialization completed with exactly 275 finite, aligned,
+hash-stable `float32` raw-alpha maps and `target_access=false`. The exact
+train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.656274 / 0.611754
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.011768
+macro median page AUC: 0.704466
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the raw-alpha family through thresholding, layer or
+channel selection, transforms, neighborhoods, folds, sampling, ridge lambda,
+nonlinear probes, or training. A successor requires separate preregistration
+of a materially new target-free causal support source and an independent
+train-only ablation. The current-primary product default, promotion closure,
+and reserved-blind closure remain unchanged.

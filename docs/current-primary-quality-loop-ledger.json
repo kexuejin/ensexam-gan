@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Add only the frozen second-stage erasemap raw sigmoid alpha before the 0.3 threshold to the fixed final second-stage RGB support evidence, testing whether hidden edit confidence identifies target-lighter residual support without reusing visible RGB transforms, primary masks/stages, page gates, or neighborhoods.",
+    "causal_change": "No implementation is authorized. Identify and preregister one materially new target-free causal support source with an independent train-only ablation after final RGB/context, primary mb/ms, reconstruction stages, source-plus-output RGB, and second-stage raw alpha all failed their frozen incremental-margin gates.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -305,12 +305,36 @@
       {
         "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
         "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
+        "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
+      },
+      {
+        "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+        "sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3"
+      },
+      {
+        "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+        "sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351"
+      },
+      {
+        "path": "scripts/analysis/materialize_second_stage_alpha_train_only.py",
+        "sha256": "8a9314b9e880ad968aabab10b144d59d489488db4e83d0371e11bedb6db89f06"
+      },
+      {
+        "path": "scripts/analysis/audit_second_stage_alpha_support.py",
+        "sha256": "1142e5d160702c617ea5163fe61ecda47b9903d13d2f4ec45293e5b8e3496731"
+      },
+      {
+        "path": "tests/test_second_stage_alpha_support_prerequisite.py",
+        "sha256": "019dc7c4413dcd604d2da6f142dd5f72237fe6b5270aecef81baa70ec4d508a1"
       }
     ],
-    "failure_bucket": "prethreshold_second_stage_alpha_support_unproven_after_visible_rgb_and_primary_internal_kills",
+    "failure_bucket": "all_preregistered_target_free_support_sources_closed_without_incremental_margin",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run only the exact label-free train275 raw second-stage alpha materialization and preregistered four-channel page-grouped separability diagnostic; keep every optimizer and quality surface closed until all provenance and AUC gates pass.",
+    "next_action": "Keep every optimizer and quality surface closed. Preregister only a materially new target-free causal support source with an independent train-only ablation; do not rescue or repeat final RGB/context, primary mb/ms, reconstruction stages, source-plus-output RGB, or second-stage raw alpha.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -388,8 +412,13 @@
         "status": "passed"
       },
       {
-        "detail": "Materialize only train275 raw alpha from the frozen erasemap before thresholding, pin prediction/checkpoint/source provenance, then run the exact train-label-only five-fold separability diagnostic while all model and quality surfaces remain closed.",
+        "detail": "The target-free 275-page raw-alpha materialization passed and the exact diagnostic reached mean AUC 0.656274, but KILLed the family because its margin over the fixed second-stage RGB ablation was only 0.011768 versus the frozen 0.03 minimum. No training or quality surface opened.",
         "id": "second_stage_alpha_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any further data execution or implementation, name and freeze one materially new target-free causal support source, its independent train-only ablation, leakage-safe folds, acceptance gates, and terminal successors; reusing or rescuing any closed family is prohibited.",
+        "id": "materially_new_support_successor_preregistration_v3",
         "status": "pending"
       }
     ],
@@ -440,7 +469,14 @@
       "source_output_support_v1_training",
       "source_output_support_v1_candidate_inference",
       "source_output_support_v1_quality_gate",
-      "source_output_support_v1_promotion"
+      "source_output_support_v1_promotion",
+      "second_stage_alpha_support_v1_repeat_diagnostic",
+      "second_stage_alpha_support_v1_threshold_layer_channel_or_transform_rescue",
+      "second_stage_alpha_support_v1_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "second_stage_alpha_support_v1_training",
+      "second_stage_alpha_support_v1_candidate_inference",
+      "second_stage_alpha_support_v1_quality_gate",
+      "second_stage_alpha_support_v1_promotion"
     ],
     "prohibited_before_successor_preregistration": [
       "training",
@@ -1425,6 +1461,42 @@
       "outcome": "frozen_prethreshold_second_stage_erasemap_alpha_diagnostic_pending_label_free_train275_materialization",
       "repeat_policy": "implement_and_run_exact_train275_alpha_materialization_and_four_channel_diagnostic_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
+          "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
+        },
+        {
+          "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+          "sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3"
+        },
+        {
+          "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+          "sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351"
+        },
+        {
+          "path": "scripts/analysis/materialize_second_stage_alpha_train_only.py",
+          "sha256": "8a9314b9e880ad968aabab10b144d59d489488db4e83d0371e11bedb6db89f06"
+        },
+        {
+          "path": "scripts/analysis/audit_second_stage_alpha_support.py",
+          "sha256": "1142e5d160702c617ea5163fe61ecda47b9903d13d2f4ec45293e5b8e3496731"
+        },
+        {
+          "path": "tests/test_second_stage_alpha_support_prerequisite.py",
+          "sha256": "019dc7c4413dcd604d2da6f142dd5f72237fe6b5270aecef81baa70ec4d508a1"
+        },
+        {
+          "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+          "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+        }
+      ],
+      "id": "second-stage-alpha-support-train275-diagnostic",
+      "outcome": "raw_prethreshold_alpha_adds_directional_signal_but_insufficient_margin_over_second_stage_rgb",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1
