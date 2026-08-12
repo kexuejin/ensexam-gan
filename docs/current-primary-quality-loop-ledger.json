@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Close both the failed coarse page-broadcast context and the weaker frozen primary mb/ms support family, then require a separately preregistered target-free causal source with an independent train-only ablation before any optimizer can reopen.",
+    "causal_change": "Keep the quality loop active after final-pipeline context, primary mb/ms, and reconstruction-stage disagreement all failed their frozen train-only ablations; require a separately preregistered materially new target-free causal source before any optimizer or quality surface can reopen.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -204,7 +204,7 @@
       },
       {
         "path": "scripts/analysis/audit_dual_input_support_separation.py",
-        "sha256": "fd2dd33d7e730cbc0a38401ec95d21851016f3c328f84556f7136f58fda8a1ed"
+        "sha256": "4821a27c860aef54878fc15016458244a3cbd195fdbffacdc535ded1b1b032e5"
       },
       {
         "path": "tests/test_dual_input_support_separation_prerequisite.py",
@@ -241,12 +241,44 @@
       {
         "path": "tests/test_spatial_primary_mask_support_prerequisite.py",
         "sha256": "5075d7b8ada2296652e60a25f89212c1310616f00e2004653e1b47b6fe1966a9"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md",
+        "sha256": "422170ac77db148b23b597c100d054ba3c8c5f69754a586f814b22b44c2453ae"
+      },
+      {
+        "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+        "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-diagnostic-kill.md",
+        "sha256": "01c6d854a7b1e70683c1697ecaf7b6357d12f5bbda0671cf96a1b5503c56ea9c"
+      },
+      {
+        "path": "outputs/reconstruction-stage-disagreement-materialization-20260812/manifest.json",
+        "sha256": "1f17a884735614303a5340cefcfc5962b5c15677b288d56f65a4ed850d9147c6"
+      },
+      {
+        "path": "outputs/reconstruction-stage-disagreement-prerequisite-20260812/audit.json",
+        "sha256": "c6564514041cde59e928032343d316d1f2a33c18e0931c79022a5368fbbbda1b"
+      },
+      {
+        "path": "scripts/analysis/materialize_reconstruction_stage_disagreement_train_only.py",
+        "sha256": "dc7710e6f8b50224c2ad9ccaad9f85f62dcc904beee48d678af0c357f697ef25"
+      },
+      {
+        "path": "scripts/analysis/audit_reconstruction_stage_disagreement.py",
+        "sha256": "1ce37584ca6ec43a24887b5c36ba7a221ae09663d511480f0a641a06f755ebe8"
+      },
+      {
+        "path": "tests/test_reconstruction_stage_disagreement_prerequisite.py",
+        "sha256": "8ceecedee5b2cba4c89bdf03e10861a1e194505cd301f6da983e083353e04c1c"
       }
     ],
-    "failure_bucket": "frozen_primary_masks_underperform_second_stage_rgb_support_ablation",
+    "failure_bucket": "materially_new_target_free_support_source_needed_after_context_mask_and_stage_disagreement_kills",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Review evidence and preregister only a materially new target-free causal support source with an independent train-only ablation; do not rescue either closed support family or open training and quality surfaces.",
+    "next_action": "Preregister a materially new target-free causal support source and independent train-only ablation that does not rescue final-pipeline RGB/context, primary mb/ms, or Ic4/Ic2/Ic1/Ire disagreement; keep implementation, training, and every quality surface closed until that record passes review.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -297,6 +329,21 @@
         "detail": "The label-free 275-page mb/ms materialization passed, but the exact diagnostic KILLed the family: mean AUC 0.580727, median page AUC 0.584623, and full-minus-RGB-ablation margin -0.063779. No training or quality surface opened.",
         "id": "spatial_primary_mask_support_train_only_diagnostic",
         "status": "passed"
+      },
+      {
+        "detail": "A materially different frozen-primary reconstruction-stage disagreement source, four exact channels, label-free NPZ materialization, fixed RGB ablation, and explicit terminal successors are frozen before implementation or data execution.",
+        "id": "materially_new_target_free_support_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The label-free 275-page stage materialization passed and the exact diagnostic reached mean AUC 0.657016, but KILLed the family because its margin over the fixed RGB ablation was only 0.012509 versus the frozen 0.03 minimum. No training or quality surface opened.",
+        "id": "reconstruction_stage_disagreement_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any additional data execution or implementation, name and freeze a materially new target-free support source plus an independent train-only ablation that is not a transform, selector, threshold, neighborhood, probe, or training rescue of the three closed evidence families.",
+        "id": "materially_new_support_successor_preregistration",
+        "status": "pending"
       }
     ],
     "killed_family_prohibitions": [
@@ -332,7 +379,14 @@
       "spatial_primary_mask_support_v1_training",
       "spatial_primary_mask_support_v1_candidate_inference",
       "spatial_primary_mask_support_v1_quality_gate",
-      "spatial_primary_mask_support_v1_promotion"
+      "spatial_primary_mask_support_v1_promotion",
+      "reconstruction_stage_disagreement_v1_repeat_diagnostic",
+      "reconstruction_stage_disagreement_v1_stage_channel_or_transform_rescue",
+      "reconstruction_stage_disagreement_v1_threshold_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "reconstruction_stage_disagreement_v1_training",
+      "reconstruction_stage_disagreement_v1_candidate_inference",
+      "reconstruction_stage_disagreement_v1_quality_gate",
+      "reconstruction_stage_disagreement_v1_promotion"
     ],
     "prohibited_before_successor_preregistration": [
       "training",
@@ -1146,7 +1200,7 @@
         },
         {
           "path": "scripts/analysis/audit_dual_input_support_separation.py",
-          "sha256": "fd2dd33d7e730cbc0a38401ec95d21851016f3c328f84556f7136f58fda8a1ed"
+          "sha256": "4821a27c860aef54878fc15016458244a3cbd195fdbffacdc535ded1b1b032e5"
         },
         {
           "path": "tests/test_dual_input_support_separation_prerequisite.py",
@@ -1203,6 +1257,58 @@
       ],
       "id": "spatial-primary-mask-support-train275-diagnostic",
       "outcome": "frozen_primary_masks_have_weak_signal_but_underperform_second_stage_rgb_ablation",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md",
+          "sha256": "422170ac77db148b23b597c100d054ba3c8c5f69754a586f814b22b44c2453ae"
+        },
+        {
+          "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+          "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+        }
+      ],
+      "id": "reconstruction-stage-disagreement-preregistration",
+      "outcome": "frozen_primary_multiscale_reconstruction_disagreement_diagnostic_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_stage_disagreement_materialization_and_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-diagnostic-kill.md",
+          "sha256": "01c6d854a7b1e70683c1697ecaf7b6357d12f5bbda0671cf96a1b5503c56ea9c"
+        },
+        {
+          "path": "outputs/reconstruction-stage-disagreement-materialization-20260812/manifest.json",
+          "sha256": "1f17a884735614303a5340cefcfc5962b5c15677b288d56f65a4ed850d9147c6"
+        },
+        {
+          "path": "outputs/reconstruction-stage-disagreement-prerequisite-20260812/audit.json",
+          "sha256": "c6564514041cde59e928032343d316d1f2a33c18e0931c79022a5368fbbbda1b"
+        },
+        {
+          "path": "scripts/analysis/materialize_reconstruction_stage_disagreement_train_only.py",
+          "sha256": "dc7710e6f8b50224c2ad9ccaad9f85f62dcc904beee48d678af0c357f697ef25"
+        },
+        {
+          "path": "scripts/analysis/audit_reconstruction_stage_disagreement.py",
+          "sha256": "1ce37584ca6ec43a24887b5c36ba7a221ae09663d511480f0a641a06f755ebe8"
+        },
+        {
+          "path": "tests/test_reconstruction_stage_disagreement_prerequisite.py",
+          "sha256": "8ceecedee5b2cba4c89bdf03e10861a1e194505cd301f6da983e083353e04c1c"
+        },
+        {
+          "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+          "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+        }
+      ],
+      "id": "reconstruction-stage-disagreement-train275-diagnostic",
+      "outcome": "stage_disagreement_has_directional_signal_but_insufficient_margin_over_second_stage_rgb",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
     }

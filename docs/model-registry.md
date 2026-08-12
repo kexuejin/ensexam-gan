@@ -848,3 +848,50 @@ lambda, nonlinear probes, or training. A successor requires separate
 preregistration of a materially new target-free causal support source and an
 independent train-only ablation. The current-primary product default,
 promotion closure, and reserved-blind closure remain unchanged.
+
+## Reconstruction-Stage Disagreement Preregistration
+
+```text
+family: reconstruction_stage_disagreement
+state: PREREQUISITE_NEEDED
+materialization: frozen Ic4/Ic2/Ic1/Ire stage disagreement, train275 sources only, no labels
+representation: refine-coarse signed luma + refine-coarse abs RGB + Ic2/Ic1 abs RGB + Ic4/Ic1 abs RGB
+diagnostic: page-grouped closed-form ridge, stage disagreement vs fixed second-stage-RGB ablation
+plan: docs/reconstruction-stage-disagreement-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact label-free stage-disagreement materialization and train-only support diagnostic
+```
+
+This family measures convergence inside the frozen primary reconstruction
+hierarchy rather than reusing final RGB, masks, page scalars, or selectors. Its
+four channels, interpolation, per-patch derivation, overlap fusion, folds,
+sampling, ridge probe, RGB ablation, and acceptance gates are frozen before
+data execution. A PASS may authorize only a later data/training/application
+preflight with portable checkpoint metadata; it cannot authorize training or
+candidate inference directly.
+
+The exact label-free materialization passed and the train275 diagnostic
+subsequently returned KILL:
+
+```text
+materialized stage-disagreement pages: 275 / 275
+materialization target access: false
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.657016 / 0.639200
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.012509
+macro median page AUC: 0.678154
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the four-channel reconstruction-stage family through
+stage selection, transforms, neighborhoods, thresholds, folds, sampling,
+ridge lambda, nonlinear probes, or training. A successor requires separate
+preregistration of a materially new target-free causal support source and an
+independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.

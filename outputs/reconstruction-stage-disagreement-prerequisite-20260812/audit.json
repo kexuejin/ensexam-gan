@@ -1,0 +1,5498 @@
+{
+  "ablation_feature_names": [
+    "second_stage_r",
+    "second_stage_g",
+    "second_stage_b"
+  ],
+  "acceptance": {
+    "conditions": {
+      "every_fold_auc": true,
+      "full_auc_ablation_margin": false,
+      "full_mean_fold_auc": true,
+      "macro_median_page_auc": true,
+      "positive_mean_above_preserve": true
+    },
+    "contract": {
+      "full_auc_ablation_margin_min": 0.03,
+      "full_fold_auc_min": 0.55,
+      "full_mean_fold_auc_min": 0.65,
+      "macro_median_page_auc_min": 0.6,
+      "positive_mean_above_preserve_min_folds": 4,
+      "required_fold_count": 5,
+      "required_terminal_on_pass": "PASS"
+    },
+    "passed": false
+  },
+  "aggregates": {
+    "ablation_mean_fold_auc": 0.644506096958718,
+    "full_auc_ablation_margin": 0.012509426158116121,
+    "full_mean_fold_auc": 0.6570155231168341,
+    "full_min_fold_auc": 0.6392001899719238,
+    "macro_median_page_auc": 0.6781539916992188,
+    "positive_mean_above_preserve_folds": 5
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "feature_count": 4,
+  "feature_names": [
+    "coarse_refine_signed_luma",
+    "coarse_refine_abs_rgb",
+    "coarse_ic2_abs_rgb",
+    "coarse_ic4_abs_rgb"
+  ],
+  "fold_page_counts": {
+    "0": 54,
+    "1": 62,
+    "2": 47,
+    "3": 50,
+    "4": 62
+  },
+  "folds": [
+    {
+      "ablation_auc": 0.6415823339925382,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7556052339807531,
+          0.7595036514559785,
+          0.7628979399026442
+        ],
+        "feature_scale": [
+          0.18764389442069843,
+          0.17391369907001075,
+          0.18178666135077565
+        ],
+        "weights": [
+          -0.10892965960167783,
+          0.25654450030014603,
+          -0.41407056322682584,
+          -1.1542148026509554e-16
+        ]
+      },
+      "auc_margin": 0.012851977381032498,
+      "fit_page_count": 221,
+      "fold": 0,
+      "full_auc": 0.6544343113735707,
+      "full_fit": {
+        "feature_mean": [
+          0.006592695063663558,
+          0.06251829647630854,
+          0.04750253518045572,
+          0.09281320355103416
+        ],
+        "feature_scale": [
+          0.08803175622824183,
+          0.07123981238750994,
+          0.057745541115183846,
+          0.11079207811939067
+        ],
+        "weights": [
+          -0.19067993214287937,
+          -0.038836517583376674,
+          0.09137476960814345,
+          0.08803185158246221,
+          -1.4240504862809995e-17
+        ]
+      },
+      "page_auc_median": 0.6780910491943359,
+      "pages": [
+        {
+          "auc": 0.7718372344970703,
+          "file": "hw5k_1029.jpg",
+          "positive_score_mean": 0.05843722798490357,
+          "preserve_score_mean": -0.12749222359672385,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8716220855712891,
+          "file": "hw5k_1269.jpg",
+          "positive_score_mean": 0.2263122080410614,
+          "preserve_score_mean": -0.01652485958014971,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9178380966186523,
+          "file": "hw5k_1286.jpg",
+          "positive_score_mean": 0.09224880520513612,
+          "preserve_score_mean": -0.09104664066479223,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6048259735107422,
+          "file": "hw5k_1340.jpg",
+          "positive_score_mean": -0.1468146518856466,
+          "preserve_score_mean": -0.22327709696817277,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7089366912841797,
+          "file": "hw5k_1358.jpg",
+          "positive_score_mean": 0.0018710032962804875,
+          "preserve_score_mean": -0.17032772436291388,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7835884094238281,
+          "file": "hw5k_1447.jpg",
+          "positive_score_mean": 0.2619290645969772,
+          "preserve_score_mean": -0.04008843282670678,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7465648651123047,
+          "file": "hw5k_1537.jpg",
+          "positive_score_mean": 0.15788446918060872,
+          "preserve_score_mean": -0.05426703820622866,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7281026840209961,
+          "file": "hw5k_1827.jpg",
+          "positive_score_mean": 0.07609251062931248,
+          "preserve_score_mean": -0.12358960635736285,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.765803337097168,
+          "file": "hw5k_2005.jpg",
+          "positive_score_mean": 0.11209898514658595,
+          "preserve_score_mean": -0.04978369568480685,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.76910400390625,
+          "file": "hw5k_2041.jpg",
+          "positive_score_mean": 0.023045078117177986,
+          "preserve_score_mean": -0.10938145828258407,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5684728622436523,
+          "file": "hw5k_2130.jpg",
+          "positive_score_mean": -0.08108904903215047,
+          "preserve_score_mean": -0.11003816017197826,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5519533157348633,
+          "file": "hw5k_2222.jpg",
+          "positive_score_mean": 0.5253948421345882,
+          "preserve_score_mean": 0.4715390968153217,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6938028335571289,
+          "file": "hw5k_2310.jpg",
+          "positive_score_mean": -0.03281313325909542,
+          "preserve_score_mean": -0.11078752329078725,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6006031036376953,
+          "file": "hw5k_2704.jpg",
+          "positive_score_mean": -0.03754732407505722,
+          "preserve_score_mean": -0.05998921437651332,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5704860687255859,
+          "file": "hw5k_2774.jpg",
+          "positive_score_mean": -0.039172547188262706,
+          "preserve_score_mean": -0.053591467617220875,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6804180145263672,
+          "file": "hw5k_282.jpg",
+          "positive_score_mean": 0.08653482462791351,
+          "preserve_score_mean": 0.03702078514072414,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5579643249511719,
+          "file": "hw5k_2864.jpg",
+          "positive_score_mean": -0.009557190078030586,
+          "preserve_score_mean": -0.03840983289607383,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7551822662353516,
+          "file": "hw5k_2936.jpg",
+          "positive_score_mean": 0.007199953022847232,
+          "preserve_score_mean": -0.05294946828911075,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5873985290527344,
+          "file": "hw5k_300.jpg",
+          "positive_score_mean": 0.1528653751143984,
+          "preserve_score_mean": 0.13817687379435462,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6214370727539062,
+          "file": "hw5k_3025.jpg",
+          "positive_score_mean": -0.06913874670019929,
+          "preserve_score_mean": -0.12093368453818992,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.629608154296875,
+          "file": "hw5k_3079.jpg",
+          "positive_score_mean": -0.027738397386472075,
+          "preserve_score_mean": -0.0328629531646388,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6168098449707031,
+          "file": "hw5k_3114.jpg",
+          "positive_score_mean": -0.017991975480191498,
+          "preserve_score_mean": -0.026427698159759642,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5304183959960938,
+          "file": "hw5k_3132.jpg",
+          "positive_score_mean": 0.030030938955158726,
+          "preserve_score_mean": 0.024010468932470976,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6780281066894531,
+          "file": "hw5k_3225.jpg",
+          "positive_score_mean": 0.09414799518412503,
+          "preserve_score_mean": 0.01513959155372916,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5278778076171875,
+          "file": "hw5k_3315.jpg",
+          "positive_score_mean": -0.12235174900471606,
+          "preserve_score_mean": -0.13506958395303217,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6286077499389648,
+          "file": "hw5k_3493.jpg",
+          "positive_score_mean": 0.031291577095957146,
+          "preserve_score_mean": -0.051348511940091636,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6661348342895508,
+          "file": "hw5k_3564.jpg",
+          "positive_score_mean": -0.04103549027381094,
+          "preserve_score_mean": -0.10513541387315035,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.667628288269043,
+          "file": "hw5k_3636.jpg",
+          "positive_score_mean": -0.02387409286660387,
+          "preserve_score_mean": -0.11273547419980161,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.48691463470458984,
+          "file": "hw5k_3725.jpg",
+          "positive_score_mean": 0.006009879586296531,
+          "preserve_score_mean": 0.04383659212562893,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4876546859741211,
+          "file": "hw5k_3833.jpg",
+          "positive_score_mean": -0.01878314672171783,
+          "preserve_score_mean": 0.0005718449116239436,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7892923355102539,
+          "file": "hw5k_3921.jpg",
+          "positive_score_mean": 0.20104479830142333,
+          "preserve_score_mean": -0.035049334230050626,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5931072235107422,
+          "file": "hw5k_3939.jpg",
+          "positive_score_mean": 0.10909846763338826,
+          "preserve_score_mean": 0.010975163762449693,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7063484191894531,
+          "file": "hw5k_4028.jpg",
+          "positive_score_mean": 0.08762263900152865,
+          "preserve_score_mean": -0.0720988104238264,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6514930725097656,
+          "file": "hw5k_4100.jpg",
+          "positive_score_mean": 0.3464948589759418,
+          "preserve_score_mean": 0.16788172786299682,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6781539916992188,
+          "file": "hw5k_4118.jpg",
+          "positive_score_mean": 0.09697734077054479,
+          "preserve_score_mean": -0.030543976161593135,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6714725494384766,
+          "file": "hw5k_4225.jpg",
+          "positive_score_mean": 0.235799818532318,
+          "preserve_score_mean": 0.05024302182635432,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7931394577026367,
+          "file": "hw5k_4315.jpg",
+          "positive_score_mean": -0.07155039780041017,
+          "preserve_score_mean": -0.1569759683116192,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8144292831420898,
+          "file": "hw5k_4333.jpg",
+          "positive_score_mean": -0.05955016237216832,
+          "preserve_score_mean": -0.1564925295039408,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8644924163818359,
+          "file": "hw5k_4439.jpg",
+          "positive_score_mean": -0.06434617250323707,
+          "preserve_score_mean": -0.16173666681513563,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6054897308349609,
+          "file": "hw5k_4564.jpg",
+          "positive_score_mean": -0.04617239096785423,
+          "preserve_score_mean": -0.12230522202082492,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7895908355712891,
+          "file": "hw5k_4725.jpg",
+          "positive_score_mean": 0.10655123000294466,
+          "preserve_score_mean": -0.1251289388748289,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6912689208984375,
+          "file": "hw5k_4779.jpg",
+          "positive_score_mean": -0.03857223613553737,
+          "preserve_score_mean": -0.1278269947000708,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6867341995239258,
+          "file": "hw5k_4797.jpg",
+          "positive_score_mean": 0.02227171997775389,
+          "preserve_score_mean": -0.12663273415578102,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.642085075378418,
+          "file": "hw5k_4903.jpg",
+          "positive_score_mean": 0.0054773211294462535,
+          "preserve_score_mean": -0.12393593422271915,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7456912994384766,
+          "file": "hw5k_5028.jpg",
+          "positive_score_mean": 0.12095918760171688,
+          "preserve_score_mean": -0.0794417565029798,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6544027328491211,
+          "file": "hw5k_5082.jpg",
+          "positive_score_mean": 0.004912421275170721,
+          "preserve_score_mean": -0.07909743428285375,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8015670776367188,
+          "file": "hw5k_539.jpg",
+          "positive_score_mean": 0.3178678784401649,
+          "preserve_score_mean": 0.09167031517544814,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6831216812133789,
+          "file": "hw5k_557.jpg",
+          "positive_score_mean": 0.19419316368061998,
+          "preserve_score_mean": 0.0354094947136035,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9155969619750977,
+          "file": "hw5k_611.jpg",
+          "positive_score_mean": 0.2605749943680293,
+          "preserve_score_mean": 0.01677016816794466,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8101558685302734,
+          "file": "hw5k_797.jpg",
+          "positive_score_mean": 0.044274237550513504,
+          "preserve_score_mean": -0.07015678358773779,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6250371932983398,
+          "file": "scut_457.jpg",
+          "positive_score_mean": 0.11718873307432623,
+          "preserve_score_mean": -0.058593754257854194,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6055116653442383,
+          "file": "scut_471.jpg",
+          "positive_score_mean": -0.028716095958363063,
+          "preserve_score_mean": -0.05617038462174152,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5899686813354492,
+          "file": "scut_487.jpg",
+          "positive_score_mean": 0.004018139758687802,
+          "preserve_score_mean": -0.06747161520164548,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7120437622070312,
+          "file": "scut_539.jpg",
+          "positive_score_mean": 0.04862891605309875,
+          "preserve_score_mean": -0.06492061552591999,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.06093584545106337,
+      "preserve_score_mean": -0.04865540873369006,
+      "stage_channel_strata": {
+        "coarse_ic2_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6055975890379549,
+              "bin": 0,
+              "positive_count": 8789,
+              "preserve_count": 14839,
+              "sample_count": 23628
+            },
+            {
+              "auc": 0.6049588891825838,
+              "bin": 1,
+              "positive_count": 11943,
+              "preserve_count": 15991,
+              "sample_count": 27934
+            },
+            {
+              "auc": 0.6099349135272407,
+              "bin": 2,
+              "positive_count": 15465,
+              "preserve_count": 14149,
+              "sample_count": 29614
+            },
+            {
+              "auc": 0.6153471423745177,
+              "bin": 3,
+              "positive_count": 19099,
+              "preserve_count": 10317,
+              "sample_count": 29416
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.01703944243490696,
+            0.02859102562069893,
+            0.053693145513534546
+          ]
+        },
+        "coarse_ic4_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6157866381450313,
+              "bin": 0,
+              "positive_count": 8706,
+              "preserve_count": 15154,
+              "sample_count": 23860
+            },
+            {
+              "auc": 0.6263362256307188,
+              "bin": 1,
+              "positive_count": 11589,
+              "preserve_count": 15477,
+              "sample_count": 27066
+            },
+            {
+              "auc": 0.6235596668626132,
+              "bin": 2,
+              "positive_count": 18173,
+              "preserve_count": 12636,
+              "sample_count": 30809
+            },
+            {
+              "auc": 0.655454981299353,
+              "bin": 3,
+              "positive_count": 16828,
+              "preserve_count": 12029,
+              "sample_count": 28857
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.019889851100742817,
+            0.036730751395225525,
+            0.1256936751306057
+          ]
+        },
+        "coarse_refine_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6261476343237289,
+              "bin": 0,
+              "positive_count": 11431,
+              "preserve_count": 14080,
+              "sample_count": 25511
+            },
+            {
+              "auc": 0.638465058374728,
+              "bin": 1,
+              "positive_count": 13460,
+              "preserve_count": 14955,
+              "sample_count": 28415
+            },
+            {
+              "auc": 0.6622469309640532,
+              "bin": 2,
+              "positive_count": 13517,
+              "preserve_count": 15545,
+              "sample_count": 29062
+            },
+            {
+              "auc": 0.6617920400065849,
+              "bin": 3,
+              "positive_count": 16888,
+              "preserve_count": 10716,
+              "sample_count": 27604
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.027042116969823837,
+            0.04305943287909031,
+            0.06926862522959709
+          ]
+        },
+        "coarse_refine_signed_luma": {
+          "bins": [
+            {
+              "auc": 0.6373180120042008,
+              "bin": 0,
+              "positive_count": 20551,
+              "preserve_count": 10127,
+              "sample_count": 30678
+            },
+            {
+              "auc": 0.6330940923647048,
+              "bin": 1,
+              "positive_count": 11804,
+              "preserve_count": 13547,
+              "sample_count": 25351
+            },
+            {
+              "auc": 0.6311354332996445,
+              "bin": 2,
+              "positive_count": 11994,
+              "preserve_count": 15995,
+              "sample_count": 27989
+            },
+            {
+              "auc": 0.5522052070182372,
+              "bin": 3,
+              "positive_count": 10947,
+              "preserve_count": 15627,
+              "sample_count": 26574
+            }
+          ],
+          "fit_quartile_cuts": [
+            -0.0040943402564153075,
+            0.018418566323816776,
+            0.04474605340510607
+          ]
+        }
+      },
+      "test_page_count": 54
+    },
+    {
+      "ablation_auc": 0.6486228834701998,
+      "ablation_fit": {
+        "feature_mean": [
+          0.757524163194195,
+          0.7622754549673998,
+          0.764959063958109
+        ],
+        "feature_scale": [
+          0.18673617050287683,
+          0.17110848302019555,
+          0.18017597564763033
+        ],
+        "weights": [
+          -0.1088306115834517,
+          0.2702862860853957,
+          -0.42213250406672903,
+          1.0696764189378163e-16
+        ]
+      },
+      "auc_margin": 0.016577853372516382,
+      "fit_page_count": 213,
+      "fold": 1,
+      "full_auc": 0.6652007368427162,
+      "full_fit": {
+        "feature_mean": [
+          0.007143441406476664,
+          0.06240316503195819,
+          0.048136526712884944,
+          0.09173362659572931
+        ],
+        "feature_scale": [
+          0.08618432509180417,
+          0.06945421586638019,
+          0.057938349010900905,
+          0.10730535947289783
+        ],
+        "weights": [
+          -0.18407054219851227,
+          -0.03193049769320807,
+          0.08358817712259907,
+          0.08643187138008934,
+          -2.1806628764081537e-17
+        ]
+      },
+      "page_auc_median": 0.6890192031860352,
+      "pages": [
+        {
+          "auc": 0.8117523193359375,
+          "file": "hw5k_1125.jpg",
+          "positive_score_mean": 0.07731931116160248,
+          "preserve_score_mean": -0.12038543740221794,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6131811141967773,
+          "file": "hw5k_1322.jpg",
+          "positive_score_mean": -0.14079042960017565,
+          "preserve_score_mean": -0.19806448350294378,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6767663955688477,
+          "file": "hw5k_1501.jpg",
+          "positive_score_mean": 0.1883202811332318,
+          "preserve_score_mean": -0.007414019799594697,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6530513763427734,
+          "file": "hw5k_1519.jpg",
+          "positive_score_mean": 0.11098828871684982,
+          "preserve_score_mean": -0.02660084426038843,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7960720062255859,
+          "file": "hw5k_1612.jpg",
+          "positive_score_mean": 0.24423794535475984,
+          "preserve_score_mean": -0.05499951759652935,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7316389083862305,
+          "file": "hw5k_1630.jpg",
+          "positive_score_mean": -0.002358637279830647,
+          "preserve_score_mean": -0.11974805375792145,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6406927108764648,
+          "file": "hw5k_1648.jpg",
+          "positive_score_mean": -0.014447527783119127,
+          "preserve_score_mean": -0.1184887388331046,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5541362762451172,
+          "file": "hw5k_1665.jpg",
+          "positive_score_mean": -0.07270879221137037,
+          "preserve_score_mean": -0.12220233184527407,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7521219253540039,
+          "file": "hw5k_1701.jpg",
+          "positive_score_mean": 0.0806703650352604,
+          "preserve_score_mean": -0.10168432870069692,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6022567749023438,
+          "file": "hw5k_1719.jpg",
+          "positive_score_mean": -0.01697121212858213,
+          "preserve_score_mean": -0.11591018114440371,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6909818649291992,
+          "file": "hw5k_175.jpg",
+          "positive_score_mean": 0.11965782451525414,
+          "preserve_score_mean": 0.040772119464984394,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7817754745483398,
+          "file": "hw5k_1773.jpg",
+          "positive_score_mean": 0.05042181342882266,
+          "preserve_score_mean": -0.11471889417284101,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6441268920898438,
+          "file": "hw5k_1880.jpg",
+          "positive_score_mean": -0.045320569261387535,
+          "preserve_score_mean": -0.11861879173109649,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6343441009521484,
+          "file": "hw5k_193.jpg",
+          "positive_score_mean": 0.09088032391802058,
+          "preserve_score_mean": 0.04839983881683545,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7657032012939453,
+          "file": "hw5k_1952.jpg",
+          "positive_score_mean": 0.025343461144672057,
+          "preserve_score_mean": -0.12114793931233309,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7038650512695312,
+          "file": "hw5k_211.jpg",
+          "positive_score_mean": 0.08746807815035477,
+          "preserve_score_mean": 0.032848966982796296,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6180496215820312,
+          "file": "hw5k_2257.jpg",
+          "positive_score_mean": -0.07579730023781377,
+          "preserve_score_mean": -0.1022347963672568,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7354345321655273,
+          "file": "hw5k_229.jpg",
+          "positive_score_mean": 0.10299484564220043,
+          "preserve_score_mean": 0.037105636240087905,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6415014266967773,
+          "file": "hw5k_2292.jpg",
+          "positive_score_mean": -0.04493179122370998,
+          "preserve_score_mean": -0.09335157586640175,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6307449340820312,
+          "file": "hw5k_2346.jpg",
+          "positive_score_mean": -0.053295478374013994,
+          "preserve_score_mean": -0.09035532919600786,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7114648818969727,
+          "file": "hw5k_2382.jpg",
+          "positive_score_mean": 0.005912402588605533,
+          "preserve_score_mean": -0.09151409605720157,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6916894912719727,
+          "file": "hw5k_2418.jpg",
+          "positive_score_mean": 0.0941713248063846,
+          "preserve_score_mean": -0.03540679684870452,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6207637786865234,
+          "file": "hw5k_2471.jpg",
+          "positive_score_mean": 0.32640862701762474,
+          "preserve_score_mean": 0.228672269774367,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7961063385009766,
+          "file": "hw5k_2543.jpg",
+          "positive_score_mean": 0.11170232483595263,
+          "preserve_score_mean": -0.07748381965508293,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5778598785400391,
+          "file": "hw5k_2740.jpg",
+          "positive_score_mean": -0.04140867494497811,
+          "preserve_score_mean": -0.05408922907537289,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6059608459472656,
+          "file": "hw5k_2846.jpg",
+          "positive_score_mean": -0.025198981919814296,
+          "preserve_score_mean": -0.05364132890641832,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6655206680297852,
+          "file": "hw5k_2971.jpg",
+          "positive_score_mean": 0.017259835336258945,
+          "preserve_score_mean": -0.04116485731537146,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6342477798461914,
+          "file": "hw5k_3061.jpg",
+          "positive_score_mean": -0.0525908722854722,
+          "preserve_score_mean": -0.07931326042314235,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6947555541992188,
+          "file": "hw5k_3457.jpg",
+          "positive_score_mean": 0.18612760184645452,
+          "preserve_score_mean": -0.013479490779996123,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6266708374023438,
+          "file": "hw5k_353.jpg",
+          "positive_score_mean": 0.20715982645026254,
+          "preserve_score_mean": 0.17236152206321032,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6100320816040039,
+          "file": "hw5k_3618.jpg",
+          "positive_score_mean": 0.06330040772420202,
+          "preserve_score_mean": -0.025723116461730658,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.67877197265625,
+          "file": "hw5k_3671.jpg",
+          "positive_score_mean": -0.04516113973534416,
+          "preserve_score_mean": -0.08236922948717938,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7026491165161133,
+          "file": "hw5k_3707.jpg",
+          "positive_score_mean": 0.12147573460018633,
+          "preserve_score_mean": -0.06785472070828849,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5112371444702148,
+          "file": "hw5k_371.jpg",
+          "positive_score_mean": 0.16771142178282106,
+          "preserve_score_mean": 0.16836490335137583,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6666488647460938,
+          "file": "hw5k_3743.jpg",
+          "positive_score_mean": -0.04111720347160719,
+          "preserve_score_mean": -0.07512271503117929,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7044000625610352,
+          "file": "hw5k_3761.jpg",
+          "positive_score_mean": -0.019384464968328737,
+          "preserve_score_mean": -0.0625694345215089,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6466617584228516,
+          "file": "hw5k_3797.jpg",
+          "positive_score_mean": 0.18673968024258392,
+          "preserve_score_mean": 0.0507884519966004,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5882406234741211,
+          "file": "hw5k_3849.jpg",
+          "positive_score_mean": 0.16498161725290178,
+          "preserve_score_mean": 0.09452299536288024,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6152629852294922,
+          "file": "hw5k_389.jpg",
+          "positive_score_mean": 0.07689261026628506,
+          "preserve_score_mean": 0.04720154267425639,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7728347778320312,
+          "file": "hw5k_4010.jpg",
+          "positive_score_mean": 0.4184410572611066,
+          "preserve_score_mean": 0.02686543867809976,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8450126647949219,
+          "file": "hw5k_4349.jpg",
+          "positive_score_mean": -0.06266276026539735,
+          "preserve_score_mean": -0.1647425931045737,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.798518180847168,
+          "file": "hw5k_4385.jpg",
+          "positive_score_mean": -0.0784596503783487,
+          "preserve_score_mean": -0.16543059669357396,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6220455169677734,
+          "file": "hw5k_4546.jpg",
+          "positive_score_mean": -0.04355632499171783,
+          "preserve_score_mean": -0.13063383686117133,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6870565414428711,
+          "file": "hw5k_4618.jpg",
+          "positive_score_mean": -0.025993649482083908,
+          "preserve_score_mean": -0.11894665986425909,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5967521667480469,
+          "file": "hw5k_4671.jpg",
+          "positive_score_mean": -0.04092735734301528,
+          "preserve_score_mean": -0.12300334668500246,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.597559928894043,
+          "file": "hw5k_4689.jpg",
+          "positive_score_mean": -0.07503503227198924,
+          "preserve_score_mean": -0.12068952605819805,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7430334091186523,
+          "file": "hw5k_4761.jpg",
+          "positive_score_mean": 0.0263356913408711,
+          "preserve_score_mean": -0.12658878322540487,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7623987197875977,
+          "file": "hw5k_4921.jpg",
+          "positive_score_mean": 0.03797504998349617,
+          "preserve_score_mean": -0.12544523649188682,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8510189056396484,
+          "file": "hw5k_4957.jpg",
+          "positive_score_mean": 0.2475558254108502,
+          "preserve_score_mean": -0.06995928981322656,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6383094787597656,
+          "file": "hw5k_5064.jpg",
+          "positive_score_mean": -0.05560975480072666,
+          "preserve_score_mean": -0.07955510261555714,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6942615509033203,
+          "file": "hw5k_5100.jpg",
+          "positive_score_mean": 0.015090200193887389,
+          "preserve_score_mean": -0.08126104560414371,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7355117797851562,
+          "file": "hw5k_55.jpg",
+          "positive_score_mean": 0.12633196105912303,
+          "preserve_score_mean": 0.05758432970669232,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7760839462280273,
+          "file": "hw5k_593.jpg",
+          "positive_score_mean": 0.47419858370221774,
+          "preserve_score_mean": 0.16362711882971248,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6525468826293945,
+          "file": "hw5k_725.jpg",
+          "positive_score_mean": 0.10144330252827803,
+          "preserve_score_mean": 0.0183839400961486,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7789011001586914,
+          "file": "hw5k_761.jpg",
+          "positive_score_mean": 0.06300461179689318,
+          "preserve_score_mean": -0.10889454254394937,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5940418243408203,
+          "file": "hw5k_779.jpg",
+          "positive_score_mean": -0.07634321862896812,
+          "preserve_score_mean": -0.09933606525795088,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7377071380615234,
+          "file": "scut_464.jpg",
+          "positive_score_mean": 0.04773967430540452,
+          "preserve_score_mean": -0.07356301946048421,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8615255355834961,
+          "file": "scut_496.jpg",
+          "positive_score_mean": 0.23222829148468127,
+          "preserve_score_mean": -0.054661267794279086,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8452548980712891,
+          "file": "scut_510.jpg",
+          "positive_score_mean": 0.21470266538925806,
+          "preserve_score_mean": -0.0660723196284837,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8033456802368164,
+          "file": "scut_524.jpg",
+          "positive_score_mean": 0.1651766667047574,
+          "preserve_score_mean": -0.03992273161272184,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7728204727172852,
+          "file": "scut_529.jpg",
+          "positive_score_mean": 0.1740963721751948,
+          "preserve_score_mean": -0.030422615180898803,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7715578079223633,
+          "file": "scut_535.jpg",
+          "positive_score_mean": 0.1353780993349744,
+          "preserve_score_mean": -0.04402397345898811,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.06835118035539924,
+      "preserve_score_mean": -0.04873081994640153,
+      "stage_channel_strata": {
+        "coarse_ic2_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6330035253768322,
+              "bin": 0,
+              "positive_count": 12213,
+              "preserve_count": 21650,
+              "sample_count": 33863
+            },
+            {
+              "auc": 0.6103951335702159,
+              "bin": 1,
+              "positive_count": 13762,
+              "preserve_count": 16926,
+              "sample_count": 30688
+            },
+            {
+              "auc": 0.6138047803069889,
+              "bin": 2,
+              "positive_count": 16364,
+              "preserve_count": 14176,
+              "sample_count": 30540
+            },
+            {
+              "auc": 0.6239583655574432,
+              "bin": 3,
+              "positive_count": 21149,
+              "preserve_count": 10736,
+              "sample_count": 31885
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.017532652243971825,
+            0.029070240445435047,
+            0.05417420994490385
+          ]
+        },
+        "coarse_ic4_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6222537555259741,
+              "bin": 0,
+              "positive_count": 12236,
+              "preserve_count": 22708,
+              "sample_count": 34944
+            },
+            {
+              "auc": 0.6360560713228621,
+              "bin": 1,
+              "positive_count": 13954,
+              "preserve_count": 17298,
+              "sample_count": 31252
+            },
+            {
+              "auc": 0.6490833680607315,
+              "bin": 2,
+              "positive_count": 18721,
+              "preserve_count": 10130,
+              "sample_count": 28851
+            },
+            {
+              "auc": 0.6626912960817014,
+              "bin": 3,
+              "positive_count": 18577,
+              "preserve_count": 13352,
+              "sample_count": 31929
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.020562889520078897,
+            0.03827769123017788,
+            0.12711747363209724
+          ]
+        },
+        "coarse_refine_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6729308290067141,
+              "bin": 0,
+              "positive_count": 14841,
+              "preserve_count": 20139,
+              "sample_count": 34980
+            },
+            {
+              "auc": 0.666012352557576,
+              "bin": 1,
+              "positive_count": 14583,
+              "preserve_count": 15945,
+              "sample_count": 30528
+            },
+            {
+              "auc": 0.6685501475703333,
+              "bin": 2,
+              "positive_count": 13424,
+              "preserve_count": 14388,
+              "sample_count": 27812
+            },
+            {
+              "auc": 0.671272447030012,
+              "bin": 3,
+              "positive_count": 20640,
+              "preserve_count": 13016,
+              "sample_count": 33656
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.027597885578870773,
+            0.04348605126142502,
+            0.0686729196459055
+          ]
+        },
+        "coarse_refine_signed_luma": {
+          "bins": [
+            {
+              "auc": 0.6521527424502042,
+              "bin": 0,
+              "positive_count": 22377,
+              "preserve_count": 9125,
+              "sample_count": 31502
+            },
+            {
+              "auc": 0.6683388495531145,
+              "bin": 1,
+              "positive_count": 14598,
+              "preserve_count": 19514,
+              "sample_count": 34112
+            },
+            {
+              "auc": 0.655813615009348,
+              "bin": 2,
+              "positive_count": 13141,
+              "preserve_count": 17853,
+              "sample_count": 30994
+            },
+            {
+              "auc": 0.550804703603607,
+              "bin": 3,
+              "positive_count": 13372,
+              "preserve_count": 16996,
+              "sample_count": 30368
+            }
+          ],
+          "fit_quartile_cuts": [
+            -0.004758120863698423,
+            0.01864296104758978,
+            0.04482450243085623
+          ]
+        }
+      },
+      "test_page_count": 62
+    },
+    {
+      "ablation_auc": 0.6802159709161955,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7566180613570318,
+          0.7582373093295697,
+          0.7606886418645231
+        ],
+        "feature_scale": [
+          0.18695743097662998,
+          0.17374296288596497,
+          0.1845702733452374
+        ],
+        "weights": [
+          -0.10136695324413854,
+          0.23694041127020682,
+          -0.3916326524059108,
+          5.319842586703105e-16
+        ]
+      },
+      "auc_margin": -0.006025476011014663,
+      "fit_page_count": 228,
+      "fold": 2,
+      "full_auc": 0.6741904949051808,
+      "full_fit": {
+        "feature_mean": [
+          0.006387494085833796,
+          0.06289761114082597,
+          0.04936905561699139,
+          0.09445813710929545
+        ],
+        "feature_scale": [
+          0.08738949195264352,
+          0.07054403826472326,
+          0.05974743976465723,
+          0.11018875599911795
+        ],
+        "weights": [
+          -0.1858415712764704,
+          -0.0346820827018736,
+          0.08828329643064252,
+          0.07975382957135718,
+          2.144579037783155e-17
+        ]
+      },
+      "page_auc_median": 0.6846799850463867,
+      "pages": [
+        {
+          "auc": 0.8610258102416992,
+          "file": "hw5k_1011.jpg",
+          "positive_score_mean": 0.16774249315742112,
+          "preserve_score_mean": -0.10637291338726854,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8178596496582031,
+          "file": "hw5k_1046.jpg",
+          "positive_score_mean": 0.1009772411611349,
+          "preserve_score_mean": -0.12295660524288701,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8644037246704102,
+          "file": "hw5k_1161.jpg",
+          "positive_score_mean": 0.10667406085307526,
+          "preserve_score_mean": -0.06037678265469541,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7933883666992188,
+          "file": "hw5k_1251.jpg",
+          "positive_score_mean": 0.06783259334011549,
+          "preserve_score_mean": -0.11954892384405993,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7715663909912109,
+          "file": "hw5k_1376.jpg",
+          "positive_score_mean": 0.06959341555694537,
+          "preserve_score_mean": -0.1148273702581961,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8156633377075195,
+          "file": "hw5k_1394.jpg",
+          "positive_score_mean": 0.15111207859920894,
+          "preserve_score_mean": -0.06993240359249941,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6351585388183594,
+          "file": "hw5k_1683.jpg",
+          "positive_score_mean": 0.03923479981229536,
+          "preserve_score_mean": -0.11101796591367481,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6846799850463867,
+          "file": "hw5k_1737.jpg",
+          "positive_score_mean": 0.0323759556941196,
+          "preserve_score_mean": -0.12384027423206317,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6422233581542969,
+          "file": "hw5k_1755.jpg",
+          "positive_score_mean": -0.006153977617130204,
+          "preserve_score_mean": -0.1127871831143112,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7150964736938477,
+          "file": "hw5k_1862.jpg",
+          "positive_score_mean": 0.12320390114692742,
+          "preserve_score_mean": -0.07027927515462433,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6421194076538086,
+          "file": "hw5k_1934.jpg",
+          "positive_score_mean": 0.03716882834743873,
+          "preserve_score_mean": -0.11100890639723401,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5967340469360352,
+          "file": "hw5k_1988.jpg",
+          "positive_score_mean": -0.03340832962579607,
+          "preserve_score_mean": -0.10884450794804378,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.49645137786865234,
+          "file": "hw5k_2166.jpg",
+          "positive_score_mean": -0.12340831420892259,
+          "preserve_score_mean": -0.12335706011517672,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6572227478027344,
+          "file": "hw5k_2239.jpg",
+          "positive_score_mean": -0.061336683546542856,
+          "preserve_score_mean": -0.10046042023402248,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5603122711181641,
+          "file": "hw5k_2632.jpg",
+          "positive_score_mean": -0.03875442225650465,
+          "preserve_score_mean": -0.05978651458463609,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6019573211669922,
+          "file": "hw5k_2686.jpg",
+          "positive_score_mean": -0.018479722316954616,
+          "preserve_score_mean": -0.04781900331320968,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6091079711914062,
+          "file": "hw5k_2757.jpg",
+          "positive_score_mean": -0.032679926181764,
+          "preserve_score_mean": -0.05287608312651769,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6239795684814453,
+          "file": "hw5k_2810.jpg",
+          "positive_score_mean": -0.03228165533880955,
+          "preserve_score_mean": -0.05739025547621522,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6716709136962891,
+          "file": "hw5k_2900.jpg",
+          "positive_score_mean": -0.0004067402867311197,
+          "preserve_score_mean": -0.04734089499555276,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6530895233154297,
+          "file": "hw5k_2918.jpg",
+          "positive_score_mean": -0.027758966313559147,
+          "preserve_score_mean": -0.06331513407912479,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.45764732360839844,
+          "file": "hw5k_318.jpg",
+          "positive_score_mean": 0.10596929206369037,
+          "preserve_score_mean": 0.1321589683616697,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6124029159545898,
+          "file": "hw5k_335.jpg",
+          "positive_score_mean": 0.15131121204264017,
+          "preserve_score_mean": 0.1265058529004345,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7543001174926758,
+          "file": "hw5k_3385.jpg",
+          "positive_score_mean": 0.3093909717557568,
+          "preserve_score_mean": -0.020172736939254685,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6085977554321289,
+          "file": "hw5k_3582.jpg",
+          "positive_score_mean": -0.10913518306471195,
+          "preserve_score_mean": -0.13042766229657266,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6442060470581055,
+          "file": "hw5k_3600.jpg",
+          "positive_score_mean": 0.18260025852825879,
+          "preserve_score_mean": 0.06763158000017494,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7282094955444336,
+          "file": "hw5k_3993.jpg",
+          "positive_score_mean": 0.2960870058206086,
+          "preserve_score_mean": 0.009886429714281726,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5807600021362305,
+          "file": "hw5k_4082.jpg",
+          "positive_score_mean": 0.005383471089061233,
+          "preserve_score_mean": -0.049020097080558066,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7275524139404297,
+          "file": "hw5k_4154.jpg",
+          "positive_score_mean": -0.04245626045273852,
+          "preserve_score_mean": -0.14120409306323004,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6330356597900391,
+          "file": "hw5k_4171.jpg",
+          "positive_score_mean": 0.022014773237469722,
+          "preserve_score_mean": -0.0884951749067221,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6341543197631836,
+          "file": "hw5k_4189.jpg",
+          "positive_score_mean": -0.06075576076877999,
+          "preserve_score_mean": -0.10486214177689368,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7656068801879883,
+          "file": "hw5k_4243.jpg",
+          "positive_score_mean": 0.03218546916146511,
+          "preserve_score_mean": -0.10500602006944314,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8331336975097656,
+          "file": "hw5k_4261.jpg",
+          "positive_score_mean": -0.06424300143453174,
+          "preserve_score_mean": -0.15901586225291764,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6608066558837891,
+          "file": "hw5k_4279.jpg",
+          "positive_score_mean": -0.11310538929160888,
+          "preserve_score_mean": -0.15497334463615342,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8117847442626953,
+          "file": "hw5k_4421.jpg",
+          "positive_score_mean": -0.0632504694558739,
+          "preserve_score_mean": -0.15143725909263545,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7973947525024414,
+          "file": "hw5k_4493.jpg",
+          "positive_score_mean": -0.0780565507301431,
+          "preserve_score_mean": -0.1609305163860426,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.728917121887207,
+          "file": "hw5k_4528.jpg",
+          "positive_score_mean": 0.015844986397066347,
+          "preserve_score_mean": -0.12075765097217286,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6222734451293945,
+          "file": "hw5k_4636.jpg",
+          "positive_score_mean": 0.011146577493375536,
+          "preserve_score_mean": -0.12476045557185163,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6569032669067383,
+          "file": "hw5k_4654.jpg",
+          "positive_score_mean": -0.009282001311857233,
+          "preserve_score_mean": -0.12435973862865773,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7840557098388672,
+          "file": "hw5k_4850.jpg",
+          "positive_score_mean": 0.048954088429844736,
+          "preserve_score_mean": -0.11786096146578513,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7640953063964844,
+          "file": "hw5k_4885.jpg",
+          "positive_score_mean": 0.08762398242913977,
+          "preserve_score_mean": -0.11945028128210913,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7935113906860352,
+          "file": "hw5k_575.jpg",
+          "positive_score_mean": 0.26127127347824264,
+          "preserve_score_mean": 0.07066649493967628,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7712764739990234,
+          "file": "hw5k_72.jpg",
+          "positive_score_mean": 0.09019726438430947,
+          "preserve_score_mean": 0.014137683900901815,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7176284790039062,
+          "file": "hw5k_815.jpg",
+          "positive_score_mean": -0.01885947863432582,
+          "preserve_score_mean": -0.10000372013990068,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7193479537963867,
+          "file": "scut_411.jpg",
+          "positive_score_mean": 0.07584098630141409,
+          "preserve_score_mean": -0.029414851447059208,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6331634521484375,
+          "file": "scut_447.jpg",
+          "positive_score_mean": -0.03223466326611938,
+          "preserve_score_mean": -0.05194934689212629,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8665733337402344,
+          "file": "scut_494.jpg",
+          "positive_score_mean": 0.23858865840640012,
+          "preserve_score_mean": -0.057882045286667204,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7133722305297852,
+          "file": "scut_542.jpg",
+          "positive_score_mean": -0.00018483083847588115,
+          "preserve_score_mean": -0.06473783197796376,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.039661559824373284,
+      "preserve_score_mean": -0.07531645234067215,
+      "stage_channel_strata": {
+        "coarse_ic2_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6293579278085826,
+              "bin": 0,
+              "positive_count": 10031,
+              "preserve_count": 16817,
+              "sample_count": 26848
+            },
+            {
+              "auc": 0.617581940424844,
+              "bin": 1,
+              "positive_count": 11771,
+              "preserve_count": 15091,
+              "sample_count": 26862
+            },
+            {
+              "auc": 0.6367637810793962,
+              "bin": 2,
+              "positive_count": 12588,
+              "preserve_count": 10306,
+              "sample_count": 22894
+            },
+            {
+              "auc": 0.6500762764864844,
+              "bin": 3,
+              "positive_count": 13738,
+              "preserve_count": 5914,
+              "sample_count": 19652
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.01758454879745841,
+            0.029515580274164677,
+            0.05560299288481474
+          ]
+        },
+        "coarse_ic4_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6207713611966842,
+              "bin": 0,
+              "positive_count": 9523,
+              "preserve_count": 17029,
+              "sample_count": 26552
+            },
+            {
+              "auc": 0.6374148205485612,
+              "bin": 1,
+              "positive_count": 11487,
+              "preserve_count": 14665,
+              "sample_count": 26152
+            },
+            {
+              "auc": 0.6589414276371641,
+              "bin": 2,
+              "positive_count": 14393,
+              "preserve_count": 8745,
+              "sample_count": 23138
+            },
+            {
+              "auc": 0.6725191934693018,
+              "bin": 3,
+              "positive_count": 12725,
+              "preserve_count": 7689,
+              "sample_count": 20414
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.020497662015259266,
+            0.03870265930891037,
+            0.13262469694018364
+          ]
+        },
+        "coarse_refine_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6450612862070788,
+              "bin": 0,
+              "positive_count": 9349,
+              "preserve_count": 12539,
+              "sample_count": 21888
+            },
+            {
+              "auc": 0.6660630393974074,
+              "bin": 1,
+              "positive_count": 12172,
+              "preserve_count": 13792,
+              "sample_count": 25964
+            },
+            {
+              "auc": 0.680218449640429,
+              "bin": 2,
+              "positive_count": 13446,
+              "preserve_count": 15179,
+              "sample_count": 28625
+            },
+            {
+              "auc": 0.6945896060158694,
+              "bin": 3,
+              "positive_count": 13161,
+              "preserve_count": 6618,
+              "sample_count": 19779
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.027037893887609243,
+            0.043191300705075264,
+            0.07061954215168953
+          ]
+        },
+        "coarse_refine_signed_luma": {
+          "bins": [
+            {
+              "auc": 0.6755626206935338,
+              "bin": 0,
+              "positive_count": 16584,
+              "preserve_count": 6639,
+              "sample_count": 23223
+            },
+            {
+              "auc": 0.6586019809468859,
+              "bin": 1,
+              "positive_count": 10545,
+              "preserve_count": 13037,
+              "sample_count": 23582
+            },
+            {
+              "auc": 0.6566459834819272,
+              "bin": 2,
+              "positive_count": 10684,
+              "preserve_count": 14945,
+              "sample_count": 25629
+            },
+            {
+              "auc": 0.5750973885069414,
+              "bin": 3,
+              "positive_count": 10315,
+              "preserve_count": 13507,
+              "sample_count": 23822
+            }
+          ],
+          "fit_quartile_cuts": [
+            -0.004886441747657955,
+            0.01807446125894785,
+            0.04456501919776201
+          ]
+        }
+      },
+      "test_page_count": 47
+    },
+    {
+      "ablation_auc": 0.6073253784179687,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7570605114315619,
+          0.7624212566022914,
+          0.7663430628573183
+        ],
+        "feature_scale": [
+          0.18303022411435316,
+          0.16911238464603293,
+          0.17980372037553705
+        ],
+        "weights": [
+          -0.11009993377108292,
+          0.24577965175617775,
+          -0.41602684096758025,
+          -1.5543723131907377e-16
+        ]
+      },
+      "auc_margin": 0.03187481155395511,
+      "fit_page_count": 225,
+      "fold": 3,
+      "full_auc": 0.6392001899719238,
+      "full_fit": {
+        "feature_mean": [
+          0.00613422895135052,
+          0.06238599176960094,
+          0.04607354413207664,
+          0.08972164579282299
+        ],
+        "feature_scale": [
+          0.08771590392591547,
+          0.07116441282743827,
+          0.05495842624337575,
+          0.10772398523083844
+        ],
+        "weights": [
+          -0.18939182776997343,
+          -0.03846803488235446,
+          0.10097361716700932,
+          0.08587834951588406,
+          6.020094158770147e-18
+        ]
+      },
+      "page_auc_median": 0.6889023780822754,
+      "pages": [
+        {
+          "auc": 0.7864904403686523,
+          "file": "hw5k_1197.jpg",
+          "positive_score_mean": 0.08480686422423209,
+          "preserve_score_mean": -0.11553293639786227,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4409933090209961,
+          "file": "hw5k_121.jpg",
+          "positive_score_mean": 0.03823825801635605,
+          "preserve_score_mean": 0.0607263107612648,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7258214950561523,
+          "file": "hw5k_1215.jpg",
+          "positive_score_mean": -0.01410930121124097,
+          "preserve_score_mean": -0.12419728715885275,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9015083312988281,
+          "file": "hw5k_1233.jpg",
+          "positive_score_mean": 0.18210251568689495,
+          "preserve_score_mean": -0.02033702229084454,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7258081436157227,
+          "file": "hw5k_1430.jpg",
+          "positive_score_mean": 0.1480380290276101,
+          "preserve_score_mean": -0.0864024457755333,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6712408065795898,
+          "file": "hw5k_1483.jpg",
+          "positive_score_mean": 0.040056933053305405,
+          "preserve_score_mean": -0.11081076267041716,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7255640029907227,
+          "file": "hw5k_2328.jpg",
+          "positive_score_mean": 0.09632388926227085,
+          "preserve_score_mean": -0.04833346153059493,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7013092041015625,
+          "file": "hw5k_2364.jpg",
+          "positive_score_mean": 0.04398897244782504,
+          "preserve_score_mean": -0.06027346295805766,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7012271881103516,
+          "file": "hw5k_2400.jpg",
+          "positive_score_mean": 0.04992071133421662,
+          "preserve_score_mean": -0.06454370775090038,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7405071258544922,
+          "file": "hw5k_2453.jpg",
+          "positive_score_mean": 0.038260021429713124,
+          "preserve_score_mean": -0.10511696702439571,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7482767105102539,
+          "file": "hw5k_246.jpg",
+          "positive_score_mean": 0.12464744114267513,
+          "preserve_score_mean": 0.032229551732686476,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5973901748657227,
+          "file": "hw5k_2507.jpg",
+          "positive_score_mean": 0.6269961703792231,
+          "preserve_score_mean": 0.5241728647511525,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7013330459594727,
+          "file": "hw5k_2525.jpg",
+          "positive_score_mean": 0.004967819050260046,
+          "preserve_score_mean": -0.06503644033842677,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7148923873901367,
+          "file": "hw5k_2614.jpg",
+          "positive_score_mean": 0.01515878364862129,
+          "preserve_score_mean": -0.07328185246716984,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6555156707763672,
+          "file": "hw5k_264.jpg",
+          "positive_score_mean": 0.10159675815270838,
+          "preserve_score_mean": 0.04122035161092165,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5633478164672852,
+          "file": "hw5k_2792.jpg",
+          "positive_score_mean": -0.023013559993281387,
+          "preserve_score_mean": -0.043732244617832094,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6356010437011719,
+          "file": "hw5k_2882.jpg",
+          "positive_score_mean": 0.016379665032868064,
+          "preserve_score_mean": -0.03958795527838117,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5966320037841797,
+          "file": "hw5k_2953.jpg",
+          "positive_score_mean": 0.014207982676722289,
+          "preserve_score_mean": -0.0450626552727509,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6726951599121094,
+          "file": "hw5k_2989.jpg",
+          "positive_score_mean": -0.006147608556609982,
+          "preserve_score_mean": -0.054200475741209085,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4587287902832031,
+          "file": "hw5k_3097.jpg",
+          "positive_score_mean": 0.0024504014539671534,
+          "preserve_score_mean": 0.05138763731004961,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5703201293945312,
+          "file": "hw5k_3150.jpg",
+          "positive_score_mean": 0.0452970012906944,
+          "preserve_score_mean": 0.018602672668091277,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5604057312011719,
+          "file": "hw5k_3261.jpg",
+          "positive_score_mean": 0.025378378078159135,
+          "preserve_score_mean": 0.01220969905261496,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.594355583190918,
+          "file": "hw5k_3279.jpg",
+          "positive_score_mean": -0.001161250055819072,
+          "preserve_score_mean": -0.04085671725760133,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6791019439697266,
+          "file": "hw5k_3297.jpg",
+          "positive_score_mean": 0.09539638813363763,
+          "preserve_score_mean": -0.04507131485019221,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6378555297851562,
+          "file": "hw5k_3331.jpg",
+          "positive_score_mean": 0.13264426574081162,
+          "preserve_score_mean": 0.007565415224453621,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6937456130981445,
+          "file": "hw5k_3421.jpg",
+          "positive_score_mean": 0.06964439698422034,
+          "preserve_score_mean": -0.058800318905195305,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6409463882446289,
+          "file": "hw5k_3475.jpg",
+          "positive_score_mean": 0.40852646183252556,
+          "preserve_score_mean": 0.2351405996160899,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6923274993896484,
+          "file": "hw5k_3510.jpg",
+          "positive_score_mean": 0.23621906517311025,
+          "preserve_score_mean": 0.03849144260893188,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6901559829711914,
+          "file": "hw5k_3528.jpg",
+          "positive_score_mean": -0.012262975042497171,
+          "preserve_score_mean": -0.147248909422832,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.596653938293457,
+          "file": "hw5k_3546.jpg",
+          "positive_score_mean": 0.3296764687714551,
+          "preserve_score_mean": 0.18134278829358075,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4605865478515625,
+          "file": "hw5k_3779.jpg",
+          "positive_score_mean": 0.12302209677761904,
+          "preserve_score_mean": 0.11792687172591082,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5699863433837891,
+          "file": "hw5k_3867.jpg",
+          "positive_score_mean": -0.0029611792287171,
+          "preserve_score_mean": -0.022371961174225928,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5945835113525391,
+          "file": "hw5k_3885.jpg",
+          "positive_score_mean": 0.050218530959312724,
+          "preserve_score_mean": 0.01822992035186578,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6915283203125,
+          "file": "hw5k_3975.jpg",
+          "positive_score_mean": 0.2174758630225761,
+          "preserve_score_mean": -0.007155798921884603,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7186565399169922,
+          "file": "hw5k_406.jpg",
+          "positive_score_mean": 0.227397434907148,
+          "preserve_score_mean": 0.1624606015476378,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6876487731933594,
+          "file": "hw5k_4136.jpg",
+          "positive_score_mean": 0.23965906399408402,
+          "preserve_score_mean": 0.02792597634683425,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.750823974609375,
+          "file": "hw5k_4457.jpg",
+          "positive_score_mean": -0.0979645652051738,
+          "preserve_score_mean": -0.16749614003972146,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.71502685546875,
+          "file": "hw5k_4743.jpg",
+          "positive_score_mean": 0.012185015290050404,
+          "preserve_score_mean": -0.1289134351477271,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6466445922851562,
+          "file": "hw5k_4815.jpg",
+          "positive_score_mean": -0.0651195945480037,
+          "preserve_score_mean": -0.1287293061093349,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5485868453979492,
+          "file": "hw5k_4867.jpg",
+          "positive_score_mean": -0.10619424786036291,
+          "preserve_score_mean": -0.12785274884948622,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7118825912475586,
+          "file": "hw5k_5010.jpg",
+          "positive_score_mean": 0.010444688000871998,
+          "preserve_score_mean": -0.09242439907984933,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6862821578979492,
+          "file": "hw5k_708.jpg",
+          "positive_score_mean": 0.1626002814851444,
+          "preserve_score_mean": -0.01500052407011499,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7415628433227539,
+          "file": "hw5k_743.jpg",
+          "positive_score_mean": 0.1510604617566325,
+          "preserve_score_mean": -0.06765048362090936,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7516965866088867,
+          "file": "hw5k_833.jpg",
+          "positive_score_mean": 0.01568522878313613,
+          "preserve_score_mean": -0.09645881855885607,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7035818099975586,
+          "file": "hw5k_851.jpg",
+          "positive_score_mean": 0.002362508951658734,
+          "preserve_score_mean": -0.09216179330520742,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7032651901245117,
+          "file": "scut_415.jpg",
+          "positive_score_mean": 0.05191381317786646,
+          "preserve_score_mean": -0.040673353580250156,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8765182495117188,
+          "file": "scut_434.jpg",
+          "positive_score_mean": 0.2443043374587091,
+          "preserve_score_mean": -0.08488293984053683,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6333332061767578,
+          "file": "scut_473.jpg",
+          "positive_score_mean": -0.0601652265976573,
+          "preserve_score_mean": -0.07597303970993438,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.651031494140625,
+          "file": "scut_540.jpg",
+          "positive_score_mean": -0.0364898661925611,
+          "preserve_score_mean": -0.06743625659849668,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7074060440063477,
+          "file": "scut_544.jpg",
+          "positive_score_mean": -0.002866127218927748,
+          "preserve_score_mean": -0.06289549880269846,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.08101594929756083,
+      "preserve_score_mean": -0.021937414630323938,
+      "stage_channel_strata": {
+        "coarse_ic2_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6261540979616854,
+              "bin": 0,
+              "positive_count": 9569,
+              "preserve_count": 14938,
+              "sample_count": 24507
+            },
+            {
+              "auc": 0.5886035887520662,
+              "bin": 1,
+              "positive_count": 9668,
+              "preserve_count": 11787,
+              "sample_count": 21455
+            },
+            {
+              "auc": 0.605315052019578,
+              "bin": 2,
+              "positive_count": 12497,
+              "preserve_count": 11673,
+              "sample_count": 24170
+            },
+            {
+              "auc": 0.6090679813735694,
+              "bin": 3,
+              "positive_count": 19466,
+              "preserve_count": 12802,
+              "sample_count": 32268
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.017267154529690742,
+            0.0284434724599123,
+            0.05222529359161854
+          ]
+        },
+        "coarse_ic4_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6244766327626253,
+              "bin": 0,
+              "positive_count": 8781,
+              "preserve_count": 14192,
+              "sample_count": 22973
+            },
+            {
+              "auc": 0.6120169229538752,
+              "bin": 1,
+              "positive_count": 9600,
+              "preserve_count": 11982,
+              "sample_count": 21582
+            },
+            {
+              "auc": 0.6177405425406417,
+              "bin": 2,
+              "positive_count": 14242,
+              "preserve_count": 10956,
+              "sample_count": 25198
+            },
+            {
+              "auc": 0.6185735056367896,
+              "bin": 3,
+              "positive_count": 18577,
+              "preserve_count": 14070,
+              "sample_count": 32647
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.02000116789713502,
+            0.03627028502523899,
+            0.11770952679216862
+          ]
+        },
+        "coarse_refine_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6369899144506754,
+              "bin": 0,
+              "positive_count": 10772,
+              "preserve_count": 13530,
+              "sample_count": 24302
+            },
+            {
+              "auc": 0.6136735070839309,
+              "bin": 1,
+              "positive_count": 10967,
+              "preserve_count": 11738,
+              "sample_count": 22705
+            },
+            {
+              "auc": 0.6311408955529253,
+              "bin": 2,
+              "positive_count": 11618,
+              "preserve_count": 13516,
+              "sample_count": 25134
+            },
+            {
+              "auc": 0.6395608562961247,
+              "bin": 3,
+              "positive_count": 17843,
+              "preserve_count": 12416,
+              "sample_count": 30259
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.02712642913684249,
+            0.042682796716690063,
+            0.06783823482692242
+          ]
+        },
+        "coarse_refine_signed_luma": {
+          "bins": [
+            {
+              "auc": 0.6035810970901804,
+              "bin": 0,
+              "positive_count": 18303,
+              "preserve_count": 9141,
+              "sample_count": 27444
+            },
+            {
+              "auc": 0.6283201584940524,
+              "bin": 1,
+              "positive_count": 11239,
+              "preserve_count": 14848,
+              "sample_count": 26087
+            },
+            {
+              "auc": 0.6158439157821569,
+              "bin": 2,
+              "positive_count": 10193,
+              "preserve_count": 12810,
+              "sample_count": 23003
+            },
+            {
+              "auc": 0.5740685134981631,
+              "bin": 3,
+              "positive_count": 11465,
+              "preserve_count": 14401,
+              "sample_count": 25866
+            }
+          ],
+          "fit_quartile_cuts": [
+            -0.004330795723944902,
+            0.018675636500120163,
+            0.044442675076425076
+          ]
+        }
+      },
+      "test_page_count": 50
+    },
+    {
+      "ablation_auc": 0.6447839179966874,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7552267825509398,
+          0.7586726287985021,
+          0.7609432461638185
+        ],
+        "feature_scale": [
+          0.19039758773672796,
+          0.1767227189880938,
+          0.18663828557824963
+        ],
+        "weights": [
+          -0.11601826636005931,
+          0.2886763699583647,
+          -0.43571623890455896,
+          -1.189740995743629e-16
+        ]
+      },
+      "auc_margin": 0.007267964494091839,
+      "fit_page_count": 213,
+      "fold": 4,
+      "full_auc": 0.6520518824907793,
+      "full_fit": {
+        "feature_mean": [
+          0.005630287496408269,
+          0.06299271563956907,
+          0.049166053382381225,
+          0.09507407746727464
+        ],
+        "feature_scale": [
+          0.08715656695706633,
+          0.07046973696505983,
+          0.059776131799000126,
+          0.11112579011734262
+        ],
+        "weights": [
+          -0.19193484545082,
+          -0.03964907716127897,
+          0.09284874560070279,
+          0.08600495613312503,
+          4.8587314115398585e-18
+        ]
+      },
+      "page_auc_median": 0.6466522216796875,
+      "pages": [
+        {
+          "auc": 0.6317272186279297,
+          "file": "hw5k_1143.jpg",
+          "positive_score_mean": -0.03767020780077353,
+          "preserve_score_mean": -0.12872487948788486,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9043779373168945,
+          "file": "hw5k_1179.jpg",
+          "positive_score_mean": 0.18732103768795436,
+          "preserve_score_mean": -0.06910040752289284,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5735044479370117,
+          "file": "hw5k_1304.jpg",
+          "positive_score_mean": -0.08322830773446394,
+          "preserve_score_mean": -0.15587705778527217,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7375936508178711,
+          "file": "hw5k_139.jpg",
+          "positive_score_mean": 0.09129450416233358,
+          "preserve_score_mean": 0.02532572109799759,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7872533798217773,
+          "file": "hw5k_1412.jpg",
+          "positive_score_mean": 0.19264318562335997,
+          "preserve_score_mean": -0.08633710677792682,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6912212371826172,
+          "file": "hw5k_1465.jpg",
+          "positive_score_mean": 0.17410111737523695,
+          "preserve_score_mean": -0.06604187995602492,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6273632049560547,
+          "file": "hw5k_157.jpg",
+          "positive_score_mean": 0.03081095689291128,
+          "preserve_score_mean": 0.0005570810744814274,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6585912704467773,
+          "file": "hw5k_1791.jpg",
+          "positive_score_mean": 0.01716978971962569,
+          "preserve_score_mean": -0.11064503593758378,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6287326812744141,
+          "file": "hw5k_1809.jpg",
+          "positive_score_mean": 0.017291927843581877,
+          "preserve_score_mean": -0.12356889289644744,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8028583526611328,
+          "file": "hw5k_1844.jpg",
+          "positive_score_mean": 0.047095107365490774,
+          "preserve_score_mean": -0.1135778078275213,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.720088005065918,
+          "file": "hw5k_1898.jpg",
+          "positive_score_mean": 0.19154926611501344,
+          "preserve_score_mean": 0.040790134208269865,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5774736404418945,
+          "file": "hw5k_1916.jpg",
+          "positive_score_mean": -0.040456627654488056,
+          "preserve_score_mean": -0.1251154418383753,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6258258819580078,
+          "file": "hw5k_1970.jpg",
+          "positive_score_mean": 0.03922203539814089,
+          "preserve_score_mean": -0.10848787662772894,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5165653228759766,
+          "file": "hw5k_2023.jpg",
+          "positive_score_mean": -0.10335356192550535,
+          "preserve_score_mean": -0.10689043947342505,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6055240631103516,
+          "file": "hw5k_2148.jpg",
+          "positive_score_mean": -0.0746285411581111,
+          "preserve_score_mean": -0.12071671332445716,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7062845230102539,
+          "file": "hw5k_2274.jpg",
+          "positive_score_mean": -0.06563063490737604,
+          "preserve_score_mean": -0.11552984958379851,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7187156677246094,
+          "file": "hw5k_2436.jpg",
+          "positive_score_mean": -0.03330672818943346,
+          "preserve_score_mean": -0.10361805348697568,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6287317276000977,
+          "file": "hw5k_2489.jpg",
+          "positive_score_mean": -0.0392979313298007,
+          "preserve_score_mean": -0.10081923326373812,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7309885025024414,
+          "file": "hw5k_2561.jpg",
+          "positive_score_mean": -0.02480719808232871,
+          "preserve_score_mean": -0.1084636692053164,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5884313583374023,
+          "file": "hw5k_2579.jpg",
+          "positive_score_mean": -0.07635131981996814,
+          "preserve_score_mean": -0.10221869563954979,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6322917938232422,
+          "file": "hw5k_2597.jpg",
+          "positive_score_mean": 0.11319143923356653,
+          "preserve_score_mean": 0.004441734648836236,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6288423538208008,
+          "file": "hw5k_2650.jpg",
+          "positive_score_mean": -0.020775060454698832,
+          "preserve_score_mean": -0.06124320876980737,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5369815826416016,
+          "file": "hw5k_2668.jpg",
+          "positive_score_mean": -0.03811385263674464,
+          "preserve_score_mean": -0.044278547995834285,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6659393310546875,
+          "file": "hw5k_2722.jpg",
+          "positive_score_mean": -0.02416703325663856,
+          "preserve_score_mean": -0.06586234677399441,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6298284530639648,
+          "file": "hw5k_2828.jpg",
+          "positive_score_mean": -0.025684749086046964,
+          "preserve_score_mean": -0.0565974676688237,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6522531509399414,
+          "file": "hw5k_3007.jpg",
+          "positive_score_mean": 0.055836297837693644,
+          "preserve_score_mean": -0.05619237751718813,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6411600112915039,
+          "file": "hw5k_3043.jpg",
+          "positive_score_mean": -0.04419788311245871,
+          "preserve_score_mean": -0.06269321378880255,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5594758987426758,
+          "file": "hw5k_3243.jpg",
+          "positive_score_mean": -0.021564344019639286,
+          "preserve_score_mean": -0.04008754904675783,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7033071517944336,
+          "file": "hw5k_3349.jpg",
+          "positive_score_mean": 0.18531448251163238,
+          "preserve_score_mean": -0.025660671922915167,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6873540878295898,
+          "file": "hw5k_3367.jpg",
+          "positive_score_mean": 0.24194076863432448,
+          "preserve_score_mean": 0.01142012669550269,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6440706253051758,
+          "file": "hw5k_3403.jpg",
+          "positive_score_mean": 0.02115253900333127,
+          "preserve_score_mean": -0.08032868669448424,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6060390472412109,
+          "file": "hw5k_3439.jpg",
+          "positive_score_mean": 0.04297885635474914,
+          "preserve_score_mean": -0.0637804419319155,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5511922836303711,
+          "file": "hw5k_3654.jpg",
+          "positive_score_mean": -0.17275352304707908,
+          "preserve_score_mean": -0.19800222191701167,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6372413635253906,
+          "file": "hw5k_3689.jpg",
+          "positive_score_mean": -0.045964587945336956,
+          "preserve_score_mean": -0.07015869752801573,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4363136291503906,
+          "file": "hw5k_3815.jpg",
+          "positive_score_mean": -0.018038865363150233,
+          "preserve_score_mean": 0.01809816466343358,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6420392990112305,
+          "file": "hw5k_3903.jpg",
+          "positive_score_mean": 0.03822249787657075,
+          "preserve_score_mean": -0.05223708588897082,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6204729080200195,
+          "file": "hw5k_3957.jpg",
+          "positive_score_mean": 0.16153094610667823,
+          "preserve_score_mean": 0.04791843824335192,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6918916702270508,
+          "file": "hw5k_4046.jpg",
+          "positive_score_mean": 0.08458493649622262,
+          "preserve_score_mean": -0.06171983345740849,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6388692855834961,
+          "file": "hw5k_4064.jpg",
+          "positive_score_mean": 0.10917252991557716,
+          "preserve_score_mean": -0.03992374673596796,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.639556884765625,
+          "file": "hw5k_4207.jpg",
+          "positive_score_mean": -0.08720504289963239,
+          "preserve_score_mean": -0.12774928764853666,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4060382843017578,
+          "file": "hw5k_424.jpg",
+          "positive_score_mean": 0.052058324111416004,
+          "preserve_score_mean": 0.09270848778378099,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7652702331542969,
+          "file": "hw5k_4297.jpg",
+          "positive_score_mean": -0.0767329806029054,
+          "preserve_score_mean": -0.15733164869468497,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.820220947265625,
+          "file": "hw5k_4367.jpg",
+          "positive_score_mean": -0.08248687643358836,
+          "preserve_score_mean": -0.17468857017443687,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.788792610168457,
+          "file": "hw5k_4403.jpg",
+          "positive_score_mean": -0.0852808975321771,
+          "preserve_score_mean": -0.16755930166982103,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7709684371948242,
+          "file": "hw5k_4475.jpg",
+          "positive_score_mean": -0.09307728017683303,
+          "preserve_score_mean": -0.17069653512176702,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6492338180541992,
+          "file": "hw5k_4510.jpg",
+          "positive_score_mean": -0.045613921911469964,
+          "preserve_score_mean": -0.12978535905204389,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5610895156860352,
+          "file": "hw5k_4582.jpg",
+          "positive_score_mean": -0.09931077508578195,
+          "preserve_score_mean": -0.1283170477458216,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7358493804931641,
+          "file": "hw5k_4600.jpg",
+          "positive_score_mean": 0.0023431315369578974,
+          "preserve_score_mean": -0.1321321930959471,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7248620986938477,
+          "file": "hw5k_4707.jpg",
+          "positive_score_mean": 0.005339399404497594,
+          "preserve_score_mean": -0.1263318770602201,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6933603286743164,
+          "file": "hw5k_4833.jpg",
+          "positive_score_mean": 0.04579964864185661,
+          "preserve_score_mean": -0.12740459933513834,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6297187805175781,
+          "file": "hw5k_4939.jpg",
+          "positive_score_mean": -0.047637942643925346,
+          "preserve_score_mean": -0.08028162890314204,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7307748794555664,
+          "file": "hw5k_4975.jpg",
+          "positive_score_mean": 0.05464406266778139,
+          "preserve_score_mean": -0.0796763376447802,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5770425796508789,
+          "file": "hw5k_4993.jpg",
+          "positive_score_mean": -0.05415300037022015,
+          "preserve_score_mean": -0.07926059081714797,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6735944747924805,
+          "file": "hw5k_5046.jpg",
+          "positive_score_mean": 0.007223371348308979,
+          "preserve_score_mean": -0.08183467796919633,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7322635650634766,
+          "file": "hw5k_5118.jpg",
+          "positive_score_mean": -0.01811865910581198,
+          "preserve_score_mean": -0.08120615170586234,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8346881866455078,
+          "file": "hw5k_521.jpg",
+          "positive_score_mean": 0.3754908050271577,
+          "preserve_score_mean": 0.06905668752588526,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6273374557495117,
+          "file": "hw5k_629.jpg",
+          "positive_score_mean": 0.2392981428912978,
+          "preserve_score_mean": 0.1342886238855411,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7527122497558594,
+          "file": "hw5k_869.jpg",
+          "positive_score_mean": -0.056808078740868996,
+          "preserve_score_mean": -0.13088207445790906,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5341148376464844,
+          "file": "hw5k_93.jpg",
+          "positive_score_mean": 0.014500182949929028,
+          "preserve_score_mean": -0.001912321684632779,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8556575775146484,
+          "file": "scut_433.jpg",
+          "positive_score_mean": 0.24634882021138574,
+          "preserve_score_mean": -0.07925350810019696,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8170251846313477,
+          "file": "scut_437.jpg",
+          "positive_score_mean": 0.1953927139505545,
+          "preserve_score_mean": -0.08188574348127328,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8431873321533203,
+          "file": "scut_518.jpg",
+          "positive_score_mean": 0.26992887987669895,
+          "preserve_score_mean": -0.04032732711769489,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.029264117608783554,
+      "preserve_score_mean": -0.07352275354719337,
+      "stage_channel_strata": {
+        "coarse_ic2_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6062455859628505,
+              "bin": 0,
+              "positive_count": 12441,
+              "preserve_count": 19626,
+              "sample_count": 32067
+            },
+            {
+              "auc": 0.6100539284137876,
+              "bin": 1,
+              "positive_count": 15662,
+              "preserve_count": 18302,
+              "sample_count": 33964
+            },
+            {
+              "auc": 0.6221772498284328,
+              "bin": 2,
+              "positive_count": 17329,
+              "preserve_count": 15969,
+              "sample_count": 33298
+            },
+            {
+              "auc": 0.6460448215949018,
+              "bin": 3,
+              "positive_count": 18056,
+              "preserve_count": 9591,
+              "sample_count": 27647
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.017386185470968485,
+            0.029213642701506615,
+            0.055495074950158596
+          ]
+        },
+        "coarse_ic4_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.593798323191328,
+              "bin": 0,
+              "positive_count": 11922,
+              "preserve_count": 20997,
+              "sample_count": 32919
+            },
+            {
+              "auc": 0.6313671736044622,
+              "bin": 1,
+              "positive_count": 15798,
+              "preserve_count": 18830,
+              "sample_count": 34628
+            },
+            {
+              "auc": 0.636461609562986,
+              "bin": 2,
+              "positive_count": 19976,
+              "preserve_count": 12288,
+              "sample_count": 32264
+            },
+            {
+              "auc": 0.6665204269857928,
+              "bin": 3,
+              "positive_count": 15792,
+              "preserve_count": 11373,
+              "sample_count": 27165
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.020367213524878025,
+            0.03858456574380398,
+            0.13401873409748077
+          ]
+        },
+        "coarse_refine_abs_rgb": {
+          "bins": [
+            {
+              "auc": 0.6457302087613513,
+              "bin": 0,
+              "positive_count": 15492,
+              "preserve_count": 19151,
+              "sample_count": 34643
+            },
+            {
+              "auc": 0.6410191963505228,
+              "bin": 1,
+              "positive_count": 15660,
+              "preserve_count": 17240,
+              "sample_count": 32900
+            },
+            {
+              "auc": 0.6473494597442854,
+              "bin": 2,
+              "positive_count": 14039,
+              "preserve_count": 15899,
+              "sample_count": 29938
+            },
+            {
+              "auc": 0.6763943102176592,
+              "bin": 3,
+              "positive_count": 18297,
+              "preserve_count": 11198,
+              "sample_count": 29495
+            }
+          ],
+          "fit_quartile_cuts": [
+            0.027562168426811695,
+            0.043738679960370064,
+            0.06996886804699898
+          ]
+        },
+        "coarse_refine_signed_luma": {
+          "bins": [
+            {
+              "auc": 0.6472107878197165,
+              "bin": 0,
+              "positive_count": 19817,
+              "preserve_count": 8078,
+              "sample_count": 27895
+            },
+            {
+              "auc": 0.6552521641541494,
+              "bin": 1,
+              "positive_count": 14243,
+              "preserve_count": 17455,
+              "sample_count": 31698
+            },
+            {
+              "auc": 0.6193990233419338,
+              "bin": 2,
+              "positive_count": 14201,
+              "preserve_count": 18964,
+              "sample_count": 33165
+            },
+            {
+              "auc": 0.5636824571829808,
+              "bin": 3,
+              "positive_count": 15227,
+              "preserve_count": 18991,
+              "sample_count": 34218
+            }
+          ],
+          "fit_quartile_cuts": [
+            -0.005509927519597113,
+            0.01764047984033823,
+            0.04391990602016449
+          ]
+        }
+      },
+      "test_page_count": 62
+    }
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "ledger_path": "docs/current-primary-quality-loop-ledger.json",
+  "materialization": {
+    "content_sha256": "494285507902346db8e008716cb342f661731ff1aa5e4b4ff4a96b004467c365",
+    "manifest_path": "outputs/reconstruction-stage-disagreement-materialization-20260812/manifest.json",
+    "manifest_sha256": "1f17a884735614303a5340cefcfc5962b5c15677b288d56f65a4ed850d9147c6",
+    "provenance": "networks.generator.Generator.forward via utils.page_inference full-page patch schedule",
+    "target_access": false,
+    "train_count": 275
+  },
+  "next_boundary": "close_exact_reconstruction_stage_disagreement_diagnostic",
+  "page_samples": [
+    {
+      "file": "hw5k_1011.jpg",
+      "fold": 2,
+      "npz_sha256": "ce8e750cb83aec6fb62e537bf3b7399ba813dd0771dda83a9fa6886047d1dc79",
+      "positive_pixel_count": 1314626,
+      "preserve_pixel_count": 2872858,
+      "sample_sha256": "a1c748a4bf3f3b986e3cd398cd66f9d9972f4fb0776260c562e4a4f556a61fce",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1029.jpg",
+      "fold": 0,
+      "npz_sha256": "663c793c62a187af04472ea2dd4f8858b54d76dcaaf514527aae29d46172f22e",
+      "positive_pixel_count": 627357,
+      "preserve_pixel_count": 3560127,
+      "sample_sha256": "b024a868f0ce984da98c94a03d9b800b3c098e7060535e3e0fb01223164e6640",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1046.jpg",
+      "fold": 2,
+      "npz_sha256": "838039ea063fac4a8068290932c75eb657d3cc78acc8da8507c1572c6d92800e",
+      "positive_pixel_count": 1432088,
+      "preserve_pixel_count": 2755396,
+      "sample_sha256": "181109462711098ef273ff0534fba4cbc163b6cec715ed212d8c20d88a5addc9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1125.jpg",
+      "fold": 1,
+      "npz_sha256": "786ff816a1c09f972e5cf13cee6634bcb25d2c7096a3c59ea485e891592ee77d",
+      "positive_pixel_count": 820909,
+      "preserve_pixel_count": 3366575,
+      "sample_sha256": "073de7d71aa702969ecf89ab34a465dea29b77fa260c5e0f554f9cce7ef1a670",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1143.jpg",
+      "fold": 4,
+      "npz_sha256": "65df7083720da961594e674efda3e11620157177dc68b161137eeebb0f044f28",
+      "positive_pixel_count": 590174,
+      "preserve_pixel_count": 3597310,
+      "sample_sha256": "a13a5ede9bde93fbd94aede345808c3de8a856aa4a723b7491fb1add3cc64af2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1161.jpg",
+      "fold": 2,
+      "npz_sha256": "a5b71822d8f0839a190574bc97933ef1054b09b5d512b44dc7f2194c40f12b00",
+      "positive_pixel_count": 522645,
+      "preserve_pixel_count": 3664839,
+      "sample_sha256": "eda6a3241c417afaa5ac2da96302f73b4b3c0f9ed05fdbdcb9b64d1a9e42e883",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1179.jpg",
+      "fold": 4,
+      "npz_sha256": "458c8707cf1e958edff00cc74789fa70a38d6d5b9880d28abc956965fa788a3c",
+      "positive_pixel_count": 596991,
+      "preserve_pixel_count": 3590493,
+      "sample_sha256": "adaa06efdce73a8baaab6a06c3cb60407b307e1640765442775f3a18df182b19",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1197.jpg",
+      "fold": 3,
+      "npz_sha256": "6ce0cae6935f9672df0d40d4689bf831d636d6a95a93488a2cf887d31fc9922b",
+      "positive_pixel_count": 432080,
+      "preserve_pixel_count": 3755404,
+      "sample_sha256": "21dba72cf32029b5392e9ff12b55242587ac8d7accc4d55f1251a829a258b320",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_121.jpg",
+      "fold": 3,
+      "npz_sha256": "c72c81100b20346e4c16ff7fabab786cb5778ab8a1593525c0776f747690c7e2",
+      "positive_pixel_count": 3532359,
+      "preserve_pixel_count": 3133095,
+      "sample_sha256": "4a58dcfab9cdf9de5577c5e0af20f961993c2ae542d709ff5fa18054781bfb68",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1215.jpg",
+      "fold": 3,
+      "npz_sha256": "a1503a66eacd7f4f1268c3a6405ba7f46f5890eec1bf4533de4ed24fbc446168",
+      "positive_pixel_count": 390985,
+      "preserve_pixel_count": 3796499,
+      "sample_sha256": "4104138581a7f016f6ebf8f13926a7f38c520c7d7f30ef1480b11ea3badc80de",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1233.jpg",
+      "fold": 3,
+      "npz_sha256": "80f255562e7c35dceab66f2913e79de677b35365a59a2671881021e2c7407226",
+      "positive_pixel_count": 705526,
+      "preserve_pixel_count": 3481958,
+      "sample_sha256": "ce8d903c74986d3ed6fcd0f351385cdd30e22f77b12b9e93359cfee02dd229a5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1251.jpg",
+      "fold": 2,
+      "npz_sha256": "42a6d99540cc163c208e5ea391e560557022439f2b5f765a68e4d8ce84650121",
+      "positive_pixel_count": 1144421,
+      "preserve_pixel_count": 3043063,
+      "sample_sha256": "bed4c265a36915c018c01ad4c8574f25c99d17589ba0344914340f43e4e07b2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1269.jpg",
+      "fold": 0,
+      "npz_sha256": "b68119198b80270aee28ee4e9d758f2682298ea7516bd51196379125aba9d827",
+      "positive_pixel_count": 1726515,
+      "preserve_pixel_count": 2460969,
+      "sample_sha256": "e9622c31ea1cf1f799b722dab2353da61e315b8118215f6927e0a478ea90b3a4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1286.jpg",
+      "fold": 0,
+      "npz_sha256": "009d10874c4edae4a076d8ae5049e411fa7d5ee6caa36f2ba7b348c1d634356e",
+      "positive_pixel_count": 633065,
+      "preserve_pixel_count": 3554419,
+      "sample_sha256": "cf8f55a9a8c853e8f3bb742af12acdf428be5959889294d067f4ee682d5e2e0e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1304.jpg",
+      "fold": 4,
+      "npz_sha256": "e5c3dc0b5ed07d85aebd56cd15266e4e10cf0fc68bf37298eb290a051829d0e0",
+      "positive_pixel_count": 664713,
+      "preserve_pixel_count": 3400348,
+      "sample_sha256": "23433e43321ec8483c4ee032ea19e219c7f5f5de26eb1146285201cb388d2552",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1322.jpg",
+      "fold": 1,
+      "npz_sha256": "e7045a7dda25daf57aac37e1796f5f983df6ecb9dc4698e60508e3fe746fc271",
+      "positive_pixel_count": 427930,
+      "preserve_pixel_count": 3637131,
+      "sample_sha256": "6e0ddff5c11ca961468b36481a04af29a4db8ff62cef542ad9ceb42331772d4a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1340.jpg",
+      "fold": 0,
+      "npz_sha256": "164f5f86309028c1e06c408cb749edcd316e63b28225e46ec5f9d4c68edefcba",
+      "positive_pixel_count": 208490,
+      "preserve_pixel_count": 3856571,
+      "sample_sha256": "5e9d018076a66265b9317812d541c6175327dd6b8c7abf7f5358383acbffaaa4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1358.jpg",
+      "fold": 0,
+      "npz_sha256": "391ab58e8e9e1ad42bfc74d9d287291e44d1972c5dc1de694b3e5dbd79247e73",
+      "positive_pixel_count": 1068289,
+      "preserve_pixel_count": 2996772,
+      "sample_sha256": "0e7807d8537643d774a1e08719d0d106eab4f01a326b6c5b5ec7a80c1fd16f36",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1376.jpg",
+      "fold": 2,
+      "npz_sha256": "fbf745465ff553e20dd5a12e0aa63784a6d148690517b4424fa80b9f03ee49d7",
+      "positive_pixel_count": 930668,
+      "preserve_pixel_count": 5665108,
+      "sample_sha256": "a0aeaaac4151350df323b0fd47b5c5d9810821535fa16a509b3dbd0cef20c84e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_139.jpg",
+      "fold": 4,
+      "npz_sha256": "f9d883e49732950e3b6ef6dfa94c24cfe5f2a2461d9819e03425a1edd3ea55a6",
+      "positive_pixel_count": 702708,
+      "preserve_pixel_count": 5962746,
+      "sample_sha256": "c9c83beff0fc53c1abe213d482a84c7b0836b0130510de71062848d5aafd3a03",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1394.jpg",
+      "fold": 2,
+      "npz_sha256": "3c0feaa6350ddc34d508f842f7d9f51cfad5a0e3e6ba80763986cab004a05f9c",
+      "positive_pixel_count": 693930,
+      "preserve_pixel_count": 5901846,
+      "sample_sha256": "6b9e36c223f7a63e7733b3d60e473f6db0e878afb1d0799dd334668dd15262c9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1412.jpg",
+      "fold": 4,
+      "npz_sha256": "a6329639d251123473587daddc4f3e6da2e7aa716521e3739a0ef3ae8205b09d",
+      "positive_pixel_count": 1284288,
+      "preserve_pixel_count": 5311488,
+      "sample_sha256": "d11b224df2f6456618ead838a1ddba654110c57bc0e9fda84400af3f4ca9011e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1430.jpg",
+      "fold": 3,
+      "npz_sha256": "c5ab25f9ce9513e7918c87d9d77fce9d0c1b6f7bf676c7662de67c66efdfa74e",
+      "positive_pixel_count": 1487550,
+      "preserve_pixel_count": 5108226,
+      "sample_sha256": "e2c28f5dbe4bc1f925a43561a2a3322a745e782516a0c3b75b52454257255c5c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1447.jpg",
+      "fold": 0,
+      "npz_sha256": "a5cb39fd0dd9dd7036960b2f606ce45afe5ce8745691599900aa334908b92cb8",
+      "positive_pixel_count": 555250,
+      "preserve_pixel_count": 6040526,
+      "sample_sha256": "749a296bdb8bf15f7d8bf4c41af7f951c18b740a84b86632021c0e2a0da94f18",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1465.jpg",
+      "fold": 4,
+      "npz_sha256": "d303c3f80c15aadbcf420458c02a9a8cb6f472748bf9a6c8821c2cc4e532c1bb",
+      "positive_pixel_count": 1280253,
+      "preserve_pixel_count": 5315523,
+      "sample_sha256": "1044c8773c84ad9ef6e6fa6300e55e1cf77ddc670f01533ca88b1a2b103784ba",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1483.jpg",
+      "fold": 3,
+      "npz_sha256": "2c86d2ee40d50b283b84e59e7f93ad36f8a0b4b3f5fadb0e46f9d7628a9800cf",
+      "positive_pixel_count": 888620,
+      "preserve_pixel_count": 5707156,
+      "sample_sha256": "73447ee290bc53347a7067d4ba732f2cdb767f5767c6560aab43fd09c5a3d9d3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1501.jpg",
+      "fold": 1,
+      "npz_sha256": "e9565ee0c6864a1c4db1d6c6032c17b12aa3c6f28e61399e0cb3fcc223df3bd5",
+      "positive_pixel_count": 502366,
+      "preserve_pixel_count": 6034749,
+      "sample_sha256": "f7d709103ae36b84e0fd70ab35b3792a9e6babe22258eace2921763c2bc92e33",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1519.jpg",
+      "fold": 1,
+      "npz_sha256": "3eab7aac2024b21f0e6acde81d79bd01dea299e68bf9945dabca8101ed27c3fb",
+      "positive_pixel_count": 1773069,
+      "preserve_pixel_count": 4764046,
+      "sample_sha256": "6da162565191ab6d259d6de8a0af591f90a33905f28fd9f189e308a6e2b755d0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1537.jpg",
+      "fold": 0,
+      "npz_sha256": "7db97afcb18c75e7f6a403646367ea8f05c220607fe276d757a620ed30fae7fb",
+      "positive_pixel_count": 1888360,
+      "preserve_pixel_count": 4648755,
+      "sample_sha256": "98c14409cd78d419a120e77ee4d393216abb0353e65244b3d5e5c97a7cbfb69e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_157.jpg",
+      "fold": 4,
+      "npz_sha256": "b6c826f599ba9ed8c30a549cf6c6ca42614e7455f226dd134b7f98bf9effd5a8",
+      "positive_pixel_count": 1109151,
+      "preserve_pixel_count": 5556303,
+      "sample_sha256": "de5a12b45801c960a5b5db024bad77392441b42416e285c68ca7053409a41410",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1612.jpg",
+      "fold": 1,
+      "npz_sha256": "5539bc5c2e0dbc9fb1a032b37d476c6c4d15ee83df283e403d899f8c05127e87",
+      "positive_pixel_count": 1140932,
+      "preserve_pixel_count": 5396183,
+      "sample_sha256": "d8b23b879b07dd94d8cf9f8fac05b444f64ce9d58579255f17fefd9e9dd31c63",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1630.jpg",
+      "fold": 1,
+      "npz_sha256": "ef08c60b40ad4ffdadc370c972aada9d9e5bd63b5fa6090e627d1b1aa9962a7a",
+      "positive_pixel_count": 654280,
+      "preserve_pixel_count": 5882835,
+      "sample_sha256": "d9b30fcdca0a8c1d649325d4b4e60a2f2e4e4b275fb685252b6ef8c33d60fce4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1648.jpg",
+      "fold": 1,
+      "npz_sha256": "dac4c0e79833aec8e6a46d90b33ed191aa1efc2a2c3ed713a49895c696be109c",
+      "positive_pixel_count": 391335,
+      "preserve_pixel_count": 6145780,
+      "sample_sha256": "f8fe59b36957a801b5e08d8c6e247b6dd9a370e8a1cf3246f337464c4f9749d4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1665.jpg",
+      "fold": 1,
+      "npz_sha256": "493cfac1494913b27746889081fb3d74462e71440b3bec74e33cda3293e0012a",
+      "positive_pixel_count": 226654,
+      "preserve_pixel_count": 6310461,
+      "sample_sha256": "9e3782af49a082a991725a7d46a08e8a9ff716228dd05c248a92b35d207c452f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1683.jpg",
+      "fold": 2,
+      "npz_sha256": "dd7995ba9610ff05dcab6ebfae46144cf483adb89a3049fb4cee0589d7957f06",
+      "positive_pixel_count": 382576,
+      "preserve_pixel_count": 6154539,
+      "sample_sha256": "01165d5790ecd8b423c44a7731f6121efb23dddf9c79d323e2ae1ca1302b6ec0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1701.jpg",
+      "fold": 1,
+      "npz_sha256": "3adbafb4d6cbdf07b3f2e0d2a4320384b066b5b736dd3ad867fa47814b147d27",
+      "positive_pixel_count": 625062,
+      "preserve_pixel_count": 5912053,
+      "sample_sha256": "cf1f14d71ef08d4ede2cf32618c9a14a0fbcaa7f4f846191fec67f3e66bb587b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1719.jpg",
+      "fold": 1,
+      "npz_sha256": "c4f5a7a6c19ec86adb9f1fce097f3013b302239d10a987c4cc372acee49ff726",
+      "positive_pixel_count": 662569,
+      "preserve_pixel_count": 5874546,
+      "sample_sha256": "c0f50538a061161c2b344a06446a8eecb268806e10e8c18679508e0d621d3167",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1737.jpg",
+      "fold": 2,
+      "npz_sha256": "5b1c2a4913e501688591643b8c61d7bdfd354465daafd2365fbd8f16e1bd9ac7",
+      "positive_pixel_count": 517829,
+      "preserve_pixel_count": 6019286,
+      "sample_sha256": "5b8971981c73f173008d27cedf1db33d19495184528b298f9647b224b8022aa6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_175.jpg",
+      "fold": 1,
+      "npz_sha256": "37261842e1888cc19739f4b28e76c4f88742a9287879a87bd052af3995b78917",
+      "positive_pixel_count": 637573,
+      "preserve_pixel_count": 6027881,
+      "sample_sha256": "06278f49f67c55d98ff6267e04d42b2fcaf55a5cf0ae552942ab26a84a09a4fa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1755.jpg",
+      "fold": 2,
+      "npz_sha256": "72abc45c1b02d619eb61c82eaac3cd05d8f591f293163d87d32c1df8d48a2ae6",
+      "positive_pixel_count": 640449,
+      "preserve_pixel_count": 5896666,
+      "sample_sha256": "89f8b4a5d48af76125621d52e1a1a5a8df14da45d6692b4538c3b8a4d5ff37d5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1773.jpg",
+      "fold": 1,
+      "npz_sha256": "74f091216707bd27ec89bed7659ea2c7b804453c23648aad970f64256ac52017",
+      "positive_pixel_count": 1126610,
+      "preserve_pixel_count": 5410505,
+      "sample_sha256": "af2bf1ae690dbfed62feeb56f2210cf4fc2ef9f8264ddbd1be4f79ae9ec6fb2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1791.jpg",
+      "fold": 4,
+      "npz_sha256": "48c4964ccb01d2c757d279d2fe3c01671f00e7de035ae9ee9e3778f4ccf38b49",
+      "positive_pixel_count": 603901,
+      "preserve_pixel_count": 5933214,
+      "sample_sha256": "294adafc35d8cbc34633a8e1e20d1b9e906d06aac7ad4821173f246f8ad44dee",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1809.jpg",
+      "fold": 4,
+      "npz_sha256": "b62b12b8353fbe0c950bf02b999ab7c48a7255c8215f254de5354e394a2ed347",
+      "positive_pixel_count": 444545,
+      "preserve_pixel_count": 6092570,
+      "sample_sha256": "1e009e4222885acf520c8972c0faa8e5a688b8c6e6a1818f785259be29ae3913",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1827.jpg",
+      "fold": 0,
+      "npz_sha256": "753bca789b841c78327ba679900174a7a7f924e7f5fd9f9755ea82cc14c34148",
+      "positive_pixel_count": 355012,
+      "preserve_pixel_count": 6182103,
+      "sample_sha256": "b48f330da3384e1f0b5ab3ef1de5b4434c7218c1ec03141c1511b8d40e58f9d8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1844.jpg",
+      "fold": 4,
+      "npz_sha256": "8bb087ad13bd5143275281d30e7e43c768bc5fa119509a41c1127f022d96b43c",
+      "positive_pixel_count": 933635,
+      "preserve_pixel_count": 5603480,
+      "sample_sha256": "87f1acec65981594977d210e1e66f45263c7471e20830b0645a7a1cd8351172f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1862.jpg",
+      "fold": 2,
+      "npz_sha256": "b70ecf7738fd902054383c58055d9542d81cf11e470647356a636b0a2fbd4297",
+      "positive_pixel_count": 526949,
+      "preserve_pixel_count": 6010166,
+      "sample_sha256": "129b5d78123ee40081bf6ac83cb6b723e381910e34ec811fd22850b9cfc5f212",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1880.jpg",
+      "fold": 1,
+      "npz_sha256": "e3bddc59f74f885d0e6a4346cc6e58ac909ded31159aa52948ba9a7253bf2958",
+      "positive_pixel_count": 880123,
+      "preserve_pixel_count": 5656992,
+      "sample_sha256": "fc95d012ea01f4ca5b212ad6315db7b0107746940cd393318f9d54603417c5ef",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1898.jpg",
+      "fold": 4,
+      "npz_sha256": "562fb58d86c657b3a1a4606c0263eac686555c3b6ac96ecdb42efda10e3ada39",
+      "positive_pixel_count": 945172,
+      "preserve_pixel_count": 5591943,
+      "sample_sha256": "87de29b2d9161180784d672f5437870aebcceeb380e4cd3d6859a3bf6e328a75",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1916.jpg",
+      "fold": 4,
+      "npz_sha256": "e10d85f77f3337fe9ea939743627acf1a61cb873370f2c9e59b996443bca184f",
+      "positive_pixel_count": 337526,
+      "preserve_pixel_count": 6199589,
+      "sample_sha256": "002cbe5858f2bee625695c1ff9138440fba1b4a174436084180afe2078407d47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_193.jpg",
+      "fold": 1,
+      "npz_sha256": "575a86779bf5582a38d90d9c9cb1f9659f3ad0d15435e3a230ea56dbedd65029",
+      "positive_pixel_count": 1523401,
+      "preserve_pixel_count": 5142053,
+      "sample_sha256": "4a26de61f604df5568a18eb5265d8b76ed502b8db81bb7f9dfb86462cb913936",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1934.jpg",
+      "fold": 2,
+      "npz_sha256": "6a314b4fd310b34097b7314149fae002e5c2f5a8b3f4ba811c49a4cce67f3dde",
+      "positive_pixel_count": 929011,
+      "preserve_pixel_count": 5608104,
+      "sample_sha256": "125f17b84e369673236d17a08fdeb07e6ad001030a1c24216d4e5fd527b59942",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1952.jpg",
+      "fold": 1,
+      "npz_sha256": "439bc5189cf78cc2f3817e6552e75a188a30b03cfbc82b6889dbb0eda7ce9dc5",
+      "positive_pixel_count": 556674,
+      "preserve_pixel_count": 5980441,
+      "sample_sha256": "a64de6450f923e3f2bb09ff3c9caafaa72f9f66dc6b50bd8d089a6bfc02a66a5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1970.jpg",
+      "fold": 4,
+      "npz_sha256": "8c2e0a1fe226deb32fa4518fd2c62f1730e56e1342c70b4eed0281e13c6f3cce",
+      "positive_pixel_count": 516589,
+      "preserve_pixel_count": 6020526,
+      "sample_sha256": "693771d9ad1c823b53d884f3025e2d0c3ac9bf7689d597bfa5d13ec17f5c7117",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1988.jpg",
+      "fold": 2,
+      "npz_sha256": "f4e9effbb3bdc9cc01f1a6c87f1a8b1fdf6c4b640b7f4905717a3a880655841c",
+      "positive_pixel_count": 618474,
+      "preserve_pixel_count": 5918641,
+      "sample_sha256": "a4f87faa94142116c06651155d77b9e3cb55ccef3e95dd7efa29fb555017cec7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2005.jpg",
+      "fold": 0,
+      "npz_sha256": "178144d7ebc756514fe4118c54a23123a2028838bea5d199cb9af676eb0bb253",
+      "positive_pixel_count": 976395,
+      "preserve_pixel_count": 3343305,
+      "sample_sha256": "c24bfd81184120c7a8a4715006456c2256c871dba30cb21d68649df7015d3dd6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2023.jpg",
+      "fold": 4,
+      "npz_sha256": "a227410eb999d1739a43e24e51f14cd68f5ef2358b71a58bb6b7e369d5c5c06d",
+      "positive_pixel_count": 1399071,
+      "preserve_pixel_count": 2920629,
+      "sample_sha256": "ccb300c26c788511b6f9ccf8c3711cda48744f766c615210e1078b2541fa3194",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2041.jpg",
+      "fold": 0,
+      "npz_sha256": "1f25b708e1b90bf2091d7f7852065f1460e985b1b0a112398905b388927e2e88",
+      "positive_pixel_count": 955832,
+      "preserve_pixel_count": 3363868,
+      "sample_sha256": "6027774865ec44a9bfd2ce77101b97f91cac9dcbf705f118b80e0b0528f92ede",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_211.jpg",
+      "fold": 1,
+      "npz_sha256": "7d9c618bfb31f670138f8f4fed1cd0d538eab557b9e4f22cdcc6406167da0ed1",
+      "positive_pixel_count": 602934,
+      "preserve_pixel_count": 6062520,
+      "sample_sha256": "97c466f50f0f35905ad01ce73cbd2f368c690643fadc6c501edb681e848408b7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2130.jpg",
+      "fold": 0,
+      "npz_sha256": "fd93401a36be379fc7d3d9f1ba51b0e5463457f5fb1af7cb8b8e1375f597b082",
+      "positive_pixel_count": 840413,
+      "preserve_pixel_count": 1915837,
+      "sample_sha256": "8f9c522d23dd8b0953c8308d7f6bb8b2a3c96005535eb4d97a86d471d0106c2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2148.jpg",
+      "fold": 4,
+      "npz_sha256": "faba3b011f4abbb2506bd246b5f2b2c20020cf44ab5fe87e972a8660f335e602",
+      "positive_pixel_count": 711971,
+      "preserve_pixel_count": 2044279,
+      "sample_sha256": "010c45407730b74703235114592ae85b8db3263bc3853b8377132d67e315ffe6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2166.jpg",
+      "fold": 2,
+      "npz_sha256": "48000c3d07990a3b780e8e250a026af89930de23081facb01323043b998cbae5",
+      "positive_pixel_count": 859300,
+      "preserve_pixel_count": 1896950,
+      "sample_sha256": "def8c4e4985c134b14ff7135a765c7ec5ff53bcb2dcfdaf354eb13d20feaee61",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2222.jpg",
+      "fold": 0,
+      "npz_sha256": "ed368b62babf95eb08cf8b7dd64c5d3eed18c8f677ea3e23e87b02fd1ee031db",
+      "positive_pixel_count": 1203905,
+      "preserve_pixel_count": 3106239,
+      "sample_sha256": "169446aaff236983268f22489fd9d513ac09f45aec0da311c6bb63e2f284ef82",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2239.jpg",
+      "fold": 2,
+      "npz_sha256": "ad451d096ca71fb4394ba7b61fdef5b747e33895a9a0434d692c8a0400b86d2a",
+      "positive_pixel_count": 580320,
+      "preserve_pixel_count": 3998090,
+      "sample_sha256": "d7cc49e2fb34ce39612158d0cc04b4164f93fc75e71f976da2119acfde396ac5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2257.jpg",
+      "fold": 1,
+      "npz_sha256": "08f1912ff34617d3293cc6aacef9e4477b100425f2be1ac32f3c85d2d7f34bb3",
+      "positive_pixel_count": 563082,
+      "preserve_pixel_count": 4015328,
+      "sample_sha256": "98f74a50554e6868fb5e2c29cda11ce2e7748500123aa88b8803a85aaac6b79c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2274.jpg",
+      "fold": 4,
+      "npz_sha256": "e05a24e207c7994e2989a5d017c7c1c26b058a3b8814db1999880bb38f30ac9c",
+      "positive_pixel_count": 980333,
+      "preserve_pixel_count": 3598077,
+      "sample_sha256": "1a12a5c50782302121afdeec1ace3f6e3d76c9e1d41ff38751ea7fcac0d27065",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_229.jpg",
+      "fold": 1,
+      "npz_sha256": "fe4bc5a0f5f2f324c8fb66948177922d89a30b2478027ebd6e1b7950bd7835b1",
+      "positive_pixel_count": 739511,
+      "preserve_pixel_count": 5925943,
+      "sample_sha256": "616acc1807e61d75568e38ecb4e7b958f49b7bbc7abdc306169229cdb665bce8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2292.jpg",
+      "fold": 1,
+      "npz_sha256": "cef755898849cb4ba58d9aeceb1f40fc449455c0b3be5911f273032d0becc43b",
+      "positive_pixel_count": 752236,
+      "preserve_pixel_count": 3826174,
+      "sample_sha256": "31a36d440ee1ea9b108fe81d53834db94d6d3776749c8675becc3c741d8bfff7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2310.jpg",
+      "fold": 0,
+      "npz_sha256": "243be220ae3a8d253c3c2c7d949bc72b3123590ed3cb071f9cd6cc148acbd9d7",
+      "positive_pixel_count": 513480,
+      "preserve_pixel_count": 4064930,
+      "sample_sha256": "50d29896ad6ed8535c0c4ea84d0a7589723ad02ce836a72f1e47bfbaa8728dfd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2328.jpg",
+      "fold": 3,
+      "npz_sha256": "b74b3b2758e803ce4c696728a348bec3049ab627f97fff4b14b49797ae1accb9",
+      "positive_pixel_count": 814535,
+      "preserve_pixel_count": 3763875,
+      "sample_sha256": "0e1bede53a843f9adb8711c979b719d7f2e38930a4d1274eecf452122f646439",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2346.jpg",
+      "fold": 1,
+      "npz_sha256": "3f4a3b8b3742fb69042c6d02b68e7037b6e620d7786c2c917580b1a31b73d459",
+      "positive_pixel_count": 790621,
+      "preserve_pixel_count": 3787789,
+      "sample_sha256": "a743c953f9421a751791ea2aedfe1cb0bd941519757317a228deac3216aa2cc7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2364.jpg",
+      "fold": 3,
+      "npz_sha256": "ec284d827f9f515edaf8ecb4e2f90267556ed794225eec1f798e7419df1f4d19",
+      "positive_pixel_count": 968006,
+      "preserve_pixel_count": 3610404,
+      "sample_sha256": "da2a74a6c5e9d9a76b44417604160f24a7c82da7bd8c6cc49469deb17643833b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2382.jpg",
+      "fold": 1,
+      "npz_sha256": "35d8b0c0c893486d24f90ed7f7ca1b9b4010ecaaefdfed59e021c166b88a96c0",
+      "positive_pixel_count": 1047746,
+      "preserve_pixel_count": 3530664,
+      "sample_sha256": "36a13d19a718141c6fde9e0e878e6a898fca8eb9afb66df9959ea9d4d94fc3b9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2400.jpg",
+      "fold": 3,
+      "npz_sha256": "060522b12e1865abb01c0df12b49790dcc7624299bfea165435dfa33eddc1d6b",
+      "positive_pixel_count": 958254,
+      "preserve_pixel_count": 3620156,
+      "sample_sha256": "99cc87b5321509653562d225da9797418901c0dcdbae397901ce28df7fd65553",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2418.jpg",
+      "fold": 1,
+      "npz_sha256": "86bbadf3c9d92dd852cea5124d2ca9e1f022f01f9bd186f070cc68828e462ab9",
+      "positive_pixel_count": 1315761,
+      "preserve_pixel_count": 3262649,
+      "sample_sha256": "3b5a16de2d255dd282aedb583ec240536f633238bb56da3ca222d8a3e2d17ad2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2436.jpg",
+      "fold": 4,
+      "npz_sha256": "ddbee2b2de7e6318cce6888ca6b3f71cc4d86afb7a8a043ae645ce09d5a17ae8",
+      "positive_pixel_count": 607378,
+      "preserve_pixel_count": 3610287,
+      "sample_sha256": "af5160f1f1ee664a26fd794cdcc1c500d5886d88a2ad376ca44a9b3e4316e658",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2453.jpg",
+      "fold": 3,
+      "npz_sha256": "e7fd7c7d93cbbfd9a532f40c11acda6ed51897ae5b24c5cf834dadef1beb0407",
+      "positive_pixel_count": 1585060,
+      "preserve_pixel_count": 2993350,
+      "sample_sha256": "0cbb0326462700459c868c6c1729a57639a79f6ec143aa015deb8ca24a7400f6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_246.jpg",
+      "fold": 3,
+      "npz_sha256": "0d46ca3f7f3e727b0ae479834869af816b3c02f9b6fe42707db2ac6f78b31caf",
+      "positive_pixel_count": 388314,
+      "preserve_pixel_count": 6277140,
+      "sample_sha256": "b3f7afbda2a46d5cdfd48b6d82982b255ffb523e339dfa32164c347a3dc831aa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2471.jpg",
+      "fold": 1,
+      "npz_sha256": "7e61839a5939362f2f4675d8f68e74d2970c946464723b7a1723864f14d4ad5b",
+      "positive_pixel_count": 725341,
+      "preserve_pixel_count": 3689879,
+      "sample_sha256": "606c22a0b66364beecc81d4bdd0c488b076c5fa8a7a7b295eb73583418fa2d3d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2489.jpg",
+      "fold": 4,
+      "npz_sha256": "6493ed33bea2900b0c9b903e27f90141182d487b6184e743bf7c1ab7c4f1df78",
+      "positive_pixel_count": 497323,
+      "preserve_pixel_count": 3720342,
+      "sample_sha256": "22a5448ecfce99af4b1330653c10ba3570007f1679c3c96a98305fff5542e573",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2507.jpg",
+      "fold": 3,
+      "npz_sha256": "ff397ec8adf6831bad443b089432e1ef135e1484148d68480b3b98c0b201c88a",
+      "positive_pixel_count": 1421785,
+      "preserve_pixel_count": 3407855,
+      "sample_sha256": "1f729df5203a9ed6ad90981eed6800df831a739a476bccec945b1f0fc1e404ea",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2525.jpg",
+      "fold": 3,
+      "npz_sha256": "d61183727db793f54c44eeae40d1d0473bc1d8b2077814410c20bc57b3d60f10",
+      "positive_pixel_count": 766879,
+      "preserve_pixel_count": 3722843,
+      "sample_sha256": "09c2129d4e23385b95e9279802f282835f55118715d6bfdffaa442c620929a92",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2543.jpg",
+      "fold": 1,
+      "npz_sha256": "8b790afc629d1fcf214431df48a377f51ca32a6228beec0c791f6dfa669885f1",
+      "positive_pixel_count": 879160,
+      "preserve_pixel_count": 3610562,
+      "sample_sha256": "98f563304f50ae6b5106401079d78fce111284548ce54b5103242a542ad048c2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2561.jpg",
+      "fold": 4,
+      "npz_sha256": "8212a82d63b9fb5c6ee43b0ff68bf3c7de8a7724221d11089d04a8c78ce0c77a",
+      "positive_pixel_count": 795542,
+      "preserve_pixel_count": 3694180,
+      "sample_sha256": "3f732e2b3064daa9286afbe88aa32d7dc9965e72b9b18ad1aa9e6f00cf1924f3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2579.jpg",
+      "fold": 4,
+      "npz_sha256": "438360a4f096624ed5714e48dd1a1988121c47cac6fef1fc8798e784ef7ad2d7",
+      "positive_pixel_count": 781145,
+      "preserve_pixel_count": 3708577,
+      "sample_sha256": "880144383949b089b74e7a685b127c72dcf62b2c3069388b86bef3168f4c9801",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2597.jpg",
+      "fold": 4,
+      "npz_sha256": "ed8229292818d6baf59b51a9a92134c65a5439b68d02fc2887ad8287a28ac6ff",
+      "positive_pixel_count": 2001462,
+      "preserve_pixel_count": 2488260,
+      "sample_sha256": "b3597f202fb2fc213959a10fd4eb73d2d981dbc458143a2c4dc6b33c6e1d7901",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2614.jpg",
+      "fold": 3,
+      "npz_sha256": "a660cb7bb8c85b021951d847fb0034a42600581c70af76c162748d1b5a6a8e23",
+      "positive_pixel_count": 732609,
+      "preserve_pixel_count": 4260213,
+      "sample_sha256": "5b32861c5dfab9211da4bed61708e1e4788557fec742301eb9a800aef1af2144",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2632.jpg",
+      "fold": 2,
+      "npz_sha256": "f2141c598325468b72e33721a1a4c5f308f45ddc55010bb00063618804c08581",
+      "positive_pixel_count": 683154,
+      "preserve_pixel_count": 3624336,
+      "sample_sha256": "adc114140526fb55aba2f772aa512026eacc50efd52d9aa0f0f83a5029f20106",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_264.jpg",
+      "fold": 3,
+      "npz_sha256": "9feaa939073b0e52cbfc2b2a43b2cfa57ac89eff7d48e98903bf6c7baf2b974c",
+      "positive_pixel_count": 608125,
+      "preserve_pixel_count": 6057329,
+      "sample_sha256": "9dbd23d7e74b194357b87f0429e3bfcc6f49f61cd299800095aa04b9381b295c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2650.jpg",
+      "fold": 4,
+      "npz_sha256": "04ceb6bd2866f0703dad2aa62edfe0502aba4675830c9361cc55e66ea7366be4",
+      "positive_pixel_count": 1084724,
+      "preserve_pixel_count": 3222766,
+      "sample_sha256": "c98455f2bcf4aa796c9e351e588aa0a1062f0e45a87392590bcc49cab459b5d7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2668.jpg",
+      "fold": 4,
+      "npz_sha256": "3f822c4dca6235c9543960864d8940114a28ed0efb7cb104f0648835e3125f16",
+      "positive_pixel_count": 255875,
+      "preserve_pixel_count": 4051615,
+      "sample_sha256": "7509758963f902ea2030d3ba999694db7efbb8499bb33a3eda3cf83ea12960a0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2686.jpg",
+      "fold": 2,
+      "npz_sha256": "48f94ac0b3c7780e7e9f0a2dca206190170147afb66df54d158d44294389f3bf",
+      "positive_pixel_count": 652305,
+      "preserve_pixel_count": 3655185,
+      "sample_sha256": "8da47dff4b983648890e4da55909da555b1155176b6105a4a822eab21d871d19",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2704.jpg",
+      "fold": 0,
+      "npz_sha256": "ae5fda203d0be48154c74f19ca5500e015e7ba852f498714814474968db44dbc",
+      "positive_pixel_count": 530058,
+      "preserve_pixel_count": 3777432,
+      "sample_sha256": "27707284b086fd47c7f62deff6eb9ec3272a1f6b6d67b03edd02a2f396ab9a52",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2722.jpg",
+      "fold": 4,
+      "npz_sha256": "63387a82385585d00079b614ae5bd088fe3b087330abbbfb8c1290b01cca198e",
+      "positive_pixel_count": 911735,
+      "preserve_pixel_count": 3395755,
+      "sample_sha256": "b53025924f6299e5e19d52dc88dcb17b4a240e2c8d637c8b898a050a46ed7544",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2740.jpg",
+      "fold": 1,
+      "npz_sha256": "10bf43078b3b7094e4c6aeea881252ac4ccb962d38215def8c5b4f19ae6a8c41",
+      "positive_pixel_count": 533843,
+      "preserve_pixel_count": 3773647,
+      "sample_sha256": "532583d8f5d4f9d4c5046eb45a7485ca53a462b2a49513e45b9f51fabff100c2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2757.jpg",
+      "fold": 2,
+      "npz_sha256": "2a87e89a9340de4f55bca8fbfc87403eb22589a3f4ab5d81af68379b333256d7",
+      "positive_pixel_count": 1061259,
+      "preserve_pixel_count": 3246231,
+      "sample_sha256": "16137b209b0ad40c5c506b3da26fb32dacd854679b346ac2d5a933b14c4dcba7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2774.jpg",
+      "fold": 0,
+      "npz_sha256": "8f9b4465d2a224b074544c47b264522c0317bffa9b19b438bb826880557f7130",
+      "positive_pixel_count": 819791,
+      "preserve_pixel_count": 3487699,
+      "sample_sha256": "c80864f85a4084411f9ea65c86dde06ff8c07e9d0d555a596fd9255024cf2c03",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2792.jpg",
+      "fold": 3,
+      "npz_sha256": "98b54f4a8547b8f2dbdfc8ebf29d0a73bed39305624719016c638df20a3e6b89",
+      "positive_pixel_count": 1620094,
+      "preserve_pixel_count": 2687396,
+      "sample_sha256": "ba4ce6a939abc822eae805db03ca5e37fa38fbc79d95a874247aaeaa5212a8bd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2810.jpg",
+      "fold": 2,
+      "npz_sha256": "9ba65b9602321ad8bac1c82952832d495b64849c2d0819483a639e37823f4751",
+      "positive_pixel_count": 674036,
+      "preserve_pixel_count": 3633454,
+      "sample_sha256": "1d64f813035b67891db6d63af39efceeefda65bbbf4402724c46fa4181a7041e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_282.jpg",
+      "fold": 0,
+      "npz_sha256": "b648dc1ac515edc63857b5089cc47c60c24d212329db4cf12f84e3afa2212183",
+      "positive_pixel_count": 254861,
+      "preserve_pixel_count": 4071089,
+      "sample_sha256": "f327a1a26aa91146d46b7ef0fa2a2355605f8ca35f1f5a3f94ad94321e8813bc",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2828.jpg",
+      "fold": 4,
+      "npz_sha256": "f4f43178c5a079fb1df7a5079a6b5d200868e7f63429b17dbe86ad142865eddd",
+      "positive_pixel_count": 1541758,
+      "preserve_pixel_count": 2765732,
+      "sample_sha256": "b8e41bf3754734bd7cb651e9383e8652789cef748616bceaecbefdb2a406796f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2846.jpg",
+      "fold": 1,
+      "npz_sha256": "7ddd9ce2c4102e2be65663705ae631502be4378b0737e1f01b1e848a382a5cc3",
+      "positive_pixel_count": 1183949,
+      "preserve_pixel_count": 3123541,
+      "sample_sha256": "a10c0e667ff9c08d346c3a9937e9a37b4ec1fbbd4d3ee290ef52755b8ccb8b7a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2864.jpg",
+      "fold": 0,
+      "npz_sha256": "9ab44abae80f98fe4203f2e3d83d92eada87a6bdefc0a2646405a66c85c9c75b",
+      "positive_pixel_count": 784482,
+      "preserve_pixel_count": 3523008,
+      "sample_sha256": "5a953720929698dc821032df3b309bfd23f3cfa671a778a21df7e56e01e881cd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2882.jpg",
+      "fold": 3,
+      "npz_sha256": "724709affa1a0b60ae2c44566f8cb3c8bbcab6886ce9d4a84cb1159d1d400f91",
+      "positive_pixel_count": 1202800,
+      "preserve_pixel_count": 3104690,
+      "sample_sha256": "5e8b0ec484dade69b8d112881f3faf769e36f3c64907f1c371ac61d9c29f4855",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2900.jpg",
+      "fold": 2,
+      "npz_sha256": "4f9558f918da076544409ffaa5a918e17e964fd93bf70a8249e0c6accc7a2679",
+      "positive_pixel_count": 1015896,
+      "preserve_pixel_count": 3291594,
+      "sample_sha256": "fc7813b6c7bf95b638f41795491ec6e90b255e191bace201821ba6437c98dfaa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2918.jpg",
+      "fold": 2,
+      "npz_sha256": "93ccd30d1df3c9b691e457a8fa7a6d40ddbf1fd7b89d7c22d26d58fa4ca78d95",
+      "positive_pixel_count": 645560,
+      "preserve_pixel_count": 3661930,
+      "sample_sha256": "ca28d827d99895593df5bf325a89d37ffc516d89673c2d76102e86ea9dfd9d32",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2936.jpg",
+      "fold": 0,
+      "npz_sha256": "a341680359b9f9465599c5d69d4c07341a3088f4778c423f41a8a2def6f360a7",
+      "positive_pixel_count": 279676,
+      "preserve_pixel_count": 4027814,
+      "sample_sha256": "ba96b98e8a35f33b2fccf2ea80b33c6ee85c4759a0f040caf96152b8769c1dd9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2953.jpg",
+      "fold": 3,
+      "npz_sha256": "4bffbf43d938f2ecb308a707ff1d131686db4ba2bbafb67e319b63769488099d",
+      "positive_pixel_count": 259815,
+      "preserve_pixel_count": 4047675,
+      "sample_sha256": "d8ab6fd26f244a6f5642f790a1acee2832cc901b54a97f874a3af222080e1f77",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2971.jpg",
+      "fold": 1,
+      "npz_sha256": "28852741b1c0b4a0303def89fa9ab86ea86c1570442dbd7bd1ef7b182b977d42",
+      "positive_pixel_count": 971578,
+      "preserve_pixel_count": 3335912,
+      "sample_sha256": "67f9b4e46963c07176e561eb0e9ec2a4cc6066c26b30798719f0f87e21740bf2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2989.jpg",
+      "fold": 3,
+      "npz_sha256": "01dda77f5b363589cbe914fc8d4658c71a9a41e8cf1b63017339efed477756a8",
+      "positive_pixel_count": 585990,
+      "preserve_pixel_count": 3721500,
+      "sample_sha256": "edc8b8db17dd8562179e32eaf5efd6b7e8c77c4b0913e47daa5e20c1b35ae0e3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_300.jpg",
+      "fold": 0,
+      "npz_sha256": "8bb345727d2531aeeb46d84c510774a171993f2e515bc7a08878772e634d658c",
+      "positive_pixel_count": 348246,
+      "preserve_pixel_count": 4181229,
+      "sample_sha256": "08a49df0d4ffbd9356a830956e606e49b16d6921080946d7cd524cf39e77fe2e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3007.jpg",
+      "fold": 4,
+      "npz_sha256": "b802b93c13a4e4a44434f08240cf1792ad93f6d6c3dc7e3cdd39d9e16f4e51e7",
+      "positive_pixel_count": 1307562,
+      "preserve_pixel_count": 4479431,
+      "sample_sha256": "32425d2258bb7affd3af2a5f6082386cd07b845fe9993433aa8037ea777b671d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3025.jpg",
+      "fold": 0,
+      "npz_sha256": "892b8cb8150f4e3723b8be83e4aa1ed34b7b257f8e64a87f38ce7e90416f223e",
+      "positive_pixel_count": 1147121,
+      "preserve_pixel_count": 4067956,
+      "sample_sha256": "15dc9a48af49c93d1b735d2da504b8487ea7b9fbe8c477f5dc0ec823b484002b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3043.jpg",
+      "fold": 4,
+      "npz_sha256": "2ad3754a1cde3225f937e8759891c05f08ee5c40c57d6a8032935887e0c91464",
+      "positive_pixel_count": 1106147,
+      "preserve_pixel_count": 4525843,
+      "sample_sha256": "965fac56596de1c8511e66cf874c03b4e150de21b9ed4db4a738f533988ccc6e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3061.jpg",
+      "fold": 1,
+      "npz_sha256": "3143142bbeba29b76f886be775df1807d684089a1225dbc182b8ad2515538f36",
+      "positive_pixel_count": 1110627,
+      "preserve_pixel_count": 4521363,
+      "sample_sha256": "cfe1e071b9f675b471cc7385b38eee66ae502ea80d4dc97911a5465a205812ab",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3079.jpg",
+      "fold": 0,
+      "npz_sha256": "738d24383031896a8882bef10775729886a7eba6316b5238a4731a85e26bbc91",
+      "positive_pixel_count": 1706817,
+      "preserve_pixel_count": 3925173,
+      "sample_sha256": "a179d112e44be807dcdf8d83ec54fe3954a5188739277aeae1afb322c0e29bec",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3097.jpg",
+      "fold": 3,
+      "npz_sha256": "a88a2a4b23873c18fd50354724c1937e254f91dfc5abf08deace064060696e76",
+      "positive_pixel_count": 1161796,
+      "preserve_pixel_count": 4470194,
+      "sample_sha256": "ff061c2f700a9237c217ead5dc3c8e8774c08e49b5272599fdd0040a0520d752",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3114.jpg",
+      "fold": 0,
+      "npz_sha256": "c3837a674380708f28326054b84cdf94ffed4520b4e90a1f413fb8a8add48c17",
+      "positive_pixel_count": 1172642,
+      "preserve_pixel_count": 4459348,
+      "sample_sha256": "9a6ebb857c92095d86e115f5cf40394be73a0ff8397292acdd69dea74a1f576e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3132.jpg",
+      "fold": 0,
+      "npz_sha256": "2dbfe42a1c94af10d73dd164b4b60d8f89f4e28159f1b4c327ae1e70b0501378",
+      "positive_pixel_count": 1171345,
+      "preserve_pixel_count": 4460645,
+      "sample_sha256": "fbb070af3fb08e2d703a36916d6f664ab61852dc368a8d12d7911897c36004b9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3150.jpg",
+      "fold": 3,
+      "npz_sha256": "1bc80a1297d5ced94306e125726d53348896a85a10c5e0f3d2ee63c64b7a1343",
+      "positive_pixel_count": 1559291,
+      "preserve_pixel_count": 5316250,
+      "sample_sha256": "b11814efc063255749a27c73150f266d363046b97c052be621ae670926fae57d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_318.jpg",
+      "fold": 2,
+      "npz_sha256": "b9ac199d872cb0369f7f6e06b224a8ffb1c3b4607788fb3eafb64bd285ca6b50",
+      "positive_pixel_count": 2031062,
+      "preserve_pixel_count": 2590898,
+      "sample_sha256": "c8cd4c7570593ba0e02548df9c5ef662f1be2a9bf6d22381cc3ee642eac73b67",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3225.jpg",
+      "fold": 0,
+      "npz_sha256": "953e2f73691ab7aa3d6a1a24dc06b9ee5e0819f015dc2cd9370e0db6a085d578",
+      "positive_pixel_count": 1030981,
+      "preserve_pixel_count": 6736428,
+      "sample_sha256": "31e32d30a57878c6f238e74344a5d1d20ae40cce1f0baa9084347831ee105ec5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3243.jpg",
+      "fold": 4,
+      "npz_sha256": "aa59a9c60a36c78a9da3d4e7982adb5d78bf81d5610e5fbaa4ec3db364f2153d",
+      "positive_pixel_count": 676932,
+      "preserve_pixel_count": 3725634,
+      "sample_sha256": "3f229d1c9451684c349f25dbc6aa7bc9642e73eed48b81c2ec3b0d3ec330fe67",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3261.jpg",
+      "fold": 3,
+      "npz_sha256": "af829fc39700f2642b5e3efc6d5a953b703e2afced9a10c9f72a91b50694f4ea",
+      "positive_pixel_count": 791780,
+      "preserve_pixel_count": 3610786,
+      "sample_sha256": "2c7c6a3b3b169c2ca0b9af15b3f3c2d13c3b3e1d2219e389f9b6f8ceb5eb407f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3279.jpg",
+      "fold": 3,
+      "npz_sha256": "586b47c91b9ed2cc10fcc39fc22d735267e8601694d9487213ba243bc0a15d4e",
+      "positive_pixel_count": 1176397,
+      "preserve_pixel_count": 3226169,
+      "sample_sha256": "763325b6d86dabe4eeaea93f833c7c1fc26d5d4adf23871d3b495e52818eed7e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3297.jpg",
+      "fold": 3,
+      "npz_sha256": "07474755fb6b0fce102406e2eab473d2e208fe545d12634e1734aee17f6ca2ea",
+      "positive_pixel_count": 1737700,
+      "preserve_pixel_count": 2664866,
+      "sample_sha256": "25c4c66da1de3df93c51147fcbfa941e6813d190d67f625cda9beeaa3daf862f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3315.jpg",
+      "fold": 0,
+      "npz_sha256": "a690e9424449cf5ce209f15f9fd7f1044d7d701f2700a399898b2dd002d722dc",
+      "positive_pixel_count": 813255,
+      "preserve_pixel_count": 3589311,
+      "sample_sha256": "59461142777b689b8f235cd2615883f92eedac0f0db64ea3bf6ac3ab87427dd4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3331.jpg",
+      "fold": 3,
+      "npz_sha256": "97849cb67f565636f71a5c505f799f1eac45963ceb6bca703bbd17a15d019d19",
+      "positive_pixel_count": 1763629,
+      "preserve_pixel_count": 2638937,
+      "sample_sha256": "15010a94988e173e75ff091062bb9c257ebad891f12e46c8c572d628d0b44da6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3349.jpg",
+      "fold": 4,
+      "npz_sha256": "32e53ae835c70092b2b7cb93f4954c0d97745029dd52089d76e10b86d4382f35",
+      "positive_pixel_count": 618510,
+      "preserve_pixel_count": 3784056,
+      "sample_sha256": "5979530e899a39c6599cf9b9308f2706bc716fb736a6abb5663beee84dd2fe65",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_335.jpg",
+      "fold": 2,
+      "npz_sha256": "29f6c92c9fe0c6e5f430bbe9f569e3f70041a2569401e9b4aa22e691e6d84005",
+      "positive_pixel_count": 399863,
+      "preserve_pixel_count": 4222097,
+      "sample_sha256": "082366201669ce8bea5a80fc1463a349803d9968972a662d6ff2cd41f74ca497",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3367.jpg",
+      "fold": 4,
+      "npz_sha256": "d157fb31940b64368eb8d168ca61e514a3a461c0ffc7f5f76741331cf7ec24d4",
+      "positive_pixel_count": 809411,
+      "preserve_pixel_count": 3593155,
+      "sample_sha256": "3ae40e71f857833b57e4efefa10dbe6e0d4108455a8e045a6eab9e45177e7c42",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3385.jpg",
+      "fold": 2,
+      "npz_sha256": "cdf1dce6a39b4fa22dd42918072c24ddb62e2808f1982a848bea78960bae1650",
+      "positive_pixel_count": 704307,
+      "preserve_pixel_count": 3698259,
+      "sample_sha256": "38ffa0ef85e6cdd37725209ba1d92d7ab515ca6abf686051acd4270c3acb2551",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3403.jpg",
+      "fold": 4,
+      "npz_sha256": "b881a91f3ceaab5488ea65936551e0c6ecfc21111a34e4300b1a63f1ba646951",
+      "positive_pixel_count": 747876,
+      "preserve_pixel_count": 3654690,
+      "sample_sha256": "e2c22d1db48cbec7cfc5e0125f31339ddb0c47597c41b46e185bd47e8519fe7b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3421.jpg",
+      "fold": 3,
+      "npz_sha256": "e44c46851c5ea30ba621bad6774ea79b3934d4754a411824d367a7415b1f3fcb",
+      "positive_pixel_count": 785189,
+      "preserve_pixel_count": 3617377,
+      "sample_sha256": "1790b8ee0270b6de80fbcd74b59e026bf246d7c810125f1fb4966b3248c4c1e8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3439.jpg",
+      "fold": 4,
+      "npz_sha256": "c9828fe53c4ef68bf65ba38c75bdc80a5a4058add404521d7fa9f7a2ed85b6b6",
+      "positive_pixel_count": 705634,
+      "preserve_pixel_count": 3696932,
+      "sample_sha256": "da2cd479fc1e12500053752fb19bd05fc2b9c8c1a69a549da2f1b9ffb8fadac1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3457.jpg",
+      "fold": 1,
+      "npz_sha256": "0218a65646b3395e3cba1911f80c082dc1c048bacfc95cd7d2b13324fa0a0183",
+      "positive_pixel_count": 613663,
+      "preserve_pixel_count": 3788903,
+      "sample_sha256": "f5f98d460bc191a49a126fc55182ba1fefbf167bcadb74f3f3c8ac6c5f83e151",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3475.jpg",
+      "fold": 3,
+      "npz_sha256": "fc15f2f5794098332ea9063cee54425f65d2fd695f356d5c2a773380a10d0151",
+      "positive_pixel_count": 988412,
+      "preserve_pixel_count": 3414154,
+      "sample_sha256": "3c713b40842e01e328353ca282bd88f7ebbeb0b5ab39cb52afc9e7612f2c4144",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3493.jpg",
+      "fold": 0,
+      "npz_sha256": "5a327c9810b6d29651f6ed8684f37d2663275c93f9362ccf5225847cb6bf8d16",
+      "positive_pixel_count": 613479,
+      "preserve_pixel_count": 3789087,
+      "sample_sha256": "bdb0d777bb40bc4818fe007f885df762c750dce1e4aaa77c9bca36c6e28dde30",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3510.jpg",
+      "fold": 3,
+      "npz_sha256": "91b3c4e9365287ba288af9590edeb2dcef917b1cd1ecfbd60aa0b58de8d0bf79",
+      "positive_pixel_count": 378047,
+      "preserve_pixel_count": 4707517,
+      "sample_sha256": "a662b0ae6b3951750406bd3f45b361de047f5b66dcb9670b187abe4f3cc4381f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3528.jpg",
+      "fold": 3,
+      "npz_sha256": "93239786f725aa3fd6096e31baf064a9f87733a69c93f8023282f129ab21bf3a",
+      "positive_pixel_count": 960346,
+      "preserve_pixel_count": 4802120,
+      "sample_sha256": "11818b1c4402b3028146641721a1358e8a205677bfb207b1c03ab5fcb4653272",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_353.jpg",
+      "fold": 1,
+      "npz_sha256": "f83a15c14492cfeab53e385ed4c858938ab5c40d3843ef37ef0b1f3c1ded6fdc",
+      "positive_pixel_count": 309483,
+      "preserve_pixel_count": 4312477,
+      "sample_sha256": "58f40610b23d5a2242e511cf68469878692bdebca124e04756b40a4e36f2e357",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3546.jpg",
+      "fold": 3,
+      "npz_sha256": "0c3a2d099681cfa66fff0f65e0907929ea01ccc20f1db6201c247032e55f92cc",
+      "positive_pixel_count": 2142784,
+      "preserve_pixel_count": 3598812,
+      "sample_sha256": "1f50e46bbc24d1e93164604cade148a16552176ec91fb0d18ae902ed9e5363e0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3564.jpg",
+      "fold": 0,
+      "npz_sha256": "fca65cfe290466738ecb1f261f045619eed80911f01bb1ffc0dd5522be0ff98e",
+      "positive_pixel_count": 1584530,
+      "preserve_pixel_count": 4630510,
+      "sample_sha256": "84e679d6a8a26f2f4e10e076e0529cc04dc88f88e901ab3a81852880d3c4e6aa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3582.jpg",
+      "fold": 2,
+      "npz_sha256": "5443b2207af417159a586e46a31826ba10e110641730c812d74eca4a0c20cdff",
+      "positive_pixel_count": 4216392,
+      "preserve_pixel_count": 1998648,
+      "sample_sha256": "cd127c7f1d2d416f85a4ee84a771b394c9d71a371ac7adae6ac72dc56161efd7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3600.jpg",
+      "fold": 2,
+      "npz_sha256": "4717f2145e6986892aa110c42c5e1c40c897e0110e09aa62c38dba06656c8f50",
+      "positive_pixel_count": 572805,
+      "preserve_pixel_count": 5642235,
+      "sample_sha256": "136083748cd7d618dfe746d85e8f80a3630b96fd1e3cb8acaa29650a4eef4e3c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3618.jpg",
+      "fold": 1,
+      "npz_sha256": "326a3e7b60aa1601790b8bb9e22d9fe430b8adbf9da705194ae62901f6cba01d",
+      "positive_pixel_count": 2269065,
+      "preserve_pixel_count": 3945975,
+      "sample_sha256": "890763b58dd9a61eb0b84a3fd0f25b9dd543b76923b51709ee7d68c27972bd44",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3636.jpg",
+      "fold": 0,
+      "npz_sha256": "3c88291392da23547a424046823f49fa09268bb2ccad01e0552db13e24fca95a",
+      "positive_pixel_count": 1441084,
+      "preserve_pixel_count": 4773956,
+      "sample_sha256": "a5a09077285ffb0a954124e52ff03c1a9db2ecb2ce0412956b92cf9f0b9a1a12",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3654.jpg",
+      "fold": 4,
+      "npz_sha256": "b38abad72580ad0bf8b70c66cca5b4f4454fc64237efb04742e1c58b61c473ef",
+      "positive_pixel_count": 1487697,
+      "preserve_pixel_count": 4727343,
+      "sample_sha256": "9dccf9e9211c4b7e8f118f97388cf36a4eda03623fbbb3969241626ae1d18c5b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3671.jpg",
+      "fold": 1,
+      "npz_sha256": "6340c6559a052f9b65ac7e5fb88c2b629efa23931321102af69976e6a0db18b4",
+      "positive_pixel_count": 1482474,
+      "preserve_pixel_count": 4422678,
+      "sample_sha256": "702a8e343f5e01e7d641d55718c6226a2bb3aecdb916ad61b43f15ab11dbe305",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3689.jpg",
+      "fold": 4,
+      "npz_sha256": "c74242ddfc6e64171ce4233960c8772ff3f2de9074d88334da0577af337fdcc9",
+      "positive_pixel_count": 2086386,
+      "preserve_pixel_count": 3818766,
+      "sample_sha256": "cb4e3db3d843030de38d11e378b233d1c939ce1f507f4eb14f26d476a22dfe46",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3707.jpg",
+      "fold": 1,
+      "npz_sha256": "09ac465a300db22cb773428df192d85c5034e538c4e706b6697f2aa34b3a14df",
+      "positive_pixel_count": 1982753,
+      "preserve_pixel_count": 3922399,
+      "sample_sha256": "8d12783ded64bb885986bf6123156262c2c6a75622a860002fd4c27a62b6839a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_371.jpg",
+      "fold": 1,
+      "npz_sha256": "d13565d312c98f67857b42a188e04f9948503a9015493f8dfc03f6714939ed2a",
+      "positive_pixel_count": 159474,
+      "preserve_pixel_count": 4462486,
+      "sample_sha256": "02fc85956db9eaedcabcc94f357f2705fcc02996ce0c6d939ef4e4f1be43bc4b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3725.jpg",
+      "fold": 0,
+      "npz_sha256": "a4442875374be5ec3cff00c9dda7ecf36f0fac620c88c641a0ac25f950ca3a26",
+      "positive_pixel_count": 1497735,
+      "preserve_pixel_count": 4407417,
+      "sample_sha256": "4d6e21ea6273e0593b77468d1e4355d3b18a763b24d831163711c01e724f22d6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3743.jpg",
+      "fold": 1,
+      "npz_sha256": "650579193996bd57c92824d32286af65e0df496bcdad1b9224294dc8821f3592",
+      "positive_pixel_count": 1490028,
+      "preserve_pixel_count": 4415124,
+      "sample_sha256": "259cc04dd088f2d453189a93740ab26123b19c8588da2ce411791ca33db631e9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3761.jpg",
+      "fold": 1,
+      "npz_sha256": "a6a5095f19c24887c0d3e1e4298cf67ad940327ffebf019ac28b98c01cdead27",
+      "positive_pixel_count": 1236016,
+      "preserve_pixel_count": 4669136,
+      "sample_sha256": "ec41a5c3197792c07d5fe7282fdd1a1b7c7e99e075ad38a5d143a16034db8e7e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3779.jpg",
+      "fold": 3,
+      "npz_sha256": "cee84dc8db29614b6b171d99cc16bf9de022a613ae998b0a7ff39b2055c4c4f3",
+      "positive_pixel_count": 900054,
+      "preserve_pixel_count": 5005098,
+      "sample_sha256": "252c8733616256d65594e8cef28c80d4da2d08e1807db4efe3070abf1f84d76c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3797.jpg",
+      "fold": 1,
+      "npz_sha256": "10dc2ae0312d0062af08d15a17d4b2724e065001a633164a65e4f86020b73d25",
+      "positive_pixel_count": 1530872,
+      "preserve_pixel_count": 4374280,
+      "sample_sha256": "f9a3aa0dbbdc7538da36eb5b6a758dd95e6c6bee1ce34be0a51a85e072ed6eed",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3815.jpg",
+      "fold": 4,
+      "npz_sha256": "6285ddba2e75b9bc5cbfefcc89e8e3d7d62d799bda92421ebf4cc56d09b993c1",
+      "positive_pixel_count": 1096078,
+      "preserve_pixel_count": 4809074,
+      "sample_sha256": "3493decaee40ff77478c2826a239e093733f50a118f3e2a545bd88154b16c08d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3833.jpg",
+      "fold": 0,
+      "npz_sha256": "cbe021b2cc8381e70e183c0ca28ae4f52748b6b32f4f0b9e84ff0cb085ff0171",
+      "positive_pixel_count": 1175472,
+      "preserve_pixel_count": 4729680,
+      "sample_sha256": "581f587babf75e6ebb4dc868562243d86e622097daee8c4755a43ced225d4012",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3849.jpg",
+      "fold": 1,
+      "npz_sha256": "7877f9f2287197a6d1343d0f3fc3dc8813f528f5e22880e5adb7fc26f999b7fc",
+      "positive_pixel_count": 1176269,
+      "preserve_pixel_count": 3623731,
+      "sample_sha256": "c27254c59c8d9dcaaf0fc86dc4c62092ea768dca3580c7b109122a012ad2afb7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3867.jpg",
+      "fold": 3,
+      "npz_sha256": "b5235224d11b71d6facb75b0de73477d8acc860e4b291292fd3333a16e9c0b7a",
+      "positive_pixel_count": 1295012,
+      "preserve_pixel_count": 3504988,
+      "sample_sha256": "a73791974c337ba3485ab58669299f14dc0779577795783191543c3687805b62",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3885.jpg",
+      "fold": 3,
+      "npz_sha256": "94d4e6fea708403465ece2561c81f845aac3f19e01699ab30c982ece23d36658",
+      "positive_pixel_count": 948278,
+      "preserve_pixel_count": 3851722,
+      "sample_sha256": "9bae89e6920ffe798e2177821de0eed3dddf5f70f26fc746f1341d6a71e68976",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_389.jpg",
+      "fold": 1,
+      "npz_sha256": "7f9d1dac3f571fff7424999969053423d0847bf03e6c743e6eb397bbb2c6213a",
+      "positive_pixel_count": 1592604,
+      "preserve_pixel_count": 3329460,
+      "sample_sha256": "7df7a49b0343da9e29938e4b2577cb5c78cc0e4925ab4f140899c40c9b6a764c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3903.jpg",
+      "fold": 4,
+      "npz_sha256": "e71db178a29064b7fb00daa09a4045830f56fd322582c5e1a472b95b1e8cec25",
+      "positive_pixel_count": 1225250,
+      "preserve_pixel_count": 3574750,
+      "sample_sha256": "abb2a86ac3dbf84f815cff9d26ee2571529ad5c48d3c2a6ecadc0190db063db9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3921.jpg",
+      "fold": 0,
+      "npz_sha256": "7da5ef962ba264e13c284675e32419f7b9a24bbb79dfac1c3fef86612652fa5e",
+      "positive_pixel_count": 1510268,
+      "preserve_pixel_count": 3289732,
+      "sample_sha256": "a9bef9f6ee0700108c0b832886507a3523a521598a53a9e919c415874936e7a1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3939.jpg",
+      "fold": 0,
+      "npz_sha256": "8c6b779ee409674506220cb6b4d61f19832e1245d6dcd94516077721538f7826",
+      "positive_pixel_count": 1126853,
+      "preserve_pixel_count": 3673147,
+      "sample_sha256": "f6666cd4fa2ed013cda7f4c2656013472c4d619d2988dc9c241beb415f8f55d2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3957.jpg",
+      "fold": 4,
+      "npz_sha256": "1ed36f122caf4ddce2256e590e894da08ce45bc856ea385c1bbd45189ff61104",
+      "positive_pixel_count": 2190894,
+      "preserve_pixel_count": 2609106,
+      "sample_sha256": "3c653c842b984ed5cde4258a29dd397aa6d66789480442ca45d2f72e5141db39",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3975.jpg",
+      "fold": 3,
+      "npz_sha256": "be7a86c321e04d7bf6114241726bf6daac0780781d699e59634902c659508eb9",
+      "positive_pixel_count": 832555,
+      "preserve_pixel_count": 3967445,
+      "sample_sha256": "61a0e9753c6e9a4666a514ca58ed1286915b4e2fe9fa4cb6401ab8835febda3d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3993.jpg",
+      "fold": 2,
+      "npz_sha256": "fa6126b2525e9a127dd4a585e2571809b53f3fdf841043dbca86a9f9246b52c4",
+      "positive_pixel_count": 904448,
+      "preserve_pixel_count": 3895552,
+      "sample_sha256": "a6dfd878ce757b0f84a7a164f85a1b4ee46db13056166a3daf53a6a7839c482c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4010.jpg",
+      "fold": 1,
+      "npz_sha256": "4d73961d66420a75c0ca91a2fd81ceaeeeb677dab6dbf8b26234fb21fe39e50f",
+      "positive_pixel_count": 1023593,
+      "preserve_pixel_count": 4310927,
+      "sample_sha256": "2424c7e3a307c01b0b012ee509aaef6c6269b322f59a74875ae2ce9c72055784",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4028.jpg",
+      "fold": 0,
+      "npz_sha256": "343f8430661c2fabcb4cd596d831eca5692aeb82f78a45f8a3eb35d7247b6c03",
+      "positive_pixel_count": 818891,
+      "preserve_pixel_count": 4515629,
+      "sample_sha256": "0d8d980ac134c7fe080918a27fd058c65bcbcf17da328832ccf187aba45ded6a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4046.jpg",
+      "fold": 4,
+      "npz_sha256": "30553b7cd67e3fdda015c3189ec45e4bb6dcb0eeaabf3278d6ab5bd882bef139",
+      "positive_pixel_count": 847213,
+      "preserve_pixel_count": 4487307,
+      "sample_sha256": "2c9d5ac85184870179ee421230e14d440ca995eeeb9f2f9ceedbd83a941ea5d6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_406.jpg",
+      "fold": 3,
+      "npz_sha256": "8d492b536dca7a87641e61a38836381249c53cdc2d3304fb88f9830e38a347a9",
+      "positive_pixel_count": 146505,
+      "preserve_pixel_count": 4475455,
+      "sample_sha256": "077fca0e242bde94682e74f3c7bf51cdef9ade7ee0b6f98fe5c8b5a52e89cad4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4064.jpg",
+      "fold": 4,
+      "npz_sha256": "51046e0f99b08ed2bbb3028ca12bd32e4f9e6a705d824787cd631430991508e2",
+      "positive_pixel_count": 826281,
+      "preserve_pixel_count": 4508239,
+      "sample_sha256": "0a47e7417771f0c654fc46e4b9dc9bbd03c294ecfb79b5935888f3b7622d37e9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4082.jpg",
+      "fold": 2,
+      "npz_sha256": "23a7f66c55f1c54cc6f0b060dbf56343dd6b18283291d9620513345d47a24be7",
+      "positive_pixel_count": 823558,
+      "preserve_pixel_count": 4510962,
+      "sample_sha256": "6f7c878fbfac55edb5bd6ddacc713ed6674cbe5ce6188f0a80c61c53f91e21b0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4100.jpg",
+      "fold": 0,
+      "npz_sha256": "108ca5082ce92a3d0910af3fafb93b8f33a443d8811b9870d43aebae5406fc96",
+      "positive_pixel_count": 1206921,
+      "preserve_pixel_count": 4127599,
+      "sample_sha256": "146c2de05190246d825c8324a32777f7c84b7a3d759e6ec0de615c57cba29bc9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4118.jpg",
+      "fold": 0,
+      "npz_sha256": "9a0778a965a596d0307883b6c29a85f47157e57ffcddc98f8a5939efa77a8199",
+      "positive_pixel_count": 495268,
+      "preserve_pixel_count": 4839252,
+      "sample_sha256": "4e6b5146aba8b4d59594fd69f31b0642f556a1da419f0d8ce22acb2a37e74755",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4136.jpg",
+      "fold": 3,
+      "npz_sha256": "1aae8bb89138397d7c9c8f3eb39f4c0ce34eb63f3e1eb27717ed6a2b8e8187b8",
+      "positive_pixel_count": 354392,
+      "preserve_pixel_count": 4980128,
+      "sample_sha256": "89f260350048746cc938f5d716bace2b34be485073cdbba4dd4e989413a3bbfb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4154.jpg",
+      "fold": 2,
+      "npz_sha256": "3445279c3f55159b4e8fd62a07f2dd196539e040bde7cfc90e0df1b4ec6e8ea7",
+      "positive_pixel_count": 1373157,
+      "preserve_pixel_count": 4299279,
+      "sample_sha256": "27105028c11bfe01df98ea1b4316cd88ee91e99b49c319a5856c0dd1bc95ef00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4171.jpg",
+      "fold": 2,
+      "npz_sha256": "964cd549db809408cb881a094ed3d59cd3ba63eb906b8f10fdbcb9a1e7141d6a",
+      "positive_pixel_count": 916973,
+      "preserve_pixel_count": 4979243,
+      "sample_sha256": "91e7c78ae98e3bff3264b7d8ca567c477975d0e98eeab52325c0f1e8db34aba7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4189.jpg",
+      "fold": 2,
+      "npz_sha256": "5066c805032e914d9ce6af8b1e37126ccab2e12c234e4dc99771057a00577698",
+      "positive_pixel_count": 1836423,
+      "preserve_pixel_count": 4059793,
+      "sample_sha256": "f74b11ff6bbc5be3a3c2bd94b2588f7789a8e6fcc73d7867ef5c0ad974ab1b06",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4207.jpg",
+      "fold": 4,
+      "npz_sha256": "6043b7c5d6bba48e5dcca7239c84f5f58fe488c4d8090ba60ece4ed4d2445a3f",
+      "positive_pixel_count": 1214600,
+      "preserve_pixel_count": 4681616,
+      "sample_sha256": "3e55df97b5c3bf7f41193160532ad423f1f0a53cbe9faefb7fafc1528569810e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4225.jpg",
+      "fold": 0,
+      "npz_sha256": "bbf3958db0f1433c3a52463320a13fcea769ad751551dc83742f6f7d545d1748",
+      "positive_pixel_count": 1161035,
+      "preserve_pixel_count": 4735181,
+      "sample_sha256": "c29c09c1fa10da7e390d05a28db58b9cb0b75594ccb56a36d2267b543975912a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_424.jpg",
+      "fold": 4,
+      "npz_sha256": "890fc302d7eef6798f1de498c203998f8bbc235c55e7aaa8f299015bb413c0dd",
+      "positive_pixel_count": 3178969,
+      "preserve_pixel_count": 1712759,
+      "sample_sha256": "606e8f175b0a6b8f8a23a7d838266a15aa1d8222661561817e3216574e3abc17",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4243.jpg",
+      "fold": 2,
+      "npz_sha256": "f36732979ba073a7e5ed7566ee0a022df196f9cf706f9ca877b6599297ecb972",
+      "positive_pixel_count": 796613,
+      "preserve_pixel_count": 5099603,
+      "sample_sha256": "5fc29a74614f6e42ac60e26792a1a349ac2f4cd8b24f3d7b9e1b64ca02765e9b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4261.jpg",
+      "fold": 2,
+      "npz_sha256": "e9d5021f824c4c669be93235367a19a3a55227075e43bcf02554bd3d542c8270",
+      "positive_pixel_count": 436894,
+      "preserve_pixel_count": 4049198,
+      "sample_sha256": "77624bd91611c0e81a186572ee3e37f179d2a451473cbad66140407fa4359fc2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4279.jpg",
+      "fold": 2,
+      "npz_sha256": "22eaf016a4658176adba02842b34a3c380e6e53b99df1d201c573e2febebe65c",
+      "positive_pixel_count": 636909,
+      "preserve_pixel_count": 3849183,
+      "sample_sha256": "385f601be66d8c7181f1c0625fab58be9e1edcf9f4d891decf8602a519fff522",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4297.jpg",
+      "fold": 4,
+      "npz_sha256": "fc453b8199fd7367afcb5dcbec3254ec78f91d20badeabc44d269dcf41b68334",
+      "positive_pixel_count": 795468,
+      "preserve_pixel_count": 3690624,
+      "sample_sha256": "02eecbea2ca592054c85cbb6a915e8a8e90ee946f31302a4ae78a7b0884c0ff7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4315.jpg",
+      "fold": 0,
+      "npz_sha256": "4b1e3fdfaaa46670432747267b0b98ff7c8d4f228179728a2a1d8d48777eebf2",
+      "positive_pixel_count": 537936,
+      "preserve_pixel_count": 3948156,
+      "sample_sha256": "691cd4d0a64a98d74a3a7f62f76304038587bd6de9a6eafa08235d85a1e077e0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4333.jpg",
+      "fold": 0,
+      "npz_sha256": "1a83b3c94d97c49fd3d61fcc978fb60b914be0db87b4f1886db766093ac599e1",
+      "positive_pixel_count": 838756,
+      "preserve_pixel_count": 3647336,
+      "sample_sha256": "18770c23131bf9071f217599118f9a6a9a1cd139937f93a1a015eacab18905d2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4349.jpg",
+      "fold": 1,
+      "npz_sha256": "87f7baf95a5c9bcc7ae8dd975d7f81ba2e9e7e493b050234f91d46228c7acf1b",
+      "positive_pixel_count": 498085,
+      "preserve_pixel_count": 3988007,
+      "sample_sha256": "9e9351724405e91e44e6419f503bd74f189c4587e82dffbc2d11026656fc661d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4367.jpg",
+      "fold": 4,
+      "npz_sha256": "bcc7f6996931ce75564b53fe8b06c19f1bfdf03f321530450fdf567e2b281d7e",
+      "positive_pixel_count": 224919,
+      "preserve_pixel_count": 4261173,
+      "sample_sha256": "a70012409fef0f5c516328eef1b50c4ad4f06ee4e15c9287f4dba32fdaa609c0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4385.jpg",
+      "fold": 1,
+      "npz_sha256": "5ba01cebcb4fa86a1798bb8711c4f54c2bf4725e47d2af67a642aaa4c917ac7b",
+      "positive_pixel_count": 750437,
+      "preserve_pixel_count": 3735655,
+      "sample_sha256": "6c7d7f6409438d0f13d72cc495b8da12d8c36123f2df3299bc7c62e8eabafa47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4403.jpg",
+      "fold": 4,
+      "npz_sha256": "3e57e463abd6eb4d348d6db9f90dd7c98e3bdc9ad845855a33243fcbb0919574",
+      "positive_pixel_count": 406265,
+      "preserve_pixel_count": 4079827,
+      "sample_sha256": "d09d21d281bac224a0d4c1386dd591e280c1a9f38c2f0e960f528aa7075f9c95",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4421.jpg",
+      "fold": 2,
+      "npz_sha256": "8272a0922236c3d70e590e8bc64b89a58510bc428ce4c93b9f83759b7077c59d",
+      "positive_pixel_count": 820478,
+      "preserve_pixel_count": 3665614,
+      "sample_sha256": "e386c67d343bfd7a155c2ef4a192b89f80f1df919721d6458cb437b7532e1ca3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4439.jpg",
+      "fold": 0,
+      "npz_sha256": "32a077c97e8f235b473808976568d9911c581f1f0a659773d678fb198810d4d9",
+      "positive_pixel_count": 257041,
+      "preserve_pixel_count": 4229051,
+      "sample_sha256": "0a1d0b22b78616b47df62cbe5e5640ecaba5e222b14219d9955a184fa5eca099",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4457.jpg",
+      "fold": 3,
+      "npz_sha256": "88ff88b3aa32a76acf117788f346f96dd8668bbae85d924ca3b7e106130dbb03",
+      "positive_pixel_count": 469449,
+      "preserve_pixel_count": 4016643,
+      "sample_sha256": "69838b172be2762549a2bd5588356b84215028cbda43eececbe57eec17384cef",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4475.jpg",
+      "fold": 4,
+      "npz_sha256": "5e137560e5df008713e3f2551f46bf2279955091131ef0ad1f89631aad07241f",
+      "positive_pixel_count": 779836,
+      "preserve_pixel_count": 3706256,
+      "sample_sha256": "c6ea2c99419abb80c7feabd74329b5ce53f1159e6e3b39e4c682c9486c946b77",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4493.jpg",
+      "fold": 2,
+      "npz_sha256": "4dcfa29df4b559510f6edf06924d8c6003b6ffeb70a42dc28b0cf438cb3cebbe",
+      "positive_pixel_count": 458908,
+      "preserve_pixel_count": 4027184,
+      "sample_sha256": "5a09dd851788a7e80b4be9993ea807d504fdfaa6e28465047d68ba7f3519156e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4510.jpg",
+      "fold": 4,
+      "npz_sha256": "38fa42c5f67fd101e2584fa21b3646bb08a92751758a06fa46585ac0f44feddb",
+      "positive_pixel_count": 310039,
+      "preserve_pixel_count": 5690946,
+      "sample_sha256": "3daa178a26ff6a21bf1ff891f1ba4cde2d88ddd658dc43b337ff07566aa0a3b3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4528.jpg",
+      "fold": 2,
+      "npz_sha256": "92d46b47449965f9ec5d7af4b0d95cd0dba1cdbb7e5ecae623eb117f4b8b9d44",
+      "positive_pixel_count": 392776,
+      "preserve_pixel_count": 5608209,
+      "sample_sha256": "2ffa1046e8d86bb38fa31a0dc7b2879c9ac4e514eaa220913999ab5806eca3bf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4546.jpg",
+      "fold": 1,
+      "npz_sha256": "4d43fbb404e7b2c54bd7d406636789a7b9dd9ac36975b53eac5ca4ad92f21625",
+      "positive_pixel_count": 630755,
+      "preserve_pixel_count": 5370230,
+      "sample_sha256": "92249a994b497e3908530d1d94ee751eee94e0c8e3d26398dbc7b51949f8588a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4564.jpg",
+      "fold": 0,
+      "npz_sha256": "8be3e6c3f079403fc1784ef3c2d31c4e336a14b8936d4ff6c537da5005fe0c87",
+      "positive_pixel_count": 809636,
+      "preserve_pixel_count": 5191349,
+      "sample_sha256": "57859203b49c60cba7c7df18c6763762c5ee98b9d289c4c46bc4039db0323962",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4582.jpg",
+      "fold": 4,
+      "npz_sha256": "f27aafe9389fe28926ba30f0f8b1df0574bc225ffa4be695aab735694fbd2e91",
+      "positive_pixel_count": 1428196,
+      "preserve_pixel_count": 4572789,
+      "sample_sha256": "35a0738eebeb9f3be706e74c1cb49acdf2f34c46bae89f80b0b816fa10628058",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4600.jpg",
+      "fold": 4,
+      "npz_sha256": "e8e9ec164711c899daa10e96f2d186fe74164ab30ee93817433eefafc9060e15",
+      "positive_pixel_count": 546581,
+      "preserve_pixel_count": 5454404,
+      "sample_sha256": "d555738f75cc0bfa6a730a64ccaddddcb1b5bc69e244fa99bad3113eb42e3a00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4618.jpg",
+      "fold": 1,
+      "npz_sha256": "a9e4f2767919ccf0a0ce042ec7e696bc5172d379995b8c1f078c6f4060ff3a7a",
+      "positive_pixel_count": 537279,
+      "preserve_pixel_count": 5463706,
+      "sample_sha256": "c81e9eb1fedb3271ddeb21cf0866f0bad4c0c61c3b97e8b22191a353c461682f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4636.jpg",
+      "fold": 2,
+      "npz_sha256": "b22f066a2a1be8cb1d8fa7e0c6366e5df4996aeec6ec91d4e277a96ced97717d",
+      "positive_pixel_count": 560637,
+      "preserve_pixel_count": 5440348,
+      "sample_sha256": "4cec5443f467ef0ec2f29b600b2d5327a844cad019cf40e50a42403066e13fe8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4654.jpg",
+      "fold": 2,
+      "npz_sha256": "8513e637e9a3a0f8be62621ea63249d6ec40df95fd31bdf3df749497c68a6cdd",
+      "positive_pixel_count": 421504,
+      "preserve_pixel_count": 5579481,
+      "sample_sha256": "9ba19b0978a8f9f90e33c6ae8f4550422d090f70a7fc3f1fe9556b3d05060244",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4671.jpg",
+      "fold": 1,
+      "npz_sha256": "7e1092cbb04df645a583c6f2982b0b793550ee7f955e870386a35df9496593e7",
+      "positive_pixel_count": 162611,
+      "preserve_pixel_count": 5838374,
+      "sample_sha256": "576afc6978caa5b6278a7da94b32ada88c08423710e1fd70d06ccb57ba902e1f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4689.jpg",
+      "fold": 1,
+      "npz_sha256": "64cfd1577dfb016245a283a2b60d85e53b8a4faad3f33bb409c0e461963b5b8a",
+      "positive_pixel_count": 1031894,
+      "preserve_pixel_count": 4969091,
+      "sample_sha256": "7ec92923cd64af8f52a34ca7990744cb842e88235f6ea15447b5e66381963361",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4707.jpg",
+      "fold": 4,
+      "npz_sha256": "d768f375555b32e2b7b5b0d51f7edf83e3e842bd37df7be19ba9a745ae7e1528",
+      "positive_pixel_count": 656661,
+      "preserve_pixel_count": 5344324,
+      "sample_sha256": "f5e9813ec3d992aada22ead84615cd5c458d293f1c61158080ed6da29c3c148d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4725.jpg",
+      "fold": 0,
+      "npz_sha256": "d10db2e9e5274f600236aca39267b2295918ad12af2ad94f8f54ea5dea26f512",
+      "positive_pixel_count": 709303,
+      "preserve_pixel_count": 5291682,
+      "sample_sha256": "502c0e997de3fc556b276e9ec7dfbfd3c3d43920481fe11f929fb949a25ff6ac",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4743.jpg",
+      "fold": 3,
+      "npz_sha256": "6ac1a0bdd54b1ac71362ebac8fc2348d55cb0b626c508c8359468782b7462f6d",
+      "positive_pixel_count": 594672,
+      "preserve_pixel_count": 5406313,
+      "sample_sha256": "cc77a03b75e67593d5efd7bf894d535b774c9e4c94e1e6d9be18634ceeab1c0e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4761.jpg",
+      "fold": 1,
+      "npz_sha256": "7d2f01e25742a45c0998fdcd1e72a964d56aedec8c3f87bae7c5ab69132c4ad1",
+      "positive_pixel_count": 782802,
+      "preserve_pixel_count": 5218183,
+      "sample_sha256": "2a35e5f9096575e4ce63c6b1d2f5abb92d293871fd73ec416b2466f2b9793ffb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4779.jpg",
+      "fold": 0,
+      "npz_sha256": "e2da6429feb6874b73d2c806dfac9fb9bb991770cc725e7fb2a20a5f7bbb4c86",
+      "positive_pixel_count": 811584,
+      "preserve_pixel_count": 5189401,
+      "sample_sha256": "5e202e3e2034c2ac6cffcc466844b1a0440996b5807cb0643b8410f7fedd3927",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4797.jpg",
+      "fold": 0,
+      "npz_sha256": "1cda921f4ca88931247c69dd84c30d851908489c9b76d7ed24c1bd04573e0a5b",
+      "positive_pixel_count": 364080,
+      "preserve_pixel_count": 5636905,
+      "sample_sha256": "fef19353a33346329c9e4888ecb53c8bc7c39505fc9f2fd1d21851fb17d63e91",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4815.jpg",
+      "fold": 3,
+      "npz_sha256": "f430bcb078669f92644e5c913f56f5dafde63d3563f8e1b192d2539cfe9b4b26",
+      "positive_pixel_count": 997955,
+      "preserve_pixel_count": 5003030,
+      "sample_sha256": "1697ce1300350b3fcfd9a7efad6afe093d754ac66c239b1757e72d0c0a378c00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4833.jpg",
+      "fold": 4,
+      "npz_sha256": "bdd3ad92e987c36b8e6528d00d3fcdf27abf81805d7bbf170fd6f2cbe25c98ca",
+      "positive_pixel_count": 394375,
+      "preserve_pixel_count": 5606610,
+      "sample_sha256": "c54b5bc823251d38bfb98226cfb955d1d90b35fcda66c22b3753f5806fd779f4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4850.jpg",
+      "fold": 2,
+      "npz_sha256": "df75e6815e31a009d66b29560d0ba45b4ef93749fad612f6a024d28e083c7653",
+      "positive_pixel_count": 625764,
+      "preserve_pixel_count": 5375221,
+      "sample_sha256": "ce468bfd91547e1f2a95d7eac77114eb7e09e421b30291f60ff5e74d249db342",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4867.jpg",
+      "fold": 3,
+      "npz_sha256": "0de0e07d002ebaf8b2285482954b096e1f25dfb11cc3d40165018ec9c6c3f8ae",
+      "positive_pixel_count": 1113216,
+      "preserve_pixel_count": 4887769,
+      "sample_sha256": "c55a84b739a88b776ca5773066b0c10eefc5882378fb9e24b53a40934db68cce",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4885.jpg",
+      "fold": 2,
+      "npz_sha256": "384db3f1d579c0837d7fd44048c12586eabea59e658f7c0752044997f247f405",
+      "positive_pixel_count": 415551,
+      "preserve_pixel_count": 5585434,
+      "sample_sha256": "ced0348f28bb56f119eb3c40b0ea96b1a713f6146a9a92c0296c566209a84be9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4903.jpg",
+      "fold": 0,
+      "npz_sha256": "faca81b5b7d6530e0b1fbfb71610b6302abec3af08154163a7e0fee2fba9d235",
+      "positive_pixel_count": 274538,
+      "preserve_pixel_count": 5726447,
+      "sample_sha256": "cff2ece8512ace814ad2cb76d71bdbc3b886c4ef8661a5c6edcc74558c705543",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4921.jpg",
+      "fold": 1,
+      "npz_sha256": "92b46899bc6f3e84a3062925a43ef3e7ff949f7d1bcd91b2ed3ba16faee3ccc8",
+      "positive_pixel_count": 446752,
+      "preserve_pixel_count": 5554233,
+      "sample_sha256": "43570ccc344f7ef74e539ed6089879652a781a8a968e8be347d9e80ae41a49cf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4939.jpg",
+      "fold": 4,
+      "npz_sha256": "c856e84cd6abe79261d4c833be9d2140352ad7ceb5b6261faaf95cf61e719f71",
+      "positive_pixel_count": 209090,
+      "preserve_pixel_count": 3779506,
+      "sample_sha256": "c579fa894ee517cd93e357a2c1285ecdff834618f81016f1c9208558c152cb47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4957.jpg",
+      "fold": 1,
+      "npz_sha256": "e5e9881296f2d8f16e8262e257b85e9763101bfa2ed92c8e4abd8199c32fab44",
+      "positive_pixel_count": 896203,
+      "preserve_pixel_count": 3092393,
+      "sample_sha256": "98fe38507e002a1458a4ad89821219051f8d526d43e0524a30899a1578c3e33a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4975.jpg",
+      "fold": 4,
+      "npz_sha256": "ae4b8e7370b18bfa0ea299eeabc308f072ceb2a5cbe633d416cb41ae0bcad28b",
+      "positive_pixel_count": 844853,
+      "preserve_pixel_count": 3143743,
+      "sample_sha256": "55a6f3a6083e0323d37ff69690ffa387fcf6faf850ecc2401efd93bcab672178",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4993.jpg",
+      "fold": 4,
+      "npz_sha256": "e1c531e9d72917d56f7d16316c41fffa6ee390a8a6709c39f6ffd74901e8db06",
+      "positive_pixel_count": 257179,
+      "preserve_pixel_count": 3731417,
+      "sample_sha256": "958bfc80e629ecde2591eb2eef2c835da44b963091ab57a449087f75ccec3126",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5010.jpg",
+      "fold": 3,
+      "npz_sha256": "75a5b31ad2e64f8d52daa72ff161852cc21bdd4e62a01b454a1fa6e523f93976",
+      "positive_pixel_count": 847986,
+      "preserve_pixel_count": 2893998,
+      "sample_sha256": "22881e594dc1630dd7bf77853fefa409628dbb8259146ec498b143061dd2ddbf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5028.jpg",
+      "fold": 0,
+      "npz_sha256": "0bd39d0cb41208bc40603175386a3e9f0c072e55136627f62908a30156b36a72",
+      "positive_pixel_count": 765853,
+      "preserve_pixel_count": 2976131,
+      "sample_sha256": "9277f5374d42d62ff3e7698d8f43bdf0f021a22115a0b609ecf2b28e37bd71f1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5046.jpg",
+      "fold": 4,
+      "npz_sha256": "a0b2e950ce449ce5f78c192e22af13295a595c20393c2bd5a836a26847573d93",
+      "positive_pixel_count": 718113,
+      "preserve_pixel_count": 3023871,
+      "sample_sha256": "22e503943bedd6ea0495df1bb30ad2002e7b32f3ec9ffad824c1937b683a3247",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5064.jpg",
+      "fold": 1,
+      "npz_sha256": "b99b44d4ee512597dbcb5ad8f71fb4e9a1f9879aaa537c0aa656aabb6b575b34",
+      "positive_pixel_count": 680113,
+      "preserve_pixel_count": 3061871,
+      "sample_sha256": "6f7a637d314b4157539c77afae4fe63f5e586a639d649f333694ed0216072262",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5082.jpg",
+      "fold": 0,
+      "npz_sha256": "db0c2b91d6921dbc7f2ce45edc93f016b93d37e17556d02ac7c6c9369d7cf0c8",
+      "positive_pixel_count": 727910,
+      "preserve_pixel_count": 3014074,
+      "sample_sha256": "eb219b0fae17a3df4e4471e88a7264f35acc7063f622db7868237efef327d3b7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5100.jpg",
+      "fold": 1,
+      "npz_sha256": "d431929419fafe1d162d0e89c72158368e23120f05d6a9b47141935ffb89844d",
+      "positive_pixel_count": 730412,
+      "preserve_pixel_count": 3011572,
+      "sample_sha256": "f37fc8405dad771d37a88de5b00a39a1754027fbe24c1575251b638f42c23df2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5118.jpg",
+      "fold": 4,
+      "npz_sha256": "2b6438e8446016b790019d6aa3f75b7deddae054b13893f01f17ecc370464a4d",
+      "positive_pixel_count": 759426,
+      "preserve_pixel_count": 2982558,
+      "sample_sha256": "c78ef43c49eeeaf60b3510ed5434b51c200e720c17fd7346fcc3b3c875cc9318",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_521.jpg",
+      "fold": 4,
+      "npz_sha256": "3fd1a959950ea777d41715ee65a1eb476012bcb170cb5f0a9c36c9ec2c49ef9b",
+      "positive_pixel_count": 306968,
+      "preserve_pixel_count": 3693625,
+      "sample_sha256": "362e275f6e92c0ea74cda57359667d2e41427f8c08c543feb57dc55fe62f9c66",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_539.jpg",
+      "fold": 0,
+      "npz_sha256": "cc8a64717a5263cff59f909fe22402ac3e8c83e433387fa8e2f6301300bee3fd",
+      "positive_pixel_count": 853857,
+      "preserve_pixel_count": 3146736,
+      "sample_sha256": "79e41bd58275772b543b6678d5e24e31c4f60442dbf64e0cf01ddadcf6342b6a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_55.jpg",
+      "fold": 1,
+      "npz_sha256": "5c8b56624207037843009f66fbc6159f6179d6b5168159c77402c69a62ad1ec5",
+      "positive_pixel_count": 649902,
+      "preserve_pixel_count": 4410878,
+      "sample_sha256": "91420514f420f37cb0454c0f41efdbf1c2b8780c86a5f99f03315f071443adca",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_557.jpg",
+      "fold": 0,
+      "npz_sha256": "36fe06b0e9af469747234b10727ad930440617cbc3df60e97ad6ae7ed7b80475",
+      "positive_pixel_count": 979183,
+      "preserve_pixel_count": 3021410,
+      "sample_sha256": "11d2d13a26a362e28d7c5e2f6d7ace0727d6ae200171503aeacc3212985a6de8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_575.jpg",
+      "fold": 2,
+      "npz_sha256": "339280b1ba7ecacb52aa54a012061a49a8d601ee12045c35551aef695756d0dc",
+      "positive_pixel_count": 521323,
+      "preserve_pixel_count": 3479270,
+      "sample_sha256": "2bbcbaba55b1519ee6dc1dbb13c5b76700e3bf0b0c75ea98e4fc1e6ac9dbeb41",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_593.jpg",
+      "fold": 1,
+      "npz_sha256": "12ab2a0e238314d5a6cb4b568361e47dcb25e6d47941f9f0a4615555e46335fa",
+      "positive_pixel_count": 463427,
+      "preserve_pixel_count": 3225279,
+      "sample_sha256": "7a88afd84dfb9fe7857aa0a2a4d5b1bdf8551d92776cf4f44f471b6df5293a4d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_611.jpg",
+      "fold": 0,
+      "npz_sha256": "2585f0043e95d98f6b8309eed7bc4a122a13168e90ecb335b198f918bbf66eaf",
+      "positive_pixel_count": 86585,
+      "preserve_pixel_count": 3602121,
+      "sample_sha256": "93bfef00f6602945ec73fbab2192845dd674d7e2b52312043fbc813516b0a7f7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_629.jpg",
+      "fold": 4,
+      "npz_sha256": "968a45c2348a74764671f29464c03705738254a1d3af50f7fdd3cf6762287fee",
+      "positive_pixel_count": 797451,
+      "preserve_pixel_count": 2891255,
+      "sample_sha256": "ff194f71556a2b7cff8f9c052c33cd11e3845b4af91a28096e13f30a9aa3eddc",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_708.jpg",
+      "fold": 3,
+      "npz_sha256": "2d2b44fcde7a8b4aef1a0311f4540ec2880b398bb7899d7b21e23cbdadfb1f09",
+      "positive_pixel_count": 2753511,
+      "preserve_pixel_count": 3967088,
+      "sample_sha256": "e46beb31dea98304d25eb45f2efdb5cb92d1a8f2056dcdb12b7b822876da347c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_72.jpg",
+      "fold": 2,
+      "npz_sha256": "7d6d4371caeb3d870b5c53ceeb20f7aea0bf5a9712aa4f65399332dde7e2004d",
+      "positive_pixel_count": 604328,
+      "preserve_pixel_count": 6061126,
+      "sample_sha256": "c617a75bad1aa6973ec72a9905176f21be2247ad4bb1a04d8c6f38cdfee6bd73",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_725.jpg",
+      "fold": 1,
+      "npz_sha256": "da16bd27e59ee3c405b8bfdd9afefab0b1fc49668209ca011124d3658e2168f4",
+      "positive_pixel_count": 1759609,
+      "preserve_pixel_count": 4960990,
+      "sample_sha256": "185da43c7cbc636db41584b50c99a00316a00b08cc7b6e535c00d1716ab0dff9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_743.jpg",
+      "fold": 3,
+      "npz_sha256": "aaa166d1acd45fd65dda7130952aa5e99df5c8a89e37604af80b8179f231ded8",
+      "positive_pixel_count": 3484731,
+      "preserve_pixel_count": 3235868,
+      "sample_sha256": "6d181a64fecc172f65e38c651e9faac3fd773fd618b685f387ccc36387ac7055",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_761.jpg",
+      "fold": 1,
+      "npz_sha256": "23a02d78e24aa826524cf81fba88c7d5af32c51622b2314bb83b7c72cf3e672b",
+      "positive_pixel_count": 832466,
+      "preserve_pixel_count": 4695034,
+      "sample_sha256": "cb6f717c847ce6a8482004c77393aa2ffb7eed3759945e46b8ee1e1ed84c9134",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_779.jpg",
+      "fold": 1,
+      "npz_sha256": "8cda2f3ab1bbe9baea97e274c0476eee772ae4e2f5b3b3208a6e92451c8d38ce",
+      "positive_pixel_count": 1396060,
+      "preserve_pixel_count": 4131440,
+      "sample_sha256": "783573e0ef738bfd05a439026396510d8cdda21f2190d63943f66388437de1ab",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_797.jpg",
+      "fold": 0,
+      "npz_sha256": "46fb807a783c7ab675c8c4ea7c7bc12f5ae24772847b22bc1e3168680f036e72",
+      "positive_pixel_count": 1332058,
+      "preserve_pixel_count": 4195442,
+      "sample_sha256": "0bc34fab5d7cf495b2b90ba25be76992353c6200f9df6bceb5e74034fce18bf6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_815.jpg",
+      "fold": 2,
+      "npz_sha256": "97b2cbeb47bc9bc5f02ee5770e3766a4a3ceb22e07525fcc75fbcb429b5192e2",
+      "positive_pixel_count": 1601460,
+      "preserve_pixel_count": 3926040,
+      "sample_sha256": "c47a60e648bce98b58d0e7fc33899748837b8ca79830756a5e58c0694e0dd96f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_833.jpg",
+      "fold": 3,
+      "npz_sha256": "a8dfbd83d17457d1e4120b6dd80e1ca551f9e7cdbe5ef3c73cf618a7f31cb128",
+      "positive_pixel_count": 1508801,
+      "preserve_pixel_count": 5517611,
+      "sample_sha256": "b66402c40b342a7f308e454850822e97a2a399175b1fa1d7f839ad52f391ac27",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_851.jpg",
+      "fold": 3,
+      "npz_sha256": "7f83f61c3ea391d6d008dfbb12cf9b10ec45e539bcba38b4b30e508950ed8beb",
+      "positive_pixel_count": 1934267,
+      "preserve_pixel_count": 5092145,
+      "sample_sha256": "9e720368a93978baad2675cfce6143b61ff643186e06f7e0a79b6e2655a6a18e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_869.jpg",
+      "fold": 4,
+      "npz_sha256": "d45a44e16266a087a00052ac6f7e42dc9a63e5c15ca0add4e19db0bb55e4b8d2",
+      "positive_pixel_count": 1281674,
+      "preserve_pixel_count": 5744738,
+      "sample_sha256": "aa8503f52fce660851e2dfb3a9ffebdffd4ca3869c982c1549d6002f6d28e0c9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_93.jpg",
+      "fold": 4,
+      "npz_sha256": "b2b60f9414e273ad56c3c3b5f14bdf47746c758cd69ba820340845e8947d4263",
+      "positive_pixel_count": 1251346,
+      "preserve_pixel_count": 5414108,
+      "sample_sha256": "154d85acdaaaa1f09b07dc40e986945c81aaaf1f3626b901b4b0c5b2febf354f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_411.jpg",
+      "fold": 2,
+      "npz_sha256": "b23d891fa74286eb85b80e4c28bc8530d0ef0c8d2d8241a24d014c2f8a778b35",
+      "positive_pixel_count": 331835,
+      "preserve_pixel_count": 3967421,
+      "sample_sha256": "1b8aa130fe8b7cf0398f03cc10fef8232a782bdc237800ea503043ccdcf8f813",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_415.jpg",
+      "fold": 3,
+      "npz_sha256": "f0ff196ad102dcd8c5262b42556332dbf109acce5541bb7bf9ae9c88bca2a061",
+      "positive_pixel_count": 393065,
+      "preserve_pixel_count": 3936055,
+      "sample_sha256": "2b9934bd595796faed172b780574552088017c2ae07964a683ad572cbab319ee",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_433.jpg",
+      "fold": 4,
+      "npz_sha256": "b943fb6cdf2dbcd5c35c65bdb9a3f46460e62a9d5a33ebeabdafc56a6c16191e",
+      "positive_pixel_count": 44527,
+      "preserve_pixel_count": 3634425,
+      "sample_sha256": "cea4a732034bb9d720fbd6d5c9eb1e383164e3df4d33af5e8d6d0397c8ee7691",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_434.jpg",
+      "fold": 3,
+      "npz_sha256": "a3813948af651d7722d77850a5234f951fe0bebe1d800e996cb1e989399a9a31",
+      "positive_pixel_count": 47130,
+      "preserve_pixel_count": 3631822,
+      "sample_sha256": "2c408ab668c7e7e7c0a0b8e64cd54d77a1eec6d0a2a6f6884ba890ab340d4147",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_437.jpg",
+      "fold": 4,
+      "npz_sha256": "c40fd6cd6f5317bc58ced210647097cb7b8ad4ea96c2bd620975a1b4a56166e7",
+      "positive_pixel_count": 47890,
+      "preserve_pixel_count": 3627874,
+      "sample_sha256": "281e1c5ae82f078302568543e4a4d702e6e004d7575005089a36b8202f088f6f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_447.jpg",
+      "fold": 2,
+      "npz_sha256": "b61f2239e187ef4655f0da8dd7839954cb54bf85c0b2b886eb2c31d87d8a9d16",
+      "positive_pixel_count": 447151,
+      "preserve_pixel_count": 3853169,
+      "sample_sha256": "656779deda7480636d1f7af6f2e83c9792b7b70f1e013703eea9feb7707342cb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_457.jpg",
+      "fold": 0,
+      "npz_sha256": "0cd41dc2345f6f37fea8acb69bdb895b6f838bb1337650e21ec9eead6b871e5a",
+      "positive_pixel_count": 426599,
+      "preserve_pixel_count": 3164121,
+      "sample_sha256": "20ddf3bbc43c373c0d2398ea59233f5132a3abec3841aea7968c13e4bfd2008c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_464.jpg",
+      "fold": 1,
+      "npz_sha256": "88dd8122abd4edb23a7460277b6b81071f0f9438db02438e6ac08567326d1ba7",
+      "positive_pixel_count": 216637,
+      "preserve_pixel_count": 3363239,
+      "sample_sha256": "2f785c60f89bf8bc4127ae38a3595dfdf8c0cf9afbb320eff040631a3feb266a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_471.jpg",
+      "fold": 0,
+      "npz_sha256": "ae4fda49d8997da631f11c68e77e688b42637f4cbcc02d86a91c82e0c82669cd",
+      "positive_pixel_count": 359166,
+      "preserve_pixel_count": 3210212,
+      "sample_sha256": "321500d8ff829e17703e8728a9211f4e634c0ea52e4de0f8c5953d0a51d880b8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_473.jpg",
+      "fold": 3,
+      "npz_sha256": "a9e59dfc1ec7649a2652a5c50fa7c55fbb029e697b00f8cd808d54cefa47e2db",
+      "positive_pixel_count": 413624,
+      "preserve_pixel_count": 3184936,
+      "sample_sha256": "631e61ff8eea23a7ad894b548b491ca64707095a31e5fcb5dba230ac7d45319d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_487.jpg",
+      "fold": 0,
+      "npz_sha256": "73f02edb463ef09c5a9f8f1ac2c669779c07da2da5241ea9b3480a300a255482",
+      "positive_pixel_count": 279913,
+      "preserve_pixel_count": 3324807,
+      "sample_sha256": "01a32b70edb0ab7c57f3ad83b0dac150178ef5d7cd46d3cd582fa4f9fccd2180",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_494.jpg",
+      "fold": 2,
+      "npz_sha256": "6f350fb23432c041fc93efa3b6c6fb8cc186e77df3aafbda1c23bc820dfcece0",
+      "positive_pixel_count": 80649,
+      "preserve_pixel_count": 3673063,
+      "sample_sha256": "498191645daeca9aa9726e29dc0c2eeea3c2a9ccee26ba7b305e53c411bd205c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_496.jpg",
+      "fold": 1,
+      "npz_sha256": "3e2baffb0cd581c461aa6fcfb6ff0361c9e2fc1770a136e995832385d7412a35",
+      "positive_pixel_count": 87797,
+      "preserve_pixel_count": 3681883,
+      "sample_sha256": "af730925d2fdb4d778b2cad0d19b879c38556113fe7389ea931ace979256abad",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_510.jpg",
+      "fold": 1,
+      "npz_sha256": "554a9fa0e07371fa5528b8cc3604961e280563737ee8fd3623ac3877af26635e",
+      "positive_pixel_count": 111832,
+      "preserve_pixel_count": 3702448,
+      "sample_sha256": "b246f7842558f68a39cc31adcb30f46d7b8f24525c5568443b7bcdad6c812e54",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_518.jpg",
+      "fold": 4,
+      "npz_sha256": "5ee52068e1b5f6f7942dcaf8d8bcf45386b2fd04e6cb389e4a46a843f60c9c93",
+      "positive_pixel_count": 101861,
+      "preserve_pixel_count": 3549395,
+      "sample_sha256": "71583b9d18ceee9b66982b9ddfedbce881bc0ad8b9202e9cbb8b38e03ca446c8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_524.jpg",
+      "fold": 1,
+      "npz_sha256": "b905ec83cddf5f9317ee1514bc6704a10e9dd1a44ae56f386a50a72dd0b12210",
+      "positive_pixel_count": 148134,
+      "preserve_pixel_count": 4190938,
+      "sample_sha256": "51a666e36923d9e8168f541e461c495f7be674ece7a2a81851f4ac918b28e737",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_529.jpg",
+      "fold": 1,
+      "npz_sha256": "58aa97823618dcaf1c85dd7f729e5df74c3a1624e0da4c9c2093c09451876cb0",
+      "positive_pixel_count": 187761,
+      "preserve_pixel_count": 4098103,
+      "sample_sha256": "5e6e2e9404f579953eaf99a1cd224c3180e9f4afaec753a5b672e08233adbee1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_535.jpg",
+      "fold": 1,
+      "npz_sha256": "3a1b3f888b0b74cc59310821a9a0cc678650a01b4760e8510b1e9bce564f676c",
+      "positive_pixel_count": 171193,
+      "preserve_pixel_count": 4181831,
+      "sample_sha256": "9abd5e8b6b54c1df5048fec4940caec97ebfee46fc400d57ca8457c7670c21ba",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_539.jpg",
+      "fold": 0,
+      "npz_sha256": "55a32cdba879d3d86a7ea1eb253c047cdefcbf893df00042f5b6e9716fc166f6",
+      "positive_pixel_count": 168079,
+      "preserve_pixel_count": 4170993,
+      "sample_sha256": "99932a0eab57c8d82c6fd1d2c4ecc8f1c49bc8c337e87acaf892385369ec495f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_540.jpg",
+      "fold": 3,
+      "npz_sha256": "bfde4cefc5aa7eb9a56a45955979027517d9614025d21e894dde9541c370db46",
+      "positive_pixel_count": 373652,
+      "preserve_pixel_count": 3948988,
+      "sample_sha256": "2e1342d6cae2b0471e0ad6f20f8af30fb92544c6e0da15e9214076bb62a82a41",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_542.jpg",
+      "fold": 2,
+      "npz_sha256": "12be5ad5b69298b1cba8e74e62f09cbd5ee5c0ed553f4024c1b82eae78b5cb68",
+      "positive_pixel_count": 271974,
+      "preserve_pixel_count": 4074074,
+      "sample_sha256": "927c7825d72890561406f57deb722cc266f0bf7d8df8300f7aef46d80178d6d9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_544.jpg",
+      "fold": 3,
+      "npz_sha256": "90ccb5dd210e5d1d9b236a279e4733d4bb79f9fbdbbfcc61569b63ed3128cb24",
+      "positive_pixel_count": 312807,
+      "preserve_pixel_count": 4045209,
+      "sample_sha256": "3a17fd1a8a004b8bd3a7e1ff75fa79cadb108b69bbbaab3ad1db141d97c0b154",
+      "samples_per_class": 1024
+    }
+  ],
+  "plan_path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+  "plan_sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0",
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "real_data_access": true,
+  "reserved_blind_authorized": false,
+  "sample_count": 563200,
+  "schema_version": 1,
+  "second_stage_predictions": {
+    "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "target_decode_roles": [
+    "train"
+  ],
+  "terminal": "KILL",
+  "train_labels": {
+    "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "count": 275
+  },
+  "train_page_count": 275,
+  "training_started": false
+}
