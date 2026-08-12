@@ -939,3 +939,27 @@ sampling, ridge lambda, nonlinear probes, or training. A successor requires
 separate preregistration of a materially new target-free causal support source
 and an independent train-only ablation. The current-primary product default,
 promotion closure, and reserved-blind closure remain unchanged.
+
+## Second-Stage Alpha Support Preregistration
+
+```text
+family: second_stage_alpha_support
+state: PREREQUISITE_NEEDED
+representation: frozen final second-stage RGB + raw erasemap sigmoid alpha before every threshold
+ablation: frozen final second-stage RGB only
+diagnostic: label-free train275 alpha materialization, then five-fold page-grouped closed-form ridge
+plan: docs/second-stage-alpha-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md
+data execution / training / candidate: alpha materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: implement and run the exact target-free alpha materialization and four-channel audit once
+```
+
+This family tests the frozen erasemap edit-confidence surface that the product
+removes with `cleanup_alpha_threshold=0.3` before its later gates. It excludes
+clean-candidate RGB, threshold masks, primary/source signals, page scalars,
+neighborhoods, transforms, alternative model layers, nonlinear probes, and
+all optimizer or quality work. A PASS can authorize only a separately
+preregistered alpha-conditioned data/training/application preflight with
+portable checkpoint metadata; it cannot authorize training, candidate
+inference, or any quality split directly.

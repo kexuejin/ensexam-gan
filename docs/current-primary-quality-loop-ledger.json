@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Keep the quality loop active after final-pipeline context, primary mb/ms, reconstruction-stage disagreement, and raw source-plus-output RGB all failed their frozen train-only ablations; require a separately preregistered materially new target-free causal source before any optimizer or quality surface can reopen.",
+    "causal_change": "Add only the frozen second-stage erasemap raw sigmoid alpha before the 0.3 threshold to the fixed final second-stage RGB support evidence, testing whether hidden edit confidence identifies target-lighter residual support without reusing visible RGB transforms, primary masks/stages, page gates, or neighborhoods.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -297,12 +297,20 @@
       {
         "path": "tests/test_source_output_support_prerequisite.py",
         "sha256": "e81dad38d09bb9d0912849a007d1482149bb39b98ff0f89594d07ba8c0722e9b"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md",
+        "sha256": "9476654731d8560b43109b4daf62af3527e50ecf588ffe8b6198d59a2659f580"
+      },
+      {
+        "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+        "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
       }
     ],
-    "failure_bucket": "materially_new_target_free_support_source_needed_after_context_mask_stage_and_source_output_kills",
+    "failure_bucket": "prethreshold_second_stage_alpha_support_unproven_after_visible_rgb_and_primary_internal_kills",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Preregister a materially new target-free causal support source and independent train-only ablation that does not rescue final-pipeline RGB/context, primary mb/ms, Ic4/Ic2/Ic1/Ire disagreement, or raw source-plus-output RGB; keep implementation, training, and every quality surface closed until that record passes review.",
+    "next_action": "Implement and run only the exact label-free train275 raw second-stage alpha materialization and preregistered four-channel page-grouped separability diagnostic; keep every optimizer and quality surface closed until all provenance and AUC gates pass.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -375,8 +383,13 @@
         "status": "passed"
       },
       {
-        "detail": "Before any additional data execution or implementation, name and freeze a materially new target-free support source plus an independent train-only ablation that is not a transform, selector, threshold, neighborhood, probe, or training rescue of the four closed support families.",
+        "detail": "The frozen second-stage erasemap raw prethreshold alpha, exact four-channel RGB-plus-alpha representation, label-free materialization, fixed RGB ablation, and terminal successors are frozen before implementation or data execution.",
         "id": "materially_new_support_successor_preregistration_v2",
+        "status": "passed"
+      },
+      {
+        "detail": "Materialize only train275 raw alpha from the frozen erasemap before thresholding, pin prediction/checkpoint/source provenance, then run the exact train-label-only five-fold separability diagnostic while all model and quality surfaces remain closed.",
+        "id": "second_stage_alpha_support_train_only_diagnostic",
         "status": "pending"
       }
     ],
@@ -1396,6 +1409,22 @@
       "outcome": "raw_source_adds_directional_signal_but_insufficient_margin_over_second_stage_rgb",
       "repeat_policy": "do_not_repeat",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md",
+          "sha256": "9476654731d8560b43109b4daf62af3527e50ecf588ffe8b6198d59a2659f580"
+        },
+        {
+          "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+          "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+        }
+      ],
+      "id": "second-stage-alpha-support-preregistration",
+      "outcome": "frozen_prethreshold_second_stage_erasemap_alpha_diagnostic_pending_label_free_train275_materialization",
+      "repeat_policy": "implement_and_run_exact_train275_alpha_materialization_and_four_channel_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
