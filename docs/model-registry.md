@@ -895,3 +895,47 @@ ridge lambda, nonlinear probes, or training. A successor requires separate
 preregistration of a materially new target-free causal support source and an
 independent train-only ablation. The current-primary product default,
 promotion closure, and reserved-blind closure remain unchanged.
+
+## Source-Output Support Preregistration
+
+```text
+family: source_output_support
+state: PREREQUISITE_NEEDED
+representation: raw source RGB + frozen second-stage RGB
+ablation: frozen second-stage RGB only
+diagnostic: train275 page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/source-output-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-source-output-support-preregistration.md
+data execution / training / candidate: false / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: implement and run the exact train-only six-channel diagnostic once
+```
+
+This family tests whether pre-edit source appearance supplies support evidence
+that final cleaned appearance lacks. It deliberately excludes the closed
+dual-pipeline additions: primary RGB, signed pipeline differences, masks,
+reconstruction stages, page scalars, thresholds, neighborhoods, and model
+transforms. A PASS may authorize only a later source-conditioned
+data/training/application preflight with portable checkpoint metadata; it
+cannot authorize training or candidate inference directly.
+
+The exact train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.654677 / 0.626443
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.010171
+macro median page AUC: 0.702450
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the raw source-plus-output family through channel
+selection, differences, color transforms, neighborhoods, thresholds, folds,
+sampling, ridge lambda, nonlinear probes, or training. A successor requires
+separate preregistration of a materially new target-free causal support source
+and an independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.

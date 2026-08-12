@@ -1,0 +1,162 @@
+{
+  "acceptance": {
+    "full_auc_ablation_margin_min": 0.03,
+    "full_fold_auc_min": 0.55,
+    "full_mean_fold_auc_min": 0.65,
+    "macro_median_page_auc_min": 0.6,
+    "positive_mean_above_preserve_min_folds": 4,
+    "required_fold_count": 5,
+    "required_terminal_on_pass": "PASS"
+  },
+  "authorization": {
+    "candidate_checkpoint": false,
+    "candidate_inference": false,
+    "development_gate": false,
+    "diagnostic_implementation": true,
+    "diagnostic_output_only": "outputs/source-output-support-prerequisite-20260812/audit.json",
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "train_target_decode_for_diagnostic_labels_only": true,
+    "visual_review": false
+  },
+  "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "effective_train_count": 275,
+    "effective_train_domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "manifest": {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "second_stage_prediction_dir": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+    "split": "train",
+    "target_access": "diagnostic_labels_only",
+    "target_lighter_margin_gray": 2.0
+  },
+  "diagnostic": {
+    "ablation_features": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b"
+    ],
+    "auc_tie_policy": "average_rank",
+    "class_balance": "equal_per_page_target_lighter_and_preserve",
+    "coordinate_rank": "splitmix64(row_major_index XOR first_64_bits(sha256(utf8_basename))) then unsigned_hash_y_x",
+    "feature_normalization": "divide_raw_uint8_rgb_channels_by_255",
+    "fold_assignment": "int(sha256(utf8_basename), 16) % 5",
+    "fold_count": 5,
+    "full_feature_count": 6,
+    "lambda": 1.0,
+    "luma_definition": "arithmetic_mean_rgb_gray_units",
+    "max_samples_per_class_per_page": 1024,
+    "numeric_type": "float64",
+    "optimizer": "none_closed_form_ridge",
+    "ridge_intercept": "unpenalized",
+    "sampling_count": "min(1024, target_lighter_count, preserve_count) per class per page",
+    "standardization": "fitting_fold_mean_and_standard_deviation_only",
+    "target_encoding": {
+      "preserve": -1,
+      "target_lighter": 1
+    },
+    "threshold_derivation": "prohibited"
+  },
+  "evidence": {
+    "current_primary_checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "current_primary_config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "current_second_stage_checkpoint": {
+      "path": "artifacts/current-second-stage-best.pt",
+      "sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7"
+    },
+    "dual_input_kill": {
+      "path": "docs/decisions/2026-08-11-dual-input-support-separation-diagnostic-kill.md",
+      "sha256": "64c52693cc60bab60d33586e73a46a3789d0dcbd24a3b1f4492a88fc654f94d9"
+    },
+    "primary_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary/metrics.csv",
+      "sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846"
+    },
+    "reconstruction_stage_kill": {
+      "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-diagnostic-kill.md",
+      "sha256": "01c6d854a7b1e70683c1697ecaf7b6357d12f5bbda0671cf96a1b5503c56ea9c"
+    },
+    "role_plan": {
+      "path": "docs/monotonic-residual-erase-data-roles.json",
+      "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+    },
+    "second_stage_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/metrics.csv",
+      "sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d"
+    },
+    "second_stage_prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "directory": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "spatial_mask_kill": {
+      "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-diagnostic-kill.md",
+      "sha256": "5da07daa99b6efb8783f4a5c0ef1f37edd2a6b50f36c9e5d21e8a200de42820a"
+    },
+    "train_label_set": {
+      "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+      "count": 275,
+      "directory": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+    }
+  },
+  "fail_closed": [
+    "artifact_or_role_hash_drift",
+    "source_content_hash_drift",
+    "second_stage_prediction_hash_drift",
+    "source_second_stage_or_target_shape_drift",
+    "page_crosses_folds",
+    "fitting_statistics_leak_into_held_out_fold",
+    "empty_target_lighter_or_preserve_class",
+    "unregistered_feature_transform_or_local_context",
+    "changed_sample_cap_coordinate_hash_fold_or_lambda",
+    "acceptance_condition_failed",
+    "candidate_checkpoint_prediction_or_quality_output_created"
+  ],
+  "future_portable_checkpoint_contract": {
+    "default_weights_only_load_required": true,
+    "path_metadata_serialization": "string",
+    "required_before": "candidate_inference",
+    "status": "future_training_preflight_only"
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "next_boundary_on_pass": "source_output_support_data_and_training_preflight_only",
+  "planned_implementation": {
+    "audit_output": "outputs/source-output-support-prerequisite-20260812/audit.json",
+    "audit_script": "scripts/analysis/audit_source_output_support_separation.py",
+    "test": "tests/test_source_output_support_prerequisite.py"
+  },
+  "representation": {
+    "channels": [
+      "source_r",
+      "source_g",
+      "source_b",
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b"
+    ],
+    "feature_count": 6,
+    "no_masks_page_scalars_stages_or_primary_rgb": true,
+    "no_threshold_neighborhood_or_model_transform": true,
+    "single_causal_change": "add_raw_source_rgb_to_frozen_second_stage_rgb_support_evidence",
+    "source_and_output_are_target_free": true
+  },
+  "schema_version": 1,
+  "state": "preregistered_pending_source_output_train_only_diagnostic"
+}
