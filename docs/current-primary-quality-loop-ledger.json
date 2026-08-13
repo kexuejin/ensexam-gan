@@ -369,12 +369,28 @@
       {
         "path": "docs/external-text-layout-support-prerequisite-v1.json",
         "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
+        "sha256": "fa2432e0490b18f5b06bf92e17c8c4c032c00bdfbd8de88456ff4fe8e9a27a9f"
+      },
+      {
+        "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
+        "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
+      },
+      {
+        "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+        "sha256": "1dafff0f6a2d50ebe4ddc087502408c008e0ddd68990bc243f4d12fe3768749c"
+      },
+      {
+        "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+        "sha256": "1efce15af7b9e3f31e159f3a6fb7904d62cd091c330030d263572789b0870c3d"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run exactly one target-free PP-OCRv6 train275 layout materialization and the frozen five-channel versus second-stage-RGB train-only diagnostic. Keep every optimizer, candidate, quality, visual, promotion, and reserved-blind surface closed.",
+    "next_action": "Repair the external detector runtime memory prerequisite without changing the frozen detector, runtime parameters, representation, or gates. Do not run another model process while swap exceeds 512 MiB. After a separately justified safe one-page target-free runtime result, reconstruct the missing frozen primary and second-stage prediction caches with exact historical content hashes before the formal train275 materialization and audit. Keep every optimizer, candidate, quality, visual, promotion, and reserved-blind surface closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -472,7 +488,7 @@
         "status": "passed"
       },
       {
-        "detail": "Before any optimizer or quality split, materialize exact target-free sorted text polygons, scores, occupancy, and confidence for train275, then run the exact five-channel versus second-stage-RGB train-only support audit once.",
+        "detail": "Pending runtime and frozen-cache prerequisites. A nonformal target-free CPU Transformers page crossed the 35% system-free-memory floor at 31.0% and left 1,269.75 MiB swap, so it was terminated with no formal evidence or residual model process. Repair runtime safety first; then reconstruct exact historical prediction caches before the one formal train275 materialization and five-channel audit.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       }
@@ -1629,6 +1645,30 @@
       "id": "external-text-layout-support-preregistration",
       "outcome": "frozen_external_text_occupancy_and_confidence_pending_target_free_train275_materialization_and_train_only_diagnostic",
       "repeat_policy": "implement_and_run_exact_external_text_layout_materialization_and_five_channel_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
+          "sha256": "fa2432e0490b18f5b06bf92e17c8c4c032c00bdfbd8de88456ff4fe8e9a27a9f"
+        },
+        {
+          "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
+          "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
+        },
+        {
+          "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+          "sha256": "1dafff0f6a2d50ebe4ddc087502408c008e0ddd68990bc243f4d12fe3768749c"
+        },
+        {
+          "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+          "sha256": "1efce15af7b9e3f31e159f3a6fb7904d62cd091c330030d263572789b0870c3d"
+        }
+      ],
+      "id": "external-text-layout-runtime-safety-probe",
+      "outcome": "single_target_free_cpu_detector_page_crossed_the_35_percent_memory_floor_and_left_swap_above_the_512_mib_launch_gate_without_formal_evidence",
+      "repeat_policy": "repair_runtime_prerequisite_then_retry_one_safe_page_only",
       "terminal": "PREREQUISITE_NEEDED"
     }
   ],

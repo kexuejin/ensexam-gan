@@ -1058,9 +1058,12 @@ ablation: frozen second-stage RGB only
 diagnostic: five-fold page-grouped closed-form ridge with frozen sampling and AUC gates
 plan: docs/external-text-layout-support-prerequisite-v1.json
 decision: docs/decisions/2026-08-13-external-text-layout-support-preregistration.md
+runtime prerequisite: docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md
+runtime result: docs/external-text-layout-runtime-safety-probe-20260813.json
 data execution / training / candidate: exact layout materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
-next action: implement and run the exact target-free materializer and train-only five-channel diagnostic once
+runtime status: one target-free CPU page crossed 35% free-memory floor at 31.0%; post-stop swap 1,269.75 MiB; no formal evidence or residual model process
+next action: repair runtime memory safety without parameter rescue, obtain one safe page below all fixed gates, then reconstruct exact frozen prediction caches before formal materialization
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
@@ -1077,3 +1080,10 @@ unverified, so this is only an incremental train-role support screen. Even a
 PASS cannot establish product generalization; it may authorize only a separate
 leakage-aware data/training/application preflight. The current-primary product
 default, promotion closure, and reserved-blind closure remain unchanged.
+
+The family is not KILLed. Its train-only diagnostic remains pending behind two
+fail-closed prerequisites: a safe detector runtime and reconstruction of the
+missing frozen primary/second-stage prediction caches with exact historical
+content hashes. No model process may be retried while swap use exceeds
+`512 MiB`, and the registered detector/runtime parameters and acceptance gates
+must not be relaxed.
