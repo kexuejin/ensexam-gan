@@ -332,11 +332,11 @@
       },
       {
         "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md",
-        "sha256": "e057d844f84a3244943f984af045b7df5abe993b2039ec38c7b34cf7c365b753"
+        "sha256": "03733208a1b20b8904852c052706908e4884912903a276725ad1531169b7629a"
       },
       {
         "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
-        "sha256": "09b74b6a835e1011f11cce1f1fd20e5ff26e41fe20f8c7db671584ee038656fb"
+        "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
       }
     ],
     "failure_bucket": "residual_handwriting_support_misses_on_specialist_unseen_hw5k_train_pages",
@@ -1515,11 +1515,11 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md",
-          "sha256": "e057d844f84a3244943f984af045b7df5abe993b2039ec38c7b34cf7c365b753"
+          "sha256": "03733208a1b20b8904852c052706908e4884912903a276725ad1531169b7629a"
         },
         {
           "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
-          "sha256": "09b74b6a835e1011f11cce1f1fd20e5ff26e41fe20f8c7db671584ee038656fb"
+          "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
         }
       ],
       "id": "independent-hw5k-expert-disagreement-support-preregistration",

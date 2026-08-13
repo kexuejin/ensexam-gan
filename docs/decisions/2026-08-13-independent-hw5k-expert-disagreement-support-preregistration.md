@@ -72,7 +72,10 @@ config sha256: c0ab5cc2a96dcaffa86dc75754c2a9bb9bfdc741c8ff7319e93bf8e2abc8adf8
 
 Run exact source-only current-primary inference separately with each artifact
 pair on all 123 pages. No domain field, caller label, route, or expert selector
-is accepted. Version 1 full features are exactly current-primary RGB/255 plus
+is accepted. Both runs use `page_overlap=32`, `batch_size=8`,
+`copy_input_outside_mask=mb`, `copy_mask_threshold_auto=mb_cov8_step`, fallback
+threshold `70`, dilation `0`, `device=auto`, and `--skip-label-metrics`.
+Version 1 full features are exactly current-primary RGB/255 plus
 frozen-specialist RGB/255. The ablation is the identical probe and coordinates
 with specialist RGB removed. Do not add an explicit difference channel,
 source or second-stage RGB, masks, page scalars, thresholds, neighborhoods,
@@ -83,6 +86,9 @@ transforms, or alternative checkpoints.
 After target-free paired outputs pass artifact, source, set, alignment, and
 content validation, train-role targets may define positive pixels exactly as
 `target_luma - current_primary_luma > 2` gray. All other pixels are preserve.
+The audit must first validate the complete frozen train275 label-set identity:
+275 files with content SHA
+`dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e`.
 
 Reuse the established five basename-hash page folds, deterministic SplitMix64
 sampling, and at most 1024 pixels per class per page. Fit float64 closed-form

@@ -26,6 +26,7 @@
     "visual_review": false
   },
   "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
     "derived_basename_newline_sha256": "e2921d717086c080606acd69dbec2de0e4a97281edc460aa6c0b74af41097698",
     "derived_full_path_newline_sha256": "ad7c794706edb1b832cb30af978663853fb10646531bc4cf83011023338d81e2",
     "diagnostic_count": 123,
@@ -104,6 +105,11 @@
       "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
       "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
     },
+    "train_label_set": {
+      "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+      "count": 275,
+      "directory": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+    },
     "specialist_checkpoint": {
       "external_path": "/Volumes/Tool/source/ensexam-gan/artifacts/trials/hw5k-mixed-scut130-hw5k130-50pct-guard-jointtail-lite-step6400-respress-bs4-20260730/ensexam/20260801_183409/epoch_1.pth",
       "sha256": "8da25117dd883f95059b6d7067e3dc3580da11339de365ef904f711db4a1f490"
@@ -135,6 +141,16 @@
   "paired_expert_materialization": {
     "derived_manifest_creation": "reproduce_after_all_source_and_exclusion_hashes_validate_before_image_decode",
     "inference": "run_both_frozen_checkpoints_on_every_same_source_page_without_routing",
+    "inference_protocol": {
+      "batch_size": 8,
+      "copy_input_outside_mask": "mb",
+      "copy_mask_dilate": 0,
+      "copy_mask_threshold": 70,
+      "copy_mask_threshold_auto": "mb_cov8_step",
+      "device": "auto",
+      "page_overlap": 32,
+      "skip_label_metrics": true
+    },
     "output_root": "outputs/independent-hw5k-expert-support-materialization-20260813",
     "target_access": false
   },
