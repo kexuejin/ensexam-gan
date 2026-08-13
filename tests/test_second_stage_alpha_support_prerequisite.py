@@ -299,7 +299,7 @@ class SecondStageAlphaSupportPrerequisiteTest(unittest.TestCase):
         self.assertEqual(statuses["materially_new_support_successor_preregistration_v3"], "passed")
         self.assertEqual(
             statuses["independent_hw5k_expert_support_train_only_diagnostic"],
-            "pending",
+            "passed",
         )
         result = next(
             item

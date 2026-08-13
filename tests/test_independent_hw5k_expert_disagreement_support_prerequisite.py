@@ -57,9 +57,13 @@ class IndependentHw5kExpertSupportPrerequisiteTest(unittest.TestCase):
     def test_registered_plan_keeps_every_product_surface_closed(self) -> None:
         plan, ledger = self.registered()
         validate_materialization_plan(plan)
-        validate_materialization_authority(ledger)
+        with self.assertRaisesRegex(
+            MaterializationError, "diagnostic is not pending"
+        ):
+            validate_materialization_authority(ledger)
         validate_audit_plan(plan)
-        validate_audit_authority(ledger)
+        with self.assertRaisesRegex(AuditError, "diagnostic is not pending"):
+            validate_audit_authority(ledger)
         self.assertEqual(plan["representation"]["channels"], list(CHANNELS))
         self.assertEqual(
             plan["diagnostic"]["ablation_features"], list(ABLATION_CHANNELS)

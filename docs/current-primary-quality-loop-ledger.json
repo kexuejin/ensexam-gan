@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Add frozen RGB output from an independently trained HW5K expert to frozen current-primary RGB only on 123 train-role HW5K pages that the specialist never saw; compare the exact six-channel representation against an identical current-primary-RGB-only probe before any optimizer or quality split is opened.",
+    "causal_change": "No implementation or data execution is authorized. Identify and preregister one materially new target-free causal support source with an independent train-only ablation after final RGB/context, primary mb/ms, reconstruction stages, raw source-plus-output RGB, second-stage raw alpha, and paired independent-expert RGB all failed their frozen incremental-margin gates.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -328,7 +328,7 @@
       },
       {
         "path": "tests/test_second_stage_alpha_support_prerequisite.py",
-        "sha256": "f24357d7108a04f56838f6bdd98307d5b3a580a6a3bffcea8d449c7cfe816a14"
+        "sha256": "ff7bee5358b8bb3b34f0528e217b9abd0c0e29ed143dd59243e84f8c5b8f9f66"
       },
       {
         "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md",
@@ -337,12 +337,36 @@
       {
         "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
         "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-diagnostic-kill.md",
+        "sha256": "905e99712fc4de7ccec76fd7f77fd7334d310c7977b9d4d1a61fe20bdf7d5104"
+      },
+      {
+        "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+        "sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f"
+      },
+      {
+        "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+        "sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4"
+      },
+      {
+        "path": "scripts/analysis/materialize_independent_hw5k_expert_outputs_train_only.py",
+        "sha256": "4e369f8d0b8d1e1da9a27db14e0799d85bf23d061a99bd3fc819a6ef9b29f4f9"
+      },
+      {
+        "path": "scripts/analysis/audit_independent_hw5k_expert_disagreement_support.py",
+        "sha256": "74c738c958aeef0ff0e7a5dd54b46a9d8c6197d71146ddc70ce853c44ec75923"
+      },
+      {
+        "path": "tests/test_independent_hw5k_expert_disagreement_support_prerequisite.py",
+        "sha256": "bc89d669e77aba92f5f6c63d3b434ebbce0edb93df22ff02eb8579f3fd1aba3e"
       }
     ],
-    "failure_bucket": "residual_handwriting_support_misses_on_specialist_unseen_hw5k_train_pages",
+    "failure_bucket": "all_preregistered_target_free_support_sources_closed_without_incremental_margin",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement and run only the exact target-free paired materialization and five-fold train-only support diagnostic on the frozen 123-page unseen-HW5K population. Keep routing, optimizers, candidate inference, and every quality split closed.",
+    "next_action": "Keep every implementation, data execution, optimizer, and quality surface closed. Identify and preregister only a materially new target-free causal support source with an independent train-only ablation; do not round, rescue, route, or repeat paired independent-expert RGB or any earlier closed family.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -430,8 +454,13 @@
         "status": "passed"
       },
       {
-        "detail": "Before any optimizer or quality split, reproduce the frozen specialist artifacts and 123-page exclusion set, materialize both source-only predictions without targets or routing, and run the exact six-channel versus current-primary-RGB five-fold train-only support audit once.",
+        "detail": "The exact target-free paired materialization passed and the 123-page unseen-HW5K diagnostic reached mean AUC 0.664916, but KILLed the family because its 0.029727 margin over current-primary RGB missed the frozen 0.03 minimum by 0.000273. No training or quality surface opened.",
         "id": "independent_hw5k_expert_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any further implementation or data execution, identify and freeze one materially new target-free causal support source, an independent train-only ablation, leakage-safe population and folds, acceptance gates, and terminal successors. Every completed RGB/context, mask, stage, alpha, and paired-expert family remains closed.",
+        "id": "materially_new_support_successor_preregistration_v4",
         "status": "pending"
       }
     ],
@@ -489,9 +518,19 @@
       "second_stage_alpha_support_v1_training",
       "second_stage_alpha_support_v1_candidate_inference",
       "second_stage_alpha_support_v1_quality_gate",
-      "second_stage_alpha_support_v1_promotion"
+      "second_stage_alpha_support_v1_promotion",
+      "independent_hw5k_expert_support_v1_repeat_diagnostic",
+      "independent_hw5k_expert_support_v1_margin_rounding_or_relaxation",
+      "independent_hw5k_expert_support_v1_channel_layer_transform_fold_sampling_lambda_checkpoint_or_nonlinear_rescue",
+      "independent_hw5k_expert_support_v1_routing_rescue",
+      "independent_hw5k_expert_support_v1_training",
+      "independent_hw5k_expert_support_v1_candidate_inference",
+      "independent_hw5k_expert_support_v1_quality_gate",
+      "independent_hw5k_expert_support_v1_promotion"
     ],
-    "prohibited_before_support_diagnostic_completion": [
+    "prohibited_before_successor_preregistration": [
+      "implementation",
+      "data_execution",
       "training",
       "checkpoint_generation",
       "candidate_inference",
@@ -1499,7 +1538,7 @@
         },
         {
           "path": "tests/test_second_stage_alpha_support_prerequisite.py",
-          "sha256": "f24357d7108a04f56838f6bdd98307d5b3a580a6a3bffcea8d449c7cfe816a14"
+          "sha256": "ff7bee5358b8bb3b34f0528e217b9abd0c0e29ed143dd59243e84f8c5b8f9f66"
         },
         {
           "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
@@ -1526,6 +1565,42 @@
       "outcome": "paired_independent_expert_rgb_support_frozen_on_123_specialist_unseen_hw5k_train_pages_pending_target_free_materialization_and_train_only_diagnostic",
       "repeat_policy": "implement_and_run_exact_paired_expert_materialization_and_six_channel_diagnostic_only",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-diagnostic-kill.md",
+          "sha256": "905e99712fc4de7ccec76fd7f77fd7334d310c7977b9d4d1a61fe20bdf7d5104"
+        },
+        {
+          "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+          "sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f"
+        },
+        {
+          "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+          "sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4"
+        },
+        {
+          "path": "scripts/analysis/materialize_independent_hw5k_expert_outputs_train_only.py",
+          "sha256": "4e369f8d0b8d1e1da9a27db14e0799d85bf23d061a99bd3fc819a6ef9b29f4f9"
+        },
+        {
+          "path": "scripts/analysis/audit_independent_hw5k_expert_disagreement_support.py",
+          "sha256": "74c738c958aeef0ff0e7a5dd54b46a9d8c6197d71146ddc70ce853c44ec75923"
+        },
+        {
+          "path": "tests/test_independent_hw5k_expert_disagreement_support_prerequisite.py",
+          "sha256": "bc89d669e77aba92f5f6c63d3b434ebbce0edb93df22ff02eb8579f3fd1aba3e"
+        },
+        {
+          "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
+          "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
+        }
+      ],
+      "id": "independent-hw5k-expert-support-train-only-diagnostic",
+      "outcome": "paired_independent_expert_rgb_adds_signal_but_misses_frozen_incremental_margin_by_0.000273",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1

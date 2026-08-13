@@ -991,7 +991,7 @@ and reserved-blind closure remain unchanged.
 
 ```text
 family: independent_hw5k_expert_disagreement_support_v1
-state: PREREQUISITE_NEEDED
+state: KILL
 population: 123 HW5K train-role pages not present in the specialist training manifest
 materialization: both frozen checkpoints on every same source page, no targets, no routing
 representation: current-primary RGB + frozen HW5K expert RGB
@@ -1001,7 +1001,7 @@ plan: docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json
 decision: docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md
 data execution / training / candidate: paired materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
-next action: exact target-free paired materialization and train-only support diagnostic
+next action: do not repeat or rescue; preregister only a materially new target-free causal source
 ```
 
 This prerequisite does not reopen Candidate 5 routing. Its prior routed product
@@ -1020,3 +1020,27 @@ expert-conditioned data/training/application preflight; it cannot authorize
 routing, training, candidate inference, or quality evaluation directly. The
 current-primary product default, promotion closure, and reserved-blind closure
 remain unchanged.
+
+The target-free paired materialization completed with exactly 123 aligned
+predictions from each checkpoint and no routing metadata. The exact train-only
+diagnostic subsequently returned KILL:
+
+```text
+unseen HW5K pages / balanced samples: 123 / 251,904
+full mean / minimum fold AUC: 0.664916 / 0.634484
+current-primary-RGB-only mean AUC: 0.635189
+full minus ablation mean AUC: 0.029727
+macro median page AUC: 0.716586
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL by 0.000273
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not round or relax the frozen margin, and do not rescue paired independent
+expert RGB through channel/layer selection, differences, transforms,
+neighborhoods, folds, sampling, ridge lambda, alternate checkpoints, nonlinear
+probes, routing, or training. A successor requires separate preregistration of
+a materially new target-free causal source and an independent train-only
+ablation. The current-primary product default, promotion closure, and
+reserved-blind closure remain unchanged.
