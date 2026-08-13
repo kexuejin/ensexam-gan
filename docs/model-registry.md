@@ -1044,3 +1044,36 @@ probes, routing, or training. A successor requires separate preregistration of
 a materially new target-free causal source and an independent train-only
 ablation. The current-primary product default, promotion closure, and
 reserved-blind closure remain unchanged.
+
+## External Text Layout Support Preregistration
+
+```text
+family: external_printed_text_layout_support_v1
+state: PREREQUISITE_NEEDED
+producer: official PP-OCRv6_medium_det safetensors, frozen CPU Transformers inference
+population: exact 275 train-role raw source pages
+materialization: sorted quadrilaterals/scores plus occupancy/confidence grids, no targets or recognition
+representation: frozen second-stage RGB + text occupancy + text confidence
+ablation: frozen second-stage RGB only
+diagnostic: five-fold page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/external-text-layout-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-13-external-text-layout-support-preregistration.md
+data execution / training / candidate: exact layout materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: implement and run the exact target-free materializer and train-only five-channel diagnostic once
+```
+
+This is the first registered support producer trained outside the EnsExam-GAN
+pipeline for generic text localization. Version 1 persists deterministic text
+quadrilaterals and scores for provenance, but exposes only binary polygon
+occupancy and pixelwise maximum detection confidence to the diagnostic. OCR
+recognition, recognized content, polygon geometry features, source RGB, masks,
+alpha, reconstruction stages, expert outputs, routing metadata, transforms,
+and detector or probe searches are excluded.
+
+The external model was not trained or tuned in this repository and receives no
+train275 targets. Its published training-corpus overlap with SCUT or HW5K is
+unverified, so this is only an incremental train-role support screen. Even a
+PASS cannot establish product generalization; it may authorize only a separate
+leakage-aware data/training/application preflight. The current-primary product
+default, promotion closure, and reserved-blind closure remain unchanged.
