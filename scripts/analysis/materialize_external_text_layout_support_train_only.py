@@ -5,10 +5,10 @@ from __future__ import annotations
 
 import argparse
 import csv
-from concurrent.futures import ProcessPoolExecutor
-import hashlib
 from importlib.metadata import PackageNotFoundError, version
 import json
+import multiprocessing
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -25,6 +25,7 @@ if str(ROOT) not in sys.path:
 from scripts.analysis.build_sign_separated_residual_patch_index import (  # noqa: E402
     effective_train_filenames,
 )
+from scripts.analysis import external_text_layout_materialization_runtime as runtime  # noqa: E402
 
 
 PLAN_PATH = Path("docs/external-text-layout-support-prerequisite-v1.json")
@@ -34,12 +35,11 @@ FAMILY = "external_printed_text_layout_support_v1"
 ACTIVE_ITERATION_ID = "monotonic-residual-erase-support"
 PREREGISTRATION_ID = "materially_new_support_successor_preregistration_v4"
 DIAGNOSTIC_ID = "external_text_layout_support_train_only_diagnostic"
-NPZ_KEYS = {
-    "polygons",
-    "scores",
-    "text_confidence",
-    "text_occupancy",
-}
+NPZ_KEYS = runtime.NPZ_KEYS
+PAGE_ROW_KEYS = runtime.PAGE_ROW_KEYS
+MAX_DETECTOR_RSS_BYTES = runtime.MAX_DETECTOR_RSS_BYTES
+MIN_MEMORY_FREE_PERCENT = runtime.MIN_MEMORY_FREE_PERCENT
+MAX_SWAP_USED_BYTES = runtime.MAX_SWAP_USED_BYTES
 FORBIDDEN_SOURCE_COMPONENTS = {
     "all_labels",
     "development",
@@ -64,28 +64,17 @@ FORBIDDEN_MANIFEST_FIELDS = {
 }
 
 
-class MaterializationError(RuntimeError):
-    pass
-
-
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
-
-
-def sha256_rows(rows: list[str]) -> str:
-    payload = "\n".join(sorted(rows)) + "\n"
-    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
-
-
-def read_json(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise MaterializationError(f"expected JSON object: {path}")
-    return value
+MaterializationError = runtime.MaterializationError
+sha256_file = runtime.sha256_file
+sha256_rows = runtime.sha256_rows
+read_json = runtime.read_json
+fsync_directory = runtime.fsync_directory
+atomic_write_json = runtime.atomic_write_json
+atomic_write_npz = runtime.atomic_write_npz
+assert_no_conflicting_model_processes = runtime.assert_no_conflicting_model_processes
+process_tree_rss_bytes = runtime.process_tree_rss_bytes
+runtime_health = runtime.runtime_health
+enforce_health_limits = runtime.enforce_health_limits
 
 
 def repo_path(repo_root: Path, value: str) -> Path:
@@ -479,7 +468,7 @@ def validate_registered_inputs(
     runtime = validate_runtime(evidence.get("runtime", {}))
     output_root = repo_path(repo_root, str(OUTPUT_ROOT))
     temporary_root = output_root.with_name(f".{output_root.name}.materializing")
-    if require_output_absent and (output_root.exists() or temporary_root.exists()):
+    if require_output_absent and output_root.exists():
         raise MaterializationError("external text-layout output already exists")
     return {
         "base_role_path": base_role_path,
@@ -598,15 +587,14 @@ def predict_one(detector: Any, source_path: Path, spec: dict[str, Any]) -> Any:
     return results[0]
 
 
-def write_manifest(
-    path: Path,
+def build_manifest_payload(
     *,
     repo_root: Path,
     plan_path: Path,
     registered: dict[str, Any],
     rows: list[dict[str, Any]],
-) -> None:
-    payload = {
+) -> dict[str, Any]:
+    return {
         "batch_size": 1,
         "box_thresh": 0.45,
         "device": "cpu",
@@ -643,10 +631,26 @@ def write_manifest(
         "train_count": len(rows),
         "unclip_ratio": 1.4,
     }
+
+
+def write_manifest(
+    path: Path,
+    *,
+    repo_root: Path,
+    plan_path: Path,
+    registered: dict[str, Any],
+    rows: list[dict[str, Any]],
+) -> None:
+    payload = build_manifest_payload(
+        repo_root=repo_root,
+        plan_path=plan_path,
+        registered=registered,
+        rows=rows,
+    )
     lowered_keys = {key.lower() for key in payload}
     if lowered_keys & FORBIDDEN_MANIFEST_FIELDS:
         raise MaterializationError("forbidden metadata entered materialization manifest")
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    atomic_write_json(path, payload)
 
 
 def materialize_one(
@@ -671,12 +675,12 @@ def materialize_one(
         polygons, scores, height=height, width=width
     )
     npz_path = page_dir / f"{Path(file_name).stem}.npz"
-    np.savez_compressed(
+    atomic_write_npz(
         npz_path,
         polygons=polygons,
         scores=scores,
-        text_confidence=confidence,
-        text_occupancy=occupancy,
+        confidence=confidence,
+        occupancy=occupancy,
     )
     return {
         "confidence_max": float(confidence.max()),
@@ -691,26 +695,243 @@ def materialize_one(
     }
 
 
-def materialize_chunk(task: tuple[dict[str, Any], list[tuple[str, str, str]], str]) -> list[dict[str, Any]]:
-    spec, source_rows, page_dir_value = task
-    page_dir = Path(page_dir_value)
-    page_dir.mkdir(parents=True, exist_ok=True)
+def validate_page_record(
+    row: dict[str, Any],
+    *,
+    file_name: str,
+    source_path: Path,
+    npz_path: Path,
+) -> dict[str, Any]:
+    return runtime.validate_page_record(
+        row,
+        file_name=file_name,
+        source_path=source_path,
+        npz_path=npz_path,
+        rasterize=rasterize_layout,
+    )
+
+
+def prepare_resume_state(
+    *, repo_root: Path, plan_file: Path, registered: dict[str, Any]
+) -> tuple[Path, Path, dict[str, dict[str, Any]]]:
+    return runtime.prepare_resume_state(
+        repo_root=repo_root,
+        plan_file=plan_file,
+        registered=registered,
+        family=FAMILY,
+        rasterize=rasterize_layout,
+    )
+
+
+def materialize_page_child(
+    spec: dict[str, Any],
+    file_name: str,
+    source_path_value: str,
+    page_dir_value: str,
+    record_path_value: str,
+) -> None:
+    os.setsid()
     detector = create_detector(spec)
     try:
-        return [
-            materialize_one(
-                detector=detector,
-                file_name=file_name,
-                source_path=Path(source_path),
-                spec=spec,
-                page_dir=page_dir,
-            )
-            for file_name, _relative, source_path in source_rows
-        ]
+        row = materialize_one(
+            detector=detector,
+            file_name=file_name,
+            source_path=Path(source_path_value),
+            spec=spec,
+            page_dir=Path(page_dir_value),
+        )
+        atomic_write_json(Path(record_path_value), row)
     finally:
         close = getattr(detector, "close", None)
         if callable(close):
             close()
+
+
+def wait_for_page_process(
+    process: multiprocessing.Process,
+    *,
+    health_reader: Callable[[int], dict[str, float | int]] = runtime_health,
+) -> dict[str, float | int]:
+    return runtime.wait_for_page_process(process, health_reader=health_reader)
+
+
+def run_isolated_page(
+    *,
+    spec: dict[str, Any],
+    file_name: str,
+    source_path: Path,
+    page_dir: Path,
+    record_path: Path,
+) -> dict[str, float | int]:
+    context = multiprocessing.get_context("spawn")
+    process = context.Process(
+        target=materialize_page_child,
+        args=(spec, file_name, str(source_path), str(page_dir), str(record_path)),
+        daemon=False,
+    )
+    process.start()
+    return wait_for_page_process(process)
+
+
+def run_in_process_page(
+    *,
+    detector_factory: Callable[[dict[str, Any]], Any],
+    spec: dict[str, Any],
+    file_name: str,
+    source_path: Path,
+    page_dir: Path,
+    record_path: Path,
+) -> dict[str, float | int]:
+    detector = detector_factory(spec)
+    try:
+        row = materialize_one(
+            detector=detector,
+            file_name=file_name,
+            source_path=source_path,
+            spec=spec,
+            page_dir=page_dir,
+        )
+        atomic_write_json(record_path, row)
+    finally:
+        close = getattr(detector, "close", None)
+        if callable(close):
+            close()
+    return {
+        "minimum_memory_free_percent": 100.0,
+        "peak_process_tree_rss_bytes": 0,
+        "peak_swap_used_bytes": 0,
+    }
+
+
+def publish_completed_materialization(
+    *,
+    repo_root: Path,
+    plan_file: Path,
+    registered: dict[str, Any],
+    page_dir: Path,
+    rows: list[dict[str, Any]],
+) -> None:
+    temporary_root: Path = registered["temporary_root"]
+    output_root: Path = registered["output_root"]
+    complete_root = temporary_root / "complete"
+    if complete_root.exists():
+        shutil.rmtree(complete_root)
+    complete_pages = complete_root / "pages"
+    complete_pages.mkdir(parents=True)
+    for row in rows:
+        source = page_dir / f"{Path(row['file']).stem}.npz"
+        destination = complete_pages / source.name
+        os.link(source, destination)
+    fsync_directory(complete_pages)
+    write_manifest(
+        complete_root / "manifest.json",
+        repo_root=repo_root,
+        plan_path=plan_file,
+        registered=registered,
+        rows=rows,
+    )
+    fsync_directory(complete_root)
+    complete_root.replace(output_root)
+    fsync_directory(output_root.parent)
+    finalize_published_cleanup(repo_root=repo_root, registered=registered)
+
+
+def published_transaction_paths(output_root: Path) -> tuple[Path, Path]:
+    marker = output_root.with_name(f".{output_root.name}.published.json")
+    cleanup = output_root.with_name(f".{output_root.name}.cleanup")
+    return marker, cleanup
+
+
+def published_marker_payload(
+    *, repo_root: Path, registered: dict[str, Any]
+) -> dict[str, Any]:
+    output_root: Path = registered["output_root"]
+    return {
+        "manifest_sha256": sha256_file(output_root / "manifest.json"),
+        "output_root": str(output_root.relative_to(repo_root)),
+        "schema_version": 1,
+    }
+
+
+def finalize_published_cleanup(
+    *, repo_root: Path, registered: dict[str, Any]
+) -> None:
+    output_root: Path = registered["output_root"]
+    temporary_root: Path = registered["temporary_root"]
+    marker_path, cleanup_root = published_transaction_paths(output_root)
+    expected_marker = published_marker_payload(
+        repo_root=repo_root, registered=registered
+    )
+    if marker_path.exists():
+        if read_json(marker_path) != expected_marker:
+            raise MaterializationError("published transaction marker changed")
+    else:
+        atomic_write_json(marker_path, expected_marker)
+    if temporary_root.exists():
+        if cleanup_root.exists():
+            raise MaterializationError("published cleanup states overlap")
+        temporary_root.replace(cleanup_root)
+        fsync_directory(output_root.parent)
+    if cleanup_root.exists():
+        shutil.rmtree(cleanup_root)
+        fsync_directory(output_root.parent)
+    marker_path.unlink()
+    fsync_directory(output_root.parent)
+
+
+def validate_published_materialization(
+    *,
+    repo_root: Path,
+    plan_file: Path,
+    registered: dict[str, Any],
+) -> list[dict[str, Any]]:
+    output_root: Path = registered["output_root"]
+    if not output_root.is_dir() or {path.name for path in output_root.iterdir()} != {
+        "manifest.json",
+        "pages",
+    }:
+        raise MaterializationError("published materialization surface changed")
+    page_dir = output_root / "pages"
+    if not page_dir.is_dir():
+        raise MaterializationError("published pages directory is missing")
+    expected_page_names = {
+        f"{Path(file_name).stem}.npz" for file_name in registered["file_names"]
+    }
+    if {path.name for path in page_dir.iterdir() if path.is_file()} != expected_page_names:
+        raise MaterializationError("published page population changed")
+    if any(not path.is_file() for path in page_dir.iterdir()):
+        raise MaterializationError("published page surface contains a non-file")
+    manifest = read_json(output_root / "manifest.json")
+    manifest_rows = manifest.get("pages")
+    if not isinstance(manifest_rows, list):
+        raise MaterializationError("published manifest page rows changed")
+    sources = {
+        file_name: source_path
+        for file_name, _relative, source_path in registered["sources"]
+    }
+    rows: list[dict[str, Any]] = []
+    for index, file_name in enumerate(registered["file_names"]):
+        if index >= len(manifest_rows) or not isinstance(manifest_rows[index], dict):
+            raise MaterializationError("published manifest page order changed")
+        rows.append(
+            validate_page_record(
+                manifest_rows[index],
+                file_name=file_name,
+                source_path=sources[file_name],
+                npz_path=page_dir / f"{Path(file_name).stem}.npz",
+            )
+        )
+    if len(manifest_rows) != len(rows):
+        raise MaterializationError("published manifest page count changed")
+    expected_manifest = build_manifest_payload(
+        repo_root=repo_root,
+        plan_path=plan_file,
+        registered=registered,
+        rows=rows,
+    )
+    if manifest != expected_manifest:
+        raise MaterializationError("published manifest provenance changed")
+    return rows
 
 
 def materialize(
@@ -721,93 +942,119 @@ def materialize(
     detector_factory: Callable[[dict[str, Any]], Any] = create_detector,
     worker_count: int = 1,
 ) -> dict[str, Any]:
-    if worker_count <= 0:
-        raise MaterializationError("worker count must be positive")
+    if worker_count != 1:
+        raise MaterializationError(
+            "external detector concurrency is fixed at one process after the "
+            "2026-08-13 memory-pressure panic"
+        )
     plan_file = repo_path(repo_root, str(plan_path))
     ledger_file = repo_path(repo_root, str(ledger_path))
     plan = read_json(plan_file)
     ledger = read_json(ledger_file)
     registered = validate_registered_inputs(
-        repo_root, plan, ledger, require_output_absent=True
+        repo_root, plan, ledger, require_output_absent=False
     )
     output_root: Path = registered["output_root"]
     temporary_root: Path = registered["temporary_root"]
+    marker_path, cleanup_root = published_transaction_paths(output_root)
     spec = plan["external_text_layout_materialization"]
-    rows: list[dict[str, Any]] = []
-    try:
-        worker_root = temporary_root / "workers"
-        worker_root.mkdir(parents=True)
-        sources = registered["sources"]
-        chunk_size = (len(sources) + worker_count - 1) // worker_count
-        chunks = [
-            sources[start : start + chunk_size]
-            for start in range(0, len(sources), chunk_size)
-        ]
-        if worker_count == 1:
-            detector = detector_factory(spec)
-            try:
-                rows = [
-                    materialize_one(
-                        detector=detector,
+    lock_path = output_root.with_name(f".{output_root.name}.lock")
+    with runtime.exclusive_run_lock(lock_path):
+        if output_root.exists():
+            if not temporary_root.exists() and not marker_path.exists():
+                raise MaterializationError("external text-layout output already exists")
+            rows = validate_published_materialization(
+                repo_root=repo_root,
+                plan_file=plan_file,
+                registered=registered,
+            )
+            if temporary_root.exists():
+                _page_dir, _record_dir, completed = prepare_resume_state(
+                    repo_root=repo_root,
+                    plan_file=plan_file,
+                    registered=registered,
+                )
+                resumed_rows = [
+                    completed.get(file_name) for file_name in registered["file_names"]
+                ]
+                if resumed_rows != rows:
+                    raise MaterializationError(
+                        "published materialization disagrees with resumable page records"
+                    )
+            finalize_published_cleanup(repo_root=repo_root, registered=registered)
+            peak_rss = 0
+            minimum_free = 100.0
+            peak_swap = 0
+        else:
+            if marker_path.exists() or cleanup_root.exists():
+                raise MaterializationError(
+                    "published transaction exists without final output"
+                )
+            rows = []
+        if not rows:
+            assert_no_conflicting_model_processes()
+            enforce_health_limits(runtime_health(os.getpid()))
+            page_dir, record_dir, completed = prepare_resume_state(
+                repo_root=repo_root,
+                plan_file=plan_file,
+                registered=registered,
+            )
+            sources = registered["sources"]
+            peak_rss = 0
+            minimum_free = 100.0
+            peak_swap = 0
+            for index, (file_name, _relative, source_path) in enumerate(sources, start=1):
+                if file_name in completed:
+                    continue
+                assert_no_conflicting_model_processes()
+                enforce_health_limits(runtime_health(os.getpid()))
+                record_path = record_dir / f"{Path(file_name).stem}.json"
+                if detector_factory is create_detector:
+                    health = run_isolated_page(
+                        spec=spec,
                         file_name=file_name,
                         source_path=source_path,
-                        spec=spec,
-                        page_dir=worker_root / "worker-000" / "pages",
+                        page_dir=page_dir,
+                        record_path=record_path,
                     )
-                    for file_name, _relative, source_path in sources
-                ]
-            finally:
-                close = getattr(detector, "close", None)
-                if callable(close):
-                    close()
-        else:
-            if detector_factory is not create_detector:
-                raise MaterializationError(
-                    "custom detector factories require worker_count=1"
+                else:
+                    health = run_in_process_page(
+                        detector_factory=detector_factory,
+                        spec=spec,
+                        file_name=file_name,
+                        source_path=source_path,
+                        page_dir=page_dir,
+                        record_path=record_path,
+                    )
+                peak_rss = max(peak_rss, int(health["peak_process_tree_rss_bytes"]))
+                minimum_free = min(
+                    minimum_free, float(health["minimum_memory_free_percent"])
                 )
-            tasks = [
-                (
-                    spec,
-                    [
-                        (file_name, relative, str(source_path))
-                        for file_name, relative, source_path in chunk
-                    ],
-                    str(worker_root / f"worker-{index:03d}" / "pages"),
+                peak_swap = max(peak_swap, int(health["peak_swap_used_bytes"]))
+                row = validate_page_record(
+                    read_json(record_path),
+                    file_name=file_name,
+                    source_path=source_path,
+                    npz_path=page_dir / f"{Path(file_name).stem}.npz",
                 )
-                for index, chunk in enumerate(chunks)
-            ]
-            with ProcessPoolExecutor(max_workers=len(tasks)) as executor:
-                for chunk_rows in executor.map(materialize_chunk, tasks):
-                    rows.extend(chunk_rows)
-        rows_by_name = {row["file"]: row for row in rows}
-        if list(rows_by_name) != [name for name, _relative, _source in sources]:
-            raise MaterializationError("worker materialization order or identity changed")
-        page_dir = temporary_root / "pages"
-        page_dir.mkdir(parents=True)
-        for file_name, _relative, _source in sources:
-            source_page = worker_root / "worker-000" / "pages" / f"{Path(file_name).stem}.npz"
-            if not source_page.is_file():
-                for worker_page in worker_root.glob("worker-*/pages"):
-                    candidate = worker_page / source_page.name
-                    if candidate.is_file():
-                        source_page = candidate
-                        break
-            if not source_page.is_file():
-                raise MaterializationError(f"missing worker output: {file_name}")
-            source_page.replace(page_dir / source_page.name)
-        rows = [rows_by_name[name] for name, _relative, _source in sources]
-        shutil.rmtree(worker_root)
-        write_manifest(
-            temporary_root / "manifest.json",
-            repo_root=repo_root,
-            plan_path=plan_file,
-            registered=registered,
-            rows=rows,
-        )
-        temporary_root.replace(output_root)
-    except BaseException:
-        shutil.rmtree(temporary_root, ignore_errors=True)
-        raise
+                completed[file_name] = row
+                print(
+                    f"page={index}/{len(sources)} file={file_name} "
+                    f"peak_rss_bytes={int(health['peak_process_tree_rss_bytes'])} "
+                    f"minimum_memory_free_percent="
+                    f"{float(health['minimum_memory_free_percent']):.1f}",
+                    flush=True,
+                )
+            rows = [completed[name] for name, _relative, _source in sources]
+            if len(rows) != len(sources):
+                raise MaterializationError("materialization resume population is incomplete")
+            publish_completed_materialization(
+                repo_root=repo_root,
+                plan_file=plan_file,
+                registered=registered,
+                page_dir=page_dir,
+                rows=rows,
+            )
     manifest_path = output_root / "manifest.json"
     return {
         "content_sha256": sha256_rows(
@@ -815,7 +1062,10 @@ def materialize(
         ),
         "manifest": str(manifest_path),
         "manifest_sha256": sha256_file(manifest_path),
+        "minimum_memory_free_percent": minimum_free,
         "output_root": str(output_root),
+        "peak_process_tree_rss_bytes": peak_rss,
+        "peak_swap_used_bytes": peak_swap,
         "terminal": "PASS",
         "train_count": len(rows),
     }
