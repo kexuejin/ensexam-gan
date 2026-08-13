@@ -662,11 +662,6 @@ def run_audit(
     all_file_names = [Path(row).name for row in all_manifest_rows]
     label_spec = evidence["train_label_set"]
     label_dir = repo_path(repo_root, label_spec["directory"])
-    actual_label_names = sorted(
-        path.name for path in label_dir.iterdir() if path.is_file()
-    )
-    if actual_label_names != sorted(all_file_names):
-        raise AuditError("complete train label filename set changed")
     label_summary = validate_label_set(label_dir, all_file_names, label_spec)
 
     materialization_manifest = read_json(

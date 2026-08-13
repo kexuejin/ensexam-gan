@@ -7,7 +7,12 @@ from unittest import mock
 import cv2
 import numpy as np
 
-from scripts.analysis.audit_dual_input_support_separation import AuditError
+from scripts.analysis.audit_dual_input_support_separation import (
+    AuditError,
+    sha256_file,
+    sha256_rows,
+    validate_label_set,
+)
 from scripts.analysis.audit_independent_hw5k_expert_disagreement_support import (
     ABLATION_CHANNELS,
     CHANNELS,
@@ -147,6 +152,24 @@ class IndependentHw5kExpertSupportPrerequisiteTest(unittest.TestCase):
                 materialize(repo_root=ROOT, runner=runner)
         runner.assert_not_called()
         decode.assert_not_called()
+
+    def test_frozen_label_identity_ignores_unselected_shared_directory_files(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            label_dir = Path(raw)
+            selected = label_dir / "selected.jpg"
+            selected.write_bytes(b"selected")
+            (label_dir / "unselected.jpg").write_bytes(b"unselected")
+            spec = {
+                "count": 1,
+                "directory": (
+                    "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+                ),
+                "content_sha256": sha256_rows(
+                    [f"selected.jpg {sha256_file(selected)}"]
+                ),
+            }
+            summary = validate_label_set(label_dir, ["selected.jpg"], spec)
+        self.assertEqual(summary["count"], 1)
 
     def test_page_features_are_exact_paired_rgb_with_current_only_ablation(self) -> None:
         current = np.asarray(
