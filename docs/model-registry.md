@@ -986,3 +986,37 @@ nonlinear probes, or training. A successor requires separate preregistration
 of a materially new target-free causal support source and an independent
 train-only ablation. The current-primary product default, promotion closure,
 and reserved-blind closure remain unchanged.
+
+## Independent HW5K Expert Disagreement Support Preregistration
+
+```text
+family: independent_hw5k_expert_disagreement_support_v1
+state: PREREQUISITE_NEEDED
+population: 123 HW5K train-role pages not present in the specialist training manifest
+materialization: both frozen checkpoints on every same source page, no targets, no routing
+representation: current-primary RGB + frozen HW5K expert RGB
+ablation: current-primary RGB only
+diagnostic: five-fold page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md
+data execution / training / candidate: paired materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: exact target-free paired materialization and train-only support diagnostic
+```
+
+This prerequisite does not reopen Candidate 5 routing. Its prior routed product
+path remains closed because HW5K improvement did not preserve SCUT. The new
+causal source is paired same-page evidence from an independently trained frozen
+model, evaluated only after excluding all 152 train275 pages seen by that
+specialist. The remaining diagnostic set is exactly 123 HW5K pages with frozen
+basename and ordered-path content hashes.
+
+Both checkpoints must run on all 123 pages without domain metadata or expert
+selection. Version 1 compares six raw RGB channels with the identical
+current-primary-RGB-only probe. Difference channels, transforms, masks, page
+scalars, alternative checkpoints, nonlinear probes, and every optimizer or
+quality surface remain closed. A PASS may authorize only a later
+expert-conditioned data/training/application preflight; it cannot authorize
+routing, training, candidate inference, or quality evaluation directly. The
+current-primary product default, promotion closure, and reserved-blind closure
+remain unchanged.

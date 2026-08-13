@@ -296,8 +296,16 @@ class SecondStageAlphaSupportPrerequisiteTest(unittest.TestCase):
             for item in ledger["active_iteration"]["prerequisites"]
         }
         self.assertEqual(statuses["second_stage_alpha_support_train_only_diagnostic"], "passed")
-        self.assertEqual(statuses["materially_new_support_successor_preregistration_v3"], "pending")
-        result = ledger["records"][-1]
+        self.assertEqual(statuses["materially_new_support_successor_preregistration_v3"], "passed")
+        self.assertEqual(
+            statuses["independent_hw5k_expert_support_train_only_diagnostic"],
+            "pending",
+        )
+        result = next(
+            item
+            for item in ledger["records"]
+            if item["id"] == "second-stage-alpha-support-train275-diagnostic"
+        )
         self.assertEqual(result["id"], "second-stage-alpha-support-train275-diagnostic")
         self.assertEqual(result["terminal"], "KILL")
         self.assertEqual(result["repeat_policy"], "do_not_repeat")
