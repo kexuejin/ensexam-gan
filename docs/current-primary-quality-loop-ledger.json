@@ -364,11 +364,11 @@
       },
       {
         "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
-        "sha256": "bae2697facabeac4c1e7f664948078587ffc83da3608d01dabf6b48a2eb51334"
+        "sha256": "914d9c40e95ffd7c6bcf73b466830b0911684e0383c163f72fbbe0ba1ab73a9c"
       },
       {
         "path": "docs/external-text-layout-support-prerequisite-v1.json",
-        "sha256": "b80e9612c5b6469d32cb5296be145355fed8ed797189d5ca5786869fb394fb29"
+        "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
@@ -1619,11 +1619,11 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
-          "sha256": "bae2697facabeac4c1e7f664948078587ffc83da3608d01dabf6b48a2eb51334"
+          "sha256": "914d9c40e95ffd7c6bcf73b466830b0911684e0383c163f72fbbe0ba1ab73a9c"
         },
         {
           "path": "docs/external-text-layout-support-prerequisite-v1.json",
-          "sha256": "b80e9612c5b6469d32cb5296be145355fed8ed797189d5ca5786869fb394fb29"
+          "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
         }
       ],
       "id": "external-text-layout-support-preregistration",

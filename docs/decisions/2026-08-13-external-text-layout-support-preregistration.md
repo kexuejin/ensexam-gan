@@ -27,6 +27,7 @@ Use the official Apache-2.0 PaddleOCR release already present at:
 The frozen model hashes are:
 
 ```text
+.gitattributes          11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361
 model.safetensors       bd393266c02e1a680b1b34c301d5d0d81e6290440b7f8ab0f5d5032276b17eb1
 config.json             3ea7e760f64255c152ba139e2f5f798303f7189b87c923cf498e2b2e830cadd3
 inference.yml           7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871
