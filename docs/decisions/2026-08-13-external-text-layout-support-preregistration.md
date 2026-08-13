@@ -50,6 +50,11 @@ external model files, runtime versions, and product authority before decoding
 the first page. It must never resolve or open a label, target, quality split,
 route, domain field, or caller metadata.
 
+Source content identity is bound to the registered `image_sha256` values in
+`outputs/archive/sign-separated-residual-repair-20260810/train275-primary/metrics.csv`
+(file SHA `efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846`).
+Filename and role checks alone are insufficient authorization to decode.
+
 Persist only detection quadrilaterals, detection scores, and two aligned grids:
 
 1. `text_occupancy`: `uint8` zero or one, rasterized with

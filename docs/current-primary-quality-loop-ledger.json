@@ -364,11 +364,11 @@
       },
       {
         "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
-        "sha256": "89352331cc0c77aa0a5e582fb5fd8edd6e6db3755f37df0439941bc27c6ddd43"
+        "sha256": "bae2697facabeac4c1e7f664948078587ffc83da3608d01dabf6b48a2eb51334"
       },
       {
         "path": "docs/external-text-layout-support-prerequisite-v1.json",
-        "sha256": "bec6bbfa9dba4d8d22a0fd767dd55df343798f07c2a071763723eca495b219e8"
+        "sha256": "b80e9612c5b6469d32cb5296be145355fed8ed797189d5ca5786869fb394fb29"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
@@ -1619,11 +1619,11 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
-          "sha256": "89352331cc0c77aa0a5e582fb5fd8edd6e6db3755f37df0439941bc27c6ddd43"
+          "sha256": "bae2697facabeac4c1e7f664948078587ffc83da3608d01dabf6b48a2eb51334"
         },
         {
           "path": "docs/external-text-layout-support-prerequisite-v1.json",
-          "sha256": "bec6bbfa9dba4d8d22a0fd767dd55df343798f07c2a071763723eca495b219e8"
+          "sha256": "b80e9612c5b6469d32cb5296be145355fed8ed797189d5ca5786869fb394fb29"
         }
       ],
       "id": "external-text-layout-support-preregistration",
