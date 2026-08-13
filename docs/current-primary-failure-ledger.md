@@ -85,6 +85,16 @@ buckets:
     evidence:
       - docs/decisions/2026-08-06-universal-residual-adapter-sidecar-u4c-scut15-kill.md
       - docs/plans/2026-08-06-universal-residual-adapter-sidecar-u4-development-validation.md
+      - docs/decisions/2026-08-13-universal-sidecar-d3-baseline-tail-cache-verification.md
+    prerequisite_status: >-
+      SATISFIED (2026-08-13): the exact train-manifest baseline-support cache
+      exists at
+      artifacts/caches/baseline-tail-universal-sidecar-d3-mixed-scut130-hw5k260-20260807
+      with 383/383 manifest pages, zero missing safe-mask files, and
+      primary/config/list/rows hashes verified against the ledger anchors
+      (rows_csv_sha256
+      592f6383164af92ec10008881a8b160cee6828132831ac66c4d3316d2742545a). See
+      the 2026-08-13 cache-verification decision record.
     next_allowed: >-
       One causal change only: a train-only current-primary baseline-tail
       non-regression constraint for the sidecar, holding architecture, data,
