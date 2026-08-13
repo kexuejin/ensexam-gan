@@ -13,6 +13,7 @@ import re
 import shutil
 import signal
 import subprocess
+import tempfile
 import time
 from typing import Any, Callable, Iterator
 
@@ -42,11 +43,22 @@ MAX_SWAP_USED_BYTES = 512 * 1024**2
 PAGE_TIMEOUT_SECONDS = 15 * 60.0
 MONITOR_INTERVAL_SECONDS = 1.0
 SYSTEM_COMMAND_TIMEOUT_SECONDS = 5.0
+HOST_USER_RUN_LOCK_PATH = (
+    Path(tempfile.gettempdir())
+    / f"ensexam-gan-{os.getuid()}-external-layout-materializer.lock"
+)
 CONFLICTING_MODEL_COMMANDS = (
     "scripts/infer/run_primary_full_page.py",
     "scripts/infer/run_second_stage_residual_repair.py",
     "scripts/run_second_stage_residual_repair.py",
+    "scripts/infer/run_hybrid_second_stage_gate.py",
+    "scripts/run_hybrid_second_stage_gate.py",
+    "scripts/micro_train_region_probe.py",
+    "scripts/analysis/train_page_selector_ranker.py",
+    "scripts/analysis/train_region_component_ranker.py",
     "scripts/train/",
+    "/meta_train.py",
+    " meta_train.py",
     "/train.py",
     " train.py",
 )
@@ -387,6 +399,9 @@ def prepare_resume_state(
     page_dir = temporary_root / "pages"
     record_dir = temporary_root / "records"
     progress_path = temporary_root / "progress.json"
+    initializing_root = temporary_root.with_name(
+        f"{temporary_root.name}.initializing"
+    )
     expected_progress = {
         "expected_filename_sha256": sha256_rows(registered["file_names"]),
         "expected_train_count": len(registered["file_names"]),
@@ -397,11 +412,29 @@ def prepare_resume_state(
         "temporary_output": str(temporary_root.relative_to(repo_root)),
     }
     if not temporary_root.exists():
-        temporary_root.mkdir(parents=True)
-        page_dir.mkdir()
-        record_dir.mkdir()
-        atomic_write_json(progress_path, expected_progress)
+        if initializing_root.exists():
+            if not initializing_root.is_dir():
+                raise MaterializationError(
+                    "materialization initialization root is not a directory"
+                )
+            shutil.rmtree(initializing_root)
+            fsync_directory(initializing_root.parent)
+        initializing_root.mkdir(parents=True)
+        initializing_page_dir = initializing_root / "pages"
+        initializing_record_dir = initializing_root / "records"
+        initializing_page_dir.mkdir()
+        initializing_record_dir.mkdir()
+        atomic_write_json(initializing_root / "progress.json", expected_progress)
+        fsync_directory(initializing_page_dir)
+        fsync_directory(initializing_record_dir)
+        fsync_directory(initializing_root)
+        initializing_root.replace(temporary_root)
+        fsync_directory(temporary_root.parent)
     else:
+        if initializing_root.exists():
+            raise MaterializationError(
+                "materialization initialization states overlap"
+            )
         if not temporary_root.is_dir():
             raise MaterializationError("materialization resume root is not a directory")
         shutil.rmtree(temporary_root / "complete", ignore_errors=True)

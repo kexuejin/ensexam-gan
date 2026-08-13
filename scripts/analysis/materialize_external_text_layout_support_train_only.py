@@ -958,8 +958,7 @@ def materialize(
     temporary_root: Path = registered["temporary_root"]
     marker_path, cleanup_root = published_transaction_paths(output_root)
     spec = plan["external_text_layout_materialization"]
-    lock_path = output_root.with_name(f".{output_root.name}.lock")
-    with runtime.exclusive_run_lock(lock_path):
+    with runtime.exclusive_run_lock(runtime.HOST_USER_RUN_LOCK_PATH):
         if output_root.exists():
             if not temporary_root.exists() and not marker_path.exists():
                 raise MaterializationError("external text-layout output already exists")

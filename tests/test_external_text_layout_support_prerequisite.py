@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextlib import ExitStack
 import hashlib
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -519,6 +520,33 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
             self.assertEqual(completed, {})
             self.assertFalse((page_dir / "one.npz").exists())
 
+    def test_resume_recovers_interrupted_atomic_initialization(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            fixture = make_resume_fixture(root, ["one.png"])
+            registered = fixture["registered"]
+            temporary_root = registered["temporary_root"]
+            initializing_root = temporary_root.with_name(
+                f"{temporary_root.name}.initializing"
+            )
+            initializing_root.mkdir(parents=True)
+            (initializing_root / "partial").write_text("interrupted", encoding="utf-8")
+
+            page_dir, record_dir, completed = prepare_resume_state(
+                repo_root=root,
+                plan_file=root / fixture["plan_path"],
+                registered=registered,
+            )
+
+            self.assertEqual(completed, {})
+            self.assertEqual(page_dir, temporary_root / "pages")
+            self.assertEqual(record_dir, temporary_root / "records")
+            self.assertFalse(initializing_root.exists())
+            self.assertEqual(
+                {path.name for path in temporary_root.iterdir()},
+                {"pages", "progress.json", "records"},
+            )
+
     def test_worker_count_above_one_fails_before_input_validation(self) -> None:
         with mock.patch.object(
             materializer,
@@ -537,6 +565,12 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
                 ):
                     with materializer.runtime.exclusive_run_lock(lock_path):
                         self.fail("second materializer acquired the exclusive lock")
+        self.assertNotIn(
+            str(ROOT), str(materializer.runtime.HOST_USER_RUN_LOCK_PATH)
+        )
+        self.assertIn(
+            str(os.getuid()), materializer.runtime.HOST_USER_RUN_LOCK_PATH.name
+        )
 
     def test_external_materializer_rejects_conflicting_model_processes(self) -> None:
         safe_rows = [(901, "python scripts/analysis/audit_external_layout.py")]
@@ -544,7 +578,13 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
         for command in (
             "python scripts/infer/run_primary_full_page.py --device cpu",
             "python scripts/run_second_stage_residual_repair.py --device mps",
-            "python scripts/train/train_cleanup.py",
+            "python scripts/run_hybrid_second_stage_gate.py --device cpu",
+            "python scripts/micro_train_region_probe.py",
+            "python scripts/analysis/train_page_selector_ranker.py",
+            "python scripts/analysis/train_region_component_ranker.py",
+            "python scripts/train/train_monotonic_residual_erase.py",
+            "python meta_train.py",
+            "python train.py",
         ):
             with self.subTest(command=command):
                 with self.assertRaisesRegex(
