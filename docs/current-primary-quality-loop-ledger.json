@@ -565,12 +565,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-baseline-relative-one-page-probe-pass.md",
         "sha256": "4d5158122adba5a46ec5028ca8f7fa674192ec0b66f6b72e1097266f41d925b0"
+      },
+      {
+        "path": "docs/external-text-layout-cache-reconstruction-baseline-relative-swap-v1.json",
+        "sha256": "a7cafb5358370585da926a99ad7d844a2cb9b5ec676dbead4803f53e35a09b12"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-baseline-relative-swap-preregistration.md",
+        "sha256": "b91d8e54ec41e2d4f19b6b3af3da9bd0d85c2d1f76b66e19c8c64ec1afc8ecae"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The unique baseline-relative CPU detector probe PASSed with 6.92 GiB peak process-tree RSS, 63% minimum free memory, zero swap growth, zero residual model processes, and no retained temporary output. The attempt is consumed and must never be repeated. Before cache execution, preregister and verify a cache-stage baseline-relative swap adapter that binds the exact v2 probe result and preserves the existing process-group termination, free-memory, RSS, atomic publication, historical runtime, and cache hashes. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Implement and synthetically verify the preregistered cache-stage baseline-relative swap adapter. Bind the exact v2 probe PASS, capture one absolute baseline per locked stage, pass only nonnegative growth to the unchanged monitor, preserve the 35% free-memory floor, 10 GiB RSS cap, 512 MiB growth cap, process-group termination, serial ordering, historical commands, output hashes, and atomic publication. Do not execute primary or second-stage reconstruction until both registered Python environments and the complete external-text-layout suite pass. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -695,6 +703,11 @@
       {
         "detail": "The single target-free hw5k_1011 CPU probe completed under the locked v2 contract with 6.92 GiB peak process-tree RSS, 63% minimum free memory, zero swap growth, zero residual model processes, and no retained temporary output. The terminal result is hash-bound and non-repeatable.",
         "id": "external_text_layout_tiled_one_page_runtime_safety_probe",
+        "status": "passed"
+      },
+      {
+        "detail": "A narrow adapter now freezes exact v2 probe-result validation and one absolute swap baseline per locked cache stage while preserving the 512 MiB limit as growth, the existing 35%/10 GiB limits, process-group termination, historical commands and hashes, and atomic publication. Integration tests are allowed; cache execution remains closed.",
+        "id": "external_text_layout_cache_reconstruction_baseline_relative_swap_preregistration",
         "status": "passed"
       }
     ],
@@ -2285,6 +2298,34 @@
       "outcome": "the_unique_target_free_cpu_page_completed_with_6_92_gib_peak_process_tree_rss_63_percent_minimum_free_memory_zero_swap_growth_zero_residual_processes_and_no_retained_temporary_output",
       "repeat_policy": "never_repeat_or_overwrite_the_consumed_probe; preregister_and_verify_baseline_relative_cache_monitoring_before_any_reconstruction",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-cache-reconstruction-baseline-relative-swap-v1.json",
+          "sha256": "a7cafb5358370585da926a99ad7d844a2cb9b5ec676dbead4803f53e35a09b12"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-baseline-relative-swap-preregistration.md",
+          "sha256": "b91d8e54ec41e2d4f19b6b3af3da9bd0d85c2d1f76b66e19c8c64ec1afc8ecae"
+        },
+        {
+          "path": "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-20260814/result.json",
+          "sha256": "1909d66f29d18ca5805fb29b8b89ac054e240bc9231b2a7fa96121466e0ad550"
+        },
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
+        }
+      ],
+      "id": "external-text-layout-cache-reconstruction-baseline-relative-swap-preregistration",
+      "outcome": "adapter_freezes_exact_probe_v2_validation_and_per_stage_swap_growth_monitoring_without_cache_execution",
+      "repeat_policy": "implement_only_the_registered_reconstruction_script_and_test_changes_then_verify_both_python_environments_before_any_cache_stage",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
