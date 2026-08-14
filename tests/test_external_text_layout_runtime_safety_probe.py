@@ -80,8 +80,18 @@ class ExternalTextLayoutRuntimeSafetyProbeTest(unittest.TestCase):
                 }
 
             def resource_failure(**_kwargs):
-                raise MaterializationError(
-                    "system memory safety limit crossed: 31.0% free"
+                raise probe.runtime.ResourceLimitError(
+                    "system memory safety limit crossed: 31.0% free",
+                    trigger_health={
+                        "memory_free_percent": 31.0,
+                        "process_tree_rss_bytes": 7 * 1024**3,
+                        "swap_used_bytes": 600 * 1024**2,
+                    },
+                    observed_health={
+                        "minimum_memory_free_percent": 31.0,
+                        "peak_process_tree_rss_bytes": 7 * 1024**3,
+                        "peak_swap_used_bytes": 600 * 1024**2,
+                    },
                 )
 
             with (
@@ -128,6 +138,20 @@ class ExternalTextLayoutRuntimeSafetyProbeTest(unittest.TestCase):
             self.assertFalse(result["recognition"])
             self.assertEqual(
                 result["detector_files"], {"model_safetensors": "frozen"}
+            )
+            self.assertEqual(
+                result["failure_health"]["trigger_health"][
+                    "process_tree_rss_bytes"
+                ],
+                7 * 1024**3,
+            )
+            self.assertEqual(
+                result["failure_health"]["observed_health"],
+                {
+                    "minimum_memory_free_percent": 31.0,
+                    "peak_process_tree_rss_bytes": 7 * 1024**3,
+                    "peak_swap_used_bytes": 600 * 1024**2,
+                },
             )
             self.assertEqual(lock_calls, [lock_path])
             self.assertEqual(len(health_calls), 2)

@@ -625,15 +625,42 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
                 del timeout
 
         process = FakeProcess()
-        unsafe = {
-            "memory_free_percent": materializer.MIN_MEMORY_FREE_PERCENT - 1.0,
-            "process_tree_rss_bytes": 100,
-            "swap_used_bytes": 0,
-        }
+        samples = iter(
+            [
+                {
+                    "memory_free_percent": 80.0,
+                    "process_tree_rss_bytes": 90,
+                    "swap_used_bytes": 10,
+                },
+                {
+                    "memory_free_percent": materializer.MIN_MEMORY_FREE_PERCENT - 1.0,
+                    "process_tree_rss_bytes": 120,
+                    "swap_used_bytes": 20,
+                },
+            ]
+        )
         with mock.patch.object(materializer.runtime, "terminate_page_process") as terminate:
-            with self.assertRaisesRegex(MaterializationError, "memory safety"):
-                wait_for_page_process(process, health_reader=lambda _pid: unsafe)
+            with self.assertRaisesRegex(MaterializationError, "memory safety") as caught:
+                wait_for_page_process(process, health_reader=lambda _pid: next(samples))
         terminate.assert_called_once_with(process)
+        self.assertIsInstance(caught.exception, materializer.runtime.ResourceLimitError)
+        self.assertEqual(
+            caught.exception.trigger_health,
+            {
+                "memory_free_percent": materializer.MIN_MEMORY_FREE_PERCENT - 1.0,
+                "process_tree_rss_bytes": 120,
+                "swap_used_bytes": 20,
+            },
+        )
+        self.assertEqual(
+            caught.exception.observed_health,
+            {
+                "minimum_memory_free_percent": materializer.MIN_MEMORY_FREE_PERCENT
+                - 1.0,
+                "peak_process_tree_rss_bytes": 120,
+                "peak_swap_used_bytes": 20,
+            },
+        )
 
     def test_resume_rejects_progress_provenance_drift(self) -> None:
         with tempfile.TemporaryDirectory() as raw:

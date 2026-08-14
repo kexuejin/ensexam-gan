@@ -68,6 +68,25 @@ class MaterializationError(RuntimeError):
     pass
 
 
+class ResourceLimitError(MaterializationError):
+    def __init__(
+        self,
+        message: str,
+        *,
+        trigger_health: dict[str, float | int],
+        observed_health: dict[str, float | int],
+    ) -> None:
+        super().__init__(message)
+        self.trigger_health = dict(trigger_health)
+        self.observed_health = dict(observed_health)
+
+    def evidence(self) -> dict[str, dict[str, float | int]]:
+        return {
+            "observed_health": dict(self.observed_health),
+            "trigger_health": dict(self.trigger_health),
+        }
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -280,21 +299,57 @@ def runtime_health(root_pid: int) -> dict[str, float | int]:
     }
 
 
-def enforce_health_limits(health: dict[str, float | int]) -> None:
+def health_summary(
+    health: dict[str, float | int],
+    previous: dict[str, float | int] | None = None,
+) -> dict[str, float | int]:
+    prior = previous or {
+        "minimum_memory_free_percent": 100.0,
+        "peak_process_tree_rss_bytes": 0,
+        "peak_swap_used_bytes": 0,
+    }
+    return {
+        "minimum_memory_free_percent": min(
+            float(prior["minimum_memory_free_percent"]),
+            float(health["memory_free_percent"]),
+        ),
+        "peak_process_tree_rss_bytes": max(
+            int(prior["peak_process_tree_rss_bytes"]),
+            int(health["process_tree_rss_bytes"]),
+        ),
+        "peak_swap_used_bytes": max(
+            int(prior["peak_swap_used_bytes"]),
+            int(health["swap_used_bytes"]),
+        ),
+    }
+
+
+def enforce_health_limits(
+    health: dict[str, float | int],
+    *,
+    observed_health: dict[str, float | int] | None = None,
+) -> None:
     rss = int(health["process_tree_rss_bytes"])
     free = float(health["memory_free_percent"])
     swap = int(health["swap_used_bytes"])
+    observed = observed_health or health_summary(health)
     if rss > MAX_DETECTOR_RSS_BYTES:
-        raise MaterializationError(
-            f"detector RSS safety limit exceeded: {rss} > {MAX_DETECTOR_RSS_BYTES}"
+        raise ResourceLimitError(
+            f"detector RSS safety limit exceeded: {rss} > {MAX_DETECTOR_RSS_BYTES}",
+            trigger_health=health,
+            observed_health=observed,
         )
     if free < MIN_MEMORY_FREE_PERCENT:
-        raise MaterializationError(
-            f"system memory safety limit crossed: {free:.1f}% free"
+        raise ResourceLimitError(
+            f"system memory safety limit crossed: {free:.1f}% free",
+            trigger_health=health,
+            observed_health=observed,
         )
     if swap > MAX_SWAP_USED_BYTES:
-        raise MaterializationError(
-            f"swap safety limit exceeded: {swap} > {MAX_SWAP_USED_BYTES}"
+        raise ResourceLimitError(
+            f"swap safety limit exceeded: {swap} > {MAX_SWAP_USED_BYTES}",
+            trigger_health=health,
+            observed_health=observed,
         )
 
 
@@ -526,16 +581,18 @@ def wait_for_page_process(
     if process.pid is None:
         raise MaterializationError("detector process did not start")
     started = time.monotonic()
-    peak_rss = 0
-    minimum_free = 100.0
-    peak_swap = 0
+    observed = health_summary(
+        {
+            "memory_free_percent": 100.0,
+            "process_tree_rss_bytes": 0,
+            "swap_used_bytes": 0,
+        }
+    )
     try:
         while process.is_alive():
             health = health_reader(process.pid)
-            enforce_health_limits(health)
-            peak_rss = max(peak_rss, int(health["process_tree_rss_bytes"]))
-            minimum_free = min(minimum_free, float(health["memory_free_percent"]))
-            peak_swap = max(peak_swap, int(health["swap_used_bytes"]))
+            observed = health_summary(health, observed)
+            enforce_health_limits(health, observed_health=observed)
             if time.monotonic() - started > PAGE_TIMEOUT_SECONDS:
                 raise MaterializationError("detector page timeout exceeded")
             process.join(timeout=MONITOR_INTERVAL_SECONDS)
@@ -547,8 +604,4 @@ def wait_for_page_process(
         raise MaterializationError(
             f"isolated detector process failed with exit code {process.exitcode}"
         )
-    return {
-        "minimum_memory_free_percent": minimum_free,
-        "peak_process_tree_rss_bytes": peak_rss,
-        "peak_swap_used_bytes": peak_swap,
-    }
+    return observed

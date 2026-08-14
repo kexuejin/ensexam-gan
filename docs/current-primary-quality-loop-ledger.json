@@ -372,25 +372,45 @@
       },
       {
         "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
-        "sha256": "fa2432e0490b18f5b06bf92e17c8c4c032c00bdfbd8de88456ff4fe8e9a27a9f"
+        "sha256": "32400353d0944251ea49a2c796a8e1f0b14cc64010ceeb7f3bf7ed62622a2ed1"
       },
       {
         "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
         "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
       },
       {
+        "path": "docs/external-text-layout-static-memory-risk-20260814.json",
+        "sha256": "144bf4b1c55cfa8b4b19ec125b603dfb5daaf0fa02d0f92a9725adf60ab1651f"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+        "sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+      },
+      {
         "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
-        "sha256": "1dafff0f6a2d50ebe4ddc087502408c008e0ddd68990bc243f4d12fe3768749c"
+        "sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+      },
+      {
+        "path": "scripts/analysis/report_external_text_layout_static_memory_risk.py",
+        "sha256": "c919f88b82c6d368d6868e8aa5d9d27ae9d2387ebab8ff40a22aeb544e6d3a71"
       },
       {
         "path": "tests/test_external_text_layout_runtime_safety_probe.py",
-        "sha256": "1efce15af7b9e3f31e159f3a6fb7904d62cd091c330030d263572789b0870c3d"
+        "sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c"
+      },
+      {
+        "path": "tests/test_external_text_layout_static_memory_risk.py",
+        "sha256": "87473757551f021b2e9f5179347961e2e75cc1720f2c090a5e5359b6ebd8fd6e"
+      },
+      {
+        "path": "tests/test_external_text_layout_support_prerequisite.py",
+        "sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Repair the external detector runtime memory prerequisite without changing the frozen detector, runtime parameters, representation, or gates. Do not run another model process while swap exceeds 512 MiB. After a separately justified safe one-page target-free runtime result, reconstruct the missing frozen primary and second-stage prediction caches with exact historical content hashes before the formal train275 materialization and audit. Keep every optimizer, candidate, quality, visual, promotion, and reserved-blind surface closed.",
+    "next_action": "Use the exact 2432x1728 static memory-risk evidence to justify a safe external detector runtime without changing the frozen detector, runtime parameters, representation, or gates. Do not run another model process while swap exceeds 512 MiB. After a separately justified safe one-page target-free runtime result, reconstruct the missing frozen primary and second-stage prediction caches with exact historical content hashes before the formal train275 materialization and audit. Keep every optimizer, candidate, quality, visual, promotion, and reserved-blind surface closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -488,7 +508,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending runtime and frozen-cache prerequisites. A nonformal target-free CPU Transformers page crossed the 35% system-free-memory floor at 31.0% and left 1,269.75 MiB swap, so it was terminated with no formal evidence or residual model process. Repair runtime safety first; then reconstruct exact historical prediction caches before the one formal train275 materialization and five-channel audit.",
+        "detail": "Pending runtime and frozen-cache prerequisites. A nonformal target-free CPU Transformers page crossed the 35% system-free-memory floor at 31.0% and left 1,269.75 MiB swap, so it was terminated with no formal evidence or residual model process. Static source/shape evidence corrects preprocessing to 2432x1728 and identifies full-resolution 9x9 work plus duplicate upsample construction as concrete but unproven memory-risk contributors. Justify runtime safety first; then reconstruct exact historical prediction caches before the one formal train275 materialization and five-channel audit.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       }
@@ -1651,24 +1671,44 @@
       "evidence": [
         {
           "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
-          "sha256": "fa2432e0490b18f5b06bf92e17c8c4c032c00bdfbd8de88456ff4fe8e9a27a9f"
+          "sha256": "32400353d0944251ea49a2c796a8e1f0b14cc64010ceeb7f3bf7ed62622a2ed1"
         },
         {
           "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
           "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
         },
         {
+          "path": "docs/external-text-layout-static-memory-risk-20260814.json",
+          "sha256": "144bf4b1c55cfa8b4b19ec125b603dfb5daaf0fa02d0f92a9725adf60ab1651f"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+          "sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+        },
+        {
           "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
-          "sha256": "1dafff0f6a2d50ebe4ddc087502408c008e0ddd68990bc243f4d12fe3768749c"
+          "sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+        },
+        {
+          "path": "scripts/analysis/report_external_text_layout_static_memory_risk.py",
+          "sha256": "c919f88b82c6d368d6868e8aa5d9d27ae9d2387ebab8ff40a22aeb544e6d3a71"
         },
         {
           "path": "tests/test_external_text_layout_runtime_safety_probe.py",
-          "sha256": "1efce15af7b9e3f31e159f3a6fb7904d62cd091c330030d263572789b0870c3d"
+          "sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c"
+        },
+        {
+          "path": "tests/test_external_text_layout_static_memory_risk.py",
+          "sha256": "87473757551f021b2e9f5179347961e2e75cc1720f2c090a5e5359b6ebd8fd6e"
+        },
+        {
+          "path": "tests/test_external_text_layout_support_prerequisite.py",
+          "sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131"
         }
       ],
       "id": "external-text-layout-runtime-safety-probe",
-      "outcome": "single_target_free_cpu_detector_page_crossed_the_35_percent_memory_floor_and_left_swap_above_the_512_mib_launch_gate_without_formal_evidence",
-      "repeat_policy": "repair_runtime_prerequisite_then_retry_one_safe_page_only",
+      "outcome": "single_target_free_cpu_detector_page_crossed_the_35_percent_memory_floor_and_left_swap_above_the_512_mib_launch_gate; static_exact_shape_audit_identified_full_resolution_9x9_and_duplicate_upsample_risk_without_claiming_root_cause_or_formal_evidence",
+      "repeat_policy": "justify_runtime_safety_without_parameter_rescue_then_retry_one_safe_page_only",
       "terminal": "PREREQUISITE_NEEDED"
     }
   ],

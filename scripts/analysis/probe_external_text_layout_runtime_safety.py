@@ -227,6 +227,8 @@ def run_runtime_probe(
     finally:
         shutil.rmtree(temporary_root, ignore_errors=True)
 
+    if isinstance(failure, runtime.ResourceLimitError):
+        result["failure_health"] = failure.evidence()
     if failure is None:
         result.update(
             {

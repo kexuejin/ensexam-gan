@@ -1,0 +1,134 @@
+{
+  "analysis": {
+    "model_executed": false,
+    "model_imported": false,
+    "scope": "static_source_and_shape_arithmetic_only"
+  },
+  "artifacts": {
+    "backbone_config_source": {
+      "bytes": 6039,
+      "path": "/Users/kexuejin/.pyenv/versions/3.13.1/lib/python3.13/site-packages/transformers/models/pp_lcnet_v4/configuration_pp_lcnet_v4.py",
+      "sha256": "88014d62d7df0f422395256129c250f99e27d3eadbd5e7c70a43a1956e5b9ef6"
+    },
+    "model_config": {
+      "bytes": 2134,
+      "path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/config.json",
+      "sha256": "3ea7e760f64255c152ba139e2f5f798303f7189b87c923cf498e2b2e830cadd3"
+    },
+    "model_source": {
+      "bytes": 16025,
+      "path": "/Users/kexuejin/.pyenv/versions/3.13.1/lib/python3.13/site-packages/transformers/models/pp_ocrv6_medium_det/modeling_pp_ocrv6_medium_det.py",
+      "sha256": "4bb27b16b04056ee00779391a4943efa5b5c2745e9431e4e9aa652423b271210"
+    },
+    "preprocessor_config": {
+      "bytes": 838,
+      "path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/preprocessor_config.json",
+      "sha256": "74421569a28a78d417db320f9bc039ce0997a1defe2b35f259dfc74299c9f1ed"
+    },
+    "weights": {
+      "bytes": 88020412,
+      "path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/model.safetensors",
+      "sha256": "bd393266c02e1a680b1b34c301d5d0d81e6290440b7f8ab0f5d5032276b17eb1"
+    }
+  },
+  "input": {
+    "height": 1719,
+    "path": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_images/hw5k_1011.jpg",
+    "sha256": "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d",
+    "width": 2436
+  },
+  "memory_estimates": {
+    "backbone_output_payload_bytes_float32": 250048512,
+    "concatenation_input_plus_output_payload_bytes_float32": 537919488,
+    "duplicate_upsample_additional_interpolated_payload_bytes_float32": 201719808,
+    "duplicate_upsampled_lists_distinct_payload_bytes_float32": 470679552,
+    "high_resolution_9x9_lateral_explicit_unfold_equivalent_bytes_float32": 5446434816,
+    "high_resolution_9x9_projection_explicit_unfold_equivalent_bytes_float32": 21785739264,
+    "high_resolution_neck_map_payload_bytes_float32": 268959744,
+    "input_tensor_payload_bytes_float32": 50429952,
+    "single_upsampled_list_payload_bytes_float32": 268959744
+  },
+  "model": {
+    "backbone_stem_stride": 4,
+    "explicit_lower_precision_in_model_config": false,
+    "feature_maps": [
+      {
+        "channels": 128,
+        "height": 432,
+        "payload_bytes_float32": 134479872,
+        "stage": 1,
+        "stride": 4,
+        "width": 608
+      },
+      {
+        "channels": 256,
+        "height": 216,
+        "payload_bytes_float32": 67239936,
+        "stage": 2,
+        "stride": 8,
+        "width": 304
+      },
+      {
+        "channels": 512,
+        "height": 108,
+        "payload_bytes_float32": 33619968,
+        "stage": 3,
+        "stride": 16,
+        "width": 152
+      },
+      {
+        "channels": 896,
+        "height": 54,
+        "payload_bytes_float32": 14708736,
+        "stage": 4,
+        "stride": 32,
+        "width": 76
+      }
+    ],
+    "model_type": "pp_ocrv6_medium_det",
+    "neck_out_channels": 256,
+    "nominal_static_estimate_dtype": "float32",
+    "scale_factor_list": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "source_observations": {
+      "kernel_size_9_convolution_count": 2,
+      "kernel_size_9_convolution_lines": [
+        236,
+        257
+      ],
+      "upsampled_assignment_count": 2,
+      "upsampled_assignment_lines": [
+        306,
+        314
+      ]
+    }
+  },
+  "plan": {
+    "path": "docs/external-text-layout-support-prerequisite-v1.json",
+    "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+  },
+  "preprocessing": {
+    "limit_side_len": 736,
+    "limit_type": "min",
+    "max_side_limit": 4000,
+    "multiple_of_32_rounding_changed_dimensions": true,
+    "processed_height": 1728,
+    "processed_width": 2432,
+    "rounding_multiple": 32,
+    "source_was_downscaled_by_limit": false
+  },
+  "risk_assessment": {
+    "interpretation": [
+      "limit_type=min does not shrink this page before multiple-of-32 rounding",
+      "the duplicate upsampled construction adds three interpolated high-resolution outputs while the scale-1 entry reuses its existing feature",
+      "explicit-unfold equivalents are risk bounds for shape comparison, not measured PyTorch allocations or proof of the runtime root cause"
+    ],
+    "reason_code": "static_full_resolution_detector_memory_risk",
+    "terminal": "PREREQUISITE_NEEDED"
+  },
+  "schema_version": 1
+}
