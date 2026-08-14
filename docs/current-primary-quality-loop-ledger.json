@@ -629,12 +629,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-second-stage-cache-reconstruction-prerequisite-needed.md",
         "sha256": "8814ed6fe60c7e3236616fa89c401aaa779cba9a1a48b9c9e41860ab71678bb0"
+      },
+      {
+        "path": "docs/external-text-layout-second-stage-cache-salvage-audit-v1.json",
+        "sha256": "b53a6a21882918a1aa6160763a199d023352b46678310abd9abba1746b46b906"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-cache-salvage-audit-preregistration.md",
+        "sha256": "4f63d93ced9a0f38478a6a74e8c567d1ea0779efcc083c1fb5f9ea41af4133ec"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The second-stage model command completed 275/275 pages without resource termination and produced the exact frozen prediction set, while validation-before-publication correctly left final absent. Its 275 gate ratios and label-content hash match historical evidence, but root-canonical metrics SHA 79fd6127 still differs from opaque frozen SHA b800fdf3 and the historical payload is absent. Do not rerun the model. Preregister a temporary-cache salvage audit that recomputes every non-path metric from frozen inputs, labels, and exact PNGs, binds all historical gate ratios, and decides whether retained evidence can reconstruct the missing identity or justify a separately hash-bound semantic-equivalence cache. Archive, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Implement only the preregistered read-only temporary-cache salvage audit. Before image decode, bind every contract and evidence hash plus exact temporary/final/archive state. Validate the frozen prediction set, manifest paths, primary source hashes, label-content hash, all 275 historical gate ratios, and every recomputed residual/overerase field; require the in-memory canonical candidate SHA 79fd6127 without mutation. Run focused tests in Python 3.13.1 and 3.10.11, then execute the audit once. Do not rerun the model or publish any cache. Archive, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -795,6 +803,11 @@
         "detail": "The second-stage command completed all 275 pages and produced the exact frozen prediction set without resource termination. All 275 gate ratios and the label-content hash match historical evidence, but the root-canonical metrics candidate SHA differs from the unavailable opaque historical payload. Final and archive paths remain absent; salvage audit is required without model rerun.",
         "id": "external_text_layout_second_stage_cache_reconstruction",
         "status": "pending"
+      },
+      {
+        "detail": "A read-only salvage audit now freezes the temporary cache, 16 field evidence sources, historical gate and label identities, exact 79fd canonical candidate, and PASS/KILL successors. PASS can authorize only a separate recovered-identity preregistration; no model, mutation, final/archive publication, or quality surface is open.",
+        "id": "external_text_layout_second_stage_cache_salvage_audit_preregistration",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
