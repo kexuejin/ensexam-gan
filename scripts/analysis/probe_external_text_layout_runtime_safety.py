@@ -5,11 +5,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import multiprocessing
 import os
 from pathlib import Path
 import shutil
 import sys
 import tempfile
+import time
 from typing import Any, Callable
 
 
@@ -24,10 +26,10 @@ from scripts.analysis import materialize_external_text_layout_support_train_only
 PLAN_PATH = Path("docs/external-text-layout-support-prerequisite-v1.json")
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 PROBE_CONTRACT_PATH = Path(
-    "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json"
+    "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v2.json"
 )
 EXPECTED_PROBE_CONTRACT_SHA256 = (
-    "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+    "2fb92aa625e0409fd7ed9db301d854333ca0852d714a8ed5fa8dcfc20e3527f6"
 )
 DEFAULT_RESULT_PATH = Path(
     "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-20260814/result.json"
@@ -35,7 +37,9 @@ DEFAULT_RESULT_PATH = Path(
 PROBE_MAX_PROCESS_TREE_RSS_BYTES = 8 * 1024**3
 PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT = 70.0
 PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT = 45.0
-PROBE_MAX_SWAP_USED_BYTES = 512 * 1024**2
+PROBE_MAX_SWAP_GROWTH_BYTES = 512 * 1024**2
+PROBE_LAUNCH_STABILITY_SECONDS = 60.0
+PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS = 1.0
 THREAD_CAP_NAMES = (
     "OMP_NUM_THREADS",
     "OPENBLAS_NUM_THREADS",
@@ -55,6 +59,7 @@ DETECTOR_ARTIFACT_NAMES = (
 ProbeRunner = Callable[..., dict[str, float | int]]
 HealthReader = Callable[[int], dict[str, float | int]]
 SimulatorCounter = Callable[[], int]
+Sleeper = Callable[[float], None]
 
 
 def select_probe_source(repo_root: Path, plan: dict[str, Any]) -> Path:
@@ -120,9 +125,13 @@ def safety_limits() -> dict[str, float | int]:
     return {
         "detector_process_tree_rss_bytes_max": PROBE_MAX_PROCESS_TREE_RSS_BYTES,
         "launch_memory_free_percent_min": PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+        "launch_stability_sample_interval_seconds": (
+            PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS
+        ),
+        "launch_stability_window_seconds": PROBE_LAUNCH_STABILITY_SECONDS,
         "runtime_memory_free_percent_min": PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
+        "runtime_swap_growth_bytes_max": PROBE_MAX_SWAP_GROWTH_BYTES,
         "page_timeout_seconds": runtime.PAGE_TIMEOUT_SECONDS,
-        "swap_used_bytes_max": PROBE_MAX_SWAP_USED_BYTES,
     }
 
 
@@ -131,6 +140,139 @@ def validate_thread_caps(values: dict[str, str | None]) -> None:
         raise materializer.MaterializationError(
             "detector thread caps must all be set to 1 before process start"
         )
+
+
+def relative_swap_health_reader(
+    health_reader: HealthReader,
+    launch_swap_baseline_bytes: int,
+) -> HealthReader:
+    if launch_swap_baseline_bytes < 0:
+        raise materializer.MaterializationError(
+            "launch swap baseline must be nonnegative"
+        )
+
+    def read(pid: int) -> dict[str, float | int]:
+        health = dict(health_reader(pid))
+        absolute_swap = int(health["swap_used_bytes"])
+        if absolute_swap < 0:
+            raise materializer.MaterializationError(
+                "absolute swap health must be nonnegative"
+            )
+        health["swap_used_bytes"] = max(
+            0, absolute_swap - launch_swap_baseline_bytes
+        )
+        return health
+
+    return read
+
+
+def explicit_swap_growth_evidence(
+    health: dict[str, float | int],
+) -> dict[str, float | int]:
+    evidence = dict(health)
+    if "swap_used_bytes" in evidence:
+        evidence["swap_growth_bytes"] = evidence.pop("swap_used_bytes")
+    if "peak_swap_used_bytes" in evidence:
+        evidence["peak_swap_growth_bytes"] = evidence.pop(
+            "peak_swap_used_bytes"
+        )
+    return evidence
+
+
+def stable_launch_health(
+    *,
+    health_reader: HealthReader,
+    sleeper: Sleeper,
+    pid: int,
+) -> tuple[int, dict[str, float | int], HealthReader]:
+    initial_health = dict(health_reader(pid))
+    launch_swap_baseline_bytes = int(initial_health["swap_used_bytes"])
+    relative_reader = relative_swap_health_reader(
+        health_reader, launch_swap_baseline_bytes
+    )
+    relative_initial = dict(initial_health)
+    relative_initial["swap_used_bytes"] = 0
+    observed = runtime.health_summary(relative_initial)
+    materializer.enforce_health_limits(
+        relative_initial,
+        observed_health=observed,
+        maximum_process_tree_rss_bytes=PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+        minimum_memory_free_percent=PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+        maximum_swap_used_bytes=0,
+    )
+
+    sample_count = 1
+    interval_count = int(
+        PROBE_LAUNCH_STABILITY_SECONDS
+        / PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS
+    )
+    if (
+        interval_count * PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS
+        != PROBE_LAUNCH_STABILITY_SECONDS
+    ):
+        raise materializer.MaterializationError(
+            "launch stability timing must divide exactly"
+        )
+    for _ in range(interval_count):
+        sleeper(PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS)
+        health = relative_reader(pid)
+        observed = runtime.health_summary(health, observed)
+        materializer.enforce_health_limits(
+            health,
+            observed_health=observed,
+            maximum_process_tree_rss_bytes=PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            minimum_memory_free_percent=PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+            maximum_swap_used_bytes=0,
+        )
+        sample_count += 1
+
+    launch_health = explicit_swap_growth_evidence(observed)
+    launch_health.update(
+        {
+            "sample_count": sample_count,
+            "stability_sample_interval_seconds": (
+                PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS
+            ),
+            "stability_window_seconds": PROBE_LAUNCH_STABILITY_SECONDS,
+        }
+    )
+    return launch_swap_baseline_bytes, launch_health, relative_reader
+
+
+def run_probe_page(
+    *,
+    spec: dict[str, Any],
+    file_name: str,
+    source_path: Path,
+    page_dir: Path,
+    record_path: Path,
+    health_reader: HealthReader,
+    maximum_process_tree_rss_bytes: int,
+    minimum_memory_free_percent: float,
+    maximum_swap_used_bytes: int,
+    reject_booted_ios_simulators: bool,
+) -> dict[str, float | int]:
+    context = multiprocessing.get_context("spawn")
+    process = context.Process(
+        target=materializer.materialize_page_child,
+        args=(
+            spec,
+            file_name,
+            str(source_path),
+            str(page_dir),
+            str(record_path),
+            reject_booted_ios_simulators,
+        ),
+        daemon=False,
+    )
+    process.start()
+    return materializer.wait_for_page_process(
+        process,
+        health_reader=health_reader,
+        maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
+        minimum_memory_free_percent=minimum_memory_free_percent,
+        maximum_swap_used_bytes=maximum_swap_used_bytes,
+    )
 
 
 def base_result(source_path: Path, contract_path: Path) -> dict[str, Any]:
@@ -158,7 +300,7 @@ def base_result(source_path: Path, contract_path: Path) -> dict[str, Any]:
         "result_authority": "runtime_prerequisite_only",
         "routing_metadata_access": False,
         "safety_limits": safety_limits(),
-        "schema_version": 1,
+        "schema_version": 2,
         "target_access": False,
         "temporary_page_outputs_retained": False,
         "thread_caps": {name: os.environ.get(name) for name in THREAD_CAP_NAMES},
@@ -178,7 +320,8 @@ def validate_probe_contract(
         raise materializer.MaterializationError("tiled probe contract sha256 changed")
     contract = materializer.read_json(contract_file)
     if (
-        contract.get("state")
+        contract.get("schema_version") != 2
+        or contract.get("state")
         != "preregistered_integration_allowed_execution_disabled_until_all_host_gates_pass"
         or contract.get("terminal") != "PREREQUISITE_NEEDED"
         or contract.get("execution", {}).get("exact_attempt_count") != 1
@@ -194,7 +337,12 @@ def validate_probe_contract(
     if (
         launch.get("minimum_system_free_memory_percent")
         != PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT
-        or launch.get("maximum_swap_used_bytes") != PROBE_MAX_SWAP_USED_BYTES
+        or launch.get("stability_window_seconds")
+        != PROBE_LAUNCH_STABILITY_SECONDS
+        or launch.get("stability_sample_interval_seconds")
+        != PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS
+        or launch.get("swap_growth_during_stability_bytes_max") != 0
+        or launch.get("swap_baseline_absolute_maximum_bytes") is not None
         or launch.get("booted_ios_simulator_count") != 0
         or launch.get("no_conflicting_model_processes") is not True
         or launch.get("result_path_absent") is not True
@@ -202,10 +350,21 @@ def validate_probe_contract(
         != PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT
         or acceptance.get("maximum_process_tree_rss_bytes")
         != PROBE_MAX_PROCESS_TREE_RSS_BYTES
-        or acceptance.get("maximum_swap_used_bytes") != PROBE_MAX_SWAP_USED_BYTES
+        or acceptance.get("maximum_swap_growth_bytes")
+        != PROBE_MAX_SWAP_GROWTH_BYTES
+        or contract.get("execution", {}).get("monitor_interval_seconds")
+        != runtime.MONITOR_INTERVAL_SECONDS
     ):
         raise materializer.MaterializationError("tiled probe safety gates changed")
-    for label in ("repair", "repair_test", "repair_verification", "support_plan"):
+    for label in (
+        "predecessor_contract",
+        "repair",
+        "repair_test",
+        "repair_verification",
+        "shared_materializer",
+        "shared_runtime",
+        "support_plan",
+    ):
         materializer.validate_internal_artifact(
             repo_root,
             contract["frozen_inputs"][label],
@@ -267,6 +426,7 @@ def run_runtime_probe(
     page_runner: ProbeRunner | None = None,
     health_reader: HealthReader | None = None,
     simulator_counter: SimulatorCounter | None = None,
+    sleeper: Sleeper = time.sleep,
     lock_path: Path = runtime.HOST_USER_RUN_LOCK_PATH,
 ) -> dict[str, Any]:
     contract = validate_probe_contract(
@@ -291,18 +451,15 @@ def run_runtime_probe(
         raise materializer.MaterializationError(
             "tiled probe result already exists; retry is prohibited"
         )
-    page_runner = page_runner or materializer.run_isolated_page
+    page_runner = page_runner or run_probe_page
     health_reader = health_reader or runtime.runtime_health
     result = base_result(source_path, contract_path)
     result["detector_files"] = detector_files
     result["runtime"] = registered_runtime
 
-    temporary_root = Path(tempfile.mkdtemp(prefix="ensexam-external-layout-probe-"))
-    page_dir = temporary_root / "pages"
-    record_dir = temporary_root / "records"
-    page_dir.mkdir()
-    record_dir.mkdir()
-    record_path = record_dir / f"{source_path.stem}.json"
+    temporary_root: Path | None = None
+    page_dir: Path | None = None
+    record_path: Path | None = None
     failure: Exception | None = None
     write_result = False
     try:
@@ -311,20 +468,29 @@ def run_runtime_probe(
                 raise materializer.MaterializationError(
                     "tiled probe result already exists; retry is prohibited"
                 )
-            write_result = True
             validate_thread_caps(result["thread_caps"])
             materializer.assert_no_conflicting_model_processes()
             result["booted_ios_simulator_count"] = (
                 runtime.assert_no_booted_ios_simulators(simulator_counter)
             )
-            initial_health = health_reader(os.getpid())
-            result["initial_health"] = initial_health
-            materializer.enforce_health_limits(
-                initial_health,
-                maximum_process_tree_rss_bytes=PROBE_MAX_PROCESS_TREE_RSS_BYTES,
-                minimum_memory_free_percent=PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
-                maximum_swap_used_bytes=PROBE_MAX_SWAP_USED_BYTES,
+            (
+                result["launch_swap_baseline_bytes"],
+                result["launch_health"],
+                relative_health_reader,
+            ) = stable_launch_health(
+                health_reader=health_reader,
+                sleeper=sleeper,
+                pid=os.getpid(),
             )
+            materializer.assert_no_conflicting_model_processes()
+            result["booted_ios_simulator_count"] = (
+                runtime.assert_no_booted_ios_simulators(simulator_counter)
+            )
+            if destination.exists():
+                raise materializer.MaterializationError(
+                    "tiled probe result already exists; retry is prohibited"
+                )
+            write_result = True
             result.update(
                 {
                     "attempt_count": 1,
@@ -333,8 +499,16 @@ def run_runtime_probe(
                 }
             )
             materializer.atomic_write_json(destination, result)
+            temporary_root = Path(
+                tempfile.mkdtemp(prefix="ensexam-external-layout-probe-")
+            )
+            page_dir = temporary_root / "pages"
+            record_dir = temporary_root / "records"
+            page_dir.mkdir()
+            record_dir.mkdir()
+            record_path = record_dir / f"{source_path.stem}.json"
             try:
-                result["page_health"] = page_runner(
+                page_health = page_runner(
                     spec=spec,
                     file_name=source_path.name,
                     source_path=source_path,
@@ -346,22 +520,29 @@ def run_runtime_probe(
                     minimum_memory_free_percent=(
                         PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT
                     ),
-                    maximum_swap_used_bytes=PROBE_MAX_SWAP_USED_BYTES,
+                    maximum_swap_used_bytes=PROBE_MAX_SWAP_GROWTH_BYTES,
                     reject_booted_ios_simulators=True,
+                    health_reader=relative_health_reader,
+                )
+                result["page_health"] = explicit_swap_growth_evidence(
+                    page_health
                 )
             except (materializer.MaterializationError, OSError, ValueError) as error:
                 failure = error
             try:
-                result["post_run_health"] = health_reader(os.getpid())
+                post_run_health = relative_health_reader(os.getpid())
                 materializer.enforce_health_limits(
-                    result["post_run_health"],
+                    post_run_health,
                     maximum_process_tree_rss_bytes=(
                         PROBE_MAX_PROCESS_TREE_RSS_BYTES
                     ),
                     minimum_memory_free_percent=(
                         PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT
                     ),
-                    maximum_swap_used_bytes=PROBE_MAX_SWAP_USED_BYTES,
+                    maximum_swap_used_bytes=PROBE_MAX_SWAP_GROWTH_BYTES,
+                )
+                result["post_run_health"] = explicit_swap_growth_evidence(
+                    post_run_health
                 )
             except (materializer.MaterializationError, OSError, ValueError) as error:
                 if failure is None:
@@ -373,6 +554,10 @@ def run_runtime_probe(
                 if failure is None:
                     failure = error
             if failure is None:
+                if record_path is None or page_dir is None:
+                    raise materializer.MaterializationError(
+                        "temporary probe paths were not initialized"
+                    )
                 materializer.validate_page_record(
                     materializer.read_json(record_path),
                     file_name=source_path.name,
@@ -383,17 +568,33 @@ def run_runtime_probe(
     except (materializer.MaterializationError, OSError, ValueError) as error:
         failure = error
     finally:
-        try:
-            shutil.rmtree(temporary_root)
-        except OSError as error:
-            if failure is None:
-                failure = materializer.MaterializationError(
-                    f"temporary probe output cleanup failed: {error}"
-                )
-        result["temporary_page_outputs_retained"] = temporary_root.exists()
+        if temporary_root is not None:
+            try:
+                shutil.rmtree(temporary_root)
+            except OSError as error:
+                if failure is None:
+                    failure = materializer.MaterializationError(
+                        f"temporary probe output cleanup failed: {error}"
+                    )
+            result["temporary_page_outputs_retained"] = temporary_root.exists()
 
     if isinstance(failure, runtime.ResourceLimitError):
-        result["failure_health"] = failure.evidence()
+        result["failure_health"] = {
+            label: explicit_swap_growth_evidence(health)
+            for label, health in failure.evidence().items()
+        }
+    growth_evidence = [
+        int(result.get("launch_health", {}).get("peak_swap_growth_bytes", 0)),
+        int(result.get("page_health", {}).get("peak_swap_growth_bytes", 0)),
+        int(result.get("post_run_health", {}).get("swap_growth_bytes", 0)),
+        int(
+            result.get("failure_health", {})
+            .get("observed_health", {})
+            .get("peak_swap_growth_bytes", 0)
+        ),
+    ]
+    if "launch_swap_baseline_bytes" in result:
+        result["peak_swap_growth_bytes"] = max(growth_evidence)
     if failure is None:
         result.update(
             {
