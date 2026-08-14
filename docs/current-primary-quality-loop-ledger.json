@@ -846,6 +846,11 @@
         "detail": "A recovered second-stage identity now binds semantic audit PASS, canonical 79fd metrics, exact predictions, the single 487082-to-79fd mutation, validation-before-final-rename, post-rename validation, archive absence, and bounded crash retry. Only implementation and synthetic verification are open; real publication remains closed.",
         "id": "external_text_layout_second_stage_recovered_cache_publication_preregistration",
         "status": "passed"
+      },
+      {
+        "detail": "The no-model recovered-cache publisher passed 14 focused and 95 complete external-text-layout tests in Python 3.13.1 and 3.10.11. Exact prediction and metrics identities, mutation-before-publication rejection, complete pre/post-rename validation, result-write rollback, terminal idempotency, archive absence, and helper-route closure are locked. A real closed-authority probe left the 487082 temporary cache unchanged; one exact publication is now authorized after this PASS is pushed.",
+        "id": "external_text_layout_second_stage_recovered_cache_publication_integration",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [

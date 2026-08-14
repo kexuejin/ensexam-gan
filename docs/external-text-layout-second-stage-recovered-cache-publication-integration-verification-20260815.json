@@ -1,0 +1,101 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "recovered_second_stage_cache_publication": true,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_second_stage_cache_publication_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-second-stage-recovered-cache-publication-v1.json",
+    "sha256": "75a988d48fce658ca22e6e7deff9eab3759a4a13557161a99b4f4b3f62925163"
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "implementation": {
+    "canonicalizer": {
+      "path": "scripts/analysis/external_text_layout_cache_metrics.py",
+      "sha256": "5020440e7572f6df39ae4c54c2bf38c4ad8c634eeadb2fc84bf33af352661950"
+    },
+    "publisher": {
+      "path": "scripts/analysis/publish_external_text_layout_recovered_second_stage_cache.py",
+      "sha256": "9bdbdfcac1af70984e5db3d41e3cf5aa1ba455b9255d340b7ac0b4bcd101b17f"
+    },
+    "publisher_test": {
+      "path": "tests/test_publish_external_text_layout_recovered_second_stage_cache.py",
+      "sha256": "07733a6a06ac1faae9f79d214f90027e782ddc0585cd17bc5c33435bcda6872e"
+    }
+  },
+  "integration": {
+    "already_canonical_temporary_cache_is_resumable": true,
+    "archive_conflicts_reject_before_mutation": true,
+    "complete_final_cache_is_validated_after_rename": true,
+    "complete_temporary_cache_is_validated_before_rename": true,
+    "existing_final_requires_exact_identity_and_pass_result": true,
+    "fresh_publication_requires_ledger_integration_pass": true,
+    "historical_and_model_execution_routes_are_absent": true,
+    "result_write_failure_restores_temporary_cache": true,
+    "wrong_candidate_prediction_and_replacement_count_reject_before_publication": true
+  },
+  "real_state_after_closed_authority_probe": {
+    "archive_primary_present": false,
+    "archive_second_stage_present": false,
+    "final_present": false,
+    "probe": {
+      "exit_code": 2,
+      "reason": "recovered publication execution authority is closed",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    "result_present": false,
+    "temporary_metrics_sha256_after": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439",
+    "temporary_metrics_sha256_before": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439",
+    "temporary_unchanged": true
+  },
+  "recovered_identity": {
+    "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest tests.test_publish_external_text_layout_recovered_second_stage_cache",
+        "result": "14_passed"
+      },
+      {
+        "command": "/Users/kexuejin/.pyenv/versions/3.13.1/bin/python3.13 -m unittest tests.test_publish_external_text_layout_recovered_second_stage_cache",
+        "result": "14_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest tests/test_external_text_layout*.py tests/test_publish_external_text_layout_recovered_second_stage_cache.py",
+        "result": "95_passed"
+      },
+      {
+        "command": "/Users/kexuejin/.pyenv/versions/3.13.1/bin/python3.13 -m unittest tests/test_external_text_layout*.py tests/test_publish_external_text_layout_recovered_second_stage_cache.py",
+        "result": "95_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/publish_external_text_layout_recovered_second_stage_cache.py",
+        "result": "prerequisite_needed_before_ledger_integration_pass"
+      }
+    ],
+    "compile_check": "passed",
+    "diff_check": "passed"
+  },
+  "next_action": "Commit and push this integration PASS, then run the publisher exactly once under the frozen Python 3.10.11 runtime. Require terminal=PASS, exact 79fd metrics and 275-file prediction identity, absent temporary and archive paths, and an atomic result before recording publication PASS.",
+  "schema_version": 1,
+  "terminal": "PASS"
+}
