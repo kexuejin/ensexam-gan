@@ -1,0 +1,107 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "candidate_inference": false,
+    "final_cache_publication_execution": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_second_stage_cache_publication_integration_only",
+    "training": false
+  },
+  "evidence": {
+    "primary_recovery": {
+      "path": "docs/external-text-layout-primary-cache-recovery-result-20260814.json",
+      "sha256": "8b2c3ad75010c106f5154238ae734cd495ceb540813e11b9924623cf1cf6914b"
+    },
+    "salvage_audit": {
+      "path": "outputs/external-text-layout-second-stage-cache-salvage-audit-20260815/audit.json",
+      "sha256": "cdee62bafda2c854c02f3bc136a1be12373f4ef730376a4d1fdb9a756d317f98"
+    },
+    "salvage_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-cache-salvage-audit-pass.md",
+      "sha256": "9aa473328d847d5cb42f6f8ea63391f64d3126b30fd7b4d4c2884f57395dfd3c"
+    },
+    "salvage_verification": {
+      "path": "docs/external-text-layout-second-stage-cache-salvage-audit-verification-20260815.json",
+      "sha256": "f8a27d108acb0474b003ee2cec4f40b8f915702c6a3f704d7b611a10a9434cb9"
+    },
+    "second_stage_reconstruction_result": {
+      "path": "docs/external-text-layout-second-stage-cache-reconstruction-result-20260814.json",
+      "sha256": "5c33fe0c73c9de0b4179b399f3fb2f24c7361f86e528de0063135bd324fae593"
+    }
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/publish_external_text_layout_recovered_second_stage_cache.py",
+      "tests/test_publish_external_text_layout_recovered_second_stage_cache.py"
+    ],
+    "canonicalizer": {
+      "path": "scripts/analysis/external_text_layout_cache_metrics.py",
+      "sha256": "5020440e7572f6df39ae4c54c2bf38c4ad8c634eeadb2fc84bf33af352661950"
+    },
+    "new_dependency": false,
+    "result": "outputs/external-text-layout-second-stage-recovered-publication-20260815/result.json",
+    "site_packages_write": false
+  },
+  "paths": {
+    "archive_primary": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+    "archive_second_stage": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+    "final": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+    "primary": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "temporary": "outputs/.sign-separated-residual-repair-train275-frozen-pipeline-v1.materializing"
+  },
+  "publication_order": [
+    "validate_contract_evidence_ledger_and_path_state",
+    "validate_exact_primary_and_temporary_prediction_identities",
+    "if_needed_atomically_canonicalize_275_pred_path_roots_from_487082_to_79fd",
+    "validate_complete_temporary_recovered_identity",
+    "atomically_rename_temporary_to_absent_final",
+    "validate_complete_final_recovered_identity",
+    "write_result_json"
+  ],
+  "recovered_identity": {
+    "canonicalization": {
+      "current_repository_root": "/Volumes/Tool/source/ensexam-gan-h0-monotonic-safe",
+      "expected_data_rows": 275,
+      "expected_replacement_count": 275,
+      "frozen_historical_repository_root": "/private/tmp/ensexam-gan-h0-P0vNwp",
+      "source_metrics_sha256": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439"
+    },
+    "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+  },
+  "recovery_semantics": {
+    "after_metrics_mutation_before_directory_rename": "retry_may_validate_existing_79fd_temporary_metrics_and_continue",
+    "before_metrics_mutation": "require_exact_487082_source_before_canonicalization",
+    "final_already_present": "accept_only_exact_recovered_identity_with_absent_temporary_and_existing_PASS_result",
+    "unknown_metrics_or_path_state": "PREREQUISITE_NEEDED_without_mutation"
+  },
+  "required_verification": [
+    "wrong_contract_evidence_ledger_or_path_state_rejected_before_mutation",
+    "wrong_source_metrics_prediction_or_replacement_count_rejected_before_mutation",
+    "synthetic_487082_equivalent_to_79fd_canonicalization",
+    "already_canonical_temporary_crash_retry",
+    "complete_temporary_validation_before_final_rename",
+    "complete_final_validation_after_rename",
+    "archive_paths_remain_absent",
+    "model_and_historical_helper_routes_absent",
+    "focused_and_complete_external_text_layout_tests_in_python_3_13_1_and_3_10_11"
+  ],
+  "schema_version": 1,
+  "state": "preregistered_recovered_second_stage_cache_publication",
+  "terminal": "PREREQUISITE_NEEDED"
+}
