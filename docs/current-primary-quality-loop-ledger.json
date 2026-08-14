@@ -761,12 +761,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-formal-rss-launch-v4-preregistration.md",
         "sha256": "78fde5da88d1a0602f017c6e2f2c723c1b936e909210d6400d7209d0dac57647"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4-integration-verification-20260815.json",
+        "sha256": "5817b56f031db1dfcfb334e66c4578d8836396cd878573b23e6f2c3566239867"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-formal-rss-launch-v4-integration-pass.md",
+        "sha256": "f4399ae8d85841473b571b8229b81d982893ffeaf66f67682aa116e3731adfb5"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered launcher v4 formal-RSS correction and focused tests. Restore the detector runtime RSS cap from the one-page probe-specific 8 GiB to the unchanged shared formal 10 GiB value, retain an 8 GiB launch-parent check, shorten only the locked runtime monitor interval to 0.25 seconds, and restore it plus all adapters in finally. Keep 70%/45% free-memory floors, 512 MiB swap-growth termination, CPU one-page isolation, child Simulator recheck, 15-minute timeout, exact 39d5 plan, and the retained hw5k_1011 resume hashes. Do not resume the detector until dual-runtime v4 integration PASS is committed and pushed; diagnostic and quality surfaces remain closed.",
+    "next_action": "Commit and push the launcher v4 integration PASS, then resume with the exact project Python 3.13 executable and all four thread caps set to one. Require the locked 60-second 70%-free zero-growth readiness window and skip exact completed hw5k_1011 state. Retain the formal 10 GiB detector RSS cap, 0.25-second monitoring, 45% runtime free-memory floor, 512 MiB swap-growth termination, CPU one-page isolation, child Simulator recheck, 15-minute timeout, and exact 39d5 plan. Preserve all completed page records after any rejection. Require schema-v4 PASS, all 275 NPZ hashes, exact manifest plan binding, no residual process, and no temporary/marker/cleanup residue before recording materialization PASS; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -996,6 +1004,11 @@
       {
         "detail": "The pushed v3 launcher passed locked readiness and completed hw5k_1011 with 7.21 GiB peak RSS, 63% minimum free memory, and zero swap growth, then safely terminated same-size hw5k_1029 at 9.63 GiB because v3 incorrectly used the one-page probe's 8 GiB cap instead of the unchanged formal 10 GiB cap. Exact progress, NPZ, and record state is retained; post-stop swap is unchanged, free memory is 72%, and no model process remains. V4 may only restore the formal 10 GiB runtime cap and shorten locked monitoring to 0.25 seconds while retaining all other stronger gates. Implementation and synthetic verification are open; detector resume is closed until v4 integration PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "V4 passed 14 focused and 123 complete external-layout tests in Python 3.13.1 and 3.10.11. The observed 9.63 GiB page is accepted below the unchanged formal 10 GiB cap, 10 GiB plus one byte still terminates the process group, 0.25-second monitoring and every process-local adapter restore after pass/failure, and the 70%/45% free-memory plus 512 MiB growth gates remain. Shared hashes and retained hw5k_1011 progress/NPZ/record hashes are exact; a closed-authority real probe changed no state. Resumable detector execution from hw5k_1029 is authorized only after this PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_integration",
         "status": "passed"
       }
     ],

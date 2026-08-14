@@ -22,6 +22,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
     def test_repository_contract_and_shared_hashes_are_exact(self) -> None:
         contract = launcher.validate_repository_contract(launcher.ROOT)
         self.assertEqual(contract["schema_version"], 2)
+        self.assertEqual(launcher.validate_v4_contract(launcher.ROOT)["schema_version"], 4)
         self.assertEqual(
             launcher.materializer.sha256_file(
                 launcher.ROOT
@@ -77,7 +78,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
-    def test_execution_authority_requires_v3_integration_pass(self) -> None:
+    def test_execution_authority_requires_v4_integration_pass(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             ledger_path = root / launcher.LEDGER_PATH
@@ -104,6 +105,14 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                     "status": "passed",
                 },
                 {
+                    "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_integration",
+                    "status": "passed",
+                },
+                {
+                    "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_preregistration",
+                    "status": "passed",
+                },
+                {
                     "id": "external_text_layout_support_train_only_diagnostic",
                     "status": "pending",
                 },
@@ -119,7 +128,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 launcher.validate_execution_authority(root)
             prerequisites.append(
                 {
-                    "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_integration",
+                    "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_integration",
                     "status": "passed",
                 }
             )
@@ -241,7 +250,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 derived_plan_path=root / "generated/effective-plan.json",
             )
             self.assertEqual(result["terminal"], "PASS")
-            self.assertEqual(result["schema_version"], 3)
+            self.assertEqual(result["schema_version"], 4)
             self.assertEqual(result["runtime_safety"], runtime_safety)
             self.assertEqual(
                 json.loads((root / launcher.RESULT_PATH).read_text()), result
@@ -263,7 +272,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 },
                 "evidence": {"original_plan": {"path": "docs/plan.json"}},
             }
-            terminal = {"schema_version": 3, "terminal": "PASS"}
+            terminal = {"schema_version": 4, "terminal": "PASS"}
             with (
                 mock.patch.object(
                     launcher, "validate_repository_contract", return_value=contract
@@ -357,7 +366,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
 
         materializer_result = {
             "minimum_memory_free_percent": 63.0,
-            "peak_process_tree_rss_bytes": 7 * 1024**3,
+            "peak_process_tree_rss_bytes": 10_334_617_600,
             "peak_swap_used_bytes": 0,
             "terminal": "PASS",
         }
@@ -367,11 +376,15 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             captured.update(kwargs)
             return {
                 "minimum_memory_free_percent": 63.0,
-                "peak_process_tree_rss_bytes": 7 * 1024**3,
+                "peak_process_tree_rss_bytes": 10_334_617_600,
                 "peak_swap_used_bytes": 0,
             }
 
         def runner(**_kwargs: object) -> dict[str, object]:
+            self.assertEqual(
+                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
+                launcher.FORMAL_MONITOR_INTERVAL_SECONDS,
+            )
             self.assertEqual(
                 launcher.materializer.runtime_health(123)["swap_used_bytes"], 0
             )
@@ -397,6 +410,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             launcher.materializer.enforce_health_limits,
             launcher.materializer.wait_for_page_process,
             launcher.materializer.run_isolated_page,
+            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
         )
         conflicts = mock.Mock()
         simulators = mock.Mock(return_value=0)
@@ -425,7 +439,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         self.assertTrue(captured["reject_booted_ios_simulators"])
         self.assertEqual(
             captured["maximum_process_tree_rss_bytes"],
-            launcher.safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            launcher.FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
         )
         self.assertEqual(
             (
@@ -434,6 +448,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 launcher.materializer.enforce_health_limits,
                 launcher.materializer.wait_for_page_process,
                 launcher.materializer.run_isolated_page,
+                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
             ),
             originals,
         )
@@ -499,6 +514,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             launcher.materializer.enforce_health_limits,
             launcher.materializer.wait_for_page_process,
             launcher.materializer.run_isolated_page,
+            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
         )
         with mock.patch.object(
             launcher.materializer.runtime, "terminate_page_process"
@@ -522,6 +538,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 launcher.materializer.enforce_health_limits,
                 launcher.materializer.wait_for_page_process,
                 launcher.materializer.run_isolated_page,
+                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
             ),
             originals,
         )
@@ -538,7 +555,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 "stability_window_seconds": 60.0,
             },
             "launch_swap_baseline_bytes": 1024,
-            "limits": launcher.safety_probe.safety_limits(),
+            "limits": launcher.launcher_safety_limits(),
             "materialization_health": {
                 "minimum_memory_free_percent": 45.0,
                 "peak_process_tree_rss_bytes": 8 * 1024**3,
@@ -560,6 +577,50 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         recovered["unexpected"] = True
         with self.assertRaises(launcher.RecoveredMaterializationError):
             launcher.validate_runtime_safety(recovered)
+
+    def test_formal_rss_limit_allows_observed_page_and_terminates_above_10_gib(self) -> None:
+        baseline = 2 * 1024**3
+        calls = 0
+
+        def health(_pid: int) -> dict[str, float | int]:
+            nonlocal calls
+            calls += 1
+            rss = 1024 if calls <= 61 else 10 * 1024**3 + 1
+            return {
+                "memory_free_percent": 80.0,
+                "process_tree_rss_bytes": rss,
+                "swap_used_bytes": baseline,
+            }
+
+        class Process:
+            pid = 12345
+            exitcode = 0
+
+            def is_alive(self) -> bool:
+                return True
+
+        def runner(**_kwargs: object) -> dict[str, object]:
+            launcher.materializer.wait_for_page_process(Process())
+            raise AssertionError("RSS above the formal limit should terminate")
+
+        with mock.patch.object(
+            launcher.materializer.runtime, "terminate_page_process"
+        ) as terminate:
+            with self.assertRaises(launcher.materializer.runtime.ResourceLimitError):
+                launcher.run_baseline_relative_materializer(
+                    repo_root=Path("/repo"),
+                    derived_plan_path=Path("/repo/effective-plan.json"),
+                    health_reader=health,
+                    sleeper=lambda _seconds: None,
+                    materialize_runner=runner,
+                    lock_factory=noop_lock,
+                    conflict_checker=lambda: None,
+                    simulator_checker=lambda: 0,
+                )
+            terminate.assert_called_once()
+        self.assertEqual(
+            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS, 1.0
+        )
 
 
 if __name__ == "__main__":

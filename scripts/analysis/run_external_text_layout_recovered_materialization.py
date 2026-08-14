@@ -32,6 +32,12 @@ V3_CONTRACT_PATH = Path(
 EXPECTED_V3_CONTRACT_SHA256 = (
     "8602c2ff972ed45ee6e62514f75d3bcade9e8c4056398d0c47976124153e023f"
 )
+V4_CONTRACT_PATH = Path(
+    "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4.json"
+)
+EXPECTED_V4_CONTRACT_SHA256 = (
+    "e05eb01bac1f92bc7e8b1a5c1064c73d1d19eeb5db7a73a2b872e594a0fc682b"
+)
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 DERIVED_PLAN_PATH = Path(
     "outputs/external-text-layout-recovered-materializer-input-20260815/"
@@ -55,6 +61,8 @@ EXPECTED_SHARED_RUNTIME_SHA256 = (
 EXPECTED_SAFETY_PROBE_SHA256 = (
     "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53"
 )
+FORMAL_MAX_PROCESS_TREE_RSS_BYTES = materializer.MAX_DETECTOR_RSS_BYTES
+FORMAL_MONITOR_INTERVAL_SECONDS = 0.25
 
 
 class RecoveredMaterializationError(RuntimeError):
@@ -90,6 +98,94 @@ def validate_artifact(repo_root: Path, artifact: Any, label: str) -> Path:
             f"{label} sha256 changed: expected {artifact['sha256']}, got {actual}"
         )
     return path
+
+
+def launcher_safety_limits() -> dict[str, float | int]:
+    return {
+        "launch_memory_free_percent_min": safety_probe.PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+        "launch_process_tree_rss_bytes_max": safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+        "launch_stability_sample_interval_seconds": safety_probe.PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS,
+        "launch_stability_window_seconds": safety_probe.PROBE_LAUNCH_STABILITY_SECONDS,
+        "page_timeout_seconds": materializer.runtime.PAGE_TIMEOUT_SECONDS,
+        "runtime_memory_free_percent_min": safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
+        "runtime_monitor_interval_seconds": FORMAL_MONITOR_INTERVAL_SECONDS,
+        "runtime_process_tree_rss_bytes_max": FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+        "runtime_swap_growth_bytes_max": safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
+    }
+
+
+def validate_v4_contract(repo_root: Path) -> dict[str, Any]:
+    contract_path = repo_root / V4_CONTRACT_PATH
+    if materializer.sha256_file(contract_path) != EXPECTED_V4_CONTRACT_SHA256:
+        raise RecoveredMaterializationError("launcher v4 contract sha256 changed")
+    contract = read_json(contract_path)
+    implementation = contract.get("implementation", {})
+    runtime_contract = contract.get("runtime", {})
+    if (
+        contract.get("schema_version") != 4
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+        or contract.get("authority", {}).get("result_authority")
+        != "recovered_materializer_launcher_v4_integration_only"
+        or implementation.get("allowed_files")
+        != [
+            "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+            "tests/test_run_external_text_layout_recovered_materialization.py",
+        ]
+        or implementation.get("launcher_result_schema_version") != 4
+        or implementation.get("new_dependency") is not False
+        or implementation.get("persistent_runtime_patch") is not False
+        or implementation.get("shared_materializer_mutation") is not False
+        or implementation.get("shared_runtime_mutation") is not False
+        or implementation.get("site_packages_write") is not False
+        or runtime_contract
+        != {
+            "child_rechecks_booted_ios_simulator_before_detector_import": True,
+            "launch_maximum_process_tree_rss_bytes": safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            "maximum_runtime_process_tree_rss_bytes": FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+            "maximum_swap_growth_bytes": safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
+            "minimum_launch_memory_free_percent": safety_probe.PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+            "minimum_runtime_memory_free_percent": safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
+            "monitor_interval_seconds": FORMAL_MONITOR_INTERVAL_SECONDS,
+            "page_timeout_seconds": materializer.runtime.PAGE_TIMEOUT_SECONDS,
+            "process_group_termination_on_limit": True,
+            "stability_sample_interval_seconds": safety_probe.PROBE_LAUNCH_SAMPLE_INTERVAL_SECONDS,
+            "stability_window_seconds": safety_probe.PROBE_LAUNCH_STABILITY_SECONDS,
+            "swap_baseline_absolute_maximum_bytes": None,
+            "worker_count": 1,
+        }
+        or contract.get("supersedes", {}).get("status")
+        != "one_page_completed_then_resource_rejected_with_exact_resume_state"
+    ):
+        raise RecoveredMaterializationError("launcher v4 contract changed")
+    evidence = contract.get("evidence", {})
+    historical = {
+        "launcher_v3_implementation": (
+            "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+            "3c58365db9d33fbc6de81cce06a45938f341920c80cdd637b763ba11cdc57ddf",
+        ),
+        "launcher_v3_test": (
+            "tests/test_run_external_text_layout_recovered_materialization.py",
+            "476ee00a7cd4c84b6d44142e2a18c9fd3b3ef5f347ac0e5568576ba539125b9d",
+        ),
+    }
+    for label, (path, sha256) in historical.items():
+        if evidence.get(label) != {"path": path, "sha256": sha256}:
+            raise RecoveredMaterializationError(
+                f"launcher historical {label} evidence changed"
+            )
+    exact = {
+        "launcher_v3_contract": EXPECTED_V3_CONTRACT_SHA256,
+        "launcher_v3_integration": "b7fc960325333e7a20788b487ac17d603f7c7e5bc4fdacecd4625c0b53da1ead",
+        "shared_materializer": EXPECTED_SHARED_MATERIALIZER_SHA256,
+        "shared_materializer_test": EXPECTED_SHARED_TEST_SHA256,
+        "shared_runtime": EXPECTED_SHARED_RUNTIME_SHA256,
+        "tiled_probe": EXPECTED_SAFETY_PROBE_SHA256,
+    }
+    for label, expected_sha256 in exact.items():
+        path = validate_artifact(repo_root, evidence.get(label), f"launcher v4 {label}")
+        if materializer.sha256_file(path) != expected_sha256:
+            raise RecoveredMaterializationError(f"launcher v4 {label} source changed")
+    return contract
 
 
 def validate_v3_contract(repo_root: Path) -> dict[str, Any]:
@@ -174,6 +270,7 @@ def validate_v3_contract(repo_root: Path) -> dict[str, Any]:
 
 
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
+    validate_v4_contract(repo_root)
     validate_v3_contract(repo_root)
     contract_path = repo_root / CONTRACT_PATH
     if materializer.sha256_file(contract_path) != EXPECTED_CONTRACT_SHA256:
@@ -237,6 +334,8 @@ def validate_execution_authority(repo_root: Path) -> None:
         "external_text_layout_recovered_materializer_launch_v2_integration": "passed",
         "external_text_layout_recovered_materializer_baseline_relative_launch_v3_preregistration": "passed",
         "external_text_layout_recovered_materializer_baseline_relative_launch_v3_integration": "passed",
+        "external_text_layout_recovered_materializer_formal_rss_launch_v4_preregistration": "passed",
+        "external_text_layout_recovered_materializer_formal_rss_launch_v4_integration": "passed",
         "external_text_layout_support_train_only_diagnostic": "pending",
     }
     if active.get("terminal") != "PREREQUISITE_NEEDED" or any(
@@ -404,6 +503,7 @@ def run_baseline_relative_materializer(
         original_enforce_health_limits = materializer.enforce_health_limits
         original_wait_for_page_process = materializer.wait_for_page_process
         original_run_isolated_page = materializer.run_isolated_page
+        original_monitor_interval = materializer.runtime.MONITOR_INTERVAL_SECONDS
 
         @contextmanager
         def held_lock(_path: Path) -> Iterator[None]:
@@ -413,7 +513,7 @@ def run_baseline_relative_materializer(
             health: dict[str, float | int],
             *,
             observed_health: dict[str, float | int] | None = None,
-            maximum_process_tree_rss_bytes: int = safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes: int = FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent: float = safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes: int = safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
         ) -> None:
@@ -422,7 +522,7 @@ def run_baseline_relative_materializer(
                 observed_health=observed_health,
                 maximum_process_tree_rss_bytes=min(
                     maximum_process_tree_rss_bytes,
-                    safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+                    FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
                 ),
                 minimum_memory_free_percent=max(
                     minimum_memory_free_percent,
@@ -438,7 +538,7 @@ def run_baseline_relative_materializer(
             process: Any,
             *,
             health_reader: Callable[[int], dict[str, float | int]] = relative_reader,
-            maximum_process_tree_rss_bytes: int = safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes: int = FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent: float = safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes: int = safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
         ) -> dict[str, float | int]:
@@ -448,7 +548,7 @@ def run_baseline_relative_materializer(
                 health_reader=relative_reader,
                 maximum_process_tree_rss_bytes=min(
                     maximum_process_tree_rss_bytes,
-                    safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+                    FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
                 ),
                 minimum_memory_free_percent=max(
                     minimum_memory_free_percent,
@@ -467,7 +567,7 @@ def run_baseline_relative_materializer(
             source_path: Path,
             page_dir: Path,
             record_path: Path,
-            maximum_process_tree_rss_bytes: int = safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes: int = FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent: float = safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes: int = safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
             reject_booted_ios_simulators: bool = True,
@@ -481,7 +581,7 @@ def run_baseline_relative_materializer(
                 record_path=record_path,
                 maximum_process_tree_rss_bytes=min(
                     maximum_process_tree_rss_bytes,
-                    safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+                    FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
                 ),
                 minimum_memory_free_percent=max(
                     minimum_memory_free_percent,
@@ -500,6 +600,9 @@ def run_baseline_relative_materializer(
             materializer.enforce_health_limits = strict_enforce_health_limits
             materializer.wait_for_page_process = monitored_wait_for_page_process
             materializer.run_isolated_page = safe_run_isolated_page
+            materializer.runtime.MONITOR_INTERVAL_SECONDS = (
+                FORMAL_MONITOR_INTERVAL_SECONDS
+            )
             result = runner(
                 repo_root=repo_root,
                 plan_path=derived_plan_path.relative_to(repo_root),
@@ -507,6 +610,7 @@ def run_baseline_relative_materializer(
                 worker_count=1,
             )
         finally:
+            materializer.runtime.MONITOR_INTERVAL_SECONDS = original_monitor_interval
             materializer.run_isolated_page = original_run_isolated_page
             materializer.wait_for_page_process = original_wait_for_page_process
             materializer.enforce_health_limits = original_enforce_health_limits
@@ -520,7 +624,7 @@ def run_baseline_relative_materializer(
         post_run_health = relative_reader(os.getpid())
         materializer.runtime.enforce_health_limits(
             post_run_health,
-            maximum_process_tree_rss_bytes=safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes=FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent=safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes=safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
         )
@@ -528,7 +632,7 @@ def run_baseline_relative_materializer(
         "evidence_state": "live_monitored_execution",
         "launch_health": launch_health,
         "launch_swap_baseline_bytes": baseline,
-        "limits": safety_probe.safety_limits(),
+        "limits": launcher_safety_limits(),
         "materialization_health": {
             "minimum_memory_free_percent": result["minimum_memory_free_percent"],
             "peak_process_tree_rss_bytes": result["peak_process_tree_rss_bytes"],
@@ -612,7 +716,7 @@ def build_launcher_result(
         "authority": {
             "candidate_inference": False,
             "quality_evaluation": False,
-            "result_authority": "recovered_materializer_launcher_v3",
+            "result_authority": "recovered_materializer_launcher_v4",
         },
         "derived_plan": {
             "path": contract["derived_plan"]["path"],
@@ -623,7 +727,7 @@ def build_launcher_result(
         "materialization": materialization,
         "recovered_second_stage_metrics_sha256": metrics_change["after"],
         "runtime_safety": runtime_safety,
-        "schema_version": 3,
+        "schema_version": 4,
         "terminal": "PASS",
     }
 
@@ -646,7 +750,7 @@ def write_result(path: Path, result: dict[str, Any]) -> None:
 def recovered_runtime_safety() -> dict[str, Any]:
     return {
         "evidence_state": "terminal_output_recovery",
-        "limits": safety_probe.safety_limits(),
+        "limits": launcher_safety_limits(),
         "live_health_available": False,
         "terminal": "PASS",
     }
@@ -671,7 +775,7 @@ def runtime_number(
 def validate_runtime_safety(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict) or value.get("terminal") != "PASS":
         raise RecoveredMaterializationError("launcher runtime safety evidence changed")
-    if value.get("limits") != safety_probe.safety_limits():
+    if value.get("limits") != launcher_safety_limits():
         raise RecoveredMaterializationError("launcher runtime safety limits changed")
     state = value.get("evidence_state")
     if state == "terminal_output_recovery":
@@ -743,7 +847,7 @@ def validate_runtime_safety(value: Any) -> dict[str, Any]:
         or not (
             0
             <= materialization_rss
-            <= safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES
+            <= FORMAL_MAX_PROCESS_TREE_RSS_BYTES
         )
         or not (
             0
@@ -751,7 +855,7 @@ def validate_runtime_safety(value: Any) -> dict[str, Any]:
             <= safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES
         )
         or post_free < safety_probe.PROBE_MIN_RUNTIME_MEMORY_FREE_PERCENT
-        or not 0 <= post_rss <= safety_probe.PROBE_MAX_PROCESS_TREE_RSS_BYTES
+        or not 0 <= post_rss <= FORMAL_MAX_PROCESS_TREE_RSS_BYTES
         or not 0 <= post_swap <= safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES
     ):
         raise RecoveredMaterializationError("launcher runtime safety bounds changed")
@@ -782,11 +886,11 @@ def validate_existing_result(
     result = read_json(result_path)
     if (
         result.get("terminal") != "PASS"
-        or result.get("schema_version") != 3
+        or result.get("schema_version") != 4
         or result.get("archive_cache_identities") != archive_inputs
         or result.get("materialization") != materialization
         or result.get("authority", {}).get("result_authority")
-        != "recovered_materializer_launcher_v3"
+        != "recovered_materializer_launcher_v4"
         or result.get("derived_plan", {}).get("path")
         != contract["derived_plan"]["path"]
         or result.get("derived_plan", {}).get("sha256")
@@ -868,7 +972,7 @@ def main() -> int:
             json.dumps(
                 {
                     "reason": str(error),
-                    "schema_version": 3,
+                    "schema_version": 4,
                     "terminal": "PREREQUISITE_NEEDED",
                 },
                 sort_keys=True,
