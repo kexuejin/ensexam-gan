@@ -685,12 +685,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-recovered-cache-publication-pass.md",
         "sha256": "66bc45858bc8eb36e6bfe427ac2aed013cc5fa0d50453d36793345d78a8dec38"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-archive-publication-v1.json",
+        "sha256": "088ca14e0b9497d5c4c8150ded5a29b8c77c55b2edb451cc830cea9e15003fa2"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-archive-publication-preregistration.md",
+        "sha256": "1c7eb40ab31e97a52ba52b4581ac2157d831ee8eccb98ec66db14f2039e497fe"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Preregister a separate recovered-identity archive publisher. It must validate the exact primary efd588/6400 cache and recovered second-stage 79fd/2ffa cache, create only the two frozen relative archive symlinks atomically, preserve both cache directories byte-for-byte, and avoid the original historical b800-bound controller route. Implement and test only after preregistration; real archive publication remains closed until a separate integration PASS is committed and pushed. Formal materialization, train275 diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Implement only the preregistered recovered-identity archive publisher and synthetic tests. Validate the exact 275-name manifest, primary efd588/6400 cache, and recovered second-stage 79fd/2ffa cache before link mutation; preflight both final and temporary paths; create only relative registered links; support bounded partial-link recovery and current-attempt rollback; and keep the original b800-bound publish_caches route absent. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not create real archive links until a separate integration PASS is committed and pushed. Formal materialization, diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -875,6 +883,11 @@
       {
         "detail": "The single authorized no-model publisher changed only 275 registered pred_path roots from source metrics 487082 to recovered metrics 79fd, preserved the exact 275-file 2ffa prediction payload, validated temporary and final caches, wrote terminal PASS, and left temporary/archive paths absent. Historical b800 remains explicitly unreproduced; only separate archive preregistration is open.",
         "id": "external_text_layout_second_stage_recovered_cache_publication",
+        "status": "passed"
+      },
+      {
+        "detail": "A separate no-model archive path now binds the exact primary efd588/6400 cache, recovered second-stage 79fd/2ffa cache, 275-name manifest, two relative symlinks, dual-destination preflight, partial-link crash recovery, and current-attempt rollback. Only implementation and synthetic verification are open; real archive links remain absent until integration PASS is pushed.",
+        "id": "external_text_layout_recovered_archive_publication_preregistration",
         "status": "passed"
       }
     ],

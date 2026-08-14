@@ -1,0 +1,107 @@
+{
+  "authority": {
+    "archive_publication_execution": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "implementation_and_synthetic_verification": true,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_archive_publication_integration_only",
+    "training": false
+  },
+  "evidence": {
+    "manifest": {
+      "count": 275,
+      "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "primary_recovery": {
+      "path": "docs/external-text-layout-primary-cache-recovery-result-20260814.json",
+      "sha256": "8b2c3ad75010c106f5154238ae734cd495ceb540813e11b9924623cf1cf6914b"
+    },
+    "recovered_second_stage_publication": {
+      "path": "outputs/external-text-layout-second-stage-recovered-publication-20260815/result.json",
+      "sha256": "f505fd2cf0b998280f71872eed8d30b4deb1d84ee44f41b1b228295813b0e5ee"
+    },
+    "recovered_second_stage_verification": {
+      "path": "docs/external-text-layout-second-stage-recovered-cache-publication-verification-20260815.json",
+      "sha256": "bab1ff8ab42ff28f5332894d86c4588a92faa39f26e50b3a03a919509aba6e72"
+    }
+  },
+  "expected_caches": {
+    "primary": {
+      "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+      "prediction_set": {
+        "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    },
+    "second_stage": {
+      "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      },
+      "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+    }
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/publish_external_text_layout_recovered_archive_links.py",
+      "tests/test_publish_external_text_layout_recovered_archive_links.py"
+    ],
+    "new_dependency": false,
+    "result": "outputs/external-text-layout-recovered-archive-publication-20260815/result.json",
+    "site_packages_write": false,
+    "validation_helper": {
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "sha256": "abcde54e842c512b41bbdfe4382d9c200232f9e5b75bb3b9763376f9442f032c"
+    }
+  },
+  "paths": {
+    "archive_primary": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+    "archive_second_stage": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+    "primary": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "second_stage": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1"
+  },
+  "publication_order": [
+    "validate_contract_evidence_ledger_and_exact_cache_identities",
+    "preflight_both_final_and_temporary_link_paths_before_mutation",
+    "create_and_validate_missing_relative_temporary_links",
+    "promote_missing_links_with_partial_exact_link_recovery",
+    "validate_both_final_links_and_linked_cache_identities",
+    "atomically_write_and_read_back_terminal_result"
+  ],
+  "recovery_semantics": {
+    "both_exact_links_and_absent_result": "revalidate_both_caches_and_write_result",
+    "exact_partial_relative_link": "validate_existing_link_then_create_only_the_missing_registered_link",
+    "exact_relative_temporary_link": "validate_and_promote_only_after_both_cache_identities_pass",
+    "existing_terminal_pass": "accept_only_exact_relative_links_exact_cache_identities_and_exact_result",
+    "result_write_failure": "remove_only_links_created_by_the_current_attempt_and_leave_cache_directories_unchanged",
+    "unknown_absolute_broken_or_conflicting_path": "PREREQUISITE_NEEDED_without_mutation"
+  },
+  "required_verification": [
+    "wrong_contract_evidence_ledger_manifest_or_cache_identity_rejected_before_link_mutation",
+    "both_destinations_and_temporary_paths_preflighted_before_link_mutation",
+    "only_relative_links_resolving_to_registered_cache_directories_accepted",
+    "partial_exact_final_and_temporary_link_crash_retries",
+    "second_link_or_result_failure_rolls_back_only_current_attempt_links",
+    "both_linked_caches_revalidated_after_publication",
+    "existing_terminal_pass_is_idempotent_after_execution_authority_closes",
+    "original_publish_caches_model_and_historical_helper_routes_absent",
+    "focused_and_complete_external_text_layout_tests_in_python_3_13_1_and_3_10_11"
+  ],
+  "schema_version": 1,
+  "state": "preregistered_recovered_archive_publication",
+  "terminal": "PREREQUISITE_NEEDED"
+}
