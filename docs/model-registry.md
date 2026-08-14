@@ -1063,6 +1063,8 @@ runtime result: docs/external-text-layout-runtime-safety-probe-20260813.json
 static memory risk: docs/external-text-layout-static-memory-risk-20260814.json
 runtime repair contract: docs/external-text-layout-runtime-equivalence-repair-v1.json
 runtime repair decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
+repaired probe result: docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json
+repaired probe decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-probe-kill.md
 cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
@@ -1070,12 +1072,12 @@ runtime restoration decision: docs/decisions/2026-08-14-external-text-layout-his
 historical cache runtime: Python 3.10.11 / Torch 2.5.1 / NumPy 2.2.6 / OpenCV runtime 5.0.0 / OpenCV wheel 5.0.0.93
 data execution / training / candidate: exact layout materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
-runtime status: one target-free CPU page crossed 35% free-memory floor at 31.0%; post-stop swap 1,269.75 MiB; no formal evidence or residual model process
+runtime status: the only clean-baseline repaired page crossed the free-memory floor at 26.0% and swap cap at 2,973,562,306 bytes; peak process-tree RSS 5,643,206,656 bytes; no formal evidence or residual model process
 static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
-runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction; fake-feature equivalence and fail-closed guards pass without real model import or execution
+runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction and remains statically equivalent, but its only authorized clean-baseline probe KILLed the exact repeat path as empirically unsafe
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: 75% free memory but 989.75 MiB swap used; repaired probe absent and all model execution prohibited
-next action: wait for swap below 512 MiB, obtain one safe target-free page below all fixed gates, then reconstruct exact frozen prediction caches before formal materialization
+current host gate: post-cleanup 79% free memory and 1,906.69 MiB swap used; repaired probe terminal KILL for the exact runtime path and all model execution prohibited
+next action: read-only static equivalence and memory analysis for the full-resolution 9x9 path; any lower-memory implementation or model run needs separate preregistration and new one-page authorization
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
@@ -1096,15 +1098,14 @@ default, promotion closure, and reserved-blind closure remain unchanged.
 The family is not KILLed. Its train-only diagnostic remains pending behind two
 fail-closed prerequisites: a safe detector runtime and reconstruction of the
 missing frozen primary/second-stage prediction caches with exact historical
-content hashes. No model process may be retried while swap use exceeds
-`512 MiB`, and the registered detector/runtime parameters and acceptance gates
-must not be relaxed. The repository-local runtime repair is statically
-verified and changes only overwritten control flow; it does not by itself
-establish a safe detector runtime or authorize the one-page probe before the
-swap gate passes. The cache reconstruction path is also statically verified
-and hash-bound, but remains recovery infrastructure only: it cannot load its
-historical helper until the repaired probe and current host gates pass, and it
-cannot publish either archive path until both reconstructed caches match every
-registered historical hash. The exact Python/Torch/NumPy/OpenCV runtime is now
-restored and statically verified; this closes only the cache-runtime
-prerequisite and does not weaken the detector probe or swap gates.
+content hashes. The repository-local duplicate-upsample repair is statically
+equivalent, but its only clean-baseline probe crossed both memory safeguards;
+the exact detector/runtime/geometry/repair repeat path is therefore KILLed.
+Clearing swap does not authorize another retry, and the registered safeguards
+must not be relaxed. The cache reconstruction path remains recovery
+infrastructure only: its successful-probe prerequisite is unmet and neither
+archive may be published before both reconstructed caches match every
+registered historical hash. The exact historical cache runtime remains
+restored. The only open next step is read-only analysis of a materially
+lower-memory equivalent full-resolution `9x9` path; implementation and model
+execution require separate preregistration.

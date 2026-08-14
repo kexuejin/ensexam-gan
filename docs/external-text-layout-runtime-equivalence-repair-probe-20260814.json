@@ -1,0 +1,100 @@
+{
+  "authority": {
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "formal_outputs_written": false,
+    "label_access": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "recognition": false,
+    "reserved_blind_state": "disabled",
+    "routing_metadata_access": false,
+    "target_access": false,
+    "training": false
+  },
+  "cleanup": {
+    "booted_simulator_count": 0,
+    "memory_free_percent": 79.0,
+    "residual_model_process_count": 0,
+    "swap_used_mib": 1906.69,
+    "temporary_page_outputs_retained": false
+  },
+  "decision": {
+    "exact_repair_probe_terminal": "KILL",
+    "external_text_layout_family_terminal": "PREREQUISITE_NEEDED",
+    "next_bounded_uncertainty": "static_equivalence_and_memory_analysis_for_the_full_resolution_9x9_path",
+    "repeat_policy": "do_not_repeat_the_same_detector_runtime_geometry_or_duplicate_upsample_repair_probe"
+  },
+  "detector": {
+    "device": "cpu",
+    "engine": "transformers",
+    "model_name": "PP-OCRv6_medium_det"
+  },
+  "detector_files": {
+    "config_json": "3ea7e760f64255c152ba139e2f5f798303f7189b87c923cf498e2b2e830cadd3",
+    "gitattributes": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+    "inference_yml": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871",
+    "model_safetensors": "bd393266c02e1a680b1b34c301d5d0d81e6290440b7f8ab0f5d5032276b17eb1",
+    "preprocessor_config_json": "74421569a28a78d417db320f9bc039ce0997a1defe2b35f259dfc74299c9f1ed",
+    "readme_md": "cdba9f31531fe1a4ff1323a21d7cf671a7a042b23a788ffeb081d1845acccdb6"
+  },
+  "execution": {
+    "conflicting_model_process_check": true,
+    "host_user_lock": true,
+    "one_page": true,
+    "page_process_start_method": "spawn",
+    "raw_result_path": "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/result.json",
+    "raw_result_sha256": "1f3d6d3ec1797b6a2495da87bde8e6f05f7b56b69b81c44f609f99b6e42ba52d",
+    "runtime_repair": "external_text_layout_transformers_neck_duplicate_upsample_v1",
+    "thread_caps": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "health": {
+    "initial": {
+      "memory_free_percent": 82.0,
+      "process_tree_rss_bytes": 69959680,
+      "swap_used_bytes": 384827392
+    },
+    "observed": {
+      "minimum_memory_free_percent": 26.0,
+      "peak_process_tree_rss_bytes": 5643206656,
+      "peak_swap_used_bytes": 2973562306
+    },
+    "post_run": {
+      "memory_free_percent": 78.0,
+      "process_tree_rss_bytes": 50020352,
+      "swap_used_bytes": 2381441925
+    },
+    "reason": "system memory safety limit crossed: 26.0% free",
+    "reason_code": "runtime_resource_prerequisite_failed",
+    "resource_tracker_warning": "one leaked loky semaphore was reported after the isolated process terminated"
+  },
+  "page": {
+    "file": "hw5k_1011.jpg",
+    "source_sha256": "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+  },
+  "recorded_at": "2026-08-14T17:15:41+08:00",
+  "runtime": {
+    "cv2": "4.13.0",
+    "numpy": "2.3.5",
+    "paddle": "3.0.0",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "python": "3.13.1",
+    "torch": "2.12.0",
+    "transformers": "5.12.1"
+  },
+  "safety_limits": {
+    "detector_process_tree_rss_bytes_max": 10737418240,
+    "memory_free_percent_min": 35.0,
+    "page_timeout_seconds": 900.0,
+    "swap_used_bytes_max": 536870912
+  },
+  "schema_version": 1,
+  "terminal": "KILL"
+}
