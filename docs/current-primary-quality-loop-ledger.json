@@ -493,12 +493,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md",
         "sha256": "770121757369831ec4c8bdcb373949c8d8fd9db5bfdff58fb2c6ba27deed9d17"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+        "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md",
+        "sha256": "3cdaecefc5514e2af03582379244c2266b99523556ecb1597097084575f4f3d0"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The four-row tiled 9x9 implementation and fake-feature gate PASSed without importing the detector: four CPU float32 cases covering 256-to-64 and 64-to-64 signatures are bitwise equal with maximum absolute difference zero, exact tile boundaries, fail-closed drift guards, and idempotent combined duplicate-upsample removal. The highest-resolution projection explicit-unfold comparison bound falls from 21,785,739,264 to 201,719,808 bytes, but full-map backend identity, 406-call timeout, and total process memory remain unproven. Do not integrate or execute the real detector yet. Freeze a separate one-page integration and safety-probe contract that binds the exact implementation and test hashes, retains every host gate, and authorizes at most one target-free hw5k_1011.jpg run only after swap is at most 512 MiB. Cache reconstruction, formal materialization, optimizer, candidate, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The hash-bound one-page integration and safety-probe contract is preregistered. Integrate only the combined tiled 9x9 repair, probe-specific 45% free-memory and 8 GiB process-tree RSS limits, Booted iOS Simulator rejection before detector import, and the new contract/result bindings. Keep model execution disabled until the integration is committed and every launch gate passes, including at least 70% free memory, at most 512 MiB swap, zero Booted simulators, no conflicting model process, and an absent result path. Then allow exactly one target-free hw5k_1011.jpg attempt; any non-PASS terminal closes this exact tiled path without retry. Cache reconstruction, formal materialization, optimizer, candidate, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -596,7 +604,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending a separately authorized safe detector page and frozen-cache reconstruction. The exact duplicate-upsample-only probe path is KILLed after a clean-baseline memory failure. Its four-row tiled 9x9 successor now PASSes the implementation-only gate: static bounds reduce the highest-resolution projection unfold equivalent from 21,785,739,264 to 201,719,808 bytes, and four Python 3.13.1/Torch 2.12.0 CPU float32 fake-feature cases covering both real channel signatures are bitwise identical with maximum error zero. No detector or model was imported. Full-map backend identity, 406-call timeout, and host peak memory remain unknown, so integration and real execution stay closed until a separate one-page contract is frozen and swap is at most 512 MiB. Historical cache reconstruction remains blocked on a successful safety probe.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe and frozen-cache reconstruction. The contract permits only bounded integration of the combined tiled 9x9 repair and stricter safeguards, followed by exactly one target-free hw5k_1011.jpg attempt after the integration is committed and all launch gates pass. Current swap is 1,810.69 MiB versus the unchanged 512 MiB maximum, so model execution remains disabled. Full-map backend identity, 406-call timeout, and host peak memory remain unknown; any non-PASS terminal closes this exact tiled path without retry. Historical cache reconstruction remains blocked on a successful safety probe.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       }
@@ -1948,6 +1956,22 @@
       "outcome": "four_cpu_float32_projection_and_lateral_fake_feature_cases_are_bitwise_equal_with_zero_maximum_error_and_all_frozen_drift_guards_pass_without_real_detector_import",
       "repeat_policy": "freeze_a_separate_hash_bound_one_page_integration_and_safety_probe_before_any_real_detector_import_or_execution",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+          "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md",
+          "sha256": "3cdaecefc5514e2af03582379244c2266b99523556ecb1597097084575f4f3d0"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-one-page-safety-probe-preregistration",
+      "outcome": "exactly_one_target_free_hw5k_1011_attempt_is_frozen_behind_bounded_integration_and_stricter_launch_and_runtime_resource_gates",
+      "repeat_policy": "integrate_exactly_as_frozen_then_execute_once_only_after_all_launch_gates_pass; any_non_pass_terminal_closes_the_exact_tiled_path",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
