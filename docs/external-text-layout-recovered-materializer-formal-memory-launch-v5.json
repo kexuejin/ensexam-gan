@@ -1,0 +1,96 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": false,
+    "launcher_implementation_and_synthetic_verification": true,
+    "model_execution": false,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_launcher_v5_integration_only",
+    "training": false
+  },
+  "evidence": {
+    "launcher_v4_contract": {
+      "path": "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4.json",
+      "sha256": "e05eb01bac1f92bc7e8b1a5c1064c73d1d19eeb5db7a73a2b872e594a0fc682b"
+    },
+    "launcher_v4_implementation": {
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "e85b2bf59e612860ae4d65d402aca5f61d8463709266de212d7e09217f57d5bd"
+    },
+    "launcher_v4_integration": {
+      "path": "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4-integration-verification-20260815.json",
+      "sha256": "5817b56f031db1dfcfb334e66c4578d8836396cd878573b23e6f2c3566239867"
+    },
+    "launcher_v4_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "5f98a4ef18f52dd95dd3a7bdd5f3b1598f12408883ed9c9daaf0df883d1f3d5a"
+    },
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_materializer_test": {
+      "path": "tests/test_external_text_layout_support_prerequisite.py",
+      "sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    }
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "tests/test_run_external_text_layout_recovered_materialization.py"
+    ],
+    "launcher_result_schema_version": 5,
+    "new_dependency": false,
+    "persistent_runtime_patch": false,
+    "shared_materializer_mutation": false,
+    "shared_runtime_mutation": false
+  },
+  "observed_v4_stop": {
+    "completed_count": 8,
+    "last_completed_file": "hw5k_1197.jpg",
+    "page_content_sha256": "6f64c927663e0882d3f2780ad8ec88115d529985a0a4b691a525485642eb1bcf",
+    "page_filename_sha256": "2c6159ca8199e3f9a89d402619601742b85022854eaf4b380513da394c8fa2ae",
+    "post_stop_memory_free_percent": 69.0,
+    "post_stop_model_process_count": 0,
+    "post_stop_swap_growth_bytes": 0,
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "reason": "system memory safety limit crossed: 39.0% free",
+    "record_content_sha256": "94a06c2bd2a2a7f00c4ce2fd4d02b46805e2425fe27a27d2631e239e73ab2691",
+    "record_filename_sha256": "3532ac52ceb6796be1c5f074d3e5c1ecbc018ca386d52dd19efa0d016f9c7a60",
+    "resume_file": "hw5k_1214.jpg"
+  },
+  "required_verification": [
+    "launch_readiness_retains_the_stronger_70_percent_free_memory_floor",
+    "formal_runtime_free_memory_uses_the_unchanged_shared_35_percent_floor",
+    "observed_39_percent_runtime_sample_is_allowed",
+    "runtime_below_35_percent_still_terminates_the_page_process_group",
+    "formal_10_gib_rss_250_millisecond_monitor_and_512_mib_swap_growth_caps_remain",
+    "all_process_local_surfaces_restore_after_pass_and_failure",
+    "exact_eight_page_resume_state_is_not_recomputed",
+    "shared_hashes_remain_exact",
+    "dual_runtime_focused_and_complete_external_layout_suites_pass",
+    "closed_v5_authority_rejects_before_detector_resume"
+  ],
+  "runtime": {
+    "launch_maximum_process_tree_rss_bytes": 8589934592,
+    "maximum_runtime_process_tree_rss_bytes": 10737418240,
+    "maximum_swap_growth_bytes": 536870912,
+    "minimum_launch_memory_free_percent": 70.0,
+    "minimum_runtime_memory_free_percent": 35.0,
+    "monitor_interval_seconds": 0.25,
+    "page_timeout_seconds": 900.0,
+    "stability_window_seconds": 60.0,
+    "worker_count": 1
+  },
+  "schema_version": 5,
+  "supersedes": {
+    "path": "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4.json",
+    "reason": "v4 retained the one-page probe-specific 45 percent runtime free-memory floor instead of the unchanged shared formal 35 percent floor",
+    "sha256": "e05eb01bac1f92bc7e8b1a5c1064c73d1d19eeb5db7a73a2b872e594a0fc682b",
+    "status": "eight_pages_completed_then_resource_rejected_with_exact_resume_state"
+  },
+  "terminal": "PREREQUISITE_NEEDED"
+}
