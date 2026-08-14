@@ -753,12 +753,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-baseline-relative-launch-v3-integration-pass.md",
         "sha256": "8a2d754648b55b7428e61f117ced7485c8332b26c294b1647eb2d9ec7b8e843d"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-formal-rss-launch-v4.json",
+        "sha256": "e05eb01bac1f92bc7e8b1a5c1064c73d1d19eeb5db7a73a2b872e594a0fc682b"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-formal-rss-launch-v4-preregistration.md",
+        "sha256": "78fde5da88d1a0602f017c6e2f2c723c1b936e909210d6400d7209d0dac57647"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the launcher v3 integration PASS, then run exactly once with /Volumes/Tool/source/ensexam-gan/.venv-py313-mps/bin/python3.13. The launcher must acquire the host-user lock, pass the 60-second 70%-free zero-growth readiness window, and retain the 512 MiB runtime swap-growth cap, 8 GiB process-tree RSS cap, 45% runtime free-memory floor, CPU one-page isolation, child Simulator recheck, process-group termination, 15-minute page timeout, resume state, and exact 39d5 plan provenance. Preserve completed page records after rejection or interruption. Require a schema-v3 launcher PASS, all 275 NPZ hashes, exact manifest plan binding, and no marker/cleanup residue before recording materialization PASS; diagnostic and quality surfaces remain closed.",
+    "next_action": "Implement only the preregistered launcher v4 formal-RSS correction and focused tests. Restore the detector runtime RSS cap from the one-page probe-specific 8 GiB to the unchanged shared formal 10 GiB value, retain an 8 GiB launch-parent check, shorten only the locked runtime monitor interval to 0.25 seconds, and restore it plus all adapters in finally. Keep 70%/45% free-memory floors, 512 MiB swap-growth termination, CPU one-page isolation, child Simulator recheck, 15-minute timeout, exact 39d5 plan, and the retained hw5k_1011 resume hashes. Do not resume the detector until dual-runtime v4 integration PASS is committed and pushed; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -983,6 +991,11 @@
       {
         "detail": "The launcher-local baseline-relative adapter passed 13 focused and 122 complete external-layout tests in Python 3.13.1 and 3.10.11 while shared materializer, runtime, probe, and shared-test hashes remained exact. Lock ownership, 60-second 70%-free zero-growth readiness, high stable swap, 512 MiB runtime growth termination, 8 GiB RSS, 45% runtime free memory, child Simulator recheck, CPU serial invocation, process-local restoration, schema-v3 evidence validation, exact 39d5 plan, terminal recovery, and closed-authority no-state rejection are locked. One resumable real materialization is authorized only after this PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The pushed v3 launcher passed locked readiness and completed hw5k_1011 with 7.21 GiB peak RSS, 63% minimum free memory, and zero swap growth, then safely terminated same-size hw5k_1029 at 9.63 GiB because v3 incorrectly used the one-page probe's 8 GiB cap instead of the unchanged formal 10 GiB cap. Exact progress, NPZ, and record state is retained; post-stop swap is unchanged, free memory is 72%, and no model process remains. V4 may only restore the formal 10 GiB runtime cap and shorten locked monitoring to 0.25 seconds while retaining all other stronger gates. Implementation and synthetic verification are open; detector resume is closed until v4 integration PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_preregistration",
         "status": "passed"
       }
     ],
