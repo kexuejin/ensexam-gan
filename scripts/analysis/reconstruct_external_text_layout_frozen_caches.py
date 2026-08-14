@@ -30,6 +30,9 @@ CONTRACT_PATH = Path(
 EXPECTED_CONTRACT_SHA256 = (
     "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
 )
+EXPECTED_PROBE_SOURCE_SHA256 = (
+    "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+)
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
 RECONSTRUCTION_ID = "external_text_layout_tiled_probe_cache_reconstruction_v2"
@@ -583,6 +586,9 @@ def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, 
             f"tiled one-page runtime probe is missing: {result_path}"
         )
     result = read_json(result_path)
+    attempt_count = result.get("attempt_count")
+    residual_model_process_count = result.get("residual_model_process_count")
+    booted_ios_simulator_count = result.get("booted_ios_simulator_count")
     if (
         result.get("contract") != gate["contract"]
         or result.get("terminal") != gate["required_probe_terminal"]
@@ -602,11 +608,16 @@ def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, 
         or result.get("detector", {}).get("model_name")
         != "PP-OCRv6_medium_det"
         or result.get("page", {}).get("file") != gate["probe_page"]
-        or result.get("attempt_count") != gate["required_attempt_count"]
+        or result.get("page", {}).get("source_sha256")
+        != EXPECTED_PROBE_SOURCE_SHA256
+        or type(attempt_count) is not int
+        or attempt_count != gate["required_attempt_count"]
         or result.get("page_completed") is not gate["required_page_completed"]
-        or result.get("residual_model_process_count")
+        or type(residual_model_process_count) is not int
+        or residual_model_process_count
         != gate["required_residual_model_process_count"]
-        or result.get("booted_ios_simulator_count") != 0
+        or type(booted_ios_simulator_count) is not int
+        or booted_ios_simulator_count != 0
     ):
         raise CacheReconstructionError("tiled one-page runtime probe did not pass")
     if result.get("safety_limits") != gate["required_safety_limits"]:

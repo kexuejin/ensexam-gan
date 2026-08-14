@@ -126,7 +126,10 @@ def safe_probe_result() -> dict[str, object]:
         "formal_outputs_written": False,
         "initial_health": dict(safe_health),
         "label_access": False,
-        "page": {"file": "hw5k_1011.jpg"},
+        "page": {
+            "file": "hw5k_1011.jpg",
+            "source_sha256": reconstruction.EXPECTED_PROBE_SOURCE_SHA256,
+        },
         "page_completed": True,
         "page_health": {
             "minimum_memory_free_percent": 50.0,
@@ -392,6 +395,41 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                 "probe initial_health crossed a runtime limit",
             ):
                 reconstruction.validate_probe_pass(root, contract)
+
+    def test_probe_source_and_numeric_evidence_must_be_exact(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            contract = {"probe_gate": probe_gate()}
+            result = safe_probe_result()
+
+            for source_sha256 in (None, "0" * 64):
+                with self.subTest(source_sha256=source_sha256):
+                    changed = copy.deepcopy(result)
+                    if source_sha256 is None:
+                        del changed["page"]["source_sha256"]
+                    else:
+                        changed["page"]["source_sha256"] = source_sha256
+                    write_probe(root, changed)
+                    with self.assertRaisesRegex(
+                        reconstruction.CacheReconstructionError,
+                        "tiled one-page runtime probe did not pass",
+                    ):
+                        reconstruction.validate_probe_pass(root, contract)
+
+            for field, value in (
+                ("attempt_count", True),
+                ("residual_model_process_count", False),
+                ("booted_ios_simulator_count", False),
+            ):
+                with self.subTest(field=field):
+                    changed = copy.deepcopy(result)
+                    changed[field] = value
+                    write_probe(root, changed)
+                    with self.assertRaisesRegex(
+                        reconstruction.CacheReconstructionError,
+                        "tiled one-page runtime probe did not pass",
+                    ):
+                        reconstruction.validate_probe_pass(root, contract)
 
     def test_prediction_hash_mismatch_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
