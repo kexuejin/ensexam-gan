@@ -154,6 +154,10 @@ def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
         active.get("terminal") != "PREREQUISITE_NEEDED"
         or prerequisites.get("materially_new_support_successor_preregistration_v4")
         != "passed"
+        or prerequisites.get(
+            "external_text_layout_tiled_probe_cache_reconstruction_v2_preregistration"
+        )
+        != "passed"
         or prerequisites.get("external_text_layout_support_train_only_diagnostic")
         != "pending"
     ):

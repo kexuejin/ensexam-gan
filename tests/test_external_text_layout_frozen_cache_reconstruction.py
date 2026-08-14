@@ -77,6 +77,36 @@ def reconstruction_gate() -> dict[str, object]:
     }
 
 
+def authority_ledger() -> dict[str, object]:
+    return {
+        "active_iteration": {
+            "prerequisites": [
+                {
+                    "id": "materially_new_support_successor_preregistration_v4",
+                    "status": "passed",
+                },
+                {
+                    "id": (
+                        "external_text_layout_tiled_probe_cache_reconstruction_"
+                        "v2_preregistration"
+                    ),
+                    "status": "passed",
+                },
+                {
+                    "id": "external_text_layout_support_train_only_diagnostic",
+                    "status": "pending",
+                },
+            ],
+            "terminal": "PREREQUISITE_NEEDED",
+        },
+        "program": {
+            "product_default": "artifacts/current-primary",
+            "promotion_state": "disabled",
+            "reserved_blind_state": "disabled",
+        },
+    }
+
+
 def safe_probe_result() -> dict[str, object]:
     safe_health = {
         "memory_free_percent": 80.0,
@@ -195,6 +225,25 @@ def unlocked(_path: Path):
 
 
 class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
+    def test_authority_requires_the_v2_preregistration(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger_path = root / reconstruction.LEDGER_PATH
+            ledger_path.parent.mkdir(parents=True)
+            ledger = authority_ledger()
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            contract = {"authority": dict(reconstruction.EXPECTED_AUTHORITY)}
+            reconstruction.validate_authority(root, contract)
+
+            changed = copy.deepcopy(ledger)
+            changed["active_iteration"]["prerequisites"][1]["status"] = "pending"
+            ledger_path.write_text(json.dumps(changed), encoding="utf-8")
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "external layout authority changed",
+            ):
+                reconstruction.validate_authority(root, contract)
+
     def test_repository_contract_agrees_with_frozen_boundaries_and_limits(self) -> None:
         contract_path = reconstruction.ROOT / reconstruction.CONTRACT_PATH
         contract = json.loads(contract_path.read_text(encoding="utf-8"))
@@ -283,6 +332,17 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                 "tiled one-page runtime probe did not pass",
             ):
                 reconstruction.validate_probe_pass(root, contract)
+
+            for field in ("page_completed", "residual_model_process_count"):
+                with self.subTest(field=field):
+                    missing_completion = copy.deepcopy(result)
+                    del missing_completion[field]
+                    write_probe(root, missing_completion)
+                    with self.assertRaisesRegex(
+                        reconstruction.CacheReconstructionError,
+                        "tiled one-page runtime probe did not pass",
+                    ):
+                        reconstruction.validate_probe_pass(root, contract)
 
             write_probe(root, result)
             missing_attempt = copy.deepcopy(result)

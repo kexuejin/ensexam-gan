@@ -2050,11 +2050,11 @@
       "evidence": [
         {
           "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
-          "sha256": "699adf9b2abcbdbfb36913220a4decc5debaf77f1252bfb2b1b52e4a4bdde712"
+          "sha256": "9110c9f6ea86c02cfeea32f4fcb36bcbf2fecefa2c8970fa15584a1b40563ad5"
         },
         {
           "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
-          "sha256": "c2277f72e70b2a8da835ea1f2952f9f52a619260ee9c8e68f2a81a4b90d97faf"
+          "sha256": "84d7f2008f9cd6cc5dab3af5c1c18ce4b23f48fb33d5722369ce9d9bc06f36d1"
         },
         {
           "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
@@ -2070,7 +2070,7 @@
         }
       ],
       "id": "external-text-layout-tiled-probe-cache-reconstruction-v2-integration",
-      "outcome": "hash_bound_v2_validator_passed_7_compatibility_tests_under_python_3_13_1_and_3_10_11_with_static_preflight_closed_and_no_model_or_cache_execution",
+      "outcome": "hash_bound_v2_validator_passed_8_compatibility_tests_and_62_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_explicit_v2_authority_binding_static_preflight_closed_and_no_model_or_cache_execution",
       "repeat_policy": "wait_for_all_host_swap_and_probe_gates; do_not_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
       "terminal": "PASS"
     }
