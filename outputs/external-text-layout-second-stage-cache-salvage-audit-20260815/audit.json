@@ -1,0 +1,40 @@
+{
+  "authority": {
+    "cache_mutation": false,
+    "model_execution": false,
+    "result_authority": "semantic_equivalence_audit_only",
+    "terminal_successor": "separate_hash_bound_rebaseline_preregistration_only"
+  },
+  "canonical_candidate": {
+    "candidate_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "replacement_count": 275,
+    "source_sha256": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439"
+  },
+  "contract_sha256": "b53a6a21882918a1aa6160763a199d023352b46678310abd9abba1746b46b906",
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "prediction_set": {
+    "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "schema_version": 1,
+  "semantic_validation": {
+    "constant_field_matches": 1100,
+    "gate_ratio_matches": 275,
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "path_field_matches": 825,
+    "recomputed_field_matches": 2200,
+    "row_count": 275,
+    "source_content_sha256": "8b7820579e8af7d845c068b0e07332bb4bd51d0de785b332012214ad4e7ca8e3"
+  },
+  "temporary_cache": {
+    "metrics_sha256": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439",
+    "path": "outputs/.sign-separated-residual-repair-train275-frozen-pipeline-v1.materializing",
+    "unchanged": true
+  },
+  "terminal": "PASS"
+}

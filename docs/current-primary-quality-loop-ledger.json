@@ -637,12 +637,32 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-cache-salvage-audit-preregistration.md",
         "sha256": "4f63d93ced9a0f38478a6a74e8c567d1ea0779efcc083c1fb5f9ea41af4133ec"
+      },
+      {
+        "path": "scripts/analysis/audit_external_text_layout_second_stage_cache_salvage.py",
+        "sha256": "8dbecc59e5ed8d8517a232fa77f56955548938f6a4519e2796e72115b9d85870"
+      },
+      {
+        "path": "tests/test_external_text_layout_second_stage_cache_salvage.py",
+        "sha256": "26b0de04bdba5aebe83fb5d416bc118078273c249357384d9c41ad66eea6d9de"
+      },
+      {
+        "path": "outputs/external-text-layout-second-stage-cache-salvage-audit-20260815/audit.json",
+        "sha256": "cdee62bafda2c854c02f3bc136a1be12373f4ef730376a4d1fdb9a756d317f98"
+      },
+      {
+        "path": "docs/external-text-layout-second-stage-cache-salvage-audit-verification-20260815.json",
+        "sha256": "f8a27d108acb0474b003ee2cec4f40b8f915702c6a3f704d7b611a10a9434cb9"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-cache-salvage-audit-pass.md",
+        "sha256": "9aa473328d847d5cb42f6f8ea63391f64d3126b30fd7b4d4c2884f57395dfd3c"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered read-only temporary-cache salvage audit. Before image decode, bind every contract and evidence hash plus exact temporary/final/archive state. Validate the frozen prediction set, manifest paths, primary source hashes, label-content hash, all 275 historical gate ratios, and every recomputed residual/overerase field; require the in-memory canonical candidate SHA 79fd6127 without mutation. Run focused tests in Python 3.13.1 and 3.10.11, then execute the audit once. Do not rerun the model or publish any cache. Archive, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The read-only salvage audit PASSed all 4,400 field checks across 275 rows: constants, paths, historical gate ratios, and recomputed residual/overerase metrics. Predictions, sources, labels, and the unchanged temporary cache are exact; canonical recovered metrics SHA is 79fd6127, while historical b800 remains explicitly unreproduced. Preregister one recovered second-stage identity and atomic publication path that binds this audit, permits only the exact 487082-to-79fd 275-root mutation, validates the complete temporary cache, and renames final only after PASS. Archive, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -807,6 +827,11 @@
       {
         "detail": "A read-only salvage audit now freezes the temporary cache, 16 field evidence sources, historical gate and label identities, exact 79fd canonical candidate, and PASS/KILL successors. PASS can authorize only a separate recovered-identity preregistration; no model, mutation, final/archive publication, or quality surface is open.",
         "id": "external_text_layout_second_stage_cache_salvage_audit_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The no-model salvage audit PASSed all 4,400 field checks over 275 rows, exact prediction/source/label identities, historical gate ratios, recomputed residual metrics, and the 79fd canonical candidate while leaving the temporary cache unchanged. Historical b800 remains unreproduced; only separate recovered-identity preregistration is authorized.",
+        "id": "external_text_layout_second_stage_cache_salvage_audit",
         "status": "passed"
       }
     ],
