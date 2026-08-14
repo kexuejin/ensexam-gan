@@ -889,6 +889,11 @@
         "detail": "A separate no-model archive path now binds the exact primary efd588/6400 cache, recovered second-stage 79fd/2ffa cache, 275-name manifest, two relative symlinks, dual-destination preflight, partial-link crash recovery, and current-attempt rollback. Only implementation and synthetic verification are open; real archive links remain absent until integration PASS is pushed.",
         "id": "external_text_layout_recovered_archive_publication_preregistration",
         "status": "passed"
+      },
+      {
+        "detail": "The recovered-identity archive publisher passed 14 focused and 109 complete external-text-layout tests in Python 3.13.1 and 3.10.11. Exact dual-cache validation, dual-destination preflight, canonical relative targets, partial-link recovery, current-attempt rollback, linked-cache revalidation, terminal idempotency, and historical/model route closure are locked. A real closed-authority probe left all archive/result paths absent; one exact publication is now authorized after this PASS is pushed.",
+        "id": "external_text_layout_recovered_archive_publication_integration",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
