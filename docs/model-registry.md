@@ -1065,14 +1065,16 @@ runtime repair contract: docs/external-text-layout-runtime-equivalence-repair-v1
 runtime repair decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
 cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
-historical cache runtime: Python 3.10.11 / Torch 2.5.1 / NumPy 2.2.6 / OpenCV 5.0.0.93
+runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
+runtime restoration decision: docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md
+historical cache runtime: Python 3.10.11 / Torch 2.5.1 / NumPy 2.2.6 / OpenCV runtime 5.0.0 / OpenCV wheel 5.0.0.93
 data execution / training / candidate: exact layout materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
 runtime status: one target-free CPU page crossed 35% free-memory floor at 31.0%; post-stop swap 1,269.75 MiB; no formal evidence or residual model process
 static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
 runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction; fake-feature equivalence and fail-closed guards pass without real model import or execution
-cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with execution_authorized=false
-current host gate: 74% free memory but 997.75 MiB swap used; repaired probe absent, historical runtime unavailable, and all model execution prohibited
+cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
+current host gate: 75% free memory but 989.75 MiB swap used; repaired probe absent and all model execution prohibited
 next action: wait for swap below 512 MiB, obtain one safe target-free page below all fixed gates, then reconstruct exact frozen prediction caches before formal materialization
 ```
 
@@ -1102,6 +1104,7 @@ establish a safe detector runtime or authorize the one-page probe before the
 swap gate passes. The cache reconstruction path is also statically verified
 and hash-bound, but remains recovery infrastructure only: it cannot load its
 historical helper until the repaired probe and current host gates pass, and it
-cannot run reconstruction under the current mismatched Python/Torch stack or
-publish either archive path until both reconstructed caches match every
-registered historical hash.
+cannot publish either archive path until both reconstructed caches match every
+registered historical hash. The exact Python/Torch/NumPy/OpenCV runtime is now
+restored and statically verified; this closes only the cache-runtime
+prerequisite and does not weaken the detector probe or swap gates.

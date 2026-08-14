@@ -52,7 +52,8 @@ The historical execution environment is also frozen before helper loading:
 Python  3.10.11
 Torch   2.5.1
 NumPy   2.2.6
-OpenCV  5.0.0.93
+OpenCV runtime             5.0.0
+OpenCV wheel distribution  5.0.0.93
 ```
 
 ## Execution Gates
@@ -120,10 +121,10 @@ cannot authorize quality, optimizer, candidate, or promotion surfaces.
 ```text
 contract:
   docs/external-text-layout-frozen-cache-reconstruction-v1.json
-  sha256=e23d13c7cd93346153940bd42198f74f4114dd9ad6221a246cbe9893cc7b70a8
+  sha256=6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f
 reconstruction:
   scripts/analysis/reconstruct_external_text_layout_frozen_caches.py
-  sha256=ad718ce8327fe116636b340fb16fc25d6fdee3aa5526c7b198ed0fb7256639c6
+  sha256=fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502
 test:
   tests/test_external_text_layout_frozen_cache_reconstruction.py
   sha256=b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039
@@ -141,3 +142,4 @@ Directive: Never relax runtime identity, hash, memory, swap, process-isolation, 
 Tested: Python compilation; JSON parsing; focused tests covering runtime identity, probe health, cache hashes, command paths, helper ordering, and publication; real static preflight with 275 frozen sources and artifacts.
 Not-tested: Repaired detector probe, primary reconstruction, second-stage reconstruction, cache publication, formal layout materialization, train-only audit, training, candidate inference, quality gates, or promotion.
 Related: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
+Related: docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md

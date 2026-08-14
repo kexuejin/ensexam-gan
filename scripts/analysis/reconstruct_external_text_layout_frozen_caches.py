@@ -26,7 +26,7 @@ from scripts.analysis import materialize_external_text_layout_support_train_only
 
 CONTRACT_PATH = Path("docs/external-text-layout-frozen-cache-reconstruction-v1.json")
 EXPECTED_CONTRACT_SHA256 = (
-    "e23d13c7cd93346153940bd42198f74f4114dd9ad6221a246cbe9893cc7b70a8"
+    "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
 )
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
@@ -76,7 +76,8 @@ EXPECTED_FORBIDDEN_ACCESS = [
 ]
 EXPECTED_HISTORICAL_RUNTIME = {
     "numpy": "2.2.6",
-    "opencv": "5.0.0.93",
+    "opencv": "5.0.0",
+    "opencv_distribution": "5.0.0.93",
     "python": "3.10.11",
     "torch": "2.5.1",
 }
@@ -196,14 +197,16 @@ def validate_reconstruction_boundaries(contract: dict[str, Any]) -> None:
 
 def current_reconstruction_runtime() -> dict[str, str]:
     try:
+        opencv_distribution = metadata.version("opencv-python")
         torch_version = metadata.version("torch")
     except metadata.PackageNotFoundError as error:
         raise CacheReconstructionError(
-            "historical reconstruction runtime lacks torch"
+            "historical reconstruction runtime lacks a frozen package"
         ) from error
     return {
         "numpy": materializer.np.__version__,
         "opencv": materializer.cv2.__version__,
+        "opencv_distribution": opencv_distribution,
         "python": ".".join(str(value) for value in sys.version_info[:3]),
         "torch": torch_version,
     }

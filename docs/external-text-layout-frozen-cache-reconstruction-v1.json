@@ -54,7 +54,8 @@
   ],
   "historical_runtime": {
     "numpy": "2.2.6",
-    "opencv": "5.0.0.93",
+    "opencv": "5.0.0",
+    "opencv_distribution": "5.0.0.93",
     "python": "3.10.11",
     "torch": "2.5.1"
   },
