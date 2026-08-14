@@ -1,0 +1,154 @@
+{
+  "authorization": {
+    "checkpoint_generation": "prohibited_until_preflight_pass",
+    "image_or_target_decode": "prohibited_until_preflight_pass",
+    "inference": "prohibited_until_preflight_pass",
+    "promotion": "disabled",
+    "reserved_blind": "unavailable",
+    "state": "training_preflight_pending",
+    "target_derived_patch_construction": "prohibited_until_preflight_pass",
+    "training": "prohibited_until_preflight_pass"
+  },
+  "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "effective_train_count": 275,
+    "effective_train_domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "label_dir": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels",
+    "source_dir": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_images",
+    "split": "train"
+  },
+  "evidence": {
+    "cleanup_model": {
+      "path": "scripts/infer/patch_cleanup_erasemap.py",
+      "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
+    },
+    "current_primary_checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "current_primary_config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "current_second_stage_checkpoint": {
+      "path": "artifacts/current-second-stage-best.pt",
+      "sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7"
+    },
+    "data_role_plan": {
+      "path": "docs/sign-separated-residual-data-roles.json",
+      "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+    },
+    "patch_builder": {
+      "path": "scripts/analysis/build_sign_separated_residual_patch_index.py",
+      "sha256": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056"
+    },
+    "primary_inference": {
+      "path": "scripts/infer/run_primary_full_page.py",
+      "sha256": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8"
+    },
+    "second_stage_inference": {
+      "path": "scripts/infer/run_second_stage_residual_repair.py",
+      "sha256": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d"
+    },
+    "trainer": {
+      "path": "scripts/train/train_sign_separated_residual_probe.py",
+      "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+    }
+  },
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "iteration_id": "sign-separated-residual-repair",
+  "model": {
+    "global_residual_scale": "absent",
+    "model_type": "sign_separated_residual_delta",
+    "residual_delta_bound": 0.08,
+    "route_classes": [
+      "identity",
+      "brighten",
+      "darken"
+    ]
+  },
+  "patch_builder": {
+    "direction_margin": 2.0,
+    "input_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1/pred",
+    "min_support_ratio": 0.001,
+    "output_csv": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "output_json": "outputs/sign-separated-residual-repair-train-patches-v1/summary.json",
+    "overlap": 96,
+    "tile_size": 256,
+    "top_k_per_direction": 256
+  },
+  "pipeline_preparation": {
+    "primary": {
+      "batch_size": 8,
+      "copy_input_outside_mask": "mb",
+      "copy_mask_dilate": 0,
+      "copy_mask_threshold": 70,
+      "copy_mask_threshold_auto": "mb_cov8_step",
+      "device": "mps",
+      "output_dir": "outputs/sign-separated-residual-repair-train275-primary-v1",
+      "page_overlap": 32,
+      "samples_file": "hardcase_lists/sign-separated-residual-repair-train275-v1.txt",
+      "skip_label_metrics": true
+    },
+    "second_stage": {
+      "base_edit_threshold": 12,
+      "change_threshold": 12,
+      "cleanup_alpha_threshold": 0.3,
+      "cleanup_stride": 160,
+      "cleanup_tile_size": 160,
+      "dark_threshold": 0,
+      "device": "mps",
+      "eval_threshold": 12,
+      "output_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+      "primary_pred_dir": "outputs/sign-separated-residual-repair-train275-primary-v1/pred",
+      "samples_file": "hardcase_lists/sign-separated-residual-repair-train275-v1.txt",
+      "second_delta_threshold": 32
+    }
+  },
+  "planned_outputs_must_be_absent": {
+    "first_gate_output_dir": "outputs/sign-separated-residual-repair-inner-val15-v1",
+    "patch_index": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "patch_index_summary_dir": "outputs/sign-separated-residual-repair-train-patches-v1",
+    "primary_prediction_dir": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "sample_manifest": "hardcase_lists/sign-separated-residual-repair-train275-v1.txt",
+    "training_input_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+    "training_output_dir": "artifacts/trials/sign-separated-residual-repair-v1"
+  },
+  "schema_version": 1,
+  "trainer": {
+    "batch_size": 1,
+    "bright_magnitude_weight": 1.0,
+    "dark_magnitude_weight": 1.0,
+    "device": "mps",
+    "identity_delta_weight": 1.0,
+    "init_checkpoint": "",
+    "input_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1/pred",
+    "log_every": 10,
+    "lr": 0.00002,
+    "mask_source": "target_delta",
+    "mask_threshold": 12,
+    "max_steps": 80,
+    "model_type": "sign_separated_residual_delta",
+    "output_dir": "artifacts/trials/sign-separated-residual-repair-v1",
+    "patch_index_file": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "residual_delta_bound": 0.08,
+    "route_loss_weight": 1.0,
+    "save_every": 0,
+    "seed": 42,
+    "sign_direction_margin": 2.0,
+    "tile_size": 256,
+    "validation_enabled": false
+  }
+}

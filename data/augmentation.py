@@ -62,4 +62,5 @@ def get_train_augmentation(aug_cfg: dict) -> A.Compose:
         'gt': 'image',   # gt 与 image 施加完全相同的随机变换
         'mb': 'mask',    # Mb 掩码与 image 施加相同的空间变换（亮度/噪声不影响 mask）
         'box_preserve': 'mask',
+        'cached_baseline_tail': 'mask',
     })

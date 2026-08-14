@@ -15,6 +15,7 @@ import contextlib
 import logging
 import os
 import random
+import re
 import sys
 from datetime import datetime
 
@@ -70,6 +71,306 @@ def load_optional_file_list(path: str) -> list[str] | None:
                 continue
             files.append(os.path.basename(line))
     return files
+
+
+def apply_generator_trainable_patterns(
+    model: nn.Module,
+    patterns: list[str] | tuple[str, ...] | None,
+) -> dict[str, object]:
+    """Freeze generator parameters except names matching configured regexes."""
+    if not patterns:
+        total = sum(parameter.numel() for parameter in model.parameters())
+        return {
+            "enabled": False,
+            "patterns": [],
+            "trainable_tensors": sum(1 for _ in model.parameters()),
+            "frozen_tensors": 0,
+            "trainable_params": total,
+            "total_params": total,
+        }
+
+    compiled = [re.compile(pattern) for pattern in patterns]
+    trainable_tensors = 0
+    frozen_tensors = 0
+    trainable_params = 0
+    total_params = 0
+    matched_patterns = {pattern: 0 for pattern in patterns}
+
+    for name, parameter in model.named_parameters():
+        total_params += parameter.numel()
+        matched = False
+        for raw_pattern, compiled_pattern in zip(patterns, compiled):
+            if compiled_pattern.search(name):
+                matched = True
+                matched_patterns[raw_pattern] += 1
+        parameter.requires_grad_(matched)
+        if matched:
+            trainable_tensors += 1
+            trainable_params += parameter.numel()
+        else:
+            frozen_tensors += 1
+
+    unused = [pattern for pattern, count in matched_patterns.items() if count == 0]
+    if unused:
+        raise ValueError(f"train.trainable_generator_patterns matched no parameters: {unused}")
+    if trainable_tensors == 0:
+        raise ValueError("train.trainable_generator_patterns froze every generator parameter")
+
+    return {
+        "enabled": True,
+        "patterns": list(patterns),
+        "trainable_tensors": trainable_tensors,
+        "frozen_tensors": frozen_tensors,
+        "trainable_params": trainable_params,
+        "total_params": total_params,
+    }
+
+
+def freeze_batchnorm_running_stats(model: nn.Module) -> int:
+    """Keep BatchNorm layers in eval mode while leaving affine params trainable."""
+    batchnorm_types = (
+        nn.BatchNorm1d,
+        nn.BatchNorm2d,
+        nn.BatchNorm3d,
+        nn.SyncBatchNorm,
+    )
+    frozen = 0
+    for module in model.modules():
+        if isinstance(module, batchnorm_types):
+            module.eval()
+            frozen += 1
+    return frozen
+
+
+def validate_checkpoint_strategy(resume: bool, init_checkpoint: str) -> None:
+    if resume and init_checkpoint:
+        raise ValueError("train.resume cannot combine with train.init_checkpoint")
+
+
+def load_initial_checkpoint(
+    generator: nn.Module,
+    discriminator: nn.Module,
+    checkpoint_path: str,
+    device: torch.device,
+) -> tuple[list[str], list[str]]:
+    """Initialize from a frozen checkpoint without optimizer/scheduler state.
+
+    Universal sidecar candidates deliberately add sidecar-only parameters on top
+    of current-primary. In that case, only sidecar keys may be missing when the
+    current-primary generator state is loaded.
+    """
+    checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
+    if 'G_state_dict' not in checkpoint:
+        raise KeyError("initial checkpoint must contain G_state_dict")
+
+    incompatible = generator.load_state_dict(checkpoint['G_state_dict'], strict=False)
+    missing = list(incompatible.missing_keys)
+    unexpected = list(incompatible.unexpected_keys)
+    allowed_missing = {
+        key
+        for key in generator.state_dict()
+        if key.startswith('universal_residual_adapter_sidecar.')
+    }
+    if unexpected or any(key not in allowed_missing for key in missing):
+        raise RuntimeError(
+            "initial generator checkpoint mismatch: "
+            f"missing={missing} unexpected={unexpected}"
+        )
+
+    if 'D_state_dict' in checkpoint:
+        discriminator.load_state_dict(checkpoint['D_state_dict'])
+    return missing, unexpected
+
+
+def build_training_checkpoint(
+    generator: nn.Module,
+    discriminator: nn.Module,
+    optimizer_G,
+    optimizer_D,
+    scheduler_G,
+    scheduler_D,
+    *,
+    epoch: int,
+    avg_loss_G: float,
+    avg_loss_D: float,
+    val_loss: float | None,
+    last_val_metrics: dict | None = None,
+    save_optimizer_state: bool = True,
+    save_scheduler_state: bool = True,
+) -> dict:
+    """Build checkpoint payload with optional optimizer/scheduler state."""
+    checkpoint = {
+        'epoch': epoch,
+        'G_state_dict': unwrap_model(generator).state_dict(),
+        'D_state_dict': unwrap_model(discriminator).state_dict(),
+        'avg_loss_G': avg_loss_G,
+        'avg_loss_D': avg_loss_D,
+        'val_loss': val_loss,
+    }
+    if save_optimizer_state:
+        checkpoint['optimizer_G'] = optimizer_G.state_dict()
+        checkpoint['optimizer_D'] = optimizer_D.state_dict()
+    if save_scheduler_state:
+        checkpoint['scheduler_G'] = scheduler_G.state_dict() if scheduler_G else None
+        checkpoint['scheduler_D'] = scheduler_D.state_dict() if scheduler_D else None
+    if last_val_metrics is not None:
+        checkpoint['last_val_metrics'] = last_val_metrics
+    return checkpoint
+
+
+def uses_universal_residual_adapter_sidecar(model_cfg: dict | None) -> bool:
+    sidecar_cfg = (model_cfg or {}).get('universal_residual_adapter_sidecar', {})
+    if isinstance(sidecar_cfg, bool):
+        return sidecar_cfg
+    if not isinstance(sidecar_cfg, dict):
+        raise ValueError("model.universal_residual_adapter_sidecar must be a mapping")
+    return bool(sidecar_cfg.get('enabled', False))
+
+
+_UNIVERSAL_SIDECAR_FORBIDDEN_CONFIG_TOKENS = (
+    'domain',
+    'source',
+    'caller',
+    'path',
+    'route',
+    'expert',
+)
+
+
+def _validate_universal_sidecar_model_shape(model_cfg: dict) -> None:
+    sidecar_cfg = model_cfg.get('universal_residual_adapter_sidecar', {})
+    if isinstance(sidecar_cfg, bool):
+        sidecar_cfg = {'enabled': sidecar_cfg}
+    if not isinstance(sidecar_cfg, dict):
+        raise ValueError("model.universal_residual_adapter_sidecar must be a mapping")
+    bad_keys = sorted(
+        key for key in sidecar_cfg
+        if any(
+            token in str(key).lower()
+            for token in _UNIVERSAL_SIDECAR_FORBIDDEN_CONFIG_TOKENS
+        )
+    )
+    if bad_keys:
+        raise ValueError(
+            "universal sidecar config contains prohibited routing-like keys: "
+            f"{bad_keys}"
+        )
+    if int(sidecar_cfg.get('adapter_count', 3)) != 3:
+        raise ValueError("universal sidecar requires adapter_count=3")
+    residual_parameterization = str(
+        sidecar_cfg.get('residual_parameterization', 'free_rgb')
+    )
+    if residual_parameterization not in {
+        'free_rgb',
+        'primary_edit_direction',
+        'primary_edit_direction_folded',
+    }:
+        raise ValueError(
+            "universal sidecar residual_parameterization must be free_rgb, "
+            "primary_edit_direction, or primary_edit_direction_folded"
+        )
+    residual_bound = float(sidecar_cfg.get('residual_bound', 12.0 / 255.0))
+    if residual_bound <= 0.0 or residual_bound > 12.0 / 255.0:
+        raise ValueError("universal sidecar residual_bound must be in (0, 12/255]")
+
+
+def validate_universal_sidecar_config(cfg: dict) -> None:
+    """Fail closed on future universal-sidecar training configs."""
+    model_cfg = cfg.get('model', {})
+    if not uses_universal_residual_adapter_sidecar(model_cfg):
+        return
+    _validate_universal_sidecar_model_shape(model_cfg)
+    train_cfg = cfg.get('train', {})
+    expected_init = normalize_path(
+        './artifacts/current-primary/micro_region_probe_step0001.pth'
+    )
+    if train_cfg.get('resume', False) or train_cfg.get('resume_path'):
+        raise ValueError("universal sidecar cannot resume optimizer state")
+    if normalize_path(train_cfg.get('init_checkpoint', '')) != expected_init:
+        raise ValueError(
+            "universal sidecar requires current-primary initialization"
+        )
+    patterns = train_cfg.get('trainable_generator_patterns') or []
+    if not patterns:
+        raise ValueError(
+            "universal sidecar requires sidecar-only trainable_generator_patterns"
+        )
+    parameter_names = [name for name, _ in Generator(cfg=model_cfg).named_parameters()]
+    for pattern in patterns:
+        compiled = re.compile(str(pattern))
+        matched = [name for name in parameter_names if compiled.search(name)]
+        if not matched:
+            raise ValueError(
+                "universal sidecar trainable pattern must match sidecar params"
+            )
+        if any(
+            not name.startswith('universal_residual_adapter_sidecar.')
+            for name in matched
+        ):
+            raise ValueError(
+                "universal sidecar trainable pattern must not match base params"
+            )
+    if train_cfg.get('freeze_generator_batchnorm_stats') is not True:
+        raise ValueError(
+            "universal sidecar requires BatchNorm freeze: "
+            "freeze_generator_batchnorm_stats=true"
+        )
+    if train_cfg.get('save_optimizer_state', True):
+        raise ValueError("universal sidecar must not save optimizer state")
+    if train_cfg.get('save_scheduler_state', True):
+        raise ValueError("universal sidecar must not save scheduler state")
+    if 'seed' not in train_cfg or train_cfg.get('reproducibility_mode') != 'strict':
+        raise ValueError("universal sidecar requires strict reproducibility")
+
+
+def validate_cached_baseline_tail_config(cfg: dict) -> None:
+    """Require cached baseline-tail data and loss to be enabled together."""
+    loss_cfg = cfg.get('loss', {})
+    data_cfg = cfg.get('data', {})
+    weight = float(loss_cfg.get('lambda_cached_baseline_tail_nonregress', 0.0))
+    cache_dir = str(data_cfg.get('cached_baseline_tail_dir', '') or '').strip()
+    if weight < 0:
+        raise ValueError(
+            "loss.lambda_cached_baseline_tail_nonregress must be non-negative"
+        )
+    if weight > 0 and not cache_dir:
+        raise ValueError(
+            "positive cached baseline-tail loss requires "
+            "data.cached_baseline_tail_dir"
+        )
+    if cache_dir and weight <= 0:
+        raise ValueError(
+            "data.cached_baseline_tail_dir requires positive "
+            "loss.lambda_cached_baseline_tail_nonregress"
+        )
+    if weight <= 0:
+        return
+    fraction = float(loss_cfg.get('cached_baseline_tail_fraction', 1.0))
+    temperature = float(
+        loss_cfg.get('cached_baseline_tail_event_temperature_px', 0.25)
+    )
+    residual_threshold = float(
+        loss_cfg.get('cached_baseline_tail_residual_threshold_px', 12.0)
+    )
+    edit_threshold = float(
+        loss_cfg.get('cached_baseline_tail_edit_threshold_px', 12.0)
+    )
+    residual_alpha = float(
+        loss_cfg.get('cached_baseline_tail_residual_alpha', 1.0)
+    )
+    overerase_alpha = float(
+        loss_cfg.get('cached_baseline_tail_overerase_alpha', 1.0)
+    )
+    if not (0 < fraction <= 1.0):
+        raise ValueError("cached_baseline_tail_fraction must be in (0, 1]")
+    if temperature <= 0:
+        raise ValueError(
+            "cached_baseline_tail_event_temperature_px must be positive"
+        )
+    if residual_threshold < 0 or edit_threshold < 0:
+        raise ValueError("cached baseline-tail thresholds must be non-negative")
+    if residual_alpha < 0 or overerase_alpha < 0:
+        raise ValueError("cached baseline-tail alpha weights must be non-negative")
 
 
 def set_seed(seed: int, mode: str = 'statistical'):
@@ -277,7 +578,8 @@ class CSVLogger:
                      'train_adv', 'train_lr', 'train_per', 'train_style',
                      'train_sn', 'train_block', 'train_input_preserve',
                      'train_mb_leak', 'train_box_preserve',
-                     'train_outside_edit_size', 'val_loss']
+                     'train_outside_edit_size',
+                     'train_cached_baseline_tail_nonregress', 'val_loss']
                 )
 
     def write(self, epoch: int, train_G: float, train_D: float,
@@ -374,7 +676,11 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     adam_betas  = tuple(train_cfg['adam_betas'])
     resume      = train_cfg['resume']
     resume_path = normalize_path(train_cfg['resume_path']) if train_cfg.get('resume_path') else ''
+    init_checkpoint = normalize_path(train_cfg.get('init_checkpoint', '')) if train_cfg.get('init_checkpoint') else ''
     num_workers = train_cfg['num_workers']
+    validate_checkpoint_strategy(resume, init_checkpoint)
+    validate_universal_sidecar_config(cfg)
+    validate_cached_baseline_tail_config(cfg)
     # Linux 服务器上 num_workers=0 会成为数据加载瓶颈，自动提升
     if num_workers == 0 and os.name != 'nt':
         num_workers = min(4, os.cpu_count() or 1)
@@ -387,8 +693,16 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     mask_threshold = data_cfg['mask_threshold']
     box_class_mode = data_cfg.get('box_class_mode', 'all')
     box_preserve_mode = data_cfg.get('box_preserve_mode', 'none')
+    cached_baseline_tail_dir = data_cfg.get('cached_baseline_tail_dir', '')
     final_test_mode = eval_cfg.get('final_test_mode', 'both')
     skip_final_test = bool(eval_cfg.get('skip_final_test', False))
+    skip_validation = bool(eval_cfg.get('skip_validation', False))
+    save_latest_checkpoint = bool(train_cfg.get('save_latest_checkpoint', True))
+    save_epoch_checkpoints = bool(train_cfg.get('save_epoch_checkpoints', True))
+    save_optimizer_state = bool(train_cfg.get('save_optimizer_state', True))
+    save_scheduler_state = bool(
+        train_cfg.get('save_scheduler_state', save_optimizer_state)
+    )
     page_overlap = int(eval_cfg.get('page_overlap', 32))
     val_every = max(1, int(eval_cfg.get('val_every_n_epochs', 1)))
     if final_test_mode not in {'patch', 'page', 'both'}:
@@ -469,6 +783,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             aug_cfg=data_cfg.get('augmentation'), file_list=train_files, phase=phase,
             box_class_mode=box_class_mode,
             box_preserve_mode=box_preserve_mode,
+            cached_baseline_tail_dir=cached_baseline_tail_dir,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=True,
@@ -485,6 +800,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
             aug_cfg=data_cfg.get('augmentation'), phase=phase,
             box_class_mode=box_class_mode,
             box_preserve_mode=box_preserve_mode,
+            cached_baseline_tail_dir=cached_baseline_tail_dir,
         )
         val_dataset = EnsExamRealDataset(
             data_root=data_root, img_size=img_size, is_train=False,
@@ -521,19 +837,49 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                               prefetch_factor=(2 if num_workers > 0 else None))
     if is_main_process():
         logger.info(f"训练集：{len(train_dataset)} patches | 验证集：{len(val_dataset)} patches")
-        logger.info(f"验证频率：每 {val_every} 个 epoch 验证一次（最后 1 个 epoch 强制验证）")
+        if skip_validation:
+            logger.info("验证已跳过（evaluation.skip_validation=true）")
+        else:
+            logger.info(f"验证频率：每 {val_every} 个 epoch 验证一次（最后 1 个 epoch 强制验证）")
 
     # 模型
     G = Generator(cfg=cfg['model']).to(device)
     D = Discriminator().to(device)
     criterion = EnsExamLoss(cfg=cfg['loss']).to(device)
 
+    if init_checkpoint:
+        missing, unexpected = load_initial_checkpoint(G, D, init_checkpoint, device)
+        if is_main_process():
+            logger.info(
+                "初始化 checkpoint 已加载：%s（missing=%d unexpected=%d）",
+                init_checkpoint,
+                len(missing),
+                len(unexpected),
+            )
+
+    trainable_summary = apply_generator_trainable_patterns(
+        G,
+        train_cfg.get('trainable_generator_patterns'),
+    )
+    trainable_g_params = [parameter for parameter in G.parameters() if parameter.requires_grad]
+    if not trainable_g_params:
+        raise ValueError("generator has no trainable parameters")
+    if is_main_process() and trainable_summary.get("enabled"):
+        logger.info(
+            "G trainable patterns enabled: %s | trainable=%d/%d tensors, %d/%d params",
+            trainable_summary["patterns"],
+            trainable_summary["trainable_tensors"],
+            trainable_summary["trainable_tensors"] + trainable_summary["frozen_tensors"],
+            trainable_summary["trainable_params"],
+            trainable_summary["total_params"],
+        )
+
     # 注意：不使用 SyncBatchNorm。
     # batch_size=8/GPU 足够 BN 统计，而 SyncBN 在每个 BN 层都做 allreduce，
     # 对本模型（20+ BN 层）开销远大于收益，实测比单卡还慢。
 
     # optimizer 在 wrap 前创建，持有原始参数引用
-    optimizer_G = optim.Adam(G.parameters(), lr=lr, betas=adam_betas)
+    optimizer_G = optim.Adam(trainable_g_params, lr=lr, betas=adam_betas)
     optimizer_D = optim.Adam(D.parameters(), lr=lr, betas=adam_betas)
 
     # 学习率调度器
@@ -593,6 +939,10 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     best_val_loss = float('inf')
     last_val_m = None
     G.train(); D.train()
+    if train_cfg.get('freeze_generator_batchnorm_stats', False):
+        frozen_bn = freeze_batchnorm_running_stats(unwrap_model(G))
+        if is_main_process():
+            logger.info("Generator BatchNorm running stats frozen: %d modules", frozen_bn)
 
     # AMP：A800 等 Ampere+ GPU 使用 bf16 混合精度大幅提升吞吐
     use_amp = device.type == 'cuda' and torch.cuda.is_bf16_supported()
@@ -610,7 +960,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         # GPU 上累加损失，避免每 step .item() 导致的 CPU-GPU 同步
         sum_loss_G = torch.zeros(1, device=device)
         sum_loss_D = torch.zeros(1, device=device)
-        sum_parts  = torch.zeros(10, device=device)
+        sum_parts  = torch.zeros(11, device=device)
         n_steps = 0
 
         pbar = tqdm(train_prefetcher, total=len(train_loader),
@@ -620,7 +970,28 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         for batch in pbar:
             if max_steps_per_epoch is not None and n_steps >= int(max_steps_per_epoch):
                 break
-            if len(batch) == 8:
+            cached_baseline_tail_gt = None
+            if cached_baseline_tail_dir:
+                if len(batch) == 9:
+                    (
+                        Iin, Ms_gt, Mb_gt, Box_preserve_gt,
+                        Igt4, Igt2, Igt1, Igt, cached_baseline_tail_gt,
+                    ) = batch
+                    gt = (
+                        Iin, Ms_gt, Mb_gt, Box_preserve_gt,
+                        Igt4, Igt2, Igt1, Igt,
+                    )
+                elif len(batch) == 8:
+                    (
+                        Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt,
+                        cached_baseline_tail_gt,
+                    ) = batch
+                    gt = (Iin, Ms_gt, Mb_gt, Igt4, Igt2, Igt1, Igt)
+                else:
+                    raise ValueError(
+                        "cached baseline-tail training batch must contain 8 or 9 tensors"
+                    )
+            elif len(batch) == 8:
                 Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt = batch
                 gt = (Iin, Ms_gt, Mb_gt, Box_preserve_gt, Igt4, Igt2, Igt1, Igt)
             else:
@@ -655,7 +1026,12 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                 gen_out = G(Iin)
                 Icomp   = gen_out[-1]
                 fake_g, fake_l = D(Icomp, Mb_gt)
-                loss_G, parts  = criterion(gen_out, gt, (fake_g, fake_l))
+                loss_G, parts  = criterion(
+                    gen_out,
+                    gt,
+                    (fake_g, fake_l),
+                    cached_baseline_tail_gt=cached_baseline_tail_gt,
+                )
             loss_G.backward()
             optimizer_G.step()
 
@@ -680,7 +1056,10 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
         avg_parts = [sum_parts[i].item() / n for i in range(len(sum_parts))]
 
         current_lr = optimizer_G.param_groups[0]['lr']
-        should_validate = ((epoch + 1) % val_every == 0) or (epoch == epochs - 1)
+        should_validate = (
+            not skip_validation
+            and (((epoch + 1) % val_every == 0) or (epoch == epochs - 1))
+        )
         val_m = None
         val_display = None
         if should_validate:
@@ -699,7 +1078,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
                     f"box_preserve={avg_parts[8]:.4f}  "
-                    f"outside_edit={avg_parts[9]:.4f} | "
+                    f"outside_edit={avg_parts[9]:.4f}  "
+                    f"baseline_tail={avg_parts[10]:.4f} | "
                     f"PSNR={val_m['psnr']:.2f}  "
                     f"MS-SSIM={val_display['ms_ssim']:.2f}({val_m['ms_ssim']:.4f})  "
                     f"MSE={val_display['mse']:.4f}({val_m['mse']:.6f})  "
@@ -716,7 +1096,8 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     f"per={avg_parts[2]:.4f}  style={avg_parts[3]:.4f}  "
                     f"preserve={avg_parts[6]:.4f}  mb_leak={avg_parts[7]:.4f}  "
                     f"box_preserve={avg_parts[8]:.4f}  "
-                    f"outside_edit={avg_parts[9]:.4f} | "
+                    f"outside_edit={avg_parts[9]:.4f}  "
+                    f"baseline_tail={avg_parts[10]:.4f} | "
                     f"Val=skipped | LR={current_lr:.2e}"
                 )
             csv_log.write(epoch + 1, avg_G, avg_D, avg_parts, None if val_m is None else val_m['l1'])
@@ -736,6 +1117,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     'train/mb_leak':    avg_parts[7],
                     'train/box_preserve': avg_parts[8],
                     'train/outside_edit_size': avg_parts[9],
+                    'train/cached_baseline_tail_nonregress': avg_parts[10],
                     'train/lr':         current_lr,
                 }
                 if should_validate:
@@ -758,27 +1140,29 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
                     log_images_to_wandb(G, val_loader, device, epoch + 1)
 
             # 保存 checkpoint（先存再 step，确保 lr 与本 epoch 对应）
-            ckpt = {
-                'epoch': epoch + 1,
-                'G_state_dict': unwrap_model(G).state_dict(),
-                'D_state_dict': unwrap_model(D).state_dict(),
-                'optimizer_G':  optimizer_G.state_dict(),
-                'optimizer_D':  optimizer_D.state_dict(),
-                'scheduler_G':  scheduler_G.state_dict() if scheduler_G else None,
-                'scheduler_D':  scheduler_D.state_dict() if scheduler_D else None,
-                'avg_loss_G':   avg_G,
-                'avg_loss_D':   avg_D,
-                'val_loss':     None if val_m is None else val_m['l1'],
-            }
-            if last_val_m is not None:
-                ckpt['last_val_metrics'] = last_val_m
-            torch.save(ckpt, os.path.join(run_dir, 'latest.pth'))
+            ckpt = build_training_checkpoint(
+                G,
+                D,
+                optimizer_G,
+                optimizer_D,
+                scheduler_G,
+                scheduler_D,
+                epoch=epoch + 1,
+                avg_loss_G=avg_G,
+                avg_loss_D=avg_D,
+                val_loss=None if val_m is None else val_m['l1'],
+                last_val_metrics=last_val_m,
+                save_optimizer_state=save_optimizer_state,
+                save_scheduler_state=save_scheduler_state,
+            )
+            if save_latest_checkpoint:
+                torch.save(ckpt, os.path.join(run_dir, 'latest.pth'))
 
         if scheduler_G is not None:
             scheduler_G.step()
             scheduler_D.step()
 
-        if is_main_process():
+        if is_main_process() and save_epoch_checkpoints:
             if (epoch + 1) % save_every == 0 or epoch == epochs - 1:
                 path = os.path.join(run_dir, f'epoch_{epoch + 1}.pth')
                 torch.save(ckpt, path)

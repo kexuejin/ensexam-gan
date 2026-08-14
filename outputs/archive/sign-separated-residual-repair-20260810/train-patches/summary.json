@@ -1,0 +1,17 @@
+{
+  "candidate_count": 53978,
+  "input_content_sha256": "90e0ec3b7f5e676801d2cab2f9f0a7af9d1aff053ca01154d810258b3692004e",
+  "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+  "page_count": 42,
+  "patch_count": 512,
+  "patch_index": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+  "patch_index_sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9",
+  "selected_counts": {
+    "brighten": 256,
+    "darken": 256
+  },
+  "status": "pass",
+  "terminal": "PASS",
+  "train_role_count": 275,
+  "train_role_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+}

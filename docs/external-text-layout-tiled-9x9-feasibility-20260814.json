@@ -1,0 +1,293 @@
+{
+  "analysis": {
+    "cv2_imported": false,
+    "model_executed": false,
+    "model_imported": false,
+    "paddle_imported": false,
+    "scope": "static_ast_tile_coverage_and_shape_arithmetic_only",
+    "torch_imported": false
+  },
+  "candidate": {
+    "allocation_strategy": "preallocate_full_output_then_copy_each_output_row_tile",
+    "horizontal_padding": [
+      4,
+      4
+    ],
+    "input_or_output_values_changed": false,
+    "kernel_bias_stride_dilation_groups_changed": false,
+    "numerical_equivalence_status": "requires_preregistered_fake_feature_verification",
+    "output_coordinate_coverage": "each_output_row_exactly_once",
+    "row_halo": 4,
+    "tile_output_rows": 4,
+    "vertical_boundary_padding": "per_tile_zero_padding_matching_original_padding_4"
+  },
+  "feasibility": {
+    "implementation_authorized": false,
+    "interpretation": [
+      "spatial row tiling preserves the exact receptive-field coordinates for stride-one zero-padded 9x9 convolution",
+      "the static explicit-unfold comparison is a bound, not a measured PyTorch allocation",
+      "backend algorithm selection can depend on tile shape, so floating-point equivalence is not yet proven",
+      "a runtime implementation requires separate preregistration and fake-feature verification before any detector import"
+    ],
+    "model_execution_authorized": false,
+    "reason_code": "tiled_9x9_static_feasibility_supported_equivalence_unproven",
+    "terminal": "PREREQUISITE_NEEDED"
+  },
+  "memory_estimates": {
+    "highest_resolution_lateral": {
+      "full_output_payload_bytes_float32": 67239936,
+      "full_spatial_explicit_unfold_equivalent_bytes_float32": 5446434816,
+      "height": 432,
+      "in_channels": 64,
+      "maximum_padded_input_tile_bytes_float32": 1892352,
+      "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 50429952,
+      "maximum_tiled_output_payload_bytes_float32": 622592,
+      "out_channels": 64,
+      "stage": 1,
+      "tile_count": 108,
+      "unfold_bound_reduction_factor": 108,
+      "width": 608
+    },
+    "highest_resolution_projection": {
+      "full_output_payload_bytes_float32": 67239936,
+      "full_spatial_explicit_unfold_equivalent_bytes_float32": 21785739264,
+      "height": 432,
+      "in_channels": 256,
+      "maximum_padded_input_tile_bytes_float32": 7569408,
+      "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 201719808,
+      "maximum_tiled_output_payload_bytes_float32": 622592,
+      "out_channels": 64,
+      "stage": 1,
+      "tile_count": 108,
+      "unfold_bound_reduction_factor": 108,
+      "width": 608
+    },
+    "lateral_all_stages": [
+      {
+        "full_output_payload_bytes_float32": 67239936,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 5446434816,
+        "height": 432,
+        "in_channels": 64,
+        "maximum_padded_input_tile_bytes_float32": 1892352,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 50429952,
+        "maximum_tiled_output_payload_bytes_float32": 622592,
+        "out_channels": 64,
+        "stage": 1,
+        "tile_count": 108,
+        "unfold_bound_reduction_factor": 108,
+        "width": 608
+      },
+      {
+        "full_output_payload_bytes_float32": 16809984,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 1361608704,
+        "height": 216,
+        "in_channels": 64,
+        "maximum_padded_input_tile_bytes_float32": 958464,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 25214976,
+        "maximum_tiled_output_payload_bytes_float32": 311296,
+        "out_channels": 64,
+        "stage": 2,
+        "tile_count": 54,
+        "unfold_bound_reduction_factor": 54,
+        "width": 304
+      },
+      {
+        "full_output_payload_bytes_float32": 4202496,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 340402176,
+        "height": 108,
+        "in_channels": 64,
+        "maximum_padded_input_tile_bytes_float32": 491520,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 12607488,
+        "maximum_tiled_output_payload_bytes_float32": 155648,
+        "out_channels": 64,
+        "stage": 3,
+        "tile_count": 27,
+        "unfold_bound_reduction_factor": 27,
+        "width": 152
+      },
+      {
+        "full_output_payload_bytes_float32": 1050624,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 85100544,
+        "height": 54,
+        "in_channels": 64,
+        "maximum_padded_input_tile_bytes_float32": 258048,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 6303744,
+        "maximum_tiled_output_payload_bytes_float32": 77824,
+        "out_channels": 64,
+        "stage": 4,
+        "tile_count": 14,
+        "unfold_bound_reduction_factor": 13,
+        "width": 76
+      }
+    ],
+    "projection_all_stages": [
+      {
+        "full_output_payload_bytes_float32": 67239936,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 21785739264,
+        "height": 432,
+        "in_channels": 256,
+        "maximum_padded_input_tile_bytes_float32": 7569408,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 201719808,
+        "maximum_tiled_output_payload_bytes_float32": 622592,
+        "out_channels": 64,
+        "stage": 1,
+        "tile_count": 108,
+        "unfold_bound_reduction_factor": 108,
+        "width": 608
+      },
+      {
+        "full_output_payload_bytes_float32": 16809984,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 5446434816,
+        "height": 216,
+        "in_channels": 256,
+        "maximum_padded_input_tile_bytes_float32": 3833856,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 100859904,
+        "maximum_tiled_output_payload_bytes_float32": 311296,
+        "out_channels": 64,
+        "stage": 2,
+        "tile_count": 54,
+        "unfold_bound_reduction_factor": 54,
+        "width": 304
+      },
+      {
+        "full_output_payload_bytes_float32": 4202496,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 1361608704,
+        "height": 108,
+        "in_channels": 256,
+        "maximum_padded_input_tile_bytes_float32": 1966080,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 50429952,
+        "maximum_tiled_output_payload_bytes_float32": 155648,
+        "out_channels": 64,
+        "stage": 3,
+        "tile_count": 27,
+        "unfold_bound_reduction_factor": 27,
+        "width": 152
+      },
+      {
+        "full_output_payload_bytes_float32": 1050624,
+        "full_spatial_explicit_unfold_equivalent_bytes_float32": 340402176,
+        "height": 54,
+        "in_channels": 256,
+        "maximum_padded_input_tile_bytes_float32": 1032192,
+        "maximum_tiled_explicit_unfold_equivalent_bytes_float32": 25214976,
+        "maximum_tiled_output_payload_bytes_float32": 77824,
+        "out_channels": 64,
+        "stage": 4,
+        "tile_count": 14,
+        "unfold_bound_reduction_factor": 13,
+        "width": 76
+      }
+    ],
+    "total_tiled_convolution_calls_per_page": 406
+  },
+  "probe_result": {
+    "path": "docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json",
+    "sha256": "d56d49f9ac37d127b0a17359af9f2b53a2fbcee0fcff3beabf638487a29ae5b9",
+    "terminal": "KILL"
+  },
+  "schema_version": 1,
+  "source": {
+    "convolutions": {
+      "lateral": {
+        "assignment_line": 257,
+        "bias": true,
+        "dilation": 1,
+        "groups": 1,
+        "kernel_size": 9,
+        "padding": 4,
+        "padding_mode": "zeros",
+        "stride": 1
+      },
+      "projection": {
+        "assignment_line": 236,
+        "bias": true,
+        "dilation": 1,
+        "groups": 1,
+        "kernel_size": 9,
+        "padding": 4,
+        "padding_mode": "zeros",
+        "stride": 1
+      }
+    },
+    "model_source_path": "/Users/kexuejin/.pyenv/versions/3.13.1/lib/python3.13/site-packages/transformers/models/pp_ocrv6_medium_det/modeling_pp_ocrv6_medium_det.py",
+    "model_source_sha256": "4bb27b16b04056ee00779391a4943efa5b5c2745e9431e4e9aa652423b271210"
+  },
+  "static_report": {
+    "path": "docs/external-text-layout-static-memory-risk-20260814.json",
+    "sha256": "144bf4b1c55cfa8b4b19ec125b603dfb5daaf0fa02d0f92a9725adf60ab1651f"
+  },
+  "tile_examples": {
+    "1": [
+      {
+        "output_end": 4,
+        "output_start": 0,
+        "pad_bottom": 0,
+        "pad_top": 4,
+        "source_end": 8,
+        "source_start": 0
+      },
+      {
+        "output_end": 432,
+        "output_start": 428,
+        "pad_bottom": 4,
+        "pad_top": 0,
+        "source_end": 432,
+        "source_start": 424
+      }
+    ],
+    "2": [
+      {
+        "output_end": 4,
+        "output_start": 0,
+        "pad_bottom": 0,
+        "pad_top": 4,
+        "source_end": 8,
+        "source_start": 0
+      },
+      {
+        "output_end": 216,
+        "output_start": 212,
+        "pad_bottom": 4,
+        "pad_top": 0,
+        "source_end": 216,
+        "source_start": 208
+      }
+    ],
+    "3": [
+      {
+        "output_end": 4,
+        "output_start": 0,
+        "pad_bottom": 0,
+        "pad_top": 4,
+        "source_end": 8,
+        "source_start": 0
+      },
+      {
+        "output_end": 108,
+        "output_start": 104,
+        "pad_bottom": 4,
+        "pad_top": 0,
+        "source_end": 108,
+        "source_start": 100
+      }
+    ],
+    "4": [
+      {
+        "output_end": 4,
+        "output_start": 0,
+        "pad_bottom": 0,
+        "pad_top": 4,
+        "source_end": 8,
+        "source_start": 0
+      },
+      {
+        "output_end": 54,
+        "output_start": 52,
+        "pad_bottom": 4,
+        "pad_top": 0,
+        "source_end": 54,
+        "source_start": 48
+      }
+    ]
+  }
+}

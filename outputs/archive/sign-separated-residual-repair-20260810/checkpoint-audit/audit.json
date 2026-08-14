@@ -1,0 +1,70 @@
+{
+  "authority": {
+    "candidate_application": "passed",
+    "checkpoint_audit": "pending"
+  },
+  "checkpoint": "/private/tmp/ensexam-gan-h0-P0vNwp/artifacts/trials/sign-separated-residual-repair-v2/sign_separated_probe.pt",
+  "checkpoint_sha256": "e9d75a525173a7ddf913f01765d7b5bdbc2bdb228deebfc742a24607292d05fc",
+  "current_primary_replaced": false,
+  "first_quality_gate_started": false,
+  "history": {
+    "columns": [
+      "step",
+      "loss",
+      "route_ce",
+      "bright_magnitude_l1",
+      "dark_magnitude_l1",
+      "identity_delta_l1"
+    ],
+    "first": {
+      "bright_magnitude_l1": 0.06459039,
+      "dark_magnitude_l1": 0.06102419,
+      "identity_delta_l1": 0.0,
+      "loss": 1.22422683,
+      "route_ce": 1.09861231
+    },
+    "last": {
+      "bright_magnitude_l1": 0.01566936,
+      "dark_magnitude_l1": 0.0445435,
+      "identity_delta_l1": 0.04727471,
+      "loss": 1.66378367,
+      "route_ce": 1.55629611
+    },
+    "row_count": 80,
+    "sha256": "cefc72f340f7d8dbc8a8eb427c70d8816a41ebaaf1307df9e99303f067443538"
+  },
+  "later_gates_enabled": false,
+  "parameter_movement": {
+    "output_head_l1": 48.156827338039875,
+    "total_l1": 903.7297113314271
+  },
+  "plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/sign-separated-residual-candidate-plan-v2.json",
+  "plan_sha256": "848743ccc9abbc1eed2f48f48e46f29aaabb809149338b2f1825d1b88f9b9990",
+  "promotion_enabled": false,
+  "real_patch_behavior": {
+    "applied_bright_pixel_count": 0,
+    "applied_dark_pixel_count": 8514478,
+    "applied_pixel_count": 8514478,
+    "applied_ratio": 0.2537512183189392,
+    "candidate_delta_abs_max": 13.231361389160156,
+    "patch_count": 512,
+    "pixel_count": 33554432,
+    "route_argmax_pixel_counts": {
+      "brighten": 0,
+      "darken": 33554432,
+      "identity": 0
+    },
+    "structural_failures": [
+      "no_application_eligible_brighten_pixels"
+    ],
+    "target_direction_correct_pixel_count": 7942478,
+    "target_direction_opposed_pixel_count": 202702,
+    "target_directional_applied_pixel_count": 8145180,
+    "target_identity_applied_pixel_count": 369298
+  },
+  "reason": "checkpoint failed structural application audit",
+  "reserved_blind_state": "unavailable",
+  "runnable": false,
+  "status": "kill",
+  "terminal": "KILL"
+}

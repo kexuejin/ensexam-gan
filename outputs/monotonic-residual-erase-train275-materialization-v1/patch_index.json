@@ -1,0 +1,44 @@
+{
+  "command": [
+    "/Volumes/Tool/source/ensexam-gan/.venv-py313-mps/bin/python",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/scripts/analysis/build_monotonic_residual_erase_patch_index.py",
+    "--repo-root",
+    "/private/tmp/ensexam-gan-h0-P0vNwp",
+    "--role-plan",
+    "docs/sign-separated-residual-data-roles.json",
+    "--data-root",
+    "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "--input-dir",
+    "outputs/monotonic-residual-erase-train275-frozen-pipeline-v1/pred",
+    "--output-csv",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/.monotonic-residual-erase-train-patches-v1.csv.materializing",
+    "--output-json",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/.monotonic-residual-erase-train-patches-v1.materializing/summary.json",
+    "--tile-size",
+    "256",
+    "--overlap",
+    "96",
+    "--luminance-margin-gray",
+    "2.0",
+    "--min-positive-ratio",
+    "0.001",
+    "--top-k",
+    "256"
+  ],
+  "link_target": null,
+  "outputs": [
+    {
+      "path": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+      "sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943"
+    },
+    {
+      "path": "outputs/monotonic-residual-erase-train-patches-v1/summary.json",
+      "sha256": "7373dfe313eb5c290b44c69950fdb0de6df9bec5b79bc5d4d79b9ba7949de2a2"
+    }
+  ],
+  "reuse_source": null,
+  "stage": "patch_index",
+  "terminal": "PASS",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+}

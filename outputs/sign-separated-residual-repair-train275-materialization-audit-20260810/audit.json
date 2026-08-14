@@ -1,0 +1,72 @@
+{
+  "artifact_hashes": {
+    "cleanup_model": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727",
+    "current_primary_checkpoint": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae",
+    "current_primary_config": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e",
+    "current_second_stage_checkpoint": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7",
+    "data_role_plan": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d",
+    "patch_builder": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056",
+    "primary_inference": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8",
+    "second_stage_inference": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d",
+    "trainer": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+  },
+  "authority": {
+    "materialization_audit": "pending",
+    "training_preflight": "passed"
+  },
+  "checkpoint_generated": false,
+  "first_quality_gate_started": false,
+  "later_gates_enabled": false,
+  "patch_summary": {
+    "candidate_count": 53978,
+    "input_content_sha256": "90e0ec3b7f5e676801d2cab2f9f0a7af9d1aff053ca01154d810258b3692004e",
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "page_count": 42,
+    "patch_count": 512,
+    "patch_index": "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "patch_index_sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9",
+    "selected_counts": {
+      "brighten": 256,
+      "darken": 256
+    },
+    "status": "pass",
+    "terminal": "PASS",
+    "train_role_count": 275,
+    "train_role_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+  },
+  "primary_metrics": {
+    "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "row_count": 275
+  },
+  "primary_predictions": {
+    "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "promotion_enabled": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "sample_manifest_sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f",
+  "second_stage_metrics": {
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "row_count": 275
+  },
+  "second_stage_predictions": {
+    "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "stage_record_hashes": {
+    "manifest": "caf099d9f135d68205e956dcd701ea695d10264ae6490c5c8d9accf68028e0c9",
+    "patch_index": "ae27c768271a8bd59be9fe845d69a9f7ce4ae0e357a45f74a3225defa193207b",
+    "primary": "a30083ccf05408002cc018d060818c6d93cf2d42c0a050a4733ab77abfb46605",
+    "second_stage": "f9dc9817270a54ab661cdbf4b7b61cec1be3718ed7a0edae833aeba6913e1975"
+  },
+  "status": "pass",
+  "terminal": "PASS",
+  "train_count": 275,
+  "train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/sign-separated-residual-training-plan.json",
+  "training_plan_sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b",
+  "training_started": false
+}

@@ -1,0 +1,121 @@
+{
+  "authorization": {
+    "current_primary_replacement": "disabled",
+    "quality_gates": "disabled_until_checkpoint_audit_pass",
+    "reserved_blind": "unavailable",
+    "state": "candidate_application_preflight_pending",
+    "training": "prohibited_until_candidate_application_preflight_pass"
+  },
+  "candidate_application": {
+    "baseline_input": "frozen_current_primary_plus_current_second_stage_prediction",
+    "device": "mps",
+    "edit_probability_threshold": 0.5,
+    "inference_script": "scripts/infer/run_sign_separated_residual_candidate.py",
+    "minimum_delta_threshold": 12.0,
+    "model_output_bound_gray": 20.4,
+    "stride": 160,
+    "tile_size": 256
+  },
+  "evidence": {
+    "base_training_plan": {
+      "path": "docs/sign-separated-residual-training-plan.json",
+      "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+    },
+    "candidate_inference": {
+      "path": "scripts/infer/run_sign_separated_residual_candidate.py",
+      "sha256": "2993e1dbfb739e9e883d0bac75c099cc9a79986c293e8a27215c8bae811f5550"
+    },
+    "cleanup_model": {
+      "path": "scripts/infer/patch_cleanup_erasemap.py",
+      "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
+    },
+    "materialization_audit": {
+      "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+      "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
+    },
+    "materialization_decision": {
+      "path": "docs/decisions/2026-08-10-sign-separated-residual-train275-materialization-pass.md",
+      "sha256": "f0113da1c798edeee0a01e30bbe64a650a9df996abca5c93a3e5074cd74dd807"
+    },
+    "trainer": {
+      "path": "scripts/train/train_sign_separated_residual_probe.py",
+      "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+    }
+  },
+  "first_quality_gate": {
+    "manifest": "hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+    "manifest_sha256": "fb25bb2aef2f9285403f908deb3da6d88b07b5d1c2c812965ce9e0636ddc172e",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true,
+    "role": "inner_val15"
+  },
+  "iteration_id": "sign-separated-residual-repair-v2",
+  "materialized_training_inputs": {
+    "frozen_pipeline_prediction_content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "input_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1/pred",
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "patch_count": 512,
+    "patch_index": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "patch_index_sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9",
+    "train_count": 275,
+    "train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+  },
+  "model": {
+    "model_type": "sign_separated_residual_delta",
+    "residual_delta_bound": 0.08,
+    "route_classes": [
+      "identity",
+      "brighten",
+      "darken"
+    ]
+  },
+  "planned_outputs_must_be_absent": {
+    "checkpoint_audit": "outputs/sign-separated-residual-repair-v2-checkpoint-audit-20260810",
+    "first_gate_baseline_pipeline": "outputs/sign-separated-residual-repair-v2-inner-val15-baseline-pipeline",
+    "first_gate_baseline_primary": "outputs/sign-separated-residual-repair-v2-inner-val15-baseline-primary",
+    "first_gate_candidate": "outputs/sign-separated-residual-repair-v2-inner-val15-candidate",
+    "first_gate_score": "outputs/sign-separated-residual-repair-v2-inner-val15-score",
+    "training_output_dir": "artifacts/trials/sign-separated-residual-repair-v2"
+  },
+  "schema_version": 2,
+  "supersedes": {
+    "reason": "The v1 learning rate and legacy 32-gray application gate are synthetically unreachable under the registered 0.08 output bound.",
+    "training_plan": "docs/sign-separated-residual-training-plan.json",
+    "training_plan_sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+  },
+  "synthetic_reachability": {
+    "identity_target_must_remain_exact": true,
+    "legacy_learning_rate": 0.00002,
+    "legacy_output_must_remain_below_minimum_delta": true,
+    "minimum_delta_threshold": 12.0,
+    "registered_learning_rate": 0.0001,
+    "registered_output_must_reach_minimum_delta": true,
+    "steps": 80,
+    "target_delta": 0.08
+  },
+  "trainer": {
+    "batch_size": 1,
+    "bright_magnitude_weight": 1.0,
+    "dark_magnitude_weight": 1.0,
+    "device": "mps",
+    "identity_delta_weight": 1.0,
+    "input_dir": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1/pred",
+    "log_every": 10,
+    "lr": 0.0001,
+    "max_steps": 80,
+    "output_dir": "artifacts/trials/sign-separated-residual-repair-v2",
+    "patch_index_file": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "residual_delta_bound": 0.08,
+    "route_loss_weight": 1.0,
+    "save_every": 0,
+    "seed": 42,
+    "sign_direction_margin": 2.0,
+    "split": "train",
+    "tile_size": 256,
+    "validation_enabled": false
+  }
+}

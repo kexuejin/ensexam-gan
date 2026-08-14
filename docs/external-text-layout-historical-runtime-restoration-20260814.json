@@ -1,0 +1,77 @@
+{
+  "authority": {
+    "candidate_inference": false,
+    "external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "training": false
+  },
+  "base_interpreter": {
+    "executable": "/Users/kexuejin/.pyenv/versions/3.10.11/bin/python3.10",
+    "sha256": "d4b4cc767bb187aaa228ebf4706413d33ee827c782fe872b92ff791c617142dc",
+    "version": "3.10.11"
+  },
+  "build": {
+    "official_source_sha256": "3c3bc3048303721c904a03eb8326b631e921f11cc3be2988456a42f115daf04c",
+    "official_source_url": "https://www.python.org/ftp/python/3.10.11/Python-3.10.11.tar.xz",
+    "pyenv_definition": "/opt/homebrew/Cellar/pyenv/2.5.0/plugins/python-build/share/python-build/3.10.11",
+    "pyenv_definition_sha256": "c00ab1ac3ce3b89a338fd3a84a72e5de92d3f6ac796a4b39ac8ee9267ba3aed8",
+    "source_mirror": "https://mirrors.huaweicloud.com/python/3.10.11/Python-3.10.11.tar.xz",
+    "source_mirror_sha256_verified_against_official_definition": true
+  },
+  "contract": {
+    "path": "docs/external-text-layout-frozen-cache-reconstruction-v1.json",
+    "sha256": "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
+  },
+  "current_host_gate": {
+    "memory_free_percent": 75.0,
+    "minimum_memory_free_percent": 35.0,
+    "maximum_swap_used_bytes": 536870912,
+    "model_execution_authorized": false,
+    "swap_used_bytes": 1037828096
+  },
+  "preflight": {
+    "archive_paths_absent": true,
+    "build_paths_absent": true,
+    "execution_authorized": false,
+    "historical_manifest_count": 275,
+    "historical_runtime_ready": true,
+    "probe_result_present": false,
+    "static_terminal": "PASS",
+    "terminal": "PREREQUISITE_NEEDED"
+  },
+  "reconstruction": {
+    "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+    "sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502"
+  },
+  "runtime": {
+    "expected": {
+      "numpy": "2.2.6",
+      "opencv": "5.0.0",
+      "opencv_distribution": "5.0.0.93",
+      "python": "3.10.11",
+      "torch": "2.5.1"
+    },
+    "observed": {
+      "numpy": "2.2.6",
+      "opencv": "5.0.0",
+      "opencv_distribution": "5.0.0.93",
+      "python": "3.10.11",
+      "torch": "2.5.1"
+    },
+    "status": "exact_match"
+  },
+  "schema_version": 1,
+  "state": "historical_runtime_restored_model_execution_still_blocked",
+  "terminal": "PREREQUISITE_NEEDED",
+  "test": {
+    "command_surface": "stdlib_unittest_no_model_execution",
+    "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+    "related_test_count": 42,
+    "sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+    "terminal": "PASS"
+  }
+}

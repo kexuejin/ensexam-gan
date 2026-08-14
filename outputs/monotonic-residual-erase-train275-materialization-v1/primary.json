@@ -1,0 +1,19 @@
+{
+  "command": [
+    "reuse-frozen-output",
+    "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+    "outputs/monotonic-residual-erase-train275-primary-v1"
+  ],
+  "link_target": "archive/sign-separated-residual-repair-20260810/train275-primary",
+  "outputs": [
+    {
+      "path": "outputs/monotonic-residual-erase-train275-primary-v1/metrics.csv",
+      "sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846"
+    }
+  ],
+  "reuse_source": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+  "stage": "primary",
+  "terminal": "PASS",
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+}

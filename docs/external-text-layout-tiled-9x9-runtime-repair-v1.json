@@ -1,0 +1,114 @@
+{
+  "authority": {
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "implementation_and_fake_feature_equivalence_only",
+    "training": false
+  },
+  "candidate": {
+    "allocation_strategy": "preallocate_full_output_then_copy_each_output_row_tile",
+    "full_output_shape_preserved": true,
+    "horizontal_padding": [
+      4,
+      4
+    ],
+    "id": "external_text_layout_transformers_neck_tiled_9x9_v1",
+    "input_slicing_axis": "height",
+    "kernel_size": 9,
+    "output_coordinate_coverage": "each_output_row_exactly_once",
+    "padding": 4,
+    "row_halo": 4,
+    "tile_output_rows": 4,
+    "vertical_boundary_padding": "per_tile_zero_padding_matching_original_padding_4"
+  },
+  "fail_closed_on": [
+    "transformers_version_or_model_source_hash_drift",
+    "neck_constructor_or_forward_ast_drift",
+    "non_cpu_or_non_float32_input",
+    "gradient_enabled_execution",
+    "non_conv2d_or_kernel_bias_stride_padding_dilation_group_drift",
+    "unexpected_input_or_output_rank_or_shape",
+    "conflicting_or_partial_runtime_repair_markers",
+    "fake_feature_value_or_shape_mismatch"
+  ],
+  "family": "external_printed_text_layout_support_v1",
+  "frozen_evidence": {
+    "failed_repaired_probe": {
+      "path": "docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json",
+      "sha256": "d56d49f9ac37d127b0a17359af9f2b53a2fbcee0fcff3beabf638487a29ae5b9"
+    },
+    "model_source": {
+      "external_path": "/Users/kexuejin/.pyenv/versions/3.13.1/lib/python3.13/site-packages/transformers/models/pp_ocrv6_medium_det/modeling_pp_ocrv6_medium_det.py",
+      "sha256": "4bb27b16b04056ee00779391a4943efa5b5c2745e9431e4e9aa652423b271210"
+    },
+    "static_feasibility": {
+      "path": "docs/external-text-layout-tiled-9x9-feasibility-20260814.json",
+      "sha256": "5b4a2cf381b8c0046b68d3b002c5676cc845b0e3bdd1cd00b275a439d9b2a723"
+    },
+    "static_feasibility_implementation": {
+      "path": "scripts/analysis/report_external_text_layout_tiled_9x9_feasibility.py",
+      "sha256": "8adc958c5446f3d9faf370b65a3d6610d0d1f40e64cffa75749cc352c2b55b15"
+    },
+    "static_feasibility_test": {
+      "path": "tests/test_external_text_layout_tiled_9x9_feasibility.py",
+      "sha256": "4fc40e6f6690141384b6cc15372b09674e3b55b5ca3e8f85eb4470e6108fda48"
+    }
+  },
+  "implementation_surface": {
+    "combined_with_duplicate_upsample_removal": true,
+    "model_module": "transformers.models.pp_ocrv6_medium_det.modeling_pp_ocrv6_medium_det",
+    "model_source_write": false,
+    "mutation": "replace_only_PPOCRV6MediumDetNeck_forward_and_inject_one_private_tiled_conv_helper_in_memory",
+    "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+    "site_packages_write": false,
+    "test": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py"
+  },
+  "memory_bound": {
+    "highest_resolution_lateral_full_unfold_equivalent_bytes_float32": 5446434816,
+    "highest_resolution_lateral_tiled_unfold_equivalent_bytes_float32": 50429952,
+    "highest_resolution_projection_full_unfold_equivalent_bytes_float32": 21785739264,
+    "highest_resolution_projection_tiled_unfold_equivalent_bytes_float32": 201719808,
+    "projection_unfold_bound_reduction_factor": 108,
+    "total_tiled_convolution_calls_per_page": 406
+  },
+  "preserved": [
+    "detector_model_and_weights",
+    "cpu_transformers_engine_and_float32_dtype",
+    "input_geometry_preprocessing_thresholds_and_batch_size",
+    "all_convolution_weights_biases_and_output_coordinates",
+    "kernel_stride_padding_dilation_groups_and_zero_padding_semantics",
+    "nearest_upsample_scale_factors_and_reverse_concatenation_order",
+    "detector_postprocessing_and_materialization_contracts"
+  ],
+  "runtime_binding": {
+    "class": "PPOCRV6MediumDetNeck",
+    "python": "3.13.1",
+    "torch": "2.12.0",
+    "transformers": "5.12.1"
+  },
+  "schema_version": 1,
+  "state": "preregistered_implementation_and_fake_feature_verification_only",
+  "terminal": "PREREQUISITE_NEEDED",
+  "verification_contract": {
+    "acceptance": [
+      "torch_equal_for_every_fake_feature_case",
+      "maximum_absolute_difference_exactly_zero",
+      "identical_shape_dtype_device_and_contiguity",
+      "top_middle_bottom_tile_boundaries_and_short_final_tile_covered",
+      "both_256_to_64_projection_and_64_to_64_lateral_signatures_covered",
+      "full_output_preallocation_and_four_row_tile_limit_observed",
+      "version_hash_ast_module_and_convolution_drift_rejected",
+      "repair_idempotent_and_global_site_packages_unchanged"
+    ],
+    "fake_feature_only": true,
+    "formal_or_quality_access": false,
+    "model_execution": false,
+    "real_detector_import": false,
+    "real_detector_probe_authorized": false
+  }
+}

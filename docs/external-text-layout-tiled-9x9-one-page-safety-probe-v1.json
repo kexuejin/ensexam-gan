@@ -1,0 +1,120 @@
+{
+  "acceptance": {
+    "formal_outputs_written": false,
+    "label_access": false,
+    "maximum_process_tree_rss_bytes": 8589934592,
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 45.0,
+    "page_completed": true,
+    "reason_code": "runtime_safety_probe_passed",
+    "recognition": false,
+    "residual_model_process_count": 0,
+    "result_terminal": "PASS",
+    "routing_metadata_access": false,
+    "target_access": false,
+    "temporary_page_outputs_retained": false
+  },
+  "authority": {
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": "exactly_one_target_free_page_only_after_all_launch_gates_pass",
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "runtime_safety_prerequisite_only",
+    "training": false
+  },
+  "execution": {
+    "conflicting_model_process_check": true,
+    "exact_attempt_count": 1,
+    "host_user_lock": true,
+    "monitor_interval_seconds": 1.0,
+    "page_process_group": "setsid",
+    "page_process_start_method": "spawn",
+    "page_timeout_seconds": 900.0,
+    "result_path": "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-20260814/result.json",
+    "thread_caps": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "frozen_inputs": {
+    "implementation_commit": "c8c228d6adb6edf6fe11228be2daca632fac4bbd",
+    "page": {
+      "path": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_images/hw5k_1011.jpg",
+      "sha256": "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+    },
+    "repair": {
+      "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+      "sha256": "07b894a5a43b5331c5ba866dd2a714e6346723c8112f0b23bebfb56852f839ac"
+    },
+    "repair_test": {
+      "path": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py",
+      "sha256": "01ef4e03ff41bbb440a7a028e05e07a4c6f2aa1dde049f124a362129b0b37b39"
+    },
+    "repair_verification": {
+      "path": "docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json",
+      "sha256": "6961f9beff92626dcd65547687072473a4f230ab25a05e2746ef2a01dd6ad758"
+    },
+    "support_plan": {
+      "path": "docs/external-text-layout-support-prerequisite-v1.json",
+      "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+    }
+  },
+  "host_launch_gates": {
+    "booted_ios_simulator_count": 0,
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 70.0,
+    "no_conflicting_model_processes": true,
+    "result_path_absent": true
+  },
+  "integration": {
+    "allowed_changes": [
+      "replace_the_duplicate_upsample_only_repair_import_and_call_with_the_tiled_9x9_combined_repair",
+      "add_probe_specific_stricter_memory_and_rss_limits_without_weakening_shared_defaults",
+      "reject_booted_ios_simulators_before_detector_import",
+      "bind_the_new_result_path_and_contract_hash"
+    ],
+    "materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "preintegration_sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5"
+    },
+    "probe": {
+      "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+      "preintegration_sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+    },
+    "runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "preintegration_sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+    },
+    "site_packages_write": false
+  },
+  "probe": {
+    "device": "cpu",
+    "engine": "transformers",
+    "model_name": "PP-OCRv6_medium_det",
+    "page": "hw5k_1011.jpg",
+    "scope": "one_nonformal_target_free_raw_source_page",
+    "tiled_output_rows": 4
+  },
+  "repeat_policy": {
+    "on_pass": "authorize_only_serial_frozen_cache_reconstruction_under_its_existing_contract",
+    "on_prerequisite_needed_or_kill": "do_not_repeat_or_rescue_the_tiled_9x9_probe_without_a_materially_new_preregistration"
+  },
+  "runtime": {
+    "cv2": "4.13.0",
+    "numpy": "2.3.5",
+    "paddle": "3.0.0",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "python": "3.13.1",
+    "torch": "2.12.0",
+    "transformers": "5.12.1"
+  },
+  "schema_version": 1,
+  "state": "preregistered_integration_allowed_execution_disabled_until_all_host_gates_pass",
+  "terminal": "PREREQUISITE_NEEDED"
+}

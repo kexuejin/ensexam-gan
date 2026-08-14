@@ -1,0 +1,48 @@
+{
+  "authority": {
+    "candidate_application": "passed",
+    "materialization": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint": "/private/tmp/ensexam-gan-h0-repaired/artifacts/trials/monotonic-residual-erase-v2/monotonic_residual_erase_probe.pt",
+  "checkpoint_sha256": "b12f358bc8457e7a90f7f7220e44867c531a810ad7f17fea2f52c71c18358c0e",
+  "history": "/private/tmp/ensexam-gan-h0-repaired/artifacts/trials/monotonic-residual-erase-v2/monotonic_loss_history.csv",
+  "history_sha256": "93392e60a82a008305aa3e6af13ebb79587f81ef5ec8d6070d2025dd9cf1bc13",
+  "outcome": "real_train_patch_gate_collapsed_to_subthreshold_noop",
+  "patch_summary": {
+    "max_delta_gray": 2.667738676071167,
+    "negative_delta_pixel_count": 0,
+    "outcome": "real_train_patch_gate_collapsed_to_subthreshold_noop",
+    "patch_count": 256,
+    "patches_all_preserve_route": 10,
+    "patches_with_gate": 0,
+    "positive_alpha_mean": 0.47972985735992035,
+    "positive_delta_mean_gray": 1.482286081542229,
+    "positive_gate_ratio": 0.0,
+    "positive_pixels": 10932547,
+    "positive_support_ratio": 0.02491779820384033,
+    "preserve_alpha_mean": 0.46216570428492454,
+    "preserve_delta_mean_gray": 2.030915573815803,
+    "preserve_gate_ratio": 0.0,
+    "preserve_pixels": 5844669,
+    "preserve_support_ratio": 0.0017352565217978982,
+    "terminal": "KILL"
+  },
+  "plan": "/private/tmp/ensexam-gan-h0-repaired/docs/monotonic-residual-erase-candidate-plan-v2.json",
+  "plan_sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56",
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "repeat_policy": "do_not_repeat_exact_v2_training",
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "status": "kill",
+  "structural": {
+    "checkpoint_loader": "trusted_weights_only_false_due_to_Path_args",
+    "final_step": 80,
+    "model_type": "monotonic_residual_erase",
+    "parameter_count": 384578,
+    "residual_delta_bound": 0.08
+  },
+  "terminal": "KILL",
+  "training_started": true
+}

@@ -640,3 +640,506 @@ baseline primary residual=0.136111 overerase=0.002482
 best candidate by score: step0001 residual=0.138113 overerase=0.002797 score=-0.004524
 decision: no promotion; keep artifacts/current-primary unchanged
 ```
+
+## Sign-Separated Residual v2 Structural KILL
+
+```text
+plan: docs/sign-separated-residual-candidate-plan-v2.json
+checkpoint: artifacts/archive/sign-separated-residual-repair-20260810/training-output/sign_separated_probe.pt
+checkpoint sha256: e9d75a525173a7ddf913f01765d7b5bdbc2bdb228deebfc742a24607292d05fc
+audit: outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json
+terminal: KILL before inner-val15
+route argmax identity / brighten / darken: 0 / 0 / 33,554,432
+application-eligible brighten / darken: 0 / 8,514,478
+```
+
+This checkpoint is local rejected evidence, not a product artifact. Keep
+`artifacts/current-primary` and `artifacts/current-second-stage-best.pt` unchanged. Do not run the
+candidate on inner-val15, SCUT115, holdout40, or reserved blind, and do not rescue it with threshold
+or optimization sweeps.
+
+## Monotonic Residual Erase Synthetic Prerequisite
+
+```text
+model type: monotonic_residual_erase
+representation: identity-initialized preserve-or-brighten luminance delta
+bound: 0.08
+synthetic audit: outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json
+terminal: PASS
+training CLI enabled: false
+real data accessed: false
+next action: metadata/data-role preflight only
+```
+
+This is not a candidate or a measured quality lift. It removes the competing
+darken output that collapsed sign-separated v2, while treating target-darker
+and identity pixels as preserve negatives. Keep current-primary and the current
+second stage unchanged; no training, prediction, quality gate, visual review,
+reserved blind, or promotion is authorized by the synthetic result.
+
+Metadata/data-role preflight subsequently passed without pixel decode:
+
+```text
+plan: docs/monotonic-residual-erase-data-roles.json
+train: 275 pages (253 HW5K + 22 SCUT)
+inner/development/SCUT115/holdout40: 15 / 156+112 / 115 / 40
+pairwise effective-role overlap: 0
+target access: train only
+preserve negatives: target-darker, identity, submargin target-lighter
+training CLI enabled: false
+next action: training/config preflight only
+```
+
+The metadata-only training/config preflight also passed:
+
+```text
+plan: docs/monotonic-residual-erase-training-plan.json
+preflight: outputs/monotonic-residual-erase-training-preflight-20260810/preflight.json
+train role: 275 pages (253 HW5K + 22 SCUT)
+model: exact-identity, nonnegative delta only, bound 0.08
+schedule: 80 steps, batch 1, lr 0.00002, seed 42, MPS
+support loss: separate per-sample target-lighter and preserve means
+patch selection: top 256 target-lighter-support train patches
+real pixels decoded / training / checkpoint: false / false / false
+terminal: PASS
+next action: exact train275 materialization audit only
+```
+
+This PASS is configuration evidence, not a quality result. It authorizes only
+the named train-role prediction and patch-index materialization. Training,
+inner-val15, later gates, visual review, reserved blind, promotion, and changes
+to the default artifacts remain prohibited until their preceding gates pass.
+
+Train275 materialization subsequently passed:
+
+```text
+manifest: 275 pages (253 HW5K + 22 SCUT)
+primary / frozen second-stage predictions: 275 / 275
+prediction provenance: byte-identical reuse of the prior audited frozen archive
+target-lighter candidates: 52,645
+selected patches / pages: 256 / 24
+positive support ratio: 0.310654 .. 0.945358
+preserve-negative ratio: 0.054642 .. 0.689346
+training / checkpoint / quality gate: false / false / false
+terminal: PASS
+next action: candidate application preflight only
+```
+
+The `0.08` output bound cannot satisfy the legacy `32`-gray delta threshold,
+so this PASS does not authorize training. Freeze a target-free third-stage
+application protocol before optimization; no post-result threshold rescue is
+allowed.
+
+Candidate application preflight subsequently passed with a v2-only
+reachability correction:
+
+```text
+legacy learning rate / max delta: 2e-5 / 0.023543 gray
+registered learning rate / steps: 1e-4 / 80
+registered max delta / bound: 20.399681 / 20.4 gray
+edit probability / delta gate: 0.5 / 12 gray
+direction guard: reject any candidate channel darker than baseline
+identity / target-darker: exact no-op / exact no-op
+real training / checkpoint / quality gate: false / false / false
+terminal: PASS
+```
+
+The next authorized action is one exact v2 training run on the audited
+train275 patch index. Candidate inference and inner-val15 remain closed until
+the resulting checkpoint passes a separate structural audit.
+
+The exact v2 checkpoint was subsequently killed before candidate inference:
+
+```text
+real train patches / reachable gates: 256 / 0
+maximum real brighten delta: 2.667739 gray
+positive / preserve delta mean: 1.482286 / 2.030916 gray
+positive / preserve support >= 0.5: 0.024918 / 0.001735
+negative deltas: 0
+candidate inference / inner-val15: not started / not started
+terminal: KILL
+```
+
+Do not repeat this v2 family or rescue it with learning-rate, step-count,
+loss-weight, patch-selection, or threshold sweeps. A successor must prove
+real-patch target-lighter versus preserve support separation before training
+and must serialize portable checkpoint metadata.
+
+## Dual-Input Support-Separation Preregistration
+
+```text
+family: dual_input_support_separation
+state: PREREQUISITE_NEEDED
+representation: primary RGB + second-stage RGB + signed RGB delta + four broadcast gate features
+feature count: 13
+diagnostic: page-grouped closed-form ridge, train275 only, full vs second-stage-RGB ablation
+plan: docs/dual-input-support-separation-prerequisite-v1.json
+decision: docs/decisions/2026-08-11-dual-input-support-separation-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact train-only support-separation diagnostic
+```
+
+This is a preregistered evidence boundary, not a model implementation or
+quality result. Keep the current-primary checkpoint as the product default.
+Only a passing diagnostic may authorize a separate dual-input data/training
+preflight; it cannot authorize training, candidate inference, or evaluation by
+itself. Future checkpoint metadata must serialize `Path` values as strings and
+pass the default weights-only load before candidate admission.
+
+The exact train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.648757 / 0.608393
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.004251
+macro median page AUC: 0.686132
+aggregate AUC gate / ablation-margin gate: FAIL / FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat the 13-channel diagnostic or rescue it by changing features,
+folds, sampling, ridge lambda, probe class, or thresholds. The next eligible
+uncertainty is a separately preregistered train-only audit of pixel-aligned
+frozen primary `mb`/`ms` mask evidence. That direction is not yet implemented
+or authorized.
+
+## Spatial Primary Mask Support Preregistration
+
+```text
+family: spatial_primary_mask_support
+state: PREREQUISITE_NEEDED
+materialization: frozen current-primary mb/ms, train275 sources only, no labels
+representation: mb + ms + signed mb-ms + mb*ms
+diagnostic: page-grouped closed-form ridge, full masks vs fixed second-stage-RGB ablation
+plan: docs/spatial-primary-mask-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact label-free mask materialization and train-only support diagnostic
+```
+
+This is a preregistered evidence boundary, not a mask result or candidate. The
+current-primary product default is unchanged. A PASS can authorize only a later
+mask-aware data/training preflight with portable checkpoint metadata; it cannot
+authorize training or evaluation directly.
+
+The exact materialization passed and the train275 diagnostic subsequently
+returned KILL:
+
+```text
+materialized mb / ms pages: 275 / 275
+materialization target access: false
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.580727 / 0.565196
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: -0.063779
+macro median page AUC: 0.584623
+aggregate / page / ablation-margin gates: FAIL / FAIL / FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the four-channel `mb`/`ms` family through mask
+selection, transforms, thresholds, neighborhoods, folds, sampling, ridge
+lambda, nonlinear probes, or training. A successor requires separate
+preregistration of a materially new target-free causal support source and an
+independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.
+
+## Reconstruction-Stage Disagreement Preregistration
+
+```text
+family: reconstruction_stage_disagreement
+state: PREREQUISITE_NEEDED
+materialization: frozen Ic4/Ic2/Ic1/Ire stage disagreement, train275 sources only, no labels
+representation: refine-coarse signed luma + refine-coarse abs RGB + Ic2/Ic1 abs RGB + Ic4/Ic1 abs RGB
+diagnostic: page-grouped closed-form ridge, stage disagreement vs fixed second-stage-RGB ablation
+plan: docs/reconstruction-stage-disagreement-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md
+implementation / data / training: false / false / false
+candidate inference / quality gates / promotion: disabled / disabled / disabled
+next action: exact label-free stage-disagreement materialization and train-only support diagnostic
+```
+
+This family measures convergence inside the frozen primary reconstruction
+hierarchy rather than reusing final RGB, masks, page scalars, or selectors. Its
+four channels, interpolation, per-patch derivation, overlap fusion, folds,
+sampling, ridge probe, RGB ablation, and acceptance gates are frozen before
+data execution. A PASS may authorize only a later data/training/application
+preflight with portable checkpoint metadata; it cannot authorize training or
+candidate inference directly.
+
+The exact label-free materialization passed and the train275 diagnostic
+subsequently returned KILL:
+
+```text
+materialized stage-disagreement pages: 275 / 275
+materialization target access: false
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.657016 / 0.639200
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.012509
+macro median page AUC: 0.678154
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the four-channel reconstruction-stage family through
+stage selection, transforms, neighborhoods, thresholds, folds, sampling,
+ridge lambda, nonlinear probes, or training. A successor requires separate
+preregistration of a materially new target-free causal support source and an
+independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.
+
+## Source-Output Support Preregistration
+
+```text
+family: source_output_support
+state: PREREQUISITE_NEEDED
+representation: raw source RGB + frozen second-stage RGB
+ablation: frozen second-stage RGB only
+diagnostic: train275 page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/source-output-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-source-output-support-preregistration.md
+data execution / training / candidate: false / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: implement and run the exact train-only six-channel diagnostic once
+```
+
+This family tests whether pre-edit source appearance supplies support evidence
+that final cleaned appearance lacks. It deliberately excludes the closed
+dual-pipeline additions: primary RGB, signed pipeline differences, masks,
+reconstruction stages, page scalars, thresholds, neighborhoods, and model
+transforms. A PASS may authorize only a later source-conditioned
+data/training/application preflight with portable checkpoint metadata; it
+cannot authorize training or candidate inference directly.
+
+The exact train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.654677 / 0.626443
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.010171
+macro median page AUC: 0.702450
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the raw source-plus-output family through channel
+selection, differences, color transforms, neighborhoods, thresholds, folds,
+sampling, ridge lambda, nonlinear probes, or training. A successor requires
+separate preregistration of a materially new target-free causal support source
+and an independent train-only ablation. The current-primary product default,
+promotion closure, and reserved-blind closure remain unchanged.
+
+## Second-Stage Alpha Support Preregistration
+
+```text
+family: second_stage_alpha_support
+state: KILL
+representation: frozen final second-stage RGB + raw erasemap sigmoid alpha before every threshold
+ablation: frozen final second-stage RGB only
+diagnostic: label-free train275 alpha materialization, then five-fold page-grouped closed-form ridge
+plan: docs/second-stage-alpha-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md
+data execution / training / candidate: alpha materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: do not repeat or rescue; preregister only a materially new target-free causal source
+```
+
+This family tests the frozen erasemap edit-confidence surface that the product
+removes with `cleanup_alpha_threshold=0.3` before its later gates. It excludes
+clean-candidate RGB, threshold masks, primary/source signals, page scalars,
+neighborhoods, transforms, alternative model layers, nonlinear probes, and
+all optimizer or quality work. A PASS can authorize only a separately
+preregistered alpha-conditioned data/training/application preflight with
+portable checkpoint metadata; it cannot authorize training, candidate
+inference, or any quality split directly.
+
+The label-free materialization completed with exactly 275 finite, aligned,
+hash-stable `float32` raw-alpha maps and `target_access=false`. The exact
+train275 diagnostic subsequently returned KILL:
+
+```text
+train pages / balanced samples: 275 / 563,200
+full mean / minimum fold AUC: 0.656274 / 0.611754
+second-stage-RGB-only mean AUC: 0.644506
+full minus ablation mean AUC: 0.011768
+macro median page AUC: 0.704466
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not repeat or rescue the raw-alpha family through thresholding, layer or
+channel selection, transforms, neighborhoods, folds, sampling, ridge lambda,
+nonlinear probes, or training. A successor requires separate preregistration
+of a materially new target-free causal support source and an independent
+train-only ablation. The current-primary product default, promotion closure,
+and reserved-blind closure remain unchanged.
+
+## Independent HW5K Expert Disagreement Support Preregistration
+
+```text
+family: independent_hw5k_expert_disagreement_support_v1
+state: KILL
+population: 123 HW5K train-role pages not present in the specialist training manifest
+materialization: both frozen checkpoints on every same source page, no targets, no routing
+representation: current-primary RGB + frozen HW5K expert RGB
+ablation: current-primary RGB only
+diagnostic: five-fold page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md
+data execution / training / candidate: paired materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+next action: do not repeat or rescue; preregister only a materially new target-free causal source
+```
+
+This prerequisite does not reopen Candidate 5 routing. Its prior routed product
+path remains closed because HW5K improvement did not preserve SCUT. The new
+causal source is paired same-page evidence from an independently trained frozen
+model, evaluated only after excluding all 152 train275 pages seen by that
+specialist. The remaining diagnostic set is exactly 123 HW5K pages with frozen
+basename and ordered-path content hashes.
+
+Both checkpoints must run on all 123 pages without domain metadata or expert
+selection. Version 1 compares six raw RGB channels with the identical
+current-primary-RGB-only probe. Difference channels, transforms, masks, page
+scalars, alternative checkpoints, nonlinear probes, and every optimizer or
+quality surface remain closed. A PASS may authorize only a later
+expert-conditioned data/training/application preflight; it cannot authorize
+routing, training, candidate inference, or quality evaluation directly. The
+current-primary product default, promotion closure, and reserved-blind closure
+remain unchanged.
+
+The target-free paired materialization completed with exactly 123 aligned
+predictions from each checkpoint and no routing metadata. The exact train-only
+diagnostic subsequently returned KILL:
+
+```text
+unseen HW5K pages / balanced samples: 123 / 251,904
+full mean / minimum fold AUC: 0.664916 / 0.634484
+current-primary-RGB-only mean AUC: 0.635189
+full minus ablation mean AUC: 0.029727
+macro median page AUC: 0.716586
+aggregate / page / direction gates: PASS / PASS / PASS
+ablation-margin gate: FAIL by 0.000273
+training / checkpoint / candidate: false / false / false
+terminal: KILL
+```
+
+Do not round or relax the frozen margin, and do not rescue paired independent
+expert RGB through channel/layer selection, differences, transforms,
+neighborhoods, folds, sampling, ridge lambda, alternate checkpoints, nonlinear
+probes, routing, or training. A successor requires separate preregistration of
+a materially new target-free causal source and an independent train-only
+ablation. The current-primary product default, promotion closure, and
+reserved-blind closure remain unchanged.
+
+## External Text Layout Support Preregistration
+
+```text
+family: external_printed_text_layout_support_v1
+state: PREREQUISITE_NEEDED
+producer: official PP-OCRv6_medium_det safetensors, frozen CPU Transformers inference
+population: exact 275 train-role raw source pages
+materialization: sorted quadrilaterals/scores plus occupancy/confidence grids, no targets or recognition
+representation: frozen second-stage RGB + text occupancy + text confidence
+ablation: frozen second-stage RGB only
+diagnostic: five-fold page-grouped closed-form ridge with frozen sampling and AUC gates
+plan: docs/external-text-layout-support-prerequisite-v1.json
+decision: docs/decisions/2026-08-13-external-text-layout-support-preregistration.md
+runtime prerequisite: docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md
+runtime result: docs/external-text-layout-runtime-safety-probe-20260813.json
+static memory risk: docs/external-text-layout-static-memory-risk-20260814.json
+runtime repair contract: docs/external-text-layout-runtime-equivalence-repair-v1.json
+runtime repair decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
+repaired probe result: docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json
+repaired probe decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-probe-kill.md
+tiled 9x9 static feasibility: docs/external-text-layout-tiled-9x9-feasibility-20260814.json
+tiled 9x9 repair contract: docs/external-text-layout-tiled-9x9-runtime-repair-v1.json
+tiled 9x9 repair preregistration: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md
+tiled 9x9 fake verification: docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json
+tiled 9x9 verification decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md
+tiled 9x9 one-page contract: docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json
+tiled 9x9 one-page decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md
+tiled 9x9 integration verification: docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json
+tiled 9x9 integration decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md
+tiled probe cache reconstruction v2: docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json
+tiled probe cache reconstruction v2 decision: docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md
+cache reconstruction runtime monitor: docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json
+cache reconstruction runtime monitor decision: docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md
+host readiness recovery: docs/external-text-layout-host-readiness-recovery-20260814.json (sha256 7034474fe63fa38ea026221bef837c1f0dca0a4de582942da402e93870191637)
+host readiness recovery decision: docs/decisions/2026-08-14-external-text-layout-host-readiness-recovery.md (sha256 2fb608ddbbc41034ef7a645fb3b86ddc4c66646ca10ce37f58e8195bfcfe0e38)
+v2 cache validator: scripts/analysis/reconstruct_external_text_layout_frozen_caches.py (sha256 8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786)
+v2 cache validator tests: tests/test_external_text_layout_frozen_cache_reconstruction.py (sha256 747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97)
+monitored v2 cache validator: scripts/analysis/reconstruct_external_text_layout_frozen_caches.py (sha256 0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c)
+monitored v2 cache validator tests: tests/test_external_text_layout_frozen_cache_reconstruction.py (sha256 b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6)
+historical cache reconstruction contract (immutable v1): docs/external-text-layout-frozen-cache-reconstruction-v1.json
+cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
+runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
+runtime restoration decision: docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md
+historical cache runtime: Python 3.10.11 / Torch 2.5.1 / NumPy 2.2.6 / OpenCV runtime 5.0.0 / OpenCV wheel 5.0.0.93
+data execution / training / candidate: exact layout materialization only / false / false
+inner-val15 / development / promotion: disabled / disabled / disabled
+runtime status: the only clean-baseline repaired page crossed the free-memory floor at 26.0% and swap cap at 2,973,562,306 bytes; peak process-tree RSS 5,643,206,656 bytes; no formal evidence or residual model process
+static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
+runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction and remains statically equivalent, but its only authorized clean-baseline probe KILLed the exact repeat path as empirically unsafe
+tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold comparison bound from 21,785,739,264 to 201,719,808 bytes; four exact CPU float32 fake cases covering 256-to-64 and 64-to-64 are bitwise equal with maximum error 0.0; real detector execution remains disabled
+tiled one-page authorization: bounded integration is complete; exactly one target-free hw5k_1011.jpg attempt is allowed only after every launch gate passes; any non-PASS terminal closes the exact tiled path
+tiled integration: PASS with 61/61 external-text-layout tests under Python 3.13.1 and 61/61 under Python 3.10.11; contract/source/result hashes, stricter limits, thread caps, parent-plus-child Simulator checks, RUNNING sentinel, non-overwrite, cleanup, and synthetic PASS behavior are verified without detector execution
+tiled cache handoff: v1 cannot consume the tiled result path, probe identity, or strict safety schema; v2 is preregistered to bind the tiled PASS while preserving historical cache hashes, runtime identity, helper ordering, and publication boundaries
+v2 cache validator integration: PASS with 9/9 compatibility tests and 63/63 current external-text-layout tests under both Python 3.13.1 and Python 3.10.11, run serially because the suites intentionally share the host lock; explicit v2 preregistration authority, frozen probe source hash, exact integer evidence, old result path/identity/schema, incomplete attempt/completion/process fields, thread-cap drift, split probe/reconstruction health gates, helper ordering, exact historical runtime, and static preflight are verified without detector or cache execution
+cache runtime monitor integration: PASS with 13/13 compatibility tests and 67/67 current external-text-layout tests under both Python 3.13.1 and Python 3.10.11; each stage launches with Popen(start_new_session=true), samples child-plus-descendant health every second, terminates the process group on resource or health-reader failure with SIGTERM-to-SIGKILL escalation, and preserves zero-exit atomic publication plus historical metrics rewrite behavior
+cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
+current host gate: 87% free memory, 1,362.62 MiB swap used, zero Booted iOS Simulators, no model process, tiled result absent, and both reconstruction caches absent; safe Simulator and stale-team cleanup did not close the unchanged 512 MiB gate
+next action: use a fresh clean host restart, recheck every frozen gate before opening unrelated applications, and manually run only the single preregistered tiled hw5k_1011.jpg attempt if all gates pass; monitored historical cache reconstruction remains downstream of a complete tiled probe PASS
+```
+
+This is the first registered support producer trained outside the EnsExam-GAN
+pipeline for generic text localization. Version 1 persists deterministic text
+quadrilaterals and scores for provenance, but exposes only binary polygon
+occupancy and pixelwise maximum detection confidence to the diagnostic. OCR
+recognition, recognized content, polygon geometry features, source RGB, masks,
+alpha, reconstruction stages, expert outputs, routing metadata, transforms,
+and detector or probe searches are excluded.
+
+The external model was not trained or tuned in this repository and receives no
+train275 targets. Its published training-corpus overlap with SCUT or HW5K is
+unverified, so this is only an incremental train-role support screen. Even a
+PASS cannot establish product generalization; it may authorize only a separate
+leakage-aware data/training/application preflight. The current-primary product
+default, promotion closure, and reserved-blind closure remain unchanged.
+
+The family is not KILLed. Its train-only diagnostic remains pending behind two
+fail-closed prerequisites: a safe detector runtime and reconstruction of the
+missing frozen primary/second-stage prediction caches with exact historical
+content hashes. The repository-local duplicate-upsample repair is statically
+equivalent, but its only clean-baseline probe crossed both memory safeguards;
+the exact detector/runtime/geometry/repair repeat path is therefore KILLed.
+Clearing swap does not authorize another retry, and the registered safeguards
+must not be relaxed. The cache reconstruction path remains recovery
+infrastructure only: its successful-probe prerequisite is unmet and neither
+archive may be published before both reconstructed caches match every
+registered historical hash. The exact historical cache runtime remains
+restored. Static analysis and the implementation-only gate for a materially
+lower-memory full-resolution `9x9` path now PASS: four-row tiles preserve
+tested CPU float32 values bitwise while reducing the highest projection unfold
+comparison bound by `108x`. The result does not establish full-map backend
+identity, timeout, or host peak memory. A separate one-page contract now binds
+the exact implementation and test hashes. Its bounded integration now PASSes
+under both registered Python environments without detector execution. The
+probe requires stricter resource limits, fixed thread caps, parent and child
+Simulator checks, and an atomic `RUNNING` sentinel before page start. Detector
+execution remains disabled until every host launch gate passes. The resulting
+probe is exactly one attempt; any non-PASS terminal or existing result closes
+this tiled path without retry.

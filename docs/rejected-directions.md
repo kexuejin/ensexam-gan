@@ -1195,3 +1195,27 @@ safe region selector. The ranker does not materially beat the best simple pair o
 ratio, so weak target-derived component labels alone are insufficient. Keep the script for future
 experiments with reviewed region labels, but do not promote this ranker or use it for product
 gating.
+
+## Sign-Separated Residual Route/Magnitude v2
+
+Killed before inner-val15. The representation passed deterministic identity, signed-output,
+branch-gradient, role-isolation, train275 materialization, and application-reachability
+prerequisites. Its only authorized real run nevertheless collapsed every audited train-patch
+route argmax to `darken`:
+
+```text
+checkpoint: artifacts/archive/sign-separated-residual-repair-20260810/training-output/sign_separated_probe.pt
+steps / lr: 80 / 0.0001
+audited patches / pixels: 512 / 33,554,432
+route argmax identity / brighten / darken: 0 / 0 / 33,554,432
+application-eligible brighten / darken: 0 / 8,514,478
+candidate maximum delta: 13.231361 gray
+inner-val15 started: false
+decision: KILL
+```
+
+Do not repeat this route/magnitude family or attempt learning-rate, step-count, loss-weight, or
+application-threshold rescue. The v1 `0.00002` learning rate was separately proven synthetically
+unreachable at 80 steps; v2 fixed reachability but exposed a real one-route collapse. Any future
+work on residual/overerase direction separation requires a materially different representation
+and a new preregistration.

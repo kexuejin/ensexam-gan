@@ -1,0 +1,162 @@
+{
+  "baseline": {
+    "current_primary": {
+      "checkpoint": {
+        "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+        "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+      },
+      "config": {
+        "path": "artifacts/current-primary/config.yaml",
+        "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+      },
+      "matched_copy_protocol": {
+        "batch_size": 8,
+        "change_threshold": 12,
+        "copy_input_outside_mask": "mb",
+        "copy_mask_dilate": 0,
+        "copy_mask_threshold_auto": "mb_cov8_step",
+        "eval_threshold": 12,
+        "page_overlap": 32
+      }
+    },
+    "current_second_stage": {
+      "checkpoint": {
+        "path": "artifacts/current-second-stage-best.pt",
+        "sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7"
+      },
+      "inference_script": {
+        "path": "scripts/infer/run_second_stage_residual_repair.py",
+        "sha256": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d"
+      },
+      "protocol": {
+        "base_edit_threshold": 12,
+        "cleanup_alpha_threshold": 0.3,
+        "cleanup_stride": 160,
+        "cleanup_tile_size": 160,
+        "dark_threshold": 0,
+        "second_delta_threshold": 32
+      }
+    }
+  },
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "identity_format": "<domain>/<split>/<basename>",
+  "planned_outputs_must_be_absent": {
+    "prediction_output_dir": "outputs/sign-separated-residual-repair-inner-val15-v1",
+    "target_derived_patch_manifest": "hardcase_lists/sign-separated-residual-repair-train-patches-v1.csv",
+    "training_output_dir": "artifacts/trials/sign-separated-residual-repair-v1"
+  },
+  "roles": {
+    "development_next120": {
+      "effective_count": 112,
+      "effective_identity_sha256": "da8f8d5caa31ab73713f8cd158f88659110a3d1c16f4abdb74d2e4691dba2864",
+      "exclude_roles": [
+        "inner_val15"
+      ],
+      "identity_domain": "scut",
+      "identity_split": "train",
+      "manifest": {
+        "path": "docs/scut-next120-nonoverlap-relative.txt",
+        "sha256": "7410febb1a085c3e5ecc90450eac150fc583eceea37648a077256f25eda8fe58"
+      },
+      "manifest_type": "scut_paths",
+      "source_count": 120
+    },
+    "development_train160": {
+      "effective_count": 156,
+      "effective_identity_sha256": "ec28d39f691d1229c9609232189a73f005108f2b7e514e8bf77f1b66205f85df",
+      "exclude_roles": [
+        "inner_val15"
+      ],
+      "identity_domain": "scut",
+      "identity_split": "train",
+      "manifest": {
+        "path": "docs/scut-train160-nonholdout-relative.txt",
+        "sha256": "7d3ad05218462edf31c31f7ebbbf0e0a4bb495d58b5fe51712049f91830abe19"
+      },
+      "manifest_type": "scut_paths",
+      "source_count": 160
+    },
+    "holdout40": {
+      "effective_count": 40,
+      "effective_identity_sha256": "552f6e3194ad5638ae957bd3d14d0ed8cd9e32380ca9805c9fac17915988d657",
+      "exclude_roles": [],
+      "identity_domain": "scut",
+      "identity_split": "train",
+      "manifest": {
+        "path": "hardcase_lists/scut_val_holdout_40.txt",
+        "sha256": "f76e1d4326fe40aac9cdcaf005c9ccd1c79f8622f81c12b3073bc1ef840f475d"
+      },
+      "manifest_type": "scut_paths",
+      "source_count": 40
+    },
+    "inner_val15": {
+      "effective_count": 15,
+      "effective_identity_sha256": "86098752d80185792a1cbc627381139caedc006757c5d5ac6daeedf4905f1816",
+      "exclude_roles": [],
+      "identity_domain": "scut",
+      "identity_split": "train",
+      "manifest": {
+        "path": "hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+        "sha256": "fb25bb2aef2f9285403f908deb3da6d88b07b5d1c2c812965ce9e0636ddc172e"
+      },
+      "manifest_type": "scut_paths",
+      "source_count": 15
+    },
+    "reserved_blind": {
+      "authorized": false,
+      "effective_count": 0,
+      "manifest": null,
+      "state": "unavailable"
+    },
+    "scut115": {
+      "effective_count": 115,
+      "effective_identity_sha256": "500baa2493a4746d2e1cd393a709e8e05820ac6ad28d1a1bc7a175c56243baa5",
+      "exclude_roles": [],
+      "identity_domain": "scut",
+      "identity_split": "test",
+      "manifest": {
+        "path": "docs/scut-test115-relative.txt",
+        "sha256": "68e0ce32be4520f04d939506f3ed53a15b7b73cd4feaf74ec793f79fd8928e9b"
+      },
+      "manifest_type": "scut_paths",
+      "source_count": 115
+    },
+    "train": {
+      "effective_count": 275,
+      "effective_domain_counts": {
+        "hw5k": 253,
+        "scut": 22
+      },
+      "effective_identity_sha256": "da9b90b9d344711d3dac2b202b7049ed4f921d003c8ee5a6c3531f1a9367e785",
+      "exclude_roles": [
+        "inner_val15",
+        "development_train160",
+        "development_next120",
+        "scut115",
+        "holdout40"
+      ],
+      "manifest": {
+        "path": "hardcase_lists/mixed_scut130_hw5k260_20260729.txt",
+        "sha256": "0385fb96aa7aee1812b95b90acd4198e2af39e96c895a7cd8cfb2681258470ca"
+      },
+      "manifest_type": "mixed_prefixed",
+      "source_count": 383,
+      "source_domain_counts": {
+        "hw5k": 253,
+        "scut": 130
+      }
+    }
+  },
+  "schema_version": 1,
+  "state": "metadata_only_preregistered",
+  "target_or_image_pixel_access": "prohibited",
+  "training_cli_model_type_enabled": false
+}

@@ -104,11 +104,115 @@ class ResidualDeltaCleanupNet(nn.Module):
         return pred, alpha, clean_candidate
 
 
-def build_model(model_type: str, residual_delta_scale: float = 0.25) -> nn.Module:
+class SignSeparatedResidualDeltaCleanupNet(nn.Module):
+    """Identity-initialized luminance repair with explicit signed routes."""
+
+    IDENTITY_ROUTE = 0
+    BRIGHTEN_ROUTE = 1
+    DARKEN_ROUTE = 2
+
+    def __init__(self, residual_delta_bound: float = 0.08):
+        super().__init__()
+        if residual_delta_bound <= 0.0 or residual_delta_bound > 1.0:
+            raise ValueError("residual_delta_bound must be in (0, 1]")
+        self.residual_delta_bound = float(residual_delta_bound)
+        self.enc1 = ConvBlock(3, 32)
+        self.pool1 = nn.MaxPool2d(2)
+        self.enc2 = ConvBlock(32, 64)
+        self.pool2 = nn.MaxPool2d(2)
+        self.bottleneck = ConvBlock(64, 96)
+        self.up2 = nn.ConvTranspose2d(96, 64, 2, stride=2)
+        self.dec2 = ConvBlock(128, 64)
+        self.up1 = nn.ConvTranspose2d(64, 32, 2, stride=2)
+        self.dec1 = ConvBlock(64, 32)
+        self.route_head = nn.Sequential(
+            nn.Conv2d(32, 16, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(16, 3, 1),
+        )
+        self.bright_magnitude_head = nn.Sequential(
+            nn.Conv2d(32, 16, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(16, 1, 1),
+        )
+        self.dark_magnitude_head = nn.Sequential(
+            nn.Conv2d(32, 16, 3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(16, 1, 1),
+        )
+        self.reset_output_to_identity()
+
+    def reset_output_to_identity(self) -> None:
+        nn.init.zeros_(self.route_head[-1].weight)
+        nn.init.zeros_(self.route_head[-1].bias)
+        for head in (self.bright_magnitude_head, self.dark_magnitude_head):
+            nn.init.zeros_(head[-1].weight)
+            nn.init.zeros_(head[-1].bias)
+
+    def _decode(self, x: torch.Tensor) -> torch.Tensor:
+        e1 = self.enc1(x)
+        e2 = self.enc2(self.pool1(e1))
+        b = self.bottleneck(self.pool2(e2))
+        d2 = self.dec2(torch.cat([self.up2(b), e2], dim=1))
+        return self.dec1(torch.cat([self.up1(d2), e1], dim=1))
+
+    def forward_components(self, x: torch.Tensor) -> dict[str, torch.Tensor]:
+        feature = self._decode(x)
+        route_logits = self.route_head(feature)
+        route_prob = torch.softmax(route_logits, dim=1)
+        bright_raw = self.bright_magnitude_head(feature)
+        dark_raw = self.dark_magnitude_head(feature)
+        bright_folded = torch.where(bright_raw >= 0, bright_raw, -bright_raw)
+        dark_folded = torch.where(dark_raw >= 0, dark_raw, -dark_raw)
+        bright_magnitude = self.residual_delta_bound * torch.tanh(bright_folded)
+        dark_magnitude = self.residual_delta_bound * torch.tanh(dark_folded)
+        luminance_delta = (
+            route_prob[:, self.BRIGHTEN_ROUTE : self.BRIGHTEN_ROUTE + 1]
+            * bright_magnitude
+            - route_prob[:, self.DARKEN_ROUTE : self.DARKEN_ROUTE + 1]
+            * dark_magnitude
+        )
+        signed_delta = luminance_delta.expand_as(x)
+        candidate = torch.clamp(x + signed_delta, 0.0, 1.0)
+        edit_alpha = (
+            route_prob[:, self.BRIGHTEN_ROUTE : self.BRIGHTEN_ROUTE + 1]
+            + route_prob[:, self.DARKEN_ROUTE : self.DARKEN_ROUTE + 1]
+        )
+        clean_delta = signed_delta / edit_alpha.clamp_min(1e-12)
+        clean_candidate = torch.clamp(x + clean_delta, 0.0, 1.0)
+        return {
+            "candidate": candidate,
+            "edit_alpha": edit_alpha,
+            "clean_candidate": clean_candidate,
+            "route_logits": route_logits,
+            "route_prob": route_prob,
+            "bright_magnitude": bright_magnitude,
+            "dark_magnitude": dark_magnitude,
+            "signed_delta": signed_delta,
+        }
+
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+        components = self.forward_components(x)
+        return (
+            components["candidate"],
+            components["edit_alpha"],
+            components["clean_candidate"],
+        )
+
+
+def build_model(
+    model_type: str,
+    residual_delta_scale: float = 0.25,
+    residual_delta_bound: float = 0.08,
+) -> nn.Module:
     if model_type == "erasemap":
         return EraseMapCleanupNet()
     if model_type == "residual_delta":
         return ResidualDeltaCleanupNet(residual_delta_scale=residual_delta_scale)
+    if model_type == "sign_separated_residual_delta":
+        return SignSeparatedResidualDeltaCleanupNet(
+            residual_delta_bound=residual_delta_bound
+        )
     raise ValueError(f"Unsupported cleanup model type: {model_type}")
 
 
@@ -135,7 +239,12 @@ def load_model(checkpoint_path: Path, device: torch.device) -> nn.Module:
     args = state.get("args", {}) if isinstance(state, dict) else {}
     model_type = args.get("model_type", "erasemap")
     residual_delta_scale = float(args.get("residual_delta_scale", 0.25))
-    model = build_model(model_type, residual_delta_scale=residual_delta_scale).to(device)
+    residual_delta_bound = float(args.get("residual_delta_bound", 0.08))
+    model = build_model(
+        model_type,
+        residual_delta_scale=residual_delta_scale,
+        residual_delta_bound=residual_delta_bound,
+    ).to(device)
     model.load_state_dict(state["model"] if isinstance(state, dict) else state)
     model.eval()
     return model

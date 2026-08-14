@@ -1,0 +1,4497 @@
+{
+  "ablation_feature_names": [
+    "second_stage_r",
+    "second_stage_g",
+    "second_stage_b"
+  ],
+  "acceptance": {
+    "conditions": {
+      "every_fold_auc": true,
+      "full_auc_ablation_margin": false,
+      "full_mean_fold_auc": true,
+      "macro_median_page_auc": true,
+      "positive_mean_above_preserve": true
+    },
+    "contract": {
+      "full_auc_ablation_margin_min": 0.03,
+      "full_fold_auc_min": 0.55,
+      "full_mean_fold_auc_min": 0.65,
+      "macro_median_page_auc_min": 0.6,
+      "positive_mean_above_preserve_min_folds": 4,
+      "required_fold_count": 5,
+      "required_terminal_on_pass": "PASS"
+    },
+    "passed": false
+  },
+  "aggregates": {
+    "ablation_mean_fold_auc": 0.644506096958718,
+    "full_auc_ablation_margin": 0.010171306808362757,
+    "full_mean_fold_auc": 0.6546774037670807,
+    "full_min_fold_auc": 0.6264433849334716,
+    "macro_median_page_auc": 0.7024502754211426,
+    "positive_mean_above_preserve_folds": 5
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "feature_count": 6,
+  "feature_names": [
+    "source_r",
+    "source_g",
+    "source_b",
+    "second_stage_r",
+    "second_stage_g",
+    "second_stage_b"
+  ],
+  "fold_page_counts": {
+    "0": 54,
+    "1": 62,
+    "2": 47,
+    "3": 50,
+    "4": 62
+  },
+  "folds": [
+    {
+      "ablation_auc": 0.6415823339925382,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7556052339807531,
+          0.7595036514559785,
+          0.7628979399026442
+        ],
+        "feature_scale": [
+          0.18764389442069843,
+          0.17391369907001075,
+          0.18178666135077565
+        ],
+        "weights": [
+          -0.10892965960167783,
+          0.25654450030014603,
+          -0.41407056322682584,
+          -1.1542148026509554e-16
+        ]
+      },
+      "auc_margin": 0.016238631371444434,
+      "fit_page_count": 221,
+      "fold": 0,
+      "full_auc": 0.6578209653639826,
+      "full_fit": {
+        "feature_mean": [
+          0.7335119089851638,
+          0.7177201978213279,
+          0.7294161338874309,
+          0.7556052339807531,
+          0.7595036514559785,
+          0.7628979399026442
+        ],
+        "feature_scale": [
+          0.20510151692349668,
+          0.20708813062289114,
+          0.20665957708736624,
+          0.18764389442069843,
+          0.17391369907001075,
+          0.18178666135077565
+        ],
+        "weights": [
+          0.32460104198631284,
+          -0.24472465770198432,
+          0.06637484712062568,
+          -0.43721535311343646,
+          0.5073783525157859,
+          -0.48473057389537694,
+          -2.135664159314017e-16
+        ]
+      },
+      "page_auc_median": 0.7073185443878174,
+      "pages": [
+        {
+          "auc": 0.8352117538452148,
+          "file": "hw5k_1029.jpg",
+          "positive_score_mean": 0.3072365251167082,
+          "preserve_score_mean": -0.05638973521958069,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8706607818603516,
+          "file": "hw5k_1269.jpg",
+          "positive_score_mean": 0.17944645048897728,
+          "preserve_score_mean": -0.09031821138121066,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8720951080322266,
+          "file": "hw5k_1286.jpg",
+          "positive_score_mean": 0.08815613743889451,
+          "preserve_score_mean": -0.0940175763454782,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8121895790100098,
+          "file": "hw5k_1340.jpg",
+          "positive_score_mean": 0.020109274254132326,
+          "preserve_score_mean": -0.22298728784593355,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9730143547058105,
+          "file": "hw5k_1358.jpg",
+          "positive_score_mean": 0.5622840732434555,
+          "preserve_score_mean": -0.07288660290528504,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6707301139831543,
+          "file": "hw5k_1447.jpg",
+          "positive_score_mean": 0.12204207061499509,
+          "preserve_score_mean": -0.09604317606592566,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.828279972076416,
+          "file": "hw5k_1537.jpg",
+          "positive_score_mean": 0.30403511092147295,
+          "preserve_score_mean": -0.08851494280378694,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7024502754211426,
+          "file": "hw5k_1827.jpg",
+          "positive_score_mean": 0.11613115921586832,
+          "preserve_score_mean": -0.1017969395329045,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8530526161193848,
+          "file": "hw5k_2005.jpg",
+          "positive_score_mean": 0.27581931715072794,
+          "preserve_score_mean": 0.04709189671608327,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8368654251098633,
+          "file": "hw5k_2041.jpg",
+          "positive_score_mean": 0.23098708009333485,
+          "preserve_score_mean": 0.003884639358683278,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7586126327514648,
+          "file": "hw5k_2130.jpg",
+          "positive_score_mean": 0.024701300422482815,
+          "preserve_score_mean": -0.06599239065404028,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5815839767456055,
+          "file": "hw5k_2222.jpg",
+          "positive_score_mean": 0.6466447263394824,
+          "preserve_score_mean": 0.6196304644966348,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7084817886352539,
+          "file": "hw5k_2310.jpg",
+          "positive_score_mean": 0.2896337750989822,
+          "preserve_score_mean": 0.12831029870569438,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6246151924133301,
+          "file": "hw5k_2704.jpg",
+          "positive_score_mean": -0.0408941664867665,
+          "preserve_score_mean": -0.07188697969865868,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5848212242126465,
+          "file": "hw5k_2774.jpg",
+          "positive_score_mean": -0.038109279712592946,
+          "preserve_score_mean": -0.0711394363386689,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7672791481018066,
+          "file": "hw5k_282.jpg",
+          "positive_score_mean": -0.019813602055668525,
+          "preserve_score_mean": -0.14645458530037114,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6518721580505371,
+          "file": "hw5k_2864.jpg",
+          "positive_score_mean": 0.04103210088208794,
+          "preserve_score_mean": -0.04291457727437949,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7716064453125,
+          "file": "hw5k_2936.jpg",
+          "positive_score_mean": 0.04738375795938701,
+          "preserve_score_mean": -0.06319471334738866,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.666964054107666,
+          "file": "hw5k_300.jpg",
+          "positive_score_mean": 0.009828232818269347,
+          "preserve_score_mean": -0.052701134159716834,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7044382095336914,
+          "file": "hw5k_3025.jpg",
+          "positive_score_mean": -0.13996803083906117,
+          "preserve_score_mean": -0.22374432649980103,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.592498779296875,
+          "file": "hw5k_3079.jpg",
+          "positive_score_mean": -0.2753634538682211,
+          "preserve_score_mean": -0.2860103777801868,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6214261054992676,
+          "file": "hw5k_3114.jpg",
+          "positive_score_mean": -0.25559096809188236,
+          "preserve_score_mean": -0.2788195569261924,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5993103981018066,
+          "file": "hw5k_3132.jpg",
+          "positive_score_mean": -0.18666984722499697,
+          "preserve_score_mean": -0.205405163380599,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8891620635986328,
+          "file": "hw5k_3225.jpg",
+          "positive_score_mean": 0.033457458466823034,
+          "preserve_score_mean": -0.21679134368132802,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5322036743164062,
+          "file": "hw5k_3315.jpg",
+          "positive_score_mean": -0.16367874070097022,
+          "preserve_score_mean": -0.20600077747268983,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6883182525634766,
+          "file": "hw5k_3493.jpg",
+          "positive_score_mean": -0.10391560281494143,
+          "preserve_score_mean": -0.19976940103974597,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7502431869506836,
+          "file": "hw5k_3564.jpg",
+          "positive_score_mean": 0.057350371558076714,
+          "preserve_score_mean": -0.07346142600480363,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.703000545501709,
+          "file": "hw5k_3636.jpg",
+          "positive_score_mean": 0.10199054813213113,
+          "preserve_score_mean": -0.1064518049230418,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.505915641784668,
+          "file": "hw5k_3725.jpg",
+          "positive_score_mean": -0.22659943766058974,
+          "preserve_score_mean": -0.1694020082958195,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6456289291381836,
+          "file": "hw5k_3833.jpg",
+          "positive_score_mean": -0.20059904424372899,
+          "preserve_score_mean": -0.22550338081589338,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8851876258850098,
+          "file": "hw5k_3921.jpg",
+          "positive_score_mean": 0.5051444778068261,
+          "preserve_score_mean": -0.12912929295015435,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5730142593383789,
+          "file": "hw5k_3939.jpg",
+          "positive_score_mean": 0.010582998309483985,
+          "preserve_score_mean": -0.06591963244925686,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.726172924041748,
+          "file": "hw5k_4028.jpg",
+          "positive_score_mean": -0.06122689609009567,
+          "preserve_score_mean": -0.1989737542213657,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6783485412597656,
+          "file": "hw5k_4100.jpg",
+          "positive_score_mean": 0.2611642199082936,
+          "preserve_score_mean": 0.07927893615304166,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7061553001403809,
+          "file": "hw5k_4118.jpg",
+          "positive_score_mean": -0.05753130306887543,
+          "preserve_score_mean": -0.18480306704689306,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9480252265930176,
+          "file": "hw5k_4225.jpg",
+          "positive_score_mean": 0.75251575387419,
+          "preserve_score_mean": 0.06306665908457273,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8014464378356934,
+          "file": "hw5k_4315.jpg",
+          "positive_score_mean": -0.09660895398093147,
+          "preserve_score_mean": -0.19821514257887968,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8059554100036621,
+          "file": "hw5k_4333.jpg",
+          "positive_score_mean": -0.08578388916389551,
+          "preserve_score_mean": -0.2008803535569853,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.832158088684082,
+          "file": "hw5k_4439.jpg",
+          "positive_score_mean": -0.10264975276816338,
+          "preserve_score_mean": -0.20853888809884202,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7143244743347168,
+          "file": "hw5k_4564.jpg",
+          "positive_score_mean": 0.09633908070641893,
+          "preserve_score_mean": -0.09296732080382644,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.839381217956543,
+          "file": "hw5k_4725.jpg",
+          "positive_score_mean": 0.27669853469843814,
+          "preserve_score_mean": -0.10102924643963913,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.699885368347168,
+          "file": "hw5k_4779.jpg",
+          "positive_score_mean": 0.014204388902976026,
+          "preserve_score_mean": -0.10129481365029014,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6245808601379395,
+          "file": "hw5k_4797.jpg",
+          "positive_score_mean": 0.0631881682022126,
+          "preserve_score_mean": -0.0958012856976588,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5363335609436035,
+          "file": "hw5k_4903.jpg",
+          "positive_score_mean": 0.012318330383517637,
+          "preserve_score_mean": -0.09326035054757592,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7274703979492188,
+          "file": "hw5k_5028.jpg",
+          "positive_score_mean": 0.23263389905748227,
+          "preserve_score_mean": -0.00036764453597889503,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6462993621826172,
+          "file": "hw5k_5082.jpg",
+          "positive_score_mean": 0.1203691090564851,
+          "preserve_score_mean": 0.012626245290230332,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9474706649780273,
+          "file": "hw5k_539.jpg",
+          "positive_score_mean": 0.7773141231778233,
+          "preserve_score_mean": -0.026688093831615058,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7594084739685059,
+          "file": "hw5k_557.jpg",
+          "positive_score_mean": 0.4809047234940764,
+          "preserve_score_mean": -0.06963343996397173,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.871269702911377,
+          "file": "hw5k_611.jpg",
+          "positive_score_mean": 0.35893021531312946,
+          "preserve_score_mean": -0.034913400826510364,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8115582466125488,
+          "file": "hw5k_797.jpg",
+          "positive_score_mean": 0.0892756756340597,
+          "preserve_score_mean": -0.13315949734536922,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6522026062011719,
+          "file": "scut_457.jpg",
+          "positive_score_mean": 0.09863619631162515,
+          "preserve_score_mean": -0.05238618230767755,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6559371948242188,
+          "file": "scut_471.jpg",
+          "positive_score_mean": -0.031216583303731504,
+          "preserve_score_mean": -0.059085478544537565,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6181373596191406,
+          "file": "scut_487.jpg",
+          "positive_score_mean": 0.024974200539604953,
+          "preserve_score_mean": -0.049576598745872086,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5030794143676758,
+          "file": "scut_539.jpg",
+          "positive_score_mean": -0.25235966775052165,
+          "preserve_score_mean": -0.3107997758243899,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.09805341381050552,
+      "preserve_score_mean": -0.09226170325658851,
+      "test_page_count": 54
+    },
+    {
+      "ablation_auc": 0.6486228834701998,
+      "ablation_fit": {
+        "feature_mean": [
+          0.757524163194195,
+          0.7622754549673998,
+          0.764959063958109
+        ],
+        "feature_scale": [
+          0.18673617050287683,
+          0.17110848302019555,
+          0.18017597564763033
+        ],
+        "weights": [
+          -0.1088306115834517,
+          0.2702862860853957,
+          -0.42213250406672903,
+          1.0696764189378163e-16
+        ]
+      },
+      "auc_margin": 0.0028612564059128376,
+      "fit_page_count": 213,
+      "fold": 1,
+      "full_auc": 0.6514841398761126,
+      "full_fit": {
+        "feature_mean": [
+          0.7333750213849629,
+          0.7167459593122171,
+          0.7284589461586216,
+          0.757524163194195,
+          0.7622754549673998,
+          0.764959063958109
+        ],
+        "feature_scale": [
+          0.20602744490635466,
+          0.20770190624034382,
+          0.20795563493461316,
+          0.18673617050287683,
+          0.17110848302019555,
+          0.18017597564763033
+        ],
+        "weights": [
+          0.41142057287156325,
+          -0.37209182352026526,
+          0.1389678395091693,
+          -0.5186974407177549,
+          0.6262958724578188,
+          -0.5546963081161933,
+          4.7706745325291216e-17
+        ]
+      },
+      "page_auc_median": 0.6801354885101318,
+      "pages": [
+        {
+          "auc": 0.9241180419921875,
+          "file": "hw5k_1125.jpg",
+          "positive_score_mean": 0.3456233418103052,
+          "preserve_score_mean": -0.060785610945188605,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7798781394958496,
+          "file": "hw5k_1322.jpg",
+          "positive_score_mean": 0.017049289632769367,
+          "preserve_score_mean": -0.11623821559167946,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.678955078125,
+          "file": "hw5k_1501.jpg",
+          "positive_score_mean": 0.17464497487260697,
+          "preserve_score_mean": -0.031794933861781144,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6302580833435059,
+          "file": "hw5k_1519.jpg",
+          "positive_score_mean": 0.0613734824110556,
+          "preserve_score_mean": -0.06733786048347828,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8176169395446777,
+          "file": "hw5k_1612.jpg",
+          "positive_score_mean": 0.356494156971212,
+          "preserve_score_mean": -0.11892805338871054,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7256917953491211,
+          "file": "hw5k_1630.jpg",
+          "positive_score_mean": 0.01116008743638115,
+          "preserve_score_mean": -0.1288220619508344,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6025943756103516,
+          "file": "hw5k_1648.jpg",
+          "positive_score_mean": -0.00038905611297459846,
+          "preserve_score_mean": -0.11485780460399542,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5758800506591797,
+          "file": "hw5k_1665.jpg",
+          "positive_score_mean": -0.05458907876574462,
+          "preserve_score_mean": -0.10983217113545836,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7619485855102539,
+          "file": "hw5k_1701.jpg",
+          "positive_score_mean": 0.1380565280950189,
+          "preserve_score_mean": -0.12121193891750376,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6515407562255859,
+          "file": "hw5k_1719.jpg",
+          "positive_score_mean": 0.001308962612655457,
+          "preserve_score_mean": -0.1243331950213181,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4701371192932129,
+          "file": "hw5k_175.jpg",
+          "positive_score_mean": 0.10864719208247477,
+          "preserve_score_mean": 0.09579207566271791,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9031987190246582,
+          "file": "hw5k_1773.jpg",
+          "positive_score_mean": 0.39160230018751957,
+          "preserve_score_mean": -0.11056677892835766,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6693887710571289,
+          "file": "hw5k_1880.jpg",
+          "positive_score_mean": -0.013409963365079342,
+          "preserve_score_mean": -0.10770642265205499,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.45463991165161133,
+          "file": "hw5k_193.jpg",
+          "positive_score_mean": 0.08666520951879864,
+          "preserve_score_mean": 0.09453511428658096,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8180294036865234,
+          "file": "hw5k_1952.jpg",
+          "positive_score_mean": 0.13157934035119553,
+          "preserve_score_mean": -0.11865067672803171,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6603603363037109,
+          "file": "hw5k_211.jpg",
+          "positive_score_mean": 0.13664792107063603,
+          "preserve_score_mean": 0.06941340661968434,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5741176605224609,
+          "file": "hw5k_2257.jpg",
+          "positive_score_mean": 0.19845375037103447,
+          "preserve_score_mean": 0.128449592175284,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5967340469360352,
+          "file": "hw5k_229.jpg",
+          "positive_score_mean": 0.12784849786295965,
+          "preserve_score_mean": 0.07350037750970323,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4779205322265625,
+          "file": "hw5k_2292.jpg",
+          "positive_score_mean": 0.1345366765013224,
+          "preserve_score_mean": 0.10274320827786451,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.48993492126464844,
+          "file": "hw5k_2346.jpg",
+          "positive_score_mean": 0.12452199478750305,
+          "preserve_score_mean": 0.0685896637360511,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6813158988952637,
+          "file": "hw5k_2382.jpg",
+          "positive_score_mean": 0.28121708145432245,
+          "preserve_score_mean": 0.06844428259551963,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.676023006439209,
+          "file": "hw5k_2418.jpg",
+          "positive_score_mean": 0.32257436315367827,
+          "preserve_score_mean": 0.11113401134624114,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6386504173278809,
+          "file": "hw5k_2471.jpg",
+          "positive_score_mean": 0.5431742294978101,
+          "preserve_score_mean": 0.47187567589266816,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8462200164794922,
+          "file": "hw5k_2543.jpg",
+          "positive_score_mean": 0.2427511565899791,
+          "preserve_score_mean": -0.018942790746320173,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5787043571472168,
+          "file": "hw5k_2740.jpg",
+          "positive_score_mean": -0.05418239950114127,
+          "preserve_score_mean": -0.07278490032131452,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6180996894836426,
+          "file": "hw5k_2846.jpg",
+          "positive_score_mean": -0.016955493604303155,
+          "preserve_score_mean": -0.06690056034740184,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7434167861938477,
+          "file": "hw5k_2971.jpg",
+          "positive_score_mean": 0.061523713561440055,
+          "preserve_score_mean": -0.058304254259144504,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7069535255432129,
+          "file": "hw5k_3061.jpg",
+          "positive_score_mean": -0.31586851479548617,
+          "preserve_score_mean": -0.3870354877487213,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7185139656066895,
+          "file": "hw5k_3457.jpg",
+          "positive_score_mean": 0.035768037495273894,
+          "preserve_score_mean": -0.1587184766295154,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6444230079650879,
+          "file": "hw5k_353.jpg",
+          "positive_score_mean": 0.09361451148260083,
+          "preserve_score_mean": 0.016687336140648545,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7666592597961426,
+          "file": "hw5k_3618.jpg",
+          "positive_score_mean": 0.307135971836651,
+          "preserve_score_mean": -0.082014641571267,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6340007781982422,
+          "file": "hw5k_3671.jpg",
+          "positive_score_mean": -0.30402827067203897,
+          "preserve_score_mean": -0.37356566987856255,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6570701599121094,
+          "file": "hw5k_3707.jpg",
+          "positive_score_mean": -0.10489863025891363,
+          "preserve_score_mean": -0.3290323226083933,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5186171531677246,
+          "file": "hw5k_371.jpg",
+          "positive_score_mean": 0.030847791562210194,
+          "preserve_score_mean": 0.012531938961541183,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6766252517700195,
+          "file": "hw5k_3743.jpg",
+          "positive_score_mean": -0.2770787667434229,
+          "preserve_score_mean": -0.3620335697912167,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8392367362976074,
+          "file": "hw5k_3761.jpg",
+          "positive_score_mean": -0.1839999352595748,
+          "preserve_score_mean": -0.2959153045826166,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6503152847290039,
+          "file": "hw5k_3797.jpg",
+          "positive_score_mean": 0.09054729185521558,
+          "preserve_score_mean": -0.06641925009870867,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5972995758056641,
+          "file": "hw5k_3849.jpg",
+          "positive_score_mean": 0.130971208779877,
+          "preserve_score_mean": 0.050981563578245986,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5378279685974121,
+          "file": "hw5k_389.jpg",
+          "positive_score_mean": 0.12192687918164602,
+          "preserve_score_mean": 0.08216539046178113,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7941708564758301,
+          "file": "hw5k_4010.jpg",
+          "positive_score_mean": 0.2352729769465119,
+          "preserve_score_mean": -0.12716470093434049,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8355832099914551,
+          "file": "hw5k_4349.jpg",
+          "positive_score_mean": -0.08209946311941088,
+          "preserve_score_mean": -0.2155400046017158,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7932405471801758,
+          "file": "hw5k_4385.jpg",
+          "positive_score_mean": -0.09567985014343502,
+          "preserve_score_mean": -0.20122982132871084,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6006293296813965,
+          "file": "hw5k_4546.jpg",
+          "positive_score_mean": -0.026007919397448932,
+          "preserve_score_mean": -0.09756112977646503,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7525429725646973,
+          "file": "hw5k_4618.jpg",
+          "positive_score_mean": 0.09004437304572566,
+          "preserve_score_mean": -0.10179345362701318,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5420913696289062,
+          "file": "hw5k_4671.jpg",
+          "positive_score_mean": -0.02284616625956145,
+          "preserve_score_mean": -0.0858659639703131,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.634488582611084,
+          "file": "hw5k_4689.jpg",
+          "positive_score_mean": 0.0002090928283710455,
+          "preserve_score_mean": -0.08688624453896919,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7440400123596191,
+          "file": "hw5k_4761.jpg",
+          "positive_score_mean": 0.16120012593412902,
+          "preserve_score_mean": -0.1264636171035175,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7189416885375977,
+          "file": "hw5k_4921.jpg",
+          "positive_score_mean": 0.14428103834993056,
+          "preserve_score_mean": -0.10548101023505868,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8400630950927734,
+          "file": "hw5k_4957.jpg",
+          "positive_score_mean": 0.3101480242382142,
+          "preserve_score_mean": -0.028465716526987768,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4262862205505371,
+          "file": "hw5k_5064.jpg",
+          "positive_score_mean": -0.019532308108247118,
+          "preserve_score_mean": -0.01715452375668186,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7364616394042969,
+          "file": "hw5k_5100.jpg",
+          "positive_score_mean": 0.23165600712277182,
+          "preserve_score_mean": -0.024664032179681696,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5968713760375977,
+          "file": "hw5k_55.jpg",
+          "positive_score_mean": 0.14043476949438563,
+          "preserve_score_mean": 0.10537320834410996,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9398341178894043,
+          "file": "hw5k_593.jpg",
+          "positive_score_mean": 0.9675520059866551,
+          "preserve_score_mean": 0.012938988383748184,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8806881904602051,
+          "file": "hw5k_725.jpg",
+          "positive_score_mean": 0.38987918790194254,
+          "preserve_score_mean": 0.19545429591211755,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8542404174804688,
+          "file": "hw5k_761.jpg",
+          "positive_score_mean": 0.2483585730981535,
+          "preserve_score_mean": -0.03362900827421111,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6164093017578125,
+          "file": "hw5k_779.jpg",
+          "positive_score_mean": -0.059082455157497514,
+          "preserve_score_mean": -0.151326581165793,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7365784645080566,
+          "file": "scut_464.jpg",
+          "positive_score_mean": 0.018811649760304243,
+          "preserve_score_mean": -0.09412974062077006,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8952860832214355,
+          "file": "scut_496.jpg",
+          "positive_score_mean": -0.03636702785205981,
+          "preserve_score_mean": -0.2844676539145912,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.854759693145752,
+          "file": "scut_510.jpg",
+          "positive_score_mean": -0.06236561512359887,
+          "preserve_score_mean": -0.3002211059597725,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7315549850463867,
+          "file": "scut_524.jpg",
+          "positive_score_mean": -0.10461170424710967,
+          "preserve_score_mean": -0.2819868243004708,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7002201080322266,
+          "file": "scut_529.jpg",
+          "positive_score_mean": -0.10386014838132032,
+          "preserve_score_mean": -0.2811246424401448,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7272844314575195,
+          "file": "scut_535.jpg",
+          "positive_score_mean": -0.12739047379190369,
+          "preserve_score_mean": -0.2896446482058954,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.091626943985048,
+      "preserve_score_mean": -0.0770471491349705,
+      "test_page_count": 62
+    },
+    {
+      "ablation_auc": 0.6802159709161955,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7566180613570318,
+          0.7582373093295697,
+          0.7606886418645231
+        ],
+        "feature_scale": [
+          0.18695743097662998,
+          0.17374296288596497,
+          0.1845702733452374
+        ],
+        "weights": [
+          -0.10136695324413854,
+          0.23694041127020682,
+          -0.3916326524059108,
+          5.319842586703105e-16
+        ]
+      },
+      "auc_margin": 0.0041595366595826855,
+      "fit_page_count": 228,
+      "fold": 2,
+      "full_auc": 0.6843755075757781,
+      "full_fit": {
+        "feature_mean": [
+          0.7340301741564592,
+          0.7140352001321012,
+          0.7251387352220554,
+          0.7566180613570318,
+          0.7582373093295697,
+          0.7606886418645231
+        ],
+        "feature_scale": [
+          0.20572374167485857,
+          0.20776581782906003,
+          0.21030649004086802,
+          0.18695743097662998,
+          0.17374296288596497,
+          0.1845702733452374
+        ],
+        "weights": [
+          0.4057943321318724,
+          -0.3228024925989626,
+          0.10306979455161545,
+          -0.5078634019224232,
+          0.5579438534578018,
+          -0.49424283985422485,
+          1.1972231762953137e-15
+        ]
+      },
+      "page_auc_median": 0.7041029930114746,
+      "pages": [
+        {
+          "auc": 0.9300813674926758,
+          "file": "hw5k_1011.jpg",
+          "positive_score_mean": 0.3733392641280231,
+          "preserve_score_mean": -0.08486400186964138,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.944633960723877,
+          "file": "hw5k_1046.jpg",
+          "positive_score_mean": 0.3784686393618887,
+          "preserve_score_mean": -0.07521214853267139,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8593521118164062,
+          "file": "hw5k_1161.jpg",
+          "positive_score_mean": 0.117902607920996,
+          "preserve_score_mean": -0.10418701489404245,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9296360015869141,
+          "file": "hw5k_1251.jpg",
+          "positive_score_mean": 0.3009813605905016,
+          "preserve_score_mean": -0.06813992961165494,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8599624633789062,
+          "file": "hw5k_1376.jpg",
+          "positive_score_mean": 0.27505252131622543,
+          "preserve_score_mean": -0.08795045607835847,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8901729583740234,
+          "file": "hw5k_1394.jpg",
+          "positive_score_mean": 0.24164421267882777,
+          "preserve_score_mean": -0.10225311806901091,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6720476150512695,
+          "file": "hw5k_1683.jpg",
+          "positive_score_mean": 0.02824566771472205,
+          "preserve_score_mean": -0.10089031079837642,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5412507057189941,
+          "file": "hw5k_1737.jpg",
+          "positive_score_mean": -0.03696184571525723,
+          "preserve_score_mean": -0.111971319845073,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6322903633117676,
+          "file": "hw5k_1755.jpg",
+          "positive_score_mean": 0.013351941282097213,
+          "preserve_score_mean": -0.10082823944050315,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.699286937713623,
+          "file": "hw5k_1862.jpg",
+          "positive_score_mean": 0.12873202970497383,
+          "preserve_score_mean": -0.06809000309383692,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6763162612915039,
+          "file": "hw5k_1934.jpg",
+          "positive_score_mean": 0.04550525697756397,
+          "preserve_score_mean": -0.12226793957496046,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5894560813903809,
+          "file": "hw5k_1988.jpg",
+          "positive_score_mean": -0.019633396462717084,
+          "preserve_score_mean": -0.08576821480409658,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7595372200012207,
+          "file": "hw5k_2166.jpg",
+          "positive_score_mean": 0.00946133700912278,
+          "preserve_score_mean": -0.07314091752516214,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4529094696044922,
+          "file": "hw5k_2239.jpg",
+          "positive_score_mean": 0.13601600220491422,
+          "preserve_score_mean": 0.11206301083752707,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5823478698730469,
+          "file": "hw5k_2632.jpg",
+          "positive_score_mean": -0.03626055148552,
+          "preserve_score_mean": -0.07430136780430315,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6443910598754883,
+          "file": "hw5k_2686.jpg",
+          "positive_score_mean": -0.030783411704647205,
+          "preserve_score_mean": -0.08058649067914246,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6241455078125,
+          "file": "hw5k_2757.jpg",
+          "positive_score_mean": -0.03769945303095312,
+          "preserve_score_mean": -0.07934161556761192,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6012096405029297,
+          "file": "hw5k_2810.jpg",
+          "positive_score_mean": -0.042878383512325355,
+          "preserve_score_mean": -0.08231466733544321,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7638411521911621,
+          "file": "hw5k_2900.jpg",
+          "positive_score_mean": 0.011288184382950206,
+          "preserve_score_mean": -0.08256549871374586,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6373209953308105,
+          "file": "hw5k_2918.jpg",
+          "positive_score_mean": -0.025618208656761073,
+          "preserve_score_mean": -0.07532790738003192,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6402339935302734,
+          "file": "hw5k_318.jpg",
+          "positive_score_mean": 0.019879626079389378,
+          "preserve_score_mean": -0.05478188458009561,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6509943008422852,
+          "file": "hw5k_335.jpg",
+          "positive_score_mean": 0.08410586087093969,
+          "preserve_score_mean": 0.041266282991638925,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7806820869445801,
+          "file": "hw5k_3385.jpg",
+          "positive_score_mean": 0.14933327167059157,
+          "preserve_score_mean": -0.1769094030789889,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7120261192321777,
+          "file": "hw5k_3582.jpg",
+          "positive_score_mean": -0.014265906502978305,
+          "preserve_score_mean": -0.07672335866949011,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8283505439758301,
+          "file": "hw5k_3600.jpg",
+          "positive_score_mean": 0.2625048019340721,
+          "preserve_score_mean": 0.08094189788702602,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7351279258728027,
+          "file": "hw5k_3993.jpg",
+          "positive_score_mean": 0.13200370767695485,
+          "preserve_score_mean": -0.1381133325992001,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.615476131439209,
+          "file": "hw5k_4082.jpg",
+          "positive_score_mean": -0.08133120801716448,
+          "preserve_score_mean": -0.15849987848518055,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7579207420349121,
+          "file": "hw5k_4154.jpg",
+          "positive_score_mean": -0.0911539293642053,
+          "preserve_score_mean": -0.2701937529209302,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6650466918945312,
+          "file": "hw5k_4171.jpg",
+          "positive_score_mean": 0.0437203556545943,
+          "preserve_score_mean": -0.06580149494444038,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6971549987792969,
+          "file": "hw5k_4189.jpg",
+          "positive_score_mean": -0.0010273736317164064,
+          "preserve_score_mean": -0.07791609976905059,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8186798095703125,
+          "file": "hw5k_4243.jpg",
+          "positive_score_mean": 0.2608787285462193,
+          "preserve_score_mean": -0.11730590761744075,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8413515090942383,
+          "file": "hw5k_4261.jpg",
+          "positive_score_mean": -0.06671781436027185,
+          "preserve_score_mean": -0.19132403854120433,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7152466773986816,
+          "file": "hw5k_4279.jpg",
+          "positive_score_mean": -0.12390090302498635,
+          "preserve_score_mean": -0.19514499902806043,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7997779846191406,
+          "file": "hw5k_4421.jpg",
+          "positive_score_mean": -0.09077822433851547,
+          "preserve_score_mean": -0.19712673552142987,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7824616432189941,
+          "file": "hw5k_4493.jpg",
+          "positive_score_mean": -0.1050121974436902,
+          "preserve_score_mean": -0.19447281968896735,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7041029930114746,
+          "file": "hw5k_4528.jpg",
+          "positive_score_mean": 0.091000501330756,
+          "preserve_score_mean": -0.08831425122999151,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5840654373168945,
+          "file": "hw5k_4636.jpg",
+          "positive_score_mean": 0.024202371859186254,
+          "preserve_score_mean": -0.10823697986020564,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6769919395446777,
+          "file": "hw5k_4654.jpg",
+          "positive_score_mean": 0.14456873154272498,
+          "preserve_score_mean": -0.0955510699568952,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.905235767364502,
+          "file": "hw5k_4850.jpg",
+          "positive_score_mean": 0.43887068053072925,
+          "preserve_score_mean": -0.088794053122428,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7662215232849121,
+          "file": "hw5k_4885.jpg",
+          "positive_score_mean": 0.1977484531139839,
+          "preserve_score_mean": -0.10081735412977993,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8492498397827148,
+          "file": "hw5k_575.jpg",
+          "positive_score_mean": 0.56023546277633,
+          "preserve_score_mean": -0.01343286258976776,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4432687759399414,
+          "file": "hw5k_72.jpg",
+          "positive_score_mean": 0.087858009848552,
+          "preserve_score_mean": 0.09850888546274589,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9558525085449219,
+          "file": "hw5k_815.jpg",
+          "positive_score_mean": 0.28575695100296994,
+          "preserve_score_mean": -0.04594354602215556,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5602884292602539,
+          "file": "scut_411.jpg",
+          "positive_score_mean": -0.2263667365729416,
+          "preserve_score_mean": -0.2739509611301616,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6706280708312988,
+          "file": "scut_447.jpg",
+          "positive_score_mean": -0.2678248089335248,
+          "preserve_score_mean": -0.25399759450238435,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.906743049621582,
+          "file": "scut_494.jpg",
+          "positive_score_mean": -0.01234037818556106,
+          "preserve_score_mean": -0.2803476318444371,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.40252017974853516,
+          "file": "scut_542.jpg",
+          "positive_score_mean": -0.29680965650692737,
+          "preserve_score_mean": -0.31076626859171763,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.06883600323957738,
+      "preserve_score_mean": -0.10429122048644962,
+      "test_page_count": 47
+    },
+    {
+      "ablation_auc": 0.6073253784179687,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7570605114315619,
+          0.7624212566022914,
+          0.7663430628573183
+        ],
+        "feature_scale": [
+          0.18303022411435316,
+          0.16911238464603293,
+          0.17980372037553705
+        ],
+        "weights": [
+          -0.11009993377108292,
+          0.24577965175617775,
+          -0.41602684096758025,
+          -1.5543723131907377e-16
+        ]
+      },
+      "auc_margin": 0.019118006515502883,
+      "fit_page_count": 225,
+      "fold": 3,
+      "full_auc": 0.6264433849334716,
+      "full_fit": {
+        "feature_mean": [
+          0.7343753944218973,
+          0.7196662953658486,
+          0.7324608717658824,
+          0.7570605114315619,
+          0.7624212566022914,
+          0.7663430628573183
+        ],
+        "feature_scale": [
+          0.20234627808658878,
+          0.20328231886415277,
+          0.20595113440961402,
+          0.18303022411435316,
+          0.16911238464603293,
+          0.17980372037553705
+        ],
+        "weights": [
+          0.36873133793506585,
+          -0.30553514369371537,
+          0.0956750561474879,
+          -0.4813958551583014,
+          0.5488129938824166,
+          -0.510590136294224,
+          2.668101418083809e-16
+        ]
+      },
+      "page_auc_median": 0.7085630893707275,
+      "pages": [
+        {
+          "auc": 0.9020142555236816,
+          "file": "hw5k_1197.jpg",
+          "positive_score_mean": 0.32045917367756394,
+          "preserve_score_mean": -0.009931346039628808,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4144759178161621,
+          "file": "hw5k_121.jpg",
+          "positive_score_mean": 0.07015906661068966,
+          "preserve_score_mean": 0.08497984454993016,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6966938972473145,
+          "file": "hw5k_1215.jpg",
+          "positive_score_mean": 0.08009264555340492,
+          "preserve_score_mean": -0.0388385440652002,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8900532722473145,
+          "file": "hw5k_1233.jpg",
+          "positive_score_mean": 0.11043760934403947,
+          "preserve_score_mean": -0.1037161076870895,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.791844367980957,
+          "file": "hw5k_1430.jpg",
+          "positive_score_mean": 0.2344231249245173,
+          "preserve_score_mean": -0.08667672515775349,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6561393737792969,
+          "file": "hw5k_1483.jpg",
+          "positive_score_mean": 0.06493834655835948,
+          "preserve_score_mean": -0.08538999659265759,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6865811347961426,
+          "file": "hw5k_2328.jpg",
+          "positive_score_mean": 0.3400861128830282,
+          "preserve_score_mean": 0.13981865587416797,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5349154472351074,
+          "file": "hw5k_2364.jpg",
+          "positive_score_mean": 0.1965489947532584,
+          "preserve_score_mean": 0.10808264643189922,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5698857307434082,
+          "file": "hw5k_2400.jpg",
+          "positive_score_mean": 0.22093052820792763,
+          "preserve_score_mean": 0.09954442514307563,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.762413501739502,
+          "file": "hw5k_2453.jpg",
+          "positive_score_mean": 0.410230091933822,
+          "preserve_score_mean": 0.07421875242103869,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5385193824768066,
+          "file": "hw5k_246.jpg",
+          "positive_score_mean": 0.08071862558048153,
+          "preserve_score_mean": 0.06958674516184671,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5799145698547363,
+          "file": "hw5k_2507.jpg",
+          "positive_score_mean": 0.6218443608026364,
+          "preserve_score_mean": 0.5763469420288027,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7288632392883301,
+          "file": "hw5k_2525.jpg",
+          "positive_score_mean": 0.11546628911340295,
+          "preserve_score_mean": 0.019493901786729037,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7418937683105469,
+          "file": "hw5k_2614.jpg",
+          "positive_score_mean": 0.10903993042325238,
+          "preserve_score_mean": -0.060263222864933755,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.714540958404541,
+          "file": "hw5k_264.jpg",
+          "positive_score_mean": 0.19881929301126816,
+          "preserve_score_mean": 0.09525150471047081,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6020970344543457,
+          "file": "hw5k_2792.jpg",
+          "positive_score_mean": -0.015155860374019427,
+          "preserve_score_mean": -0.06741043053551384,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.742708683013916,
+          "file": "hw5k_2882.jpg",
+          "positive_score_mean": 0.051059013031291595,
+          "preserve_score_mean": -0.05981573247345974,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5287742614746094,
+          "file": "hw5k_2953.jpg",
+          "positive_score_mean": -0.01956350496939566,
+          "preserve_score_mean": -0.07767090616281261,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7518057823181152,
+          "file": "hw5k_2989.jpg",
+          "positive_score_mean": 0.00023003428549855064,
+          "preserve_score_mean": -0.09346609847247733,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5270705223083496,
+          "file": "hw5k_3097.jpg",
+          "positive_score_mean": -0.24593964112647962,
+          "preserve_score_mean": -0.18835723880167443,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7600021362304688,
+          "file": "hw5k_3150.jpg",
+          "positive_score_mean": -0.011365372336638403,
+          "preserve_score_mean": -0.1904485856755556,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5966272354125977,
+          "file": "hw5k_3261.jpg",
+          "positive_score_mean": 0.0818615857938266,
+          "preserve_score_mean": 0.019813912770184912,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6739077568054199,
+          "file": "hw5k_3279.jpg",
+          "positive_score_mean": -0.02370354159709576,
+          "preserve_score_mean": -0.13112573430662672,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7554397583007812,
+          "file": "hw5k_3297.jpg",
+          "positive_score_mean": 0.21485902988869554,
+          "preserve_score_mean": -0.13008035155877573,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7211828231811523,
+          "file": "hw5k_3331.jpg",
+          "positive_score_mean": 0.29544122488705304,
+          "preserve_score_mean": -0.06977256973530138,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7092752456665039,
+          "file": "hw5k_3421.jpg",
+          "positive_score_mean": -0.061616892069035915,
+          "preserve_score_mean": -0.1780666964844518,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6795406341552734,
+          "file": "hw5k_3475.jpg",
+          "positive_score_mean": 0.3215054589993624,
+          "preserve_score_mean": 0.14625773231554767,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7222132682800293,
+          "file": "hw5k_3510.jpg",
+          "positive_score_mean": 0.07384293137899751,
+          "preserve_score_mean": -0.14253402643461274,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.709043025970459,
+          "file": "hw5k_3528.jpg",
+          "positive_score_mean": -0.1371067359589171,
+          "preserve_score_mean": -0.2963703594606267,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.634519100189209,
+          "file": "hw5k_3546.jpg",
+          "positive_score_mean": 0.5406229117857845,
+          "preserve_score_mean": 0.4694502177526367,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5103163719177246,
+          "file": "hw5k_3779.jpg",
+          "positive_score_mean": -0.00953193482703468,
+          "preserve_score_mean": 0.02427201977122569,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6951603889465332,
+          "file": "hw5k_3867.jpg",
+          "positive_score_mean": 0.15716441198908915,
+          "preserve_score_mean": 0.02923989219363562,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6451187133789062,
+          "file": "hw5k_3885.jpg",
+          "positive_score_mean": 0.11943650171452137,
+          "preserve_score_mean": 0.031120826800033717,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.711428165435791,
+          "file": "hw5k_3975.jpg",
+          "positive_score_mean": 0.09175077210563388,
+          "preserve_score_mean": -0.13280694897048698,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7080831527709961,
+          "file": "hw5k_406.jpg",
+          "positive_score_mean": 0.13200497636964253,
+          "preserve_score_mean": 0.005296190202370185,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7064013481140137,
+          "file": "hw5k_4136.jpg",
+          "positive_score_mean": 0.0675434004672102,
+          "preserve_score_mean": -0.1483492511511869,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8298845291137695,
+          "file": "hw5k_4457.jpg",
+          "positive_score_mean": -0.11302567914389332,
+          "preserve_score_mean": -0.2063530470653953,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7482876777648926,
+          "file": "hw5k_4743.jpg",
+          "positive_score_mean": 0.08946541872901914,
+          "preserve_score_mean": -0.09973326879766292,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.726984977722168,
+          "file": "hw5k_4815.jpg",
+          "positive_score_mean": 0.08928716072925727,
+          "preserve_score_mean": -0.09224159415968905,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5509300231933594,
+          "file": "hw5k_4867.jpg",
+          "positive_score_mean": -0.06737552657231197,
+          "preserve_score_mean": -0.09680507975382774,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8027067184448242,
+          "file": "hw5k_5010.jpg",
+          "positive_score_mean": 0.3210089152538371,
+          "preserve_score_mean": -0.01799447470585413,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9033203125,
+          "file": "hw5k_708.jpg",
+          "positive_score_mean": 0.42451383804664233,
+          "preserve_score_mean": 0.0902304637692974,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.894045352935791,
+          "file": "hw5k_743.jpg",
+          "positive_score_mean": 0.7263186476476132,
+          "preserve_score_mean": 0.23817898557804718,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.821406364440918,
+          "file": "hw5k_833.jpg",
+          "positive_score_mean": -0.01894168422966837,
+          "preserve_score_mean": -0.24669774078148907,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7473831176757812,
+          "file": "hw5k_851.jpg",
+          "positive_score_mean": -0.08515622470736506,
+          "preserve_score_mean": -0.25567874566314497,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5312414169311523,
+          "file": "scut_415.jpg",
+          "positive_score_mean": -0.28489777333609834,
+          "preserve_score_mean": -0.3039496567685781,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8018951416015625,
+          "file": "scut_434.jpg",
+          "positive_score_mean": -0.08376976798905397,
+          "preserve_score_mean": -0.33527377625565963,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6136326789855957,
+          "file": "scut_473.jpg",
+          "positive_score_mean": -0.10712267932733978,
+          "preserve_score_mean": -0.11361773277835122,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4705319404602051,
+          "file": "scut_540.jpg",
+          "positive_score_mean": -0.34440801333161297,
+          "preserve_score_mean": -0.3239810150345046,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5257282257080078,
+          "file": "scut_544.jpg",
+          "positive_score_mean": -0.30899094268541494,
+          "preserve_score_mean": -0.3283312289679292,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.10068877303798507,
+      "preserve_score_mean": -0.047811291482039435,
+      "test_page_count": 50
+    },
+    {
+      "ablation_auc": 0.6447839179966874,
+      "ablation_fit": {
+        "feature_mean": [
+          0.7552267825509398,
+          0.7586726287985021,
+          0.7609432461638185
+        ],
+        "feature_scale": [
+          0.19039758773672796,
+          0.1767227189880938,
+          0.18663828557824963
+        ],
+        "weights": [
+          -0.11601826636005931,
+          0.2886763699583647,
+          -0.43571623890455896,
+          -1.189740995743629e-16
+        ]
+      },
+      "auc_margin": 0.008479103089371276,
+      "fit_page_count": 213,
+      "fold": 4,
+      "full_auc": 0.6532630210860587,
+      "full_fit": {
+        "feature_mean": [
+          0.7327211568273162,
+          0.7150146576931656,
+          0.726077996285784,
+          0.7552267825509398,
+          0.7586726287985021,
+          0.7609432461638185
+        ],
+        "feature_scale": [
+          0.20819682466138978,
+          0.2102564455191565,
+          0.2119764497471537,
+          0.19039758773672796,
+          0.1767227189880938,
+          0.18663828557824963
+        ],
+        "weights": [
+          0.4053890968401822,
+          -0.3029706247295746,
+          0.06474069605933024,
+          -0.5250438598756946,
+          0.5947419149328413,
+          -0.5050921053656474,
+          -1.5344847444660792e-16
+        ]
+      },
+      "page_auc_median": 0.6907742023468018,
+      "pages": [
+        {
+          "auc": 0.648134708404541,
+          "file": "hw5k_1143.jpg",
+          "positive_score_mean": 0.03973747586700607,
+          "preserve_score_mean": -0.06415202342930995,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8918766975402832,
+          "file": "hw5k_1179.jpg",
+          "positive_score_mean": 0.16919377816411707,
+          "preserve_score_mean": -0.06208064863758433,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.729954719543457,
+          "file": "hw5k_1304.jpg",
+          "positive_score_mean": 0.11294235550551561,
+          "preserve_score_mean": -0.05114339449190791,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.644279956817627,
+          "file": "hw5k_139.jpg",
+          "positive_score_mean": 0.12446880587986142,
+          "preserve_score_mean": 0.05934474563522972,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8031196594238281,
+          "file": "hw5k_1412.jpg",
+          "positive_score_mean": 0.20305822028799725,
+          "preserve_score_mean": -0.09571141790822235,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.674436092376709,
+          "file": "hw5k_1465.jpg",
+          "positive_score_mean": 0.11819882732087197,
+          "preserve_score_mean": -0.09619390958104737,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4952573776245117,
+          "file": "hw5k_157.jpg",
+          "positive_score_mean": 0.0834925007792933,
+          "preserve_score_mean": 0.07426061954565008,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6529769897460938,
+          "file": "hw5k_1791.jpg",
+          "positive_score_mean": 0.021736985571041586,
+          "preserve_score_mean": -0.12394330937683362,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5872845649719238,
+          "file": "hw5k_1809.jpg",
+          "positive_score_mean": -0.016334315689718635,
+          "preserve_score_mean": -0.11510965299273687,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.9019508361816406,
+          "file": "hw5k_1844.jpg",
+          "positive_score_mean": 0.3729926374978334,
+          "preserve_score_mean": -0.1086467550468664,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8203277587890625,
+          "file": "hw5k_1898.jpg",
+          "positive_score_mean": 0.34993548027312227,
+          "preserve_score_mean": -0.020442795863021897,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6780290603637695,
+          "file": "hw5k_1916.jpg",
+          "positive_score_mean": 0.035312779007542,
+          "preserve_score_mean": -0.10814941438127469,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.586280345916748,
+          "file": "hw5k_1970.jpg",
+          "positive_score_mean": 0.026314000947633184,
+          "preserve_score_mean": -0.09547626613284765,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.42419862747192383,
+          "file": "hw5k_2023.jpg",
+          "positive_score_mean": 0.0032311155491963903,
+          "preserve_score_mean": 0.004318516618533818,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7627568244934082,
+          "file": "hw5k_2148.jpg",
+          "positive_score_mean": 0.020405967942287172,
+          "preserve_score_mean": -0.06957300075885317,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5864748954772949,
+          "file": "hw5k_2274.jpg",
+          "positive_score_mean": 0.21378300069348885,
+          "preserve_score_mean": 0.12901288844602987,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5282249450683594,
+          "file": "hw5k_2436.jpg",
+          "positive_score_mean": 0.1633975485948588,
+          "preserve_score_mean": 0.12750420818051997,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.44874048233032227,
+          "file": "hw5k_2489.jpg",
+          "positive_score_mean": 0.16057403939376214,
+          "preserve_score_mean": 0.1326453601580438,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8873820304870605,
+          "file": "hw5k_2561.jpg",
+          "positive_score_mean": 0.14384950396776913,
+          "preserve_score_mean": -0.014728707505684122,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7269654273986816,
+          "file": "hw5k_2579.jpg",
+          "positive_score_mean": 0.05879079076419993,
+          "preserve_score_mean": 0.009946148956384914,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5975184440612793,
+          "file": "hw5k_2597.jpg",
+          "positive_score_mean": 0.13679702715546008,
+          "preserve_score_mean": 0.05670181213470269,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6778230667114258,
+          "file": "hw5k_2650.jpg",
+          "positive_score_mean": 0.008921937022940293,
+          "preserve_score_mean": -0.06158681996388451,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6009521484375,
+          "file": "hw5k_2668.jpg",
+          "positive_score_mean": -0.051500321661666335,
+          "preserve_score_mean": -0.07617614214823318,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6653962135314941,
+          "file": "hw5k_2722.jpg",
+          "positive_score_mean": -0.008928654011492102,
+          "preserve_score_mean": -0.07190181480465958,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6821322441101074,
+          "file": "hw5k_2828.jpg",
+          "positive_score_mean": -0.006148318056286432,
+          "preserve_score_mean": -0.06787997552992961,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8488569259643555,
+          "file": "hw5k_3007.jpg",
+          "positive_score_mean": 0.35707638981794776,
+          "preserve_score_mean": -0.10235778998794597,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6909670829772949,
+          "file": "hw5k_3043.jpg",
+          "positive_score_mean": -0.2916197816914209,
+          "preserve_score_mean": -0.3522694459251447,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6289958953857422,
+          "file": "hw5k_3243.jpg",
+          "positive_score_mean": 0.06963922949246434,
+          "preserve_score_mean": -0.026104223521795613,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.699772834777832,
+          "file": "hw5k_3349.jpg",
+          "positive_score_mean": 0.05112129429955166,
+          "preserve_score_mean": -0.14793031280796934,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.691650390625,
+          "file": "hw5k_3367.jpg",
+          "positive_score_mean": 0.07368743180398124,
+          "preserve_score_mean": -0.13133016735997385,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6640362739562988,
+          "file": "hw5k_3403.jpg",
+          "positive_score_mean": -0.10567260476285548,
+          "preserve_score_mean": -0.20044557589547057,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6522946357727051,
+          "file": "hw5k_3439.jpg",
+          "positive_score_mean": -0.03713668315876237,
+          "preserve_score_mean": -0.14408730486269145,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7025699615478516,
+          "file": "hw5k_3654.jpg",
+          "positive_score_mean": -0.2158762141746944,
+          "preserve_score_mean": -0.4235531372543873,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7241663932800293,
+          "file": "hw5k_3689.jpg",
+          "positive_score_mean": -0.286257217276731,
+          "preserve_score_mean": -0.3679229093236692,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7127947807312012,
+          "file": "hw5k_3815.jpg",
+          "positive_score_mean": -0.16899702173128428,
+          "preserve_score_mean": -0.23626145444419006,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7060718536376953,
+          "file": "hw5k_3903.jpg",
+          "positive_score_mean": 0.022656264608099164,
+          "preserve_score_mean": -0.13233711605580903,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7720494270324707,
+          "file": "hw5k_3957.jpg",
+          "positive_score_mean": 0.420810388354278,
+          "preserve_score_mean": -0.04878642899378095,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7016944885253906,
+          "file": "hw5k_4046.jpg",
+          "positive_score_mean": -0.04280789182980564,
+          "preserve_score_mean": -0.17119989328131885,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6673059463500977,
+          "file": "hw5k_4064.jpg",
+          "positive_score_mean": 0.0023459685893228418,
+          "preserve_score_mean": -0.1422437241701197,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7328653335571289,
+          "file": "hw5k_4207.jpg",
+          "positive_score_mean": -0.006569913426067279,
+          "preserve_score_mean": -0.08516413248727761,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.4358396530151367,
+          "file": "hw5k_424.jpg",
+          "positive_score_mean": 0.13424328478815278,
+          "preserve_score_mean": 0.14236067563787072,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7987747192382812,
+          "file": "hw5k_4297.jpg",
+          "positive_score_mean": -0.08991800776045002,
+          "preserve_score_mean": -0.20723864253865237,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8834142684936523,
+          "file": "hw5k_4367.jpg",
+          "positive_score_mean": -0.07778711743599057,
+          "preserve_score_mean": -0.21388041053610618,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8145022392272949,
+          "file": "hw5k_4403.jpg",
+          "positive_score_mean": -0.10888633769271448,
+          "preserve_score_mean": -0.214740180814242,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8018889427185059,
+          "file": "hw5k_4475.jpg",
+          "positive_score_mean": -0.10701992967518179,
+          "preserve_score_mean": -0.20729577653568332,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6073441505432129,
+          "file": "hw5k_4510.jpg",
+          "positive_score_mean": -0.004641483263930789,
+          "preserve_score_mean": -0.09756519606451475,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5964450836181641,
+          "file": "hw5k_4582.jpg",
+          "positive_score_mean": -0.05289592310654298,
+          "preserve_score_mean": -0.09494535863234432,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6677026748657227,
+          "file": "hw5k_4600.jpg",
+          "positive_score_mean": -0.0027178393238560007,
+          "preserve_score_mean": -0.10535197717629238,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7811155319213867,
+          "file": "hw5k_4707.jpg",
+          "positive_score_mean": 0.11150027479094471,
+          "preserve_score_mean": -0.1047454474038484,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6905813217163086,
+          "file": "hw5k_4833.jpg",
+          "positive_score_mean": 0.12710742146927825,
+          "preserve_score_mean": -0.10001709466365502,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5734314918518066,
+          "file": "hw5k_4939.jpg",
+          "positive_score_mean": -5.613891397783581e-05,
+          "preserve_score_mean": -0.02989155059951361,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8035726547241211,
+          "file": "hw5k_4975.jpg",
+          "positive_score_mean": 0.3332448191699583,
+          "preserve_score_mean": -0.024987807694717916,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5478143692016602,
+          "file": "hw5k_4993.jpg",
+          "positive_score_mean": -0.0008927762972381556,
+          "preserve_score_mean": -0.03277566438039537,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.6688318252563477,
+          "file": "hw5k_5046.jpg",
+          "positive_score_mean": 0.2510528012323726,
+          "preserve_score_mean": 0.006508857990454689,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5677814483642578,
+          "file": "hw5k_5118.jpg",
+          "positive_score_mean": 0.036604659474025567,
+          "preserve_score_mean": -0.01696728093181778,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8409090042114258,
+          "file": "hw5k_521.jpg",
+          "positive_score_mean": 0.6278779299733186,
+          "preserve_score_mean": -0.05690056155785496,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.7663826942443848,
+          "file": "hw5k_629.jpg",
+          "positive_score_mean": 0.4218500681632293,
+          "preserve_score_mean": 0.01961507972396006,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8108110427856445,
+          "file": "hw5k_869.jpg",
+          "positive_score_mean": -0.18105124121502375,
+          "preserve_score_mean": -0.30713821340569003,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.5692191123962402,
+          "file": "hw5k_93.jpg",
+          "positive_score_mean": 0.1266120627995144,
+          "preserve_score_mean": 0.06139806557468905,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8313465118408203,
+          "file": "scut_433.jpg",
+          "positive_score_mean": -0.06965555632820217,
+          "preserve_score_mean": -0.30659769874297327,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8469820022583008,
+          "file": "scut_437.jpg",
+          "positive_score_mean": -0.09829844113223393,
+          "preserve_score_mean": -0.3033922480776016,
+          "samples_per_class": 1024
+        },
+        {
+          "auc": 0.8615565299987793,
+          "file": "scut_518.jpg",
+          "positive_score_mean": -0.022724730374666283,
+          "preserve_score_mean": -0.2698550407684602,
+          "samples_per_class": 1024
+        }
+      ],
+      "positive_score_mean": 0.059357590435829735,
+      "preserve_score_mean": -0.09492836833623768,
+      "test_page_count": 62
+    }
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "ledger_path": "docs/current-primary-quality-loop-ledger.json",
+  "next_boundary": "close_exact_source_output_support_diagnostic",
+  "page_samples": [
+    {
+      "file": "hw5k_1011.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1314626,
+      "preserve_pixel_count": 2872858,
+      "sample_sha256": "a1c748a4bf3f3b986e3cd398cd66f9d9972f4fb0776260c562e4a4f556a61fce",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1029.jpg",
+      "fold": 0,
+      "positive_pixel_count": 627357,
+      "preserve_pixel_count": 3560127,
+      "sample_sha256": "b024a868f0ce984da98c94a03d9b800b3c098e7060535e3e0fb01223164e6640",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1046.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1432088,
+      "preserve_pixel_count": 2755396,
+      "sample_sha256": "181109462711098ef273ff0534fba4cbc163b6cec715ed212d8c20d88a5addc9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1125.jpg",
+      "fold": 1,
+      "positive_pixel_count": 820909,
+      "preserve_pixel_count": 3366575,
+      "sample_sha256": "073de7d71aa702969ecf89ab34a465dea29b77fa260c5e0f554f9cce7ef1a670",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1143.jpg",
+      "fold": 4,
+      "positive_pixel_count": 590174,
+      "preserve_pixel_count": 3597310,
+      "sample_sha256": "a13a5ede9bde93fbd94aede345808c3de8a856aa4a723b7491fb1add3cc64af2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1161.jpg",
+      "fold": 2,
+      "positive_pixel_count": 522645,
+      "preserve_pixel_count": 3664839,
+      "sample_sha256": "eda6a3241c417afaa5ac2da96302f73b4b3c0f9ed05fdbdcb9b64d1a9e42e883",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1179.jpg",
+      "fold": 4,
+      "positive_pixel_count": 596991,
+      "preserve_pixel_count": 3590493,
+      "sample_sha256": "adaa06efdce73a8baaab6a06c3cb60407b307e1640765442775f3a18df182b19",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1197.jpg",
+      "fold": 3,
+      "positive_pixel_count": 432080,
+      "preserve_pixel_count": 3755404,
+      "sample_sha256": "21dba72cf32029b5392e9ff12b55242587ac8d7accc4d55f1251a829a258b320",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_121.jpg",
+      "fold": 3,
+      "positive_pixel_count": 3532359,
+      "preserve_pixel_count": 3133095,
+      "sample_sha256": "4a58dcfab9cdf9de5577c5e0af20f961993c2ae542d709ff5fa18054781bfb68",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1215.jpg",
+      "fold": 3,
+      "positive_pixel_count": 390985,
+      "preserve_pixel_count": 3796499,
+      "sample_sha256": "4104138581a7f016f6ebf8f13926a7f38c520c7d7f30ef1480b11ea3badc80de",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1233.jpg",
+      "fold": 3,
+      "positive_pixel_count": 705526,
+      "preserve_pixel_count": 3481958,
+      "sample_sha256": "ce8d903c74986d3ed6fcd0f351385cdd30e22f77b12b9e93359cfee02dd229a5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1251.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1144421,
+      "preserve_pixel_count": 3043063,
+      "sample_sha256": "bed4c265a36915c018c01ad4c8574f25c99d17589ba0344914340f43e4e07b2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1269.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1726515,
+      "preserve_pixel_count": 2460969,
+      "sample_sha256": "e9622c31ea1cf1f799b722dab2353da61e315b8118215f6927e0a478ea90b3a4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1286.jpg",
+      "fold": 0,
+      "positive_pixel_count": 633065,
+      "preserve_pixel_count": 3554419,
+      "sample_sha256": "cf8f55a9a8c853e8f3bb742af12acdf428be5959889294d067f4ee682d5e2e0e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1304.jpg",
+      "fold": 4,
+      "positive_pixel_count": 664713,
+      "preserve_pixel_count": 3400348,
+      "sample_sha256": "23433e43321ec8483c4ee032ea19e219c7f5f5de26eb1146285201cb388d2552",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1322.jpg",
+      "fold": 1,
+      "positive_pixel_count": 427930,
+      "preserve_pixel_count": 3637131,
+      "sample_sha256": "6e0ddff5c11ca961468b36481a04af29a4db8ff62cef542ad9ceb42331772d4a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1340.jpg",
+      "fold": 0,
+      "positive_pixel_count": 208490,
+      "preserve_pixel_count": 3856571,
+      "sample_sha256": "5e9d018076a66265b9317812d541c6175327dd6b8c7abf7f5358383acbffaaa4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1358.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1068289,
+      "preserve_pixel_count": 2996772,
+      "sample_sha256": "0e7807d8537643d774a1e08719d0d106eab4f01a326b6c5b5ec7a80c1fd16f36",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1376.jpg",
+      "fold": 2,
+      "positive_pixel_count": 930668,
+      "preserve_pixel_count": 5665108,
+      "sample_sha256": "a0aeaaac4151350df323b0fd47b5c5d9810821535fa16a509b3dbd0cef20c84e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_139.jpg",
+      "fold": 4,
+      "positive_pixel_count": 702708,
+      "preserve_pixel_count": 5962746,
+      "sample_sha256": "c9c83beff0fc53c1abe213d482a84c7b0836b0130510de71062848d5aafd3a03",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1394.jpg",
+      "fold": 2,
+      "positive_pixel_count": 693930,
+      "preserve_pixel_count": 5901846,
+      "sample_sha256": "6b9e36c223f7a63e7733b3d60e473f6db0e878afb1d0799dd334668dd15262c9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1412.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1284288,
+      "preserve_pixel_count": 5311488,
+      "sample_sha256": "d11b224df2f6456618ead838a1ddba654110c57bc0e9fda84400af3f4ca9011e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1430.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1487550,
+      "preserve_pixel_count": 5108226,
+      "sample_sha256": "e2c28f5dbe4bc1f925a43561a2a3322a745e782516a0c3b75b52454257255c5c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1447.jpg",
+      "fold": 0,
+      "positive_pixel_count": 555250,
+      "preserve_pixel_count": 6040526,
+      "sample_sha256": "749a296bdb8bf15f7d8bf4c41af7f951c18b740a84b86632021c0e2a0da94f18",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1465.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1280253,
+      "preserve_pixel_count": 5315523,
+      "sample_sha256": "1044c8773c84ad9ef6e6fa6300e55e1cf77ddc670f01533ca88b1a2b103784ba",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1483.jpg",
+      "fold": 3,
+      "positive_pixel_count": 888620,
+      "preserve_pixel_count": 5707156,
+      "sample_sha256": "73447ee290bc53347a7067d4ba732f2cdb767f5767c6560aab43fd09c5a3d9d3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1501.jpg",
+      "fold": 1,
+      "positive_pixel_count": 502366,
+      "preserve_pixel_count": 6034749,
+      "sample_sha256": "f7d709103ae36b84e0fd70ab35b3792a9e6babe22258eace2921763c2bc92e33",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1519.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1773069,
+      "preserve_pixel_count": 4764046,
+      "sample_sha256": "6da162565191ab6d259d6de8a0af591f90a33905f28fd9f189e308a6e2b755d0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1537.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1888360,
+      "preserve_pixel_count": 4648755,
+      "sample_sha256": "98c14409cd78d419a120e77ee4d393216abb0353e65244b3d5e5c97a7cbfb69e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_157.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1109151,
+      "preserve_pixel_count": 5556303,
+      "sample_sha256": "de5a12b45801c960a5b5db024bad77392441b42416e285c68ca7053409a41410",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1612.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1140932,
+      "preserve_pixel_count": 5396183,
+      "sample_sha256": "d8b23b879b07dd94d8cf9f8fac05b444f64ce9d58579255f17fefd9e9dd31c63",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1630.jpg",
+      "fold": 1,
+      "positive_pixel_count": 654280,
+      "preserve_pixel_count": 5882835,
+      "sample_sha256": "d9b30fcdca0a8c1d649325d4b4e60a2f2e4e4b275fb685252b6ef8c33d60fce4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1648.jpg",
+      "fold": 1,
+      "positive_pixel_count": 391335,
+      "preserve_pixel_count": 6145780,
+      "sample_sha256": "f8fe59b36957a801b5e08d8c6e247b6dd9a370e8a1cf3246f337464c4f9749d4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1665.jpg",
+      "fold": 1,
+      "positive_pixel_count": 226654,
+      "preserve_pixel_count": 6310461,
+      "sample_sha256": "9e3782af49a082a991725a7d46a08e8a9ff716228dd05c248a92b35d207c452f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1683.jpg",
+      "fold": 2,
+      "positive_pixel_count": 382576,
+      "preserve_pixel_count": 6154539,
+      "sample_sha256": "01165d5790ecd8b423c44a7731f6121efb23dddf9c79d323e2ae1ca1302b6ec0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1701.jpg",
+      "fold": 1,
+      "positive_pixel_count": 625062,
+      "preserve_pixel_count": 5912053,
+      "sample_sha256": "cf1f14d71ef08d4ede2cf32618c9a14a0fbcaa7f4f846191fec67f3e66bb587b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1719.jpg",
+      "fold": 1,
+      "positive_pixel_count": 662569,
+      "preserve_pixel_count": 5874546,
+      "sample_sha256": "c0f50538a061161c2b344a06446a8eecb268806e10e8c18679508e0d621d3167",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1737.jpg",
+      "fold": 2,
+      "positive_pixel_count": 517829,
+      "preserve_pixel_count": 6019286,
+      "sample_sha256": "5b8971981c73f173008d27cedf1db33d19495184528b298f9647b224b8022aa6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_175.jpg",
+      "fold": 1,
+      "positive_pixel_count": 637573,
+      "preserve_pixel_count": 6027881,
+      "sample_sha256": "06278f49f67c55d98ff6267e04d42b2fcaf55a5cf0ae552942ab26a84a09a4fa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1755.jpg",
+      "fold": 2,
+      "positive_pixel_count": 640449,
+      "preserve_pixel_count": 5896666,
+      "sample_sha256": "89f8b4a5d48af76125621d52e1a1a5a8df14da45d6692b4538c3b8a4d5ff37d5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1773.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1126610,
+      "preserve_pixel_count": 5410505,
+      "sample_sha256": "af2bf1ae690dbfed62feeb56f2210cf4fc2ef9f8264ddbd1be4f79ae9ec6fb2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1791.jpg",
+      "fold": 4,
+      "positive_pixel_count": 603901,
+      "preserve_pixel_count": 5933214,
+      "sample_sha256": "294adafc35d8cbc34633a8e1e20d1b9e906d06aac7ad4821173f246f8ad44dee",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1809.jpg",
+      "fold": 4,
+      "positive_pixel_count": 444545,
+      "preserve_pixel_count": 6092570,
+      "sample_sha256": "1e009e4222885acf520c8972c0faa8e5a688b8c6e6a1818f785259be29ae3913",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1827.jpg",
+      "fold": 0,
+      "positive_pixel_count": 355012,
+      "preserve_pixel_count": 6182103,
+      "sample_sha256": "b48f330da3384e1f0b5ab3ef1de5b4434c7218c1ec03141c1511b8d40e58f9d8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1844.jpg",
+      "fold": 4,
+      "positive_pixel_count": 933635,
+      "preserve_pixel_count": 5603480,
+      "sample_sha256": "87f1acec65981594977d210e1e66f45263c7471e20830b0645a7a1cd8351172f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1862.jpg",
+      "fold": 2,
+      "positive_pixel_count": 526949,
+      "preserve_pixel_count": 6010166,
+      "sample_sha256": "129b5d78123ee40081bf6ac83cb6b723e381910e34ec811fd22850b9cfc5f212",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1880.jpg",
+      "fold": 1,
+      "positive_pixel_count": 880123,
+      "preserve_pixel_count": 5656992,
+      "sample_sha256": "fc95d012ea01f4ca5b212ad6315db7b0107746940cd393318f9d54603417c5ef",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1898.jpg",
+      "fold": 4,
+      "positive_pixel_count": 945172,
+      "preserve_pixel_count": 5591943,
+      "sample_sha256": "87de29b2d9161180784d672f5437870aebcceeb380e4cd3d6859a3bf6e328a75",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1916.jpg",
+      "fold": 4,
+      "positive_pixel_count": 337526,
+      "preserve_pixel_count": 6199589,
+      "sample_sha256": "002cbe5858f2bee625695c1ff9138440fba1b4a174436084180afe2078407d47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_193.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1523401,
+      "preserve_pixel_count": 5142053,
+      "sample_sha256": "4a26de61f604df5568a18eb5265d8b76ed502b8db81bb7f9dfb86462cb913936",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1934.jpg",
+      "fold": 2,
+      "positive_pixel_count": 929011,
+      "preserve_pixel_count": 5608104,
+      "sample_sha256": "125f17b84e369673236d17a08fdeb07e6ad001030a1c24216d4e5fd527b59942",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1952.jpg",
+      "fold": 1,
+      "positive_pixel_count": 556674,
+      "preserve_pixel_count": 5980441,
+      "sample_sha256": "a64de6450f923e3f2bb09ff3c9caafaa72f9f66dc6b50bd8d089a6bfc02a66a5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1970.jpg",
+      "fold": 4,
+      "positive_pixel_count": 516589,
+      "preserve_pixel_count": 6020526,
+      "sample_sha256": "693771d9ad1c823b53d884f3025e2d0c3ac9bf7689d597bfa5d13ec17f5c7117",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_1988.jpg",
+      "fold": 2,
+      "positive_pixel_count": 618474,
+      "preserve_pixel_count": 5918641,
+      "sample_sha256": "a4f87faa94142116c06651155d77b9e3cb55ccef3e95dd7efa29fb555017cec7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2005.jpg",
+      "fold": 0,
+      "positive_pixel_count": 976395,
+      "preserve_pixel_count": 3343305,
+      "sample_sha256": "c24bfd81184120c7a8a4715006456c2256c871dba30cb21d68649df7015d3dd6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2023.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1399071,
+      "preserve_pixel_count": 2920629,
+      "sample_sha256": "ccb300c26c788511b6f9ccf8c3711cda48744f766c615210e1078b2541fa3194",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2041.jpg",
+      "fold": 0,
+      "positive_pixel_count": 955832,
+      "preserve_pixel_count": 3363868,
+      "sample_sha256": "6027774865ec44a9bfd2ce77101b97f91cac9dcbf705f118b80e0b0528f92ede",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_211.jpg",
+      "fold": 1,
+      "positive_pixel_count": 602934,
+      "preserve_pixel_count": 6062520,
+      "sample_sha256": "97c466f50f0f35905ad01ce73cbd2f368c690643fadc6c501edb681e848408b7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2130.jpg",
+      "fold": 0,
+      "positive_pixel_count": 840413,
+      "preserve_pixel_count": 1915837,
+      "sample_sha256": "8f9c522d23dd8b0953c8308d7f6bb8b2a3c96005535eb4d97a86d471d0106c2f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2148.jpg",
+      "fold": 4,
+      "positive_pixel_count": 711971,
+      "preserve_pixel_count": 2044279,
+      "sample_sha256": "010c45407730b74703235114592ae85b8db3263bc3853b8377132d67e315ffe6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2166.jpg",
+      "fold": 2,
+      "positive_pixel_count": 859300,
+      "preserve_pixel_count": 1896950,
+      "sample_sha256": "def8c4e4985c134b14ff7135a765c7ec5ff53bcb2dcfdaf354eb13d20feaee61",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2222.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1203905,
+      "preserve_pixel_count": 3106239,
+      "sample_sha256": "169446aaff236983268f22489fd9d513ac09f45aec0da311c6bb63e2f284ef82",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2239.jpg",
+      "fold": 2,
+      "positive_pixel_count": 580320,
+      "preserve_pixel_count": 3998090,
+      "sample_sha256": "d7cc49e2fb34ce39612158d0cc04b4164f93fc75e71f976da2119acfde396ac5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2257.jpg",
+      "fold": 1,
+      "positive_pixel_count": 563082,
+      "preserve_pixel_count": 4015328,
+      "sample_sha256": "98f74a50554e6868fb5e2c29cda11ce2e7748500123aa88b8803a85aaac6b79c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2274.jpg",
+      "fold": 4,
+      "positive_pixel_count": 980333,
+      "preserve_pixel_count": 3598077,
+      "sample_sha256": "1a12a5c50782302121afdeec1ace3f6e3d76c9e1d41ff38751ea7fcac0d27065",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_229.jpg",
+      "fold": 1,
+      "positive_pixel_count": 739511,
+      "preserve_pixel_count": 5925943,
+      "sample_sha256": "616acc1807e61d75568e38ecb4e7b958f49b7bbc7abdc306169229cdb665bce8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2292.jpg",
+      "fold": 1,
+      "positive_pixel_count": 752236,
+      "preserve_pixel_count": 3826174,
+      "sample_sha256": "31a36d440ee1ea9b108fe81d53834db94d6d3776749c8675becc3c741d8bfff7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2310.jpg",
+      "fold": 0,
+      "positive_pixel_count": 513480,
+      "preserve_pixel_count": 4064930,
+      "sample_sha256": "50d29896ad6ed8535c0c4ea84d0a7589723ad02ce836a72f1e47bfbaa8728dfd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2328.jpg",
+      "fold": 3,
+      "positive_pixel_count": 814535,
+      "preserve_pixel_count": 3763875,
+      "sample_sha256": "0e1bede53a843f9adb8711c979b719d7f2e38930a4d1274eecf452122f646439",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2346.jpg",
+      "fold": 1,
+      "positive_pixel_count": 790621,
+      "preserve_pixel_count": 3787789,
+      "sample_sha256": "a743c953f9421a751791ea2aedfe1cb0bd941519757317a228deac3216aa2cc7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2364.jpg",
+      "fold": 3,
+      "positive_pixel_count": 968006,
+      "preserve_pixel_count": 3610404,
+      "sample_sha256": "da2a74a6c5e9d9a76b44417604160f24a7c82da7bd8c6cc49469deb17643833b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2382.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1047746,
+      "preserve_pixel_count": 3530664,
+      "sample_sha256": "36a13d19a718141c6fde9e0e878e6a898fca8eb9afb66df9959ea9d4d94fc3b9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2400.jpg",
+      "fold": 3,
+      "positive_pixel_count": 958254,
+      "preserve_pixel_count": 3620156,
+      "sample_sha256": "99cc87b5321509653562d225da9797418901c0dcdbae397901ce28df7fd65553",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2418.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1315761,
+      "preserve_pixel_count": 3262649,
+      "sample_sha256": "3b5a16de2d255dd282aedb583ec240536f633238bb56da3ca222d8a3e2d17ad2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2436.jpg",
+      "fold": 4,
+      "positive_pixel_count": 607378,
+      "preserve_pixel_count": 3610287,
+      "sample_sha256": "af5160f1f1ee664a26fd794cdcc1c500d5886d88a2ad376ca44a9b3e4316e658",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2453.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1585060,
+      "preserve_pixel_count": 2993350,
+      "sample_sha256": "0cbb0326462700459c868c6c1729a57639a79f6ec143aa015deb8ca24a7400f6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_246.jpg",
+      "fold": 3,
+      "positive_pixel_count": 388314,
+      "preserve_pixel_count": 6277140,
+      "sample_sha256": "b3f7afbda2a46d5cdfd48b6d82982b255ffb523e339dfa32164c347a3dc831aa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2471.jpg",
+      "fold": 1,
+      "positive_pixel_count": 725341,
+      "preserve_pixel_count": 3689879,
+      "sample_sha256": "606c22a0b66364beecc81d4bdd0c488b076c5fa8a7a7b295eb73583418fa2d3d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2489.jpg",
+      "fold": 4,
+      "positive_pixel_count": 497323,
+      "preserve_pixel_count": 3720342,
+      "sample_sha256": "22a5448ecfce99af4b1330653c10ba3570007f1679c3c96a98305fff5542e573",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2507.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1421785,
+      "preserve_pixel_count": 3407855,
+      "sample_sha256": "1f729df5203a9ed6ad90981eed6800df831a739a476bccec945b1f0fc1e404ea",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2525.jpg",
+      "fold": 3,
+      "positive_pixel_count": 766879,
+      "preserve_pixel_count": 3722843,
+      "sample_sha256": "09c2129d4e23385b95e9279802f282835f55118715d6bfdffaa442c620929a92",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2543.jpg",
+      "fold": 1,
+      "positive_pixel_count": 879160,
+      "preserve_pixel_count": 3610562,
+      "sample_sha256": "98f563304f50ae6b5106401079d78fce111284548ce54b5103242a542ad048c2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2561.jpg",
+      "fold": 4,
+      "positive_pixel_count": 795542,
+      "preserve_pixel_count": 3694180,
+      "sample_sha256": "3f732e2b3064daa9286afbe88aa32d7dc9965e72b9b18ad1aa9e6f00cf1924f3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2579.jpg",
+      "fold": 4,
+      "positive_pixel_count": 781145,
+      "preserve_pixel_count": 3708577,
+      "sample_sha256": "880144383949b089b74e7a685b127c72dcf62b2c3069388b86bef3168f4c9801",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2597.jpg",
+      "fold": 4,
+      "positive_pixel_count": 2001462,
+      "preserve_pixel_count": 2488260,
+      "sample_sha256": "b3597f202fb2fc213959a10fd4eb73d2d981dbc458143a2c4dc6b33c6e1d7901",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2614.jpg",
+      "fold": 3,
+      "positive_pixel_count": 732609,
+      "preserve_pixel_count": 4260213,
+      "sample_sha256": "5b32861c5dfab9211da4bed61708e1e4788557fec742301eb9a800aef1af2144",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2632.jpg",
+      "fold": 2,
+      "positive_pixel_count": 683154,
+      "preserve_pixel_count": 3624336,
+      "sample_sha256": "adc114140526fb55aba2f772aa512026eacc50efd52d9aa0f0f83a5029f20106",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_264.jpg",
+      "fold": 3,
+      "positive_pixel_count": 608125,
+      "preserve_pixel_count": 6057329,
+      "sample_sha256": "9dbd23d7e74b194357b87f0429e3bfcc6f49f61cd299800095aa04b9381b295c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2650.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1084724,
+      "preserve_pixel_count": 3222766,
+      "sample_sha256": "c98455f2bcf4aa796c9e351e588aa0a1062f0e45a87392590bcc49cab459b5d7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2668.jpg",
+      "fold": 4,
+      "positive_pixel_count": 255875,
+      "preserve_pixel_count": 4051615,
+      "sample_sha256": "7509758963f902ea2030d3ba999694db7efbb8499bb33a3eda3cf83ea12960a0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2686.jpg",
+      "fold": 2,
+      "positive_pixel_count": 652305,
+      "preserve_pixel_count": 3655185,
+      "sample_sha256": "8da47dff4b983648890e4da55909da555b1155176b6105a4a822eab21d871d19",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2704.jpg",
+      "fold": 0,
+      "positive_pixel_count": 530058,
+      "preserve_pixel_count": 3777432,
+      "sample_sha256": "27707284b086fd47c7f62deff6eb9ec3272a1f6b6d67b03edd02a2f396ab9a52",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2722.jpg",
+      "fold": 4,
+      "positive_pixel_count": 911735,
+      "preserve_pixel_count": 3395755,
+      "sample_sha256": "b53025924f6299e5e19d52dc88dcb17b4a240e2c8d637c8b898a050a46ed7544",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2740.jpg",
+      "fold": 1,
+      "positive_pixel_count": 533843,
+      "preserve_pixel_count": 3773647,
+      "sample_sha256": "532583d8f5d4f9d4c5046eb45a7485ca53a462b2a49513e45b9f51fabff100c2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2757.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1061259,
+      "preserve_pixel_count": 3246231,
+      "sample_sha256": "16137b209b0ad40c5c506b3da26fb32dacd854679b346ac2d5a933b14c4dcba7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2774.jpg",
+      "fold": 0,
+      "positive_pixel_count": 819791,
+      "preserve_pixel_count": 3487699,
+      "sample_sha256": "c80864f85a4084411f9ea65c86dde06ff8c07e9d0d555a596fd9255024cf2c03",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2792.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1620094,
+      "preserve_pixel_count": 2687396,
+      "sample_sha256": "ba4ce6a939abc822eae805db03ca5e37fa38fbc79d95a874247aaeaa5212a8bd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2810.jpg",
+      "fold": 2,
+      "positive_pixel_count": 674036,
+      "preserve_pixel_count": 3633454,
+      "sample_sha256": "1d64f813035b67891db6d63af39efceeefda65bbbf4402724c46fa4181a7041e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_282.jpg",
+      "fold": 0,
+      "positive_pixel_count": 254861,
+      "preserve_pixel_count": 4071089,
+      "sample_sha256": "f327a1a26aa91146d46b7ef0fa2a2355605f8ca35f1f5a3f94ad94321e8813bc",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2828.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1541758,
+      "preserve_pixel_count": 2765732,
+      "sample_sha256": "b8e41bf3754734bd7cb651e9383e8652789cef748616bceaecbefdb2a406796f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2846.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1183949,
+      "preserve_pixel_count": 3123541,
+      "sample_sha256": "a10c0e667ff9c08d346c3a9937e9a37b4ec1fbbd4d3ee290ef52755b8ccb8b7a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2864.jpg",
+      "fold": 0,
+      "positive_pixel_count": 784482,
+      "preserve_pixel_count": 3523008,
+      "sample_sha256": "5a953720929698dc821032df3b309bfd23f3cfa671a778a21df7e56e01e881cd",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2882.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1202800,
+      "preserve_pixel_count": 3104690,
+      "sample_sha256": "5e8b0ec484dade69b8d112881f3faf769e36f3c64907f1c371ac61d9c29f4855",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2900.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1015896,
+      "preserve_pixel_count": 3291594,
+      "sample_sha256": "fc7813b6c7bf95b638f41795491ec6e90b255e191bace201821ba6437c98dfaa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2918.jpg",
+      "fold": 2,
+      "positive_pixel_count": 645560,
+      "preserve_pixel_count": 3661930,
+      "sample_sha256": "ca28d827d99895593df5bf325a89d37ffc516d89673c2d76102e86ea9dfd9d32",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2936.jpg",
+      "fold": 0,
+      "positive_pixel_count": 279676,
+      "preserve_pixel_count": 4027814,
+      "sample_sha256": "ba96b98e8a35f33b2fccf2ea80b33c6ee85c4759a0f040caf96152b8769c1dd9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2953.jpg",
+      "fold": 3,
+      "positive_pixel_count": 259815,
+      "preserve_pixel_count": 4047675,
+      "sample_sha256": "d8ab6fd26f244a6f5642f790a1acee2832cc901b54a97f874a3af222080e1f77",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2971.jpg",
+      "fold": 1,
+      "positive_pixel_count": 971578,
+      "preserve_pixel_count": 3335912,
+      "sample_sha256": "67f9b4e46963c07176e561eb0e9ec2a4cc6066c26b30798719f0f87e21740bf2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_2989.jpg",
+      "fold": 3,
+      "positive_pixel_count": 585990,
+      "preserve_pixel_count": 3721500,
+      "sample_sha256": "edc8b8db17dd8562179e32eaf5efd6b7e8c77c4b0913e47daa5e20c1b35ae0e3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_300.jpg",
+      "fold": 0,
+      "positive_pixel_count": 348246,
+      "preserve_pixel_count": 4181229,
+      "sample_sha256": "08a49df0d4ffbd9356a830956e606e49b16d6921080946d7cd524cf39e77fe2e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3007.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1307562,
+      "preserve_pixel_count": 4479431,
+      "sample_sha256": "32425d2258bb7affd3af2a5f6082386cd07b845fe9993433aa8037ea777b671d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3025.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1147121,
+      "preserve_pixel_count": 4067956,
+      "sample_sha256": "15dc9a48af49c93d1b735d2da504b8487ea7b9fbe8c477f5dc0ec823b484002b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3043.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1106147,
+      "preserve_pixel_count": 4525843,
+      "sample_sha256": "965fac56596de1c8511e66cf874c03b4e150de21b9ed4db4a738f533988ccc6e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3061.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1110627,
+      "preserve_pixel_count": 4521363,
+      "sample_sha256": "cfe1e071b9f675b471cc7385b38eee66ae502ea80d4dc97911a5465a205812ab",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3079.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1706817,
+      "preserve_pixel_count": 3925173,
+      "sample_sha256": "a179d112e44be807dcdf8d83ec54fe3954a5188739277aeae1afb322c0e29bec",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3097.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1161796,
+      "preserve_pixel_count": 4470194,
+      "sample_sha256": "ff061c2f700a9237c217ead5dc3c8e8774c08e49b5272599fdd0040a0520d752",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3114.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1172642,
+      "preserve_pixel_count": 4459348,
+      "sample_sha256": "9a6ebb857c92095d86e115f5cf40394be73a0ff8397292acdd69dea74a1f576e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3132.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1171345,
+      "preserve_pixel_count": 4460645,
+      "sample_sha256": "fbb070af3fb08e2d703a36916d6f664ab61852dc368a8d12d7911897c36004b9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3150.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1559291,
+      "preserve_pixel_count": 5316250,
+      "sample_sha256": "b11814efc063255749a27c73150f266d363046b97c052be621ae670926fae57d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_318.jpg",
+      "fold": 2,
+      "positive_pixel_count": 2031062,
+      "preserve_pixel_count": 2590898,
+      "sample_sha256": "c8cd4c7570593ba0e02548df9c5ef662f1be2a9bf6d22381cc3ee642eac73b67",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3225.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1030981,
+      "preserve_pixel_count": 6736428,
+      "sample_sha256": "31e32d30a57878c6f238e74344a5d1d20ae40cce1f0baa9084347831ee105ec5",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3243.jpg",
+      "fold": 4,
+      "positive_pixel_count": 676932,
+      "preserve_pixel_count": 3725634,
+      "sample_sha256": "3f229d1c9451684c349f25dbc6aa7bc9642e73eed48b81c2ec3b0d3ec330fe67",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3261.jpg",
+      "fold": 3,
+      "positive_pixel_count": 791780,
+      "preserve_pixel_count": 3610786,
+      "sample_sha256": "2c7c6a3b3b169c2ca0b9af15b3f3c2d13c3b3e1d2219e389f9b6f8ceb5eb407f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3279.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1176397,
+      "preserve_pixel_count": 3226169,
+      "sample_sha256": "763325b6d86dabe4eeaea93f833c7c1fc26d5d4adf23871d3b495e52818eed7e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3297.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1737700,
+      "preserve_pixel_count": 2664866,
+      "sample_sha256": "25c4c66da1de3df93c51147fcbfa941e6813d190d67f625cda9beeaa3daf862f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3315.jpg",
+      "fold": 0,
+      "positive_pixel_count": 813255,
+      "preserve_pixel_count": 3589311,
+      "sample_sha256": "59461142777b689b8f235cd2615883f92eedac0f0db64ea3bf6ac3ab87427dd4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3331.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1763629,
+      "preserve_pixel_count": 2638937,
+      "sample_sha256": "15010a94988e173e75ff091062bb9c257ebad891f12e46c8c572d628d0b44da6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3349.jpg",
+      "fold": 4,
+      "positive_pixel_count": 618510,
+      "preserve_pixel_count": 3784056,
+      "sample_sha256": "5979530e899a39c6599cf9b9308f2706bc716fb736a6abb5663beee84dd2fe65",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_335.jpg",
+      "fold": 2,
+      "positive_pixel_count": 399863,
+      "preserve_pixel_count": 4222097,
+      "sample_sha256": "082366201669ce8bea5a80fc1463a349803d9968972a662d6ff2cd41f74ca497",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3367.jpg",
+      "fold": 4,
+      "positive_pixel_count": 809411,
+      "preserve_pixel_count": 3593155,
+      "sample_sha256": "3ae40e71f857833b57e4efefa10dbe6e0d4108455a8e045a6eab9e45177e7c42",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3385.jpg",
+      "fold": 2,
+      "positive_pixel_count": 704307,
+      "preserve_pixel_count": 3698259,
+      "sample_sha256": "38ffa0ef85e6cdd37725209ba1d92d7ab515ca6abf686051acd4270c3acb2551",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3403.jpg",
+      "fold": 4,
+      "positive_pixel_count": 747876,
+      "preserve_pixel_count": 3654690,
+      "sample_sha256": "e2c22d1db48cbec7cfc5e0125f31339ddb0c47597c41b46e185bd47e8519fe7b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3421.jpg",
+      "fold": 3,
+      "positive_pixel_count": 785189,
+      "preserve_pixel_count": 3617377,
+      "sample_sha256": "1790b8ee0270b6de80fbcd74b59e026bf246d7c810125f1fb4966b3248c4c1e8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3439.jpg",
+      "fold": 4,
+      "positive_pixel_count": 705634,
+      "preserve_pixel_count": 3696932,
+      "sample_sha256": "da2cd479fc1e12500053752fb19bd05fc2b9c8c1a69a549da2f1b9ffb8fadac1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3457.jpg",
+      "fold": 1,
+      "positive_pixel_count": 613663,
+      "preserve_pixel_count": 3788903,
+      "sample_sha256": "f5f98d460bc191a49a126fc55182ba1fefbf167bcadb74f3f3c8ac6c5f83e151",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3475.jpg",
+      "fold": 3,
+      "positive_pixel_count": 988412,
+      "preserve_pixel_count": 3414154,
+      "sample_sha256": "3c713b40842e01e328353ca282bd88f7ebbeb0b5ab39cb52afc9e7612f2c4144",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3493.jpg",
+      "fold": 0,
+      "positive_pixel_count": 613479,
+      "preserve_pixel_count": 3789087,
+      "sample_sha256": "bdb0d777bb40bc4818fe007f885df762c750dce1e4aaa77c9bca36c6e28dde30",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3510.jpg",
+      "fold": 3,
+      "positive_pixel_count": 378047,
+      "preserve_pixel_count": 4707517,
+      "sample_sha256": "a662b0ae6b3951750406bd3f45b361de047f5b66dcb9670b187abe4f3cc4381f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3528.jpg",
+      "fold": 3,
+      "positive_pixel_count": 960346,
+      "preserve_pixel_count": 4802120,
+      "sample_sha256": "11818b1c4402b3028146641721a1358e8a205677bfb207b1c03ab5fcb4653272",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_353.jpg",
+      "fold": 1,
+      "positive_pixel_count": 309483,
+      "preserve_pixel_count": 4312477,
+      "sample_sha256": "58f40610b23d5a2242e511cf68469878692bdebca124e04756b40a4e36f2e357",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3546.jpg",
+      "fold": 3,
+      "positive_pixel_count": 2142784,
+      "preserve_pixel_count": 3598812,
+      "sample_sha256": "1f50e46bbc24d1e93164604cade148a16552176ec91fb0d18ae902ed9e5363e0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3564.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1584530,
+      "preserve_pixel_count": 4630510,
+      "sample_sha256": "84e679d6a8a26f2f4e10e076e0529cc04dc88f88e901ab3a81852880d3c4e6aa",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3582.jpg",
+      "fold": 2,
+      "positive_pixel_count": 4216392,
+      "preserve_pixel_count": 1998648,
+      "sample_sha256": "cd127c7f1d2d416f85a4ee84a771b394c9d71a371ac7adae6ac72dc56161efd7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3600.jpg",
+      "fold": 2,
+      "positive_pixel_count": 572805,
+      "preserve_pixel_count": 5642235,
+      "sample_sha256": "136083748cd7d618dfe746d85e8f80a3630b96fd1e3cb8acaa29650a4eef4e3c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3618.jpg",
+      "fold": 1,
+      "positive_pixel_count": 2269065,
+      "preserve_pixel_count": 3945975,
+      "sample_sha256": "890763b58dd9a61eb0b84a3fd0f25b9dd543b76923b51709ee7d68c27972bd44",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3636.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1441084,
+      "preserve_pixel_count": 4773956,
+      "sample_sha256": "a5a09077285ffb0a954124e52ff03c1a9db2ecb2ce0412956b92cf9f0b9a1a12",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3654.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1487697,
+      "preserve_pixel_count": 4727343,
+      "sample_sha256": "9dccf9e9211c4b7e8f118f97388cf36a4eda03623fbbb3969241626ae1d18c5b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3671.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1482474,
+      "preserve_pixel_count": 4422678,
+      "sample_sha256": "702a8e343f5e01e7d641d55718c6226a2bb3aecdb916ad61b43f15ab11dbe305",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3689.jpg",
+      "fold": 4,
+      "positive_pixel_count": 2086386,
+      "preserve_pixel_count": 3818766,
+      "sample_sha256": "cb4e3db3d843030de38d11e378b233d1c939ce1f507f4eb14f26d476a22dfe46",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3707.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1982753,
+      "preserve_pixel_count": 3922399,
+      "sample_sha256": "8d12783ded64bb885986bf6123156262c2c6a75622a860002fd4c27a62b6839a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_371.jpg",
+      "fold": 1,
+      "positive_pixel_count": 159474,
+      "preserve_pixel_count": 4462486,
+      "sample_sha256": "02fc85956db9eaedcabcc94f357f2705fcc02996ce0c6d939ef4e4f1be43bc4b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3725.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1497735,
+      "preserve_pixel_count": 4407417,
+      "sample_sha256": "4d6e21ea6273e0593b77468d1e4355d3b18a763b24d831163711c01e724f22d6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3743.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1490028,
+      "preserve_pixel_count": 4415124,
+      "sample_sha256": "259cc04dd088f2d453189a93740ab26123b19c8588da2ce411791ca33db631e9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3761.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1236016,
+      "preserve_pixel_count": 4669136,
+      "sample_sha256": "ec41a5c3197792c07d5fe7282fdd1a1b7c7e99e075ad38a5d143a16034db8e7e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3779.jpg",
+      "fold": 3,
+      "positive_pixel_count": 900054,
+      "preserve_pixel_count": 5005098,
+      "sample_sha256": "252c8733616256d65594e8cef28c80d4da2d08e1807db4efe3070abf1f84d76c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3797.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1530872,
+      "preserve_pixel_count": 4374280,
+      "sample_sha256": "f9a3aa0dbbdc7538da36eb5b6a758dd95e6c6bee1ce34be0a51a85e072ed6eed",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3815.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1096078,
+      "preserve_pixel_count": 4809074,
+      "sample_sha256": "3493decaee40ff77478c2826a239e093733f50a118f3e2a545bd88154b16c08d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3833.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1175472,
+      "preserve_pixel_count": 4729680,
+      "sample_sha256": "581f587babf75e6ebb4dc868562243d86e622097daee8c4755a43ced225d4012",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3849.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1176269,
+      "preserve_pixel_count": 3623731,
+      "sample_sha256": "c27254c59c8d9dcaaf0fc86dc4c62092ea768dca3580c7b109122a012ad2afb7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3867.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1295012,
+      "preserve_pixel_count": 3504988,
+      "sample_sha256": "a73791974c337ba3485ab58669299f14dc0779577795783191543c3687805b62",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3885.jpg",
+      "fold": 3,
+      "positive_pixel_count": 948278,
+      "preserve_pixel_count": 3851722,
+      "sample_sha256": "9bae89e6920ffe798e2177821de0eed3dddf5f70f26fc746f1341d6a71e68976",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_389.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1592604,
+      "preserve_pixel_count": 3329460,
+      "sample_sha256": "7df7a49b0343da9e29938e4b2577cb5c78cc0e4925ab4f140899c40c9b6a764c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3903.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1225250,
+      "preserve_pixel_count": 3574750,
+      "sample_sha256": "abb2a86ac3dbf84f815cff9d26ee2571529ad5c48d3c2a6ecadc0190db063db9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3921.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1510268,
+      "preserve_pixel_count": 3289732,
+      "sample_sha256": "a9bef9f6ee0700108c0b832886507a3523a521598a53a9e919c415874936e7a1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3939.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1126853,
+      "preserve_pixel_count": 3673147,
+      "sample_sha256": "f6666cd4fa2ed013cda7f4c2656013472c4d619d2988dc9c241beb415f8f55d2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3957.jpg",
+      "fold": 4,
+      "positive_pixel_count": 2190894,
+      "preserve_pixel_count": 2609106,
+      "sample_sha256": "3c653c842b984ed5cde4258a29dd397aa6d66789480442ca45d2f72e5141db39",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3975.jpg",
+      "fold": 3,
+      "positive_pixel_count": 832555,
+      "preserve_pixel_count": 3967445,
+      "sample_sha256": "61a0e9753c6e9a4666a514ca58ed1286915b4e2fe9fa4cb6401ab8835febda3d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_3993.jpg",
+      "fold": 2,
+      "positive_pixel_count": 904448,
+      "preserve_pixel_count": 3895552,
+      "sample_sha256": "a6dfd878ce757b0f84a7a164f85a1b4ee46db13056166a3daf53a6a7839c482c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4010.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1023593,
+      "preserve_pixel_count": 4310927,
+      "sample_sha256": "2424c7e3a307c01b0b012ee509aaef6c6269b322f59a74875ae2ce9c72055784",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4028.jpg",
+      "fold": 0,
+      "positive_pixel_count": 818891,
+      "preserve_pixel_count": 4515629,
+      "sample_sha256": "0d8d980ac134c7fe080918a27fd058c65bcbcf17da328832ccf187aba45ded6a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4046.jpg",
+      "fold": 4,
+      "positive_pixel_count": 847213,
+      "preserve_pixel_count": 4487307,
+      "sample_sha256": "2c9d5ac85184870179ee421230e14d440ca995eeeb9f2f9ceedbd83a941ea5d6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_406.jpg",
+      "fold": 3,
+      "positive_pixel_count": 146505,
+      "preserve_pixel_count": 4475455,
+      "sample_sha256": "077fca0e242bde94682e74f3c7bf51cdef9ade7ee0b6f98fe5c8b5a52e89cad4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4064.jpg",
+      "fold": 4,
+      "positive_pixel_count": 826281,
+      "preserve_pixel_count": 4508239,
+      "sample_sha256": "0a47e7417771f0c654fc46e4b9dc9bbd03c294ecfb79b5935888f3b7622d37e9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4082.jpg",
+      "fold": 2,
+      "positive_pixel_count": 823558,
+      "preserve_pixel_count": 4510962,
+      "sample_sha256": "6f7c878fbfac55edb5bd6ddacc713ed6674cbe5ce6188f0a80c61c53f91e21b0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4100.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1206921,
+      "preserve_pixel_count": 4127599,
+      "sample_sha256": "146c2de05190246d825c8324a32777f7c84b7a3d759e6ec0de615c57cba29bc9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4118.jpg",
+      "fold": 0,
+      "positive_pixel_count": 495268,
+      "preserve_pixel_count": 4839252,
+      "sample_sha256": "4e6b5146aba8b4d59594fd69f31b0642f556a1da419f0d8ce22acb2a37e74755",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4136.jpg",
+      "fold": 3,
+      "positive_pixel_count": 354392,
+      "preserve_pixel_count": 4980128,
+      "sample_sha256": "89f260350048746cc938f5d716bace2b34be485073cdbba4dd4e989413a3bbfb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4154.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1373157,
+      "preserve_pixel_count": 4299279,
+      "sample_sha256": "27105028c11bfe01df98ea1b4316cd88ee91e99b49c319a5856c0dd1bc95ef00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4171.jpg",
+      "fold": 2,
+      "positive_pixel_count": 916973,
+      "preserve_pixel_count": 4979243,
+      "sample_sha256": "91e7c78ae98e3bff3264b7d8ca567c477975d0e98eeab52325c0f1e8db34aba7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4189.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1836423,
+      "preserve_pixel_count": 4059793,
+      "sample_sha256": "f74b11ff6bbc5be3a3c2bd94b2588f7789a8e6fcc73d7867ef5c0ad974ab1b06",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4207.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1214600,
+      "preserve_pixel_count": 4681616,
+      "sample_sha256": "3e55df97b5c3bf7f41193160532ad423f1f0a53cbe9faefb7fafc1528569810e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4225.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1161035,
+      "preserve_pixel_count": 4735181,
+      "sample_sha256": "c29c09c1fa10da7e390d05a28db58b9cb0b75594ccb56a36d2267b543975912a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_424.jpg",
+      "fold": 4,
+      "positive_pixel_count": 3178969,
+      "preserve_pixel_count": 1712759,
+      "sample_sha256": "606e8f175b0a6b8f8a23a7d838266a15aa1d8222661561817e3216574e3abc17",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4243.jpg",
+      "fold": 2,
+      "positive_pixel_count": 796613,
+      "preserve_pixel_count": 5099603,
+      "sample_sha256": "5fc29a74614f6e42ac60e26792a1a349ac2f4cd8b24f3d7b9e1b64ca02765e9b",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4261.jpg",
+      "fold": 2,
+      "positive_pixel_count": 436894,
+      "preserve_pixel_count": 4049198,
+      "sample_sha256": "77624bd91611c0e81a186572ee3e37f179d2a451473cbad66140407fa4359fc2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4279.jpg",
+      "fold": 2,
+      "positive_pixel_count": 636909,
+      "preserve_pixel_count": 3849183,
+      "sample_sha256": "385f601be66d8c7181f1c0625fab58be9e1edcf9f4d891decf8602a519fff522",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4297.jpg",
+      "fold": 4,
+      "positive_pixel_count": 795468,
+      "preserve_pixel_count": 3690624,
+      "sample_sha256": "02eecbea2ca592054c85cbb6a915e8a8e90ee946f31302a4ae78a7b0884c0ff7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4315.jpg",
+      "fold": 0,
+      "positive_pixel_count": 537936,
+      "preserve_pixel_count": 3948156,
+      "sample_sha256": "691cd4d0a64a98d74a3a7f62f76304038587bd6de9a6eafa08235d85a1e077e0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4333.jpg",
+      "fold": 0,
+      "positive_pixel_count": 838756,
+      "preserve_pixel_count": 3647336,
+      "sample_sha256": "18770c23131bf9071f217599118f9a6a9a1cd139937f93a1a015eacab18905d2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4349.jpg",
+      "fold": 1,
+      "positive_pixel_count": 498085,
+      "preserve_pixel_count": 3988007,
+      "sample_sha256": "9e9351724405e91e44e6419f503bd74f189c4587e82dffbc2d11026656fc661d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4367.jpg",
+      "fold": 4,
+      "positive_pixel_count": 224919,
+      "preserve_pixel_count": 4261173,
+      "sample_sha256": "a70012409fef0f5c516328eef1b50c4ad4f06ee4e15c9287f4dba32fdaa609c0",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4385.jpg",
+      "fold": 1,
+      "positive_pixel_count": 750437,
+      "preserve_pixel_count": 3735655,
+      "sample_sha256": "6c7d7f6409438d0f13d72cc495b8da12d8c36123f2df3299bc7c62e8eabafa47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4403.jpg",
+      "fold": 4,
+      "positive_pixel_count": 406265,
+      "preserve_pixel_count": 4079827,
+      "sample_sha256": "d09d21d281bac224a0d4c1386dd591e280c1a9f38c2f0e960f528aa7075f9c95",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4421.jpg",
+      "fold": 2,
+      "positive_pixel_count": 820478,
+      "preserve_pixel_count": 3665614,
+      "sample_sha256": "e386c67d343bfd7a155c2ef4a192b89f80f1df919721d6458cb437b7532e1ca3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4439.jpg",
+      "fold": 0,
+      "positive_pixel_count": 257041,
+      "preserve_pixel_count": 4229051,
+      "sample_sha256": "0a1d0b22b78616b47df62cbe5e5640ecaba5e222b14219d9955a184fa5eca099",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4457.jpg",
+      "fold": 3,
+      "positive_pixel_count": 469449,
+      "preserve_pixel_count": 4016643,
+      "sample_sha256": "69838b172be2762549a2bd5588356b84215028cbda43eececbe57eec17384cef",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4475.jpg",
+      "fold": 4,
+      "positive_pixel_count": 779836,
+      "preserve_pixel_count": 3706256,
+      "sample_sha256": "c6ea2c99419abb80c7feabd74329b5ce53f1159e6e3b39e4c682c9486c946b77",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4493.jpg",
+      "fold": 2,
+      "positive_pixel_count": 458908,
+      "preserve_pixel_count": 4027184,
+      "sample_sha256": "5a09dd851788a7e80b4be9993ea807d504fdfaa6e28465047d68ba7f3519156e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4510.jpg",
+      "fold": 4,
+      "positive_pixel_count": 310039,
+      "preserve_pixel_count": 5690946,
+      "sample_sha256": "3daa178a26ff6a21bf1ff891f1ba4cde2d88ddd658dc43b337ff07566aa0a3b3",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4528.jpg",
+      "fold": 2,
+      "positive_pixel_count": 392776,
+      "preserve_pixel_count": 5608209,
+      "sample_sha256": "2ffa1046e8d86bb38fa31a0dc7b2879c9ac4e514eaa220913999ab5806eca3bf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4546.jpg",
+      "fold": 1,
+      "positive_pixel_count": 630755,
+      "preserve_pixel_count": 5370230,
+      "sample_sha256": "92249a994b497e3908530d1d94ee751eee94e0c8e3d26398dbc7b51949f8588a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4564.jpg",
+      "fold": 0,
+      "positive_pixel_count": 809636,
+      "preserve_pixel_count": 5191349,
+      "sample_sha256": "57859203b49c60cba7c7df18c6763762c5ee98b9d289c4c46bc4039db0323962",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4582.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1428196,
+      "preserve_pixel_count": 4572789,
+      "sample_sha256": "35a0738eebeb9f3be706e74c1cb49acdf2f34c46bae89f80b0b816fa10628058",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4600.jpg",
+      "fold": 4,
+      "positive_pixel_count": 546581,
+      "preserve_pixel_count": 5454404,
+      "sample_sha256": "d555738f75cc0bfa6a730a64ccaddddcb1b5bc69e244fa99bad3113eb42e3a00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4618.jpg",
+      "fold": 1,
+      "positive_pixel_count": 537279,
+      "preserve_pixel_count": 5463706,
+      "sample_sha256": "c81e9eb1fedb3271ddeb21cf0866f0bad4c0c61c3b97e8b22191a353c461682f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4636.jpg",
+      "fold": 2,
+      "positive_pixel_count": 560637,
+      "preserve_pixel_count": 5440348,
+      "sample_sha256": "4cec5443f467ef0ec2f29b600b2d5327a844cad019cf40e50a42403066e13fe8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4654.jpg",
+      "fold": 2,
+      "positive_pixel_count": 421504,
+      "preserve_pixel_count": 5579481,
+      "sample_sha256": "9ba19b0978a8f9f90e33c6ae8f4550422d090f70a7fc3f1fe9556b3d05060244",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4671.jpg",
+      "fold": 1,
+      "positive_pixel_count": 162611,
+      "preserve_pixel_count": 5838374,
+      "sample_sha256": "576afc6978caa5b6278a7da94b32ada88c08423710e1fd70d06ccb57ba902e1f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4689.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1031894,
+      "preserve_pixel_count": 4969091,
+      "sample_sha256": "7ec92923cd64af8f52a34ca7990744cb842e88235f6ea15447b5e66381963361",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4707.jpg",
+      "fold": 4,
+      "positive_pixel_count": 656661,
+      "preserve_pixel_count": 5344324,
+      "sample_sha256": "f5e9813ec3d992aada22ead84615cd5c458d293f1c61158080ed6da29c3c148d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4725.jpg",
+      "fold": 0,
+      "positive_pixel_count": 709303,
+      "preserve_pixel_count": 5291682,
+      "sample_sha256": "502c0e997de3fc556b276e9ec7dfbfd3c3d43920481fe11f929fb949a25ff6ac",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4743.jpg",
+      "fold": 3,
+      "positive_pixel_count": 594672,
+      "preserve_pixel_count": 5406313,
+      "sample_sha256": "cc77a03b75e67593d5efd7bf894d535b774c9e4c94e1e6d9be18634ceeab1c0e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4761.jpg",
+      "fold": 1,
+      "positive_pixel_count": 782802,
+      "preserve_pixel_count": 5218183,
+      "sample_sha256": "2a35e5f9096575e4ce63c6b1d2f5abb92d293871fd73ec416b2466f2b9793ffb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4779.jpg",
+      "fold": 0,
+      "positive_pixel_count": 811584,
+      "preserve_pixel_count": 5189401,
+      "sample_sha256": "5e202e3e2034c2ac6cffcc466844b1a0440996b5807cb0643b8410f7fedd3927",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4797.jpg",
+      "fold": 0,
+      "positive_pixel_count": 364080,
+      "preserve_pixel_count": 5636905,
+      "sample_sha256": "fef19353a33346329c9e4888ecb53c8bc7c39505fc9f2fd1d21851fb17d63e91",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4815.jpg",
+      "fold": 3,
+      "positive_pixel_count": 997955,
+      "preserve_pixel_count": 5003030,
+      "sample_sha256": "1697ce1300350b3fcfd9a7efad6afe093d754ac66c239b1757e72d0c0a378c00",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4833.jpg",
+      "fold": 4,
+      "positive_pixel_count": 394375,
+      "preserve_pixel_count": 5606610,
+      "sample_sha256": "c54b5bc823251d38bfb98226cfb955d1d90b35fcda66c22b3753f5806fd779f4",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4850.jpg",
+      "fold": 2,
+      "positive_pixel_count": 625764,
+      "preserve_pixel_count": 5375221,
+      "sample_sha256": "ce468bfd91547e1f2a95d7eac77114eb7e09e421b30291f60ff5e74d249db342",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4867.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1113216,
+      "preserve_pixel_count": 4887769,
+      "sample_sha256": "c55a84b739a88b776ca5773066b0c10eefc5882378fb9e24b53a40934db68cce",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4885.jpg",
+      "fold": 2,
+      "positive_pixel_count": 415551,
+      "preserve_pixel_count": 5585434,
+      "sample_sha256": "ced0348f28bb56f119eb3c40b0ea96b1a713f6146a9a92c0296c566209a84be9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4903.jpg",
+      "fold": 0,
+      "positive_pixel_count": 274538,
+      "preserve_pixel_count": 5726447,
+      "sample_sha256": "cff2ece8512ace814ad2cb76d71bdbc3b886c4ef8661a5c6edcc74558c705543",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4921.jpg",
+      "fold": 1,
+      "positive_pixel_count": 446752,
+      "preserve_pixel_count": 5554233,
+      "sample_sha256": "43570ccc344f7ef74e539ed6089879652a781a8a968e8be347d9e80ae41a49cf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4939.jpg",
+      "fold": 4,
+      "positive_pixel_count": 209090,
+      "preserve_pixel_count": 3779506,
+      "sample_sha256": "c579fa894ee517cd93e357a2c1285ecdff834618f81016f1c9208558c152cb47",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4957.jpg",
+      "fold": 1,
+      "positive_pixel_count": 896203,
+      "preserve_pixel_count": 3092393,
+      "sample_sha256": "98fe38507e002a1458a4ad89821219051f8d526d43e0524a30899a1578c3e33a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4975.jpg",
+      "fold": 4,
+      "positive_pixel_count": 844853,
+      "preserve_pixel_count": 3143743,
+      "sample_sha256": "55a6f3a6083e0323d37ff69690ffa387fcf6faf850ecc2401efd93bcab672178",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_4993.jpg",
+      "fold": 4,
+      "positive_pixel_count": 257179,
+      "preserve_pixel_count": 3731417,
+      "sample_sha256": "958bfc80e629ecde2591eb2eef2c835da44b963091ab57a449087f75ccec3126",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5010.jpg",
+      "fold": 3,
+      "positive_pixel_count": 847986,
+      "preserve_pixel_count": 2893998,
+      "sample_sha256": "22881e594dc1630dd7bf77853fefa409628dbb8259146ec498b143061dd2ddbf",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5028.jpg",
+      "fold": 0,
+      "positive_pixel_count": 765853,
+      "preserve_pixel_count": 2976131,
+      "sample_sha256": "9277f5374d42d62ff3e7698d8f43bdf0f021a22115a0b609ecf2b28e37bd71f1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5046.jpg",
+      "fold": 4,
+      "positive_pixel_count": 718113,
+      "preserve_pixel_count": 3023871,
+      "sample_sha256": "22e503943bedd6ea0495df1bb30ad2002e7b32f3ec9ffad824c1937b683a3247",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5064.jpg",
+      "fold": 1,
+      "positive_pixel_count": 680113,
+      "preserve_pixel_count": 3061871,
+      "sample_sha256": "6f7a637d314b4157539c77afae4fe63f5e586a639d649f333694ed0216072262",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5082.jpg",
+      "fold": 0,
+      "positive_pixel_count": 727910,
+      "preserve_pixel_count": 3014074,
+      "sample_sha256": "eb219b0fae17a3df4e4471e88a7264f35acc7063f622db7868237efef327d3b7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5100.jpg",
+      "fold": 1,
+      "positive_pixel_count": 730412,
+      "preserve_pixel_count": 3011572,
+      "sample_sha256": "f37fc8405dad771d37a88de5b00a39a1754027fbe24c1575251b638f42c23df2",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_5118.jpg",
+      "fold": 4,
+      "positive_pixel_count": 759426,
+      "preserve_pixel_count": 2982558,
+      "sample_sha256": "c78ef43c49eeeaf60b3510ed5434b51c200e720c17fd7346fcc3b3c875cc9318",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_521.jpg",
+      "fold": 4,
+      "positive_pixel_count": 306968,
+      "preserve_pixel_count": 3693625,
+      "sample_sha256": "362e275f6e92c0ea74cda57359667d2e41427f8c08c543feb57dc55fe62f9c66",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_539.jpg",
+      "fold": 0,
+      "positive_pixel_count": 853857,
+      "preserve_pixel_count": 3146736,
+      "sample_sha256": "79e41bd58275772b543b6678d5e24e31c4f60442dbf64e0cf01ddadcf6342b6a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_55.jpg",
+      "fold": 1,
+      "positive_pixel_count": 649902,
+      "preserve_pixel_count": 4410878,
+      "sample_sha256": "91420514f420f37cb0454c0f41efdbf1c2b8780c86a5f99f03315f071443adca",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_557.jpg",
+      "fold": 0,
+      "positive_pixel_count": 979183,
+      "preserve_pixel_count": 3021410,
+      "sample_sha256": "11d2d13a26a362e28d7c5e2f6d7ace0727d6ae200171503aeacc3212985a6de8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_575.jpg",
+      "fold": 2,
+      "positive_pixel_count": 521323,
+      "preserve_pixel_count": 3479270,
+      "sample_sha256": "2bbcbaba55b1519ee6dc1dbb13c5b76700e3bf0b0c75ea98e4fc1e6ac9dbeb41",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_593.jpg",
+      "fold": 1,
+      "positive_pixel_count": 463427,
+      "preserve_pixel_count": 3225279,
+      "sample_sha256": "7a88afd84dfb9fe7857aa0a2a4d5b1bdf8551d92776cf4f44f471b6df5293a4d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_611.jpg",
+      "fold": 0,
+      "positive_pixel_count": 86585,
+      "preserve_pixel_count": 3602121,
+      "sample_sha256": "93bfef00f6602945ec73fbab2192845dd674d7e2b52312043fbc813516b0a7f7",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_629.jpg",
+      "fold": 4,
+      "positive_pixel_count": 797451,
+      "preserve_pixel_count": 2891255,
+      "sample_sha256": "ff194f71556a2b7cff8f9c052c33cd11e3845b4af91a28096e13f30a9aa3eddc",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_708.jpg",
+      "fold": 3,
+      "positive_pixel_count": 2753511,
+      "preserve_pixel_count": 3967088,
+      "sample_sha256": "e46beb31dea98304d25eb45f2efdb5cb92d1a8f2056dcdb12b7b822876da347c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_72.jpg",
+      "fold": 2,
+      "positive_pixel_count": 604328,
+      "preserve_pixel_count": 6061126,
+      "sample_sha256": "c617a75bad1aa6973ec72a9905176f21be2247ad4bb1a04d8c6f38cdfee6bd73",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_725.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1759609,
+      "preserve_pixel_count": 4960990,
+      "sample_sha256": "185da43c7cbc636db41584b50c99a00316a00b08cc7b6e535c00d1716ab0dff9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_743.jpg",
+      "fold": 3,
+      "positive_pixel_count": 3484731,
+      "preserve_pixel_count": 3235868,
+      "sample_sha256": "6d181a64fecc172f65e38c651e9faac3fd773fd618b685f387ccc36387ac7055",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_761.jpg",
+      "fold": 1,
+      "positive_pixel_count": 832466,
+      "preserve_pixel_count": 4695034,
+      "sample_sha256": "cb6f717c847ce6a8482004c77393aa2ffb7eed3759945e46b8ee1e1ed84c9134",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_779.jpg",
+      "fold": 1,
+      "positive_pixel_count": 1396060,
+      "preserve_pixel_count": 4131440,
+      "sample_sha256": "783573e0ef738bfd05a439026396510d8cdda21f2190d63943f66388437de1ab",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_797.jpg",
+      "fold": 0,
+      "positive_pixel_count": 1332058,
+      "preserve_pixel_count": 4195442,
+      "sample_sha256": "0bc34fab5d7cf495b2b90ba25be76992353c6200f9df6bceb5e74034fce18bf6",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_815.jpg",
+      "fold": 2,
+      "positive_pixel_count": 1601460,
+      "preserve_pixel_count": 3926040,
+      "sample_sha256": "c47a60e648bce98b58d0e7fc33899748837b8ca79830756a5e58c0694e0dd96f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_833.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1508801,
+      "preserve_pixel_count": 5517611,
+      "sample_sha256": "b66402c40b342a7f308e454850822e97a2a399175b1fa1d7f839ad52f391ac27",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_851.jpg",
+      "fold": 3,
+      "positive_pixel_count": 1934267,
+      "preserve_pixel_count": 5092145,
+      "sample_sha256": "9e720368a93978baad2675cfce6143b61ff643186e06f7e0a79b6e2655a6a18e",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_869.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1281674,
+      "preserve_pixel_count": 5744738,
+      "sample_sha256": "aa8503f52fce660851e2dfb3a9ffebdffd4ca3869c982c1549d6002f6d28e0c9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "hw5k_93.jpg",
+      "fold": 4,
+      "positive_pixel_count": 1251346,
+      "preserve_pixel_count": 5414108,
+      "sample_sha256": "154d85acdaaaa1f09b07dc40e986945c81aaaf1f3626b901b4b0c5b2febf354f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_411.jpg",
+      "fold": 2,
+      "positive_pixel_count": 331835,
+      "preserve_pixel_count": 3967421,
+      "sample_sha256": "1b8aa130fe8b7cf0398f03cc10fef8232a782bdc237800ea503043ccdcf8f813",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_415.jpg",
+      "fold": 3,
+      "positive_pixel_count": 393065,
+      "preserve_pixel_count": 3936055,
+      "sample_sha256": "2b9934bd595796faed172b780574552088017c2ae07964a683ad572cbab319ee",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_433.jpg",
+      "fold": 4,
+      "positive_pixel_count": 44527,
+      "preserve_pixel_count": 3634425,
+      "sample_sha256": "cea4a732034bb9d720fbd6d5c9eb1e383164e3df4d33af5e8d6d0397c8ee7691",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_434.jpg",
+      "fold": 3,
+      "positive_pixel_count": 47130,
+      "preserve_pixel_count": 3631822,
+      "sample_sha256": "2c408ab668c7e7e7c0a0b8e64cd54d77a1eec6d0a2a6f6884ba890ab340d4147",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_437.jpg",
+      "fold": 4,
+      "positive_pixel_count": 47890,
+      "preserve_pixel_count": 3627874,
+      "sample_sha256": "281e1c5ae82f078302568543e4a4d702e6e004d7575005089a36b8202f088f6f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_447.jpg",
+      "fold": 2,
+      "positive_pixel_count": 447151,
+      "preserve_pixel_count": 3853169,
+      "sample_sha256": "656779deda7480636d1f7af6f2e83c9792b7b70f1e013703eea9feb7707342cb",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_457.jpg",
+      "fold": 0,
+      "positive_pixel_count": 426599,
+      "preserve_pixel_count": 3164121,
+      "sample_sha256": "20ddf3bbc43c373c0d2398ea59233f5132a3abec3841aea7968c13e4bfd2008c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_464.jpg",
+      "fold": 1,
+      "positive_pixel_count": 216637,
+      "preserve_pixel_count": 3363239,
+      "sample_sha256": "2f785c60f89bf8bc4127ae38a3595dfdf8c0cf9afbb320eff040631a3feb266a",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_471.jpg",
+      "fold": 0,
+      "positive_pixel_count": 359166,
+      "preserve_pixel_count": 3210212,
+      "sample_sha256": "321500d8ff829e17703e8728a9211f4e634c0ea52e4de0f8c5953d0a51d880b8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_473.jpg",
+      "fold": 3,
+      "positive_pixel_count": 413624,
+      "preserve_pixel_count": 3184936,
+      "sample_sha256": "631e61ff8eea23a7ad894b548b491ca64707095a31e5fcb5dba230ac7d45319d",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_487.jpg",
+      "fold": 0,
+      "positive_pixel_count": 279913,
+      "preserve_pixel_count": 3324807,
+      "sample_sha256": "01a32b70edb0ab7c57f3ad83b0dac150178ef5d7cd46d3cd582fa4f9fccd2180",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_494.jpg",
+      "fold": 2,
+      "positive_pixel_count": 80649,
+      "preserve_pixel_count": 3673063,
+      "sample_sha256": "498191645daeca9aa9726e29dc0c2eeea3c2a9ccee26ba7b305e53c411bd205c",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_496.jpg",
+      "fold": 1,
+      "positive_pixel_count": 87797,
+      "preserve_pixel_count": 3681883,
+      "sample_sha256": "af730925d2fdb4d778b2cad0d19b879c38556113fe7389ea931ace979256abad",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_510.jpg",
+      "fold": 1,
+      "positive_pixel_count": 111832,
+      "preserve_pixel_count": 3702448,
+      "sample_sha256": "b246f7842558f68a39cc31adcb30f46d7b8f24525c5568443b7bcdad6c812e54",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_518.jpg",
+      "fold": 4,
+      "positive_pixel_count": 101861,
+      "preserve_pixel_count": 3549395,
+      "sample_sha256": "71583b9d18ceee9b66982b9ddfedbce881bc0ad8b9202e9cbb8b38e03ca446c8",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_524.jpg",
+      "fold": 1,
+      "positive_pixel_count": 148134,
+      "preserve_pixel_count": 4190938,
+      "sample_sha256": "51a666e36923d9e8168f541e461c495f7be674ece7a2a81851f4ac918b28e737",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_529.jpg",
+      "fold": 1,
+      "positive_pixel_count": 187761,
+      "preserve_pixel_count": 4098103,
+      "sample_sha256": "5e6e2e9404f579953eaf99a1cd224c3180e9f4afaec753a5b672e08233adbee1",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_535.jpg",
+      "fold": 1,
+      "positive_pixel_count": 171193,
+      "preserve_pixel_count": 4181831,
+      "sample_sha256": "9abd5e8b6b54c1df5048fec4940caec97ebfee46fc400d57ca8457c7670c21ba",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_539.jpg",
+      "fold": 0,
+      "positive_pixel_count": 168079,
+      "preserve_pixel_count": 4170993,
+      "sample_sha256": "99932a0eab57c8d82c6fd1d2c4ecc8f1c49bc8c337e87acaf892385369ec495f",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_540.jpg",
+      "fold": 3,
+      "positive_pixel_count": 373652,
+      "preserve_pixel_count": 3948988,
+      "sample_sha256": "2e1342d6cae2b0471e0ad6f20f8af30fb92544c6e0da15e9214076bb62a82a41",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_542.jpg",
+      "fold": 2,
+      "positive_pixel_count": 271974,
+      "preserve_pixel_count": 4074074,
+      "sample_sha256": "927c7825d72890561406f57deb722cc266f0bf7d8df8300f7aef46d80178d6d9",
+      "samples_per_class": 1024
+    },
+    {
+      "file": "scut_544.jpg",
+      "fold": 3,
+      "positive_pixel_count": 312807,
+      "preserve_pixel_count": 4045209,
+      "sample_sha256": "3a17fd1a8a004b8bd3a7e1ff75fa79cadb108b69bbbaab3ad1db141d97c0b154",
+      "samples_per_class": 1024
+    }
+  ],
+  "plan_path": "docs/source-output-support-prerequisite-v1.json",
+  "plan_sha256": "fba4b1d333d5993d5741a044ed0dfec044c014a3d5c2f502c6ce7cfa25f86f5d",
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "real_data_access": true,
+  "reserved_blind_authorized": false,
+  "sample_count": 563200,
+  "schema_version": 1,
+  "second_stage_predictions": {
+    "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+    "count": 275,
+    "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+  },
+  "target_decode_roles": [
+    "train"
+  ],
+  "terminal": "KILL",
+  "train_labels": {
+    "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "count": 275
+  },
+  "train_page_count": 275,
+  "training_started": false
+}

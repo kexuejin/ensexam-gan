@@ -1,0 +1,79 @@
+{
+  "detector": {
+    "device": "cpu",
+    "engine": "transformers",
+    "model_name": "PP-OCRv6_medium_det"
+  },
+  "execution": {
+    "conflicting_model_process_check": true,
+    "host_user_lock": true,
+    "monitor_interval_seconds": 1.0,
+    "one_page": true,
+    "page_process_group": "setsid",
+    "page_process_start_method": "spawn",
+    "thread_caps": {
+      "MKL_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "VECLIB_MAXIMUM_THREADS": "1"
+    }
+  },
+  "formal_evidence": false,
+  "formal_outputs_written": false,
+  "label_access": false,
+  "observation": {
+    "abnormal_system_restart_during_probe": false,
+    "detector_process_tree_peak_rss_bytes": null,
+    "detector_process_tree_peak_rss_reason": "the failing health sample raised before the temporary probe persisted an aggregate peak",
+    "failure": "system memory safety limit crossed: 31.0% free",
+    "minimum_memory_free_percent": 31.0,
+    "post_termination_memory_free_percent_observed_range": [
+      67.0,
+      74.0
+    ],
+    "post_termination_swap_used_bytes": 1331429376,
+    "residual_model_process_count": 0,
+    "resource_tracker_warning": "one leaked loky semaphore was reported; no supported evidence identifies explicit PaddleX joblib parallelism as the cause"
+  },
+  "observed_at": "2026-08-13T23:26:47+08:00",
+  "page": {
+    "file": "hw5k_1011.jpg",
+    "selection": "first exact frozen train275 raw-source manifest row",
+    "source_sha256": "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+  },
+  "plan": {
+    "path": "docs/external-text-layout-support-prerequisite-v1.json",
+    "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+  },
+  "probe": "external_text_layout_single_page_runtime_safety",
+  "raw_runtime_artifacts": {
+    "log_external_path": "/tmp/ensexam-external-layout-single-page-probe.log",
+    "log_sha256": "234d28109d3bccd3f43ff24df9332a06c5ca26caa1e421dd5310383d4c46ac77",
+    "prototype_external_path": "/tmp/ensexam_external_layout_single_page_probe.py",
+    "prototype_sha256": "6c8a620fb117eebfca2b6faf2c2aa96aa90e1f7d15790cdd69e358bda558f919"
+  },
+  "reason_code": "runtime_resource_prerequisite_failed",
+  "recognition": false,
+  "result_authority": "runtime_prerequisite_only",
+  "routing_metadata_access": false,
+  "runtime": {
+    "cv2": "4.13.0",
+    "numpy": "2.3.5",
+    "paddle": "3.0.0",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "python": "3.13.1",
+    "torch": "2.12.0",
+    "transformers": "5.12.1"
+  },
+  "safety_limits": {
+    "detector_process_tree_rss_bytes_max": 10737418240,
+    "memory_free_percent_min": 35.0,
+    "page_timeout_seconds": 900.0,
+    "swap_used_bytes_max": 536870912
+  },
+  "schema_version": 1,
+  "target_access": false,
+  "temporary_page_outputs_retained": false,
+  "terminal": "PREREQUISITE_NEEDED"
+}

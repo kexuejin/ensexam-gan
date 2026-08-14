@@ -1,0 +1,237 @@
+{
+  "acceptance": {
+    "full_auc_ablation_margin_min": 0.03,
+    "full_fold_auc_min": 0.55,
+    "full_mean_fold_auc_min": 0.65,
+    "macro_median_page_auc_min": 0.6,
+    "positive_mean_above_preserve_min_folds": 4,
+    "required_fold_count": 5,
+    "required_terminal_on_pass": "PASS"
+  },
+  "authorization": {
+    "candidate_checkpoint": false,
+    "candidate_inference": false,
+    "development_gate": false,
+    "external_text_layout_materialization": true,
+    "external_text_layout_materialization_reads_targets": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "separability_diagnostic_target_decode_roles": [
+      "train"
+    ],
+    "visual_review": false
+  },
+  "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "effective_train_count": 275,
+    "effective_train_domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "manifest": {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "second_stage_prediction_dir": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+    "source": "exact_manifest_order_raw_input_pages",
+    "split": "train",
+    "target_lighter_margin_gray": 2.0
+  },
+  "diagnostic": {
+    "ablation_features": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b"
+    ],
+    "auc_tie_policy": "average_rank",
+    "class_balance": "equal_per_page_target_lighter_and_preserve",
+    "coordinate_rank": "splitmix64(row_major_index XOR first_64_bits(sha256(utf8_basename))) then unsigned_hash_y_x",
+    "feature_normalization": "rgb_divided_by_255_occupancy_in_zero_or_one_confidence_in_unit_interval",
+    "fold_assignment": "int(sha256(utf8_basename), 16) % 5",
+    "fold_count": 5,
+    "full_feature_count": 5,
+    "lambda": 1.0,
+    "luma_definition": "arithmetic_mean_rgb_gray_units",
+    "max_samples_per_class_per_page": 1024,
+    "numeric_type": "float64",
+    "optimizer": "none_closed_form_ridge",
+    "ridge_intercept": "unpenalized",
+    "sampling_count": "min(1024, target_lighter_count, preserve_count) per class per page",
+    "standardization": "fitting_fold_mean_and_standard_deviation_only",
+    "target_definition": "target_luma_minus_second_stage_luma_greater_than_2_gray",
+    "target_encoding": {
+      "preserve": -1,
+      "target_lighter": 1
+    },
+    "threshold_derivation": "prohibited"
+  },
+  "evidence": {
+    "current_primary_checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "current_primary_config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "current_second_stage_checkpoint": {
+      "path": "artifacts/current-second-stage-best.pt",
+      "sha256": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7"
+    },
+    "independent_expert_kill": {
+      "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-diagnostic-kill.md",
+      "sha256": "905e99712fc4de7ccec76fd7f77fd7334d310c7977b9d4d1a61fe20bdf7d5104"
+    },
+    "official_text_detector": {
+      "gitattributes": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/.gitattributes",
+        "sha256": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361"
+      },
+      "config_json": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/config.json",
+        "sha256": "3ea7e760f64255c152ba139e2f5f798303f7189b87c923cf498e2b2e830cadd3"
+      },
+      "inference_yml": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/inference.yml",
+        "sha256": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871"
+      },
+      "license": "Apache-2.0",
+      "model_name": "PP-OCRv6_medium_det",
+      "model_safetensors": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/model.safetensors",
+        "sha256": "bd393266c02e1a680b1b34c301d5d0d81e6290440b7f8ab0f5d5032276b17eb1"
+      },
+      "preprocessor_config_json": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/preprocessor_config.json",
+        "sha256": "74421569a28a78d417db320f9bc039ce0997a1defe2b35f259dfc74299c9f1ed"
+      },
+      "readme_md": {
+        "external_path": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors/README.md",
+        "sha256": "cdba9f31531fe1a4ff1323a21d7cf671a7a042b23a788ffeb081d1845acccdb6"
+      }
+    },
+    "primary_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary/metrics.csv",
+      "sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846"
+    },
+    "role_plan": {
+      "path": "docs/monotonic-residual-erase-data-roles.json",
+      "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+    },
+    "runtime": {
+      "cv2": "4.13.0",
+      "numpy": "2.3.5",
+      "paddle": "3.0.0",
+      "paddleocr": "3.7.0",
+      "paddlex": "3.7.2",
+      "python": "3.13.1",
+      "torch": "2.12.0",
+      "transformers": "5.12.1"
+    },
+    "second_stage_metrics": {
+      "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/metrics.csv",
+      "sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d"
+    },
+    "second_stage_prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "directory": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "train_label_set": {
+      "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+      "count": 275,
+      "directory": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+    }
+  },
+  "external_text_layout_materialization": {
+    "batch_size": 1,
+    "box_thresh": 0.45,
+    "device": "cpu",
+    "engine": "transformers",
+    "input": "exact_train275_raw_source_pages",
+    "limit_side_len": 736,
+    "limit_type": "min",
+    "max_side_limit": 4000,
+    "model_dir": "/Users/kexuejin/.paddlex/official_models/PP-OCRv6_medium_det_safetensors",
+    "model_name": "PP-OCRv6_medium_det",
+    "output_root": "outputs/external-text-layout-support-materialization-20260813",
+    "persisted_geometry": "clipped_integer_quadrilaterals_sorted_by_min_y_min_x_max_y_max_x_flattened_coordinates_score",
+    "persisted_grids": {
+      "text_confidence": "float32_pixelwise_max_detection_score",
+      "text_occupancy": "uint8_zero_or_one"
+    },
+    "polygon_rasterization": "cv2.fillPoly_LINE_8_shift_0",
+    "recognition": false,
+    "target_access": false,
+    "thresh": 0.2,
+    "unclip_ratio": 1.4
+  },
+  "fail_closed": [
+    "artifact_role_manifest_prediction_or_runtime_drift",
+    "external_model_file_or_license_drift",
+    "source_content_or_order_drift",
+    "target_label_or_quality_path_in_materialization",
+    "recognition_text_or_character_content_created",
+    "detector_parameter_model_runtime_or_threshold_drift",
+    "polygon_shape_score_sort_clip_or_rasterization_drift",
+    "output_directory_reuse",
+    "page_crosses_folds",
+    "fitting_statistics_leak_into_held_out_fold",
+    "empty_target_lighter_or_preserve_class",
+    "changed_sample_cap_coordinate_hash_fold_or_lambda",
+    "unregistered_feature_transform_geometry_or_metadata",
+    "candidate_or_quality_output_created"
+  ],
+  "family": "external_printed_text_layout_support_v1",
+  "iteration_id": "monotonic-residual-erase-support",
+  "leakage_boundary": {
+    "diagnostic_scope": "train_role_incremental_support_only",
+    "external_model_repo_training": false,
+    "external_model_target_access": false,
+    "published_training_corpus_overlap_with_scut_or_hw5k": "unverified",
+    "quality_or_reserved_blind_access": false,
+    "statement": "Even PASS cannot establish product generalization because upstream corpus overlap is unverified; it can authorize only a separate leakage-aware preflight."
+  },
+  "next_boundary_on_pass": "external_text_layout_conditioned_data_training_and_application_preflight_only",
+  "planned_implementation": {
+    "audit_output": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+    "audit_script": "scripts/analysis/audit_external_text_layout_support.py",
+    "materialization_output": "outputs/external-text-layout-support-materialization-20260813",
+    "materializer": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+    "test": "tests/test_external_text_layout_support_prerequisite.py"
+  },
+  "representation": {
+    "ablation_is_identical_probe_without_external_layout_channels": true,
+    "channels": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "external_text_occupancy",
+      "external_text_confidence"
+    ],
+    "feature_count": 5,
+    "forbidden_features": [
+      "ocr_recognition_or_character_content",
+      "source_rgb_masks_alpha_reconstruction_stages_or_expert_outputs",
+      "domain_split_route_or_caller_metadata",
+      "polygon_coordinates_geometry_distances_neighborhoods_or_transforms",
+      "detector_threshold_parameter_model_or_runtime_sweep",
+      "target_derived_or_quality_derived_features",
+      "nonlinear_probe"
+    ],
+    "single_causal_change": "add_frozen_external_text_detection_occupancy_and_confidence_to_second_stage_rgb_support_evidence"
+  },
+  "schema_version": 1,
+  "state": "preregistered_pending_external_text_layout_materialization",
+  "terminal_successors": {
+    "KILL": "close_external_text_layout_without_detector_threshold_geometry_transform_probe_or_training_rescue",
+    "PASS": "freeze_separate_leakage_aware_external_text_layout_conditioned_data_training_and_application_preflight",
+    "PREREQUISITE_NEEDED": "repair_only_registered_provenance_or_exact_implementation_without_changing_population_features_detector_or_gates"
+  }
+}

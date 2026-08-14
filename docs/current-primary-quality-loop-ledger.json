@@ -1,0 +1,2164 @@
+{
+  "active_iteration": {
+    "causal_change": "Add only frozen external PP-OCRv6 text-detection occupancy and confidence to second-stage RGB support evidence, after final RGB/context, primary mb/ms, reconstruction stages, raw source-plus-output RGB, second-stage raw alpha, and paired independent-expert RGB all failed their frozen incremental-margin gates.",
+    "evidence": [
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
+        "sha256": "e37a6f8ef3eac00f468fb9a55da208b4fadb60c32b857909366d953e9a27e198"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json",
+        "sha256": "3a43b2a180642ebfe3edb1a7ef75f443e128ea760f2d2c17ccc40097beacd601"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_prerequisite.py",
+        "sha256": "b5151cbc43dcfa07fc500fa30330eeac9a86f7f90f8905c0edddfe9ae89f2aad"
+      },
+      {
+        "path": "scripts/infer/monotonic_residual_erase.py",
+        "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_prerequisite.py",
+        "sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-preregistration.md",
+        "sha256": "17d0ec3aebb4b2937022bb7b0d67f52a8b69e61f3daf7acd54e2a93edf421544"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-sign-separated-residual-v2-checkpoint-kill.md",
+        "sha256": "54735b3b1579b923df2c25bef80b43ee4354ed068e6a839c1f5997b8c1041052"
+      },
+      {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json",
+        "sha256": "3889612efe6ded767e1ecbb1fb44cad563dfbd6f04b0a76107b098e7060b6b3d"
+      },
+      {
+        "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train-patches-v1.csv",
+        "sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9"
+      },
+      {
+        "path": "docs/sign-separated-residual-data-roles.json",
+        "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+      },
+      {
+        "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+        "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-data-role-preflight-pass.md",
+        "sha256": "7b8931ef180a4e4d334e92cd922b876f67fb0954cbc079302026183a9fcec8e1"
+      },
+      {
+        "path": "docs/monotonic-residual-erase-data-roles.json",
+        "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-data-role-preflight-20260810/preflight.json",
+        "sha256": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b"
+      },
+      {
+        "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
+        "sha256": "ffa22d36971249490494b38b500192411fd8fb62b009bdb4aa0ac37263920f26"
+      },
+      {
+        "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
+        "sha256": "665ee6d7dac64835044dd4aa58a4639d2bc219d6a8e06bcff73553684f991301"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-training-preflight-pass.md",
+        "sha256": "03f650cc9ac42c07417555f7d765e1b36016b8e27aff326d74c69383f1d5373c"
+      },
+      {
+        "path": "docs/monotonic-residual-erase-training-plan.json",
+        "sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-training-preflight-20260810/preflight.json",
+        "sha256": "eb34260fd05e3f56fac5a9d2ddbddb146d049692ce2b5d8f87649995a4fe12f5"
+      },
+      {
+        "path": "scripts/analysis/build_monotonic_residual_erase_patch_index.py",
+        "sha256": "2e8179cafb459a647aa27189d9d3cc73caf0fe3c9cf53ba8291319b7d7c925b8"
+      },
+      {
+        "path": "scripts/analysis/validate_monotonic_residual_erase_training_preflight.py",
+        "sha256": "d859b478b0ce717aaa2161a9b4b84a2a4c2085ac3013bdf51470e0c5003458eb"
+      },
+      {
+        "path": "scripts/train/train_monotonic_residual_erase.py",
+        "sha256": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_training.py",
+        "sha256": "e0bc7ca8e05298117ba16fe9cf32ce09e4950bb9d514de56c96e1203ddf05a0b"
+      },
+      {
+        "path": "tests/test_validate_monotonic_residual_erase_training_preflight.py",
+        "sha256": "36f03a0a71bc7d8a2c606230631a1d2b8a5cccd4bd1379b6ff50a15cc45a8bde"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-train275-materialization-pass.md",
+        "sha256": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622"
+      },
+      {
+        "path": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+        "sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943"
+      },
+      {
+        "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+        "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train-patches-v1/summary.json",
+        "sha256": "7373dfe313eb5c290b44c69950fdb0de6df9bec5b79bc5d4d79b9ba7949de2a2"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+        "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/manifest.json",
+        "sha256": "1115ccdeabc1b2afb9d2046964ef8a062b3d481a3a97a8e1fb282b5bd9028a2e"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/patch_index.json",
+        "sha256": "6522dc267629bb563a63e2271859194ac6cb7a003fe7bfb3a6648684651b0d64"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/primary.json",
+        "sha256": "4cf932820424b862d620ab7e0f1fb245218e221d91b5d214b22f62372bdd5f0d"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-train275-materialization-v1/second_stage.json",
+        "sha256": "118bb89287e5dd9cbfe2fe009aa0999d6a40f02393049813a64a0a0aa8dac702"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
+        "sha256": "02925b0e26a2fb046b43eeea0ddfe827adb45ca3306df334b9478660c98710ca"
+      },
+      {
+        "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
+        "sha256": "fa63587d47d3d34f99d4976fbd9512ada076f23739e3b7b348d8e52ea6c28d8f"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_train_materialization.py",
+        "sha256": "4063c8d1f5381956240813e08ea357c01360ae3be62b53de4e3e6709170da6ea"
+      },
+      {
+        "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
+        "sha256": "3289c9f0fe5e4c4028bf1958b98f7e93912ace6fa3d337230f38ca719fb6ea13"
+      },
+      {
+        "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
+        "sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-candidate-application-preflight-20260810/preflight.json",
+        "sha256": "7e2a519210244544c94d5753980e9945690a46b964d6a7801eebc337168e27e8"
+      },
+      {
+        "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
+        "sha256": "ffc753cfd2ca20335158197d776eebdc1afa8909dfeb72c6cd0df2b31f66fb39"
+      },
+      {
+        "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+        "sha256": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636"
+      },
+      {
+        "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
+        "sha256": "87406a9b610133cc385467814afeb8e0b64502148afc7644db34ae4604950ed6"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-monotonic-residual-erase-v2-checkpoint-kill.md",
+        "sha256": "fffe2a0357f0a7de5b59bdb893b9f29ac15c6e1c27da72dd7b013f9890c75802"
+      },
+      {
+        "path": "outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810/audit.json",
+        "sha256": "73782017723a75279f0d0fe1b69481835ac41570f60c655025c15a01edf6184a"
+      },
+      {
+        "path": "scripts/analysis/audit_monotonic_residual_erase_v2_checkpoint.py",
+        "sha256": "e9d9dfbe81f30a07e0e0b862ae448f10a493360cac6a158c3b67547a094a28a3"
+      },
+      {
+        "path": "tests/test_audit_monotonic_residual_erase_v2_checkpoint.py",
+        "sha256": "f6184e1ea64ea83f84c3497013344338d581a2195f413c78e059b2746e44f0be"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-dual-input-support-separation-preregistration.md",
+        "sha256": "361767c6096c2cbb9c7c79123fdc0a47f054083bca488657d2a5edcb068b8788"
+      },
+      {
+        "path": "docs/dual-input-support-separation-prerequisite-v1.json",
+        "sha256": "702b0f4cb68e371589177f5b0013a106ef38ff9c73528b6f2325f38c01245585"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-dual-input-support-separation-diagnostic-kill.md",
+        "sha256": "64c52693cc60bab60d33586e73a46a3789d0dcbd24a3b1f4492a88fc654f94d9"
+      },
+      {
+        "path": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+        "sha256": "415dd3720bbb70db541979a9675c938730c5da6d62a223127fe40997a40b92ff"
+      },
+      {
+        "path": "scripts/analysis/audit_dual_input_support_separation.py",
+        "sha256": "4821a27c860aef54878fc15016458244a3cbd195fdbffacdc535ded1b1b032e5"
+      },
+      {
+        "path": "tests/test_dual_input_support_separation_prerequisite.py",
+        "sha256": "cd16796d33c25c49b0132c175a1dbd61fbc0838d6697ea225cecfb81760e157b"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md",
+        "sha256": "03c02ab2f373dcf0ee4542dd9fca9e952afa5d7f3ca34401ae5ea3e64ced134e"
+      },
+      {
+        "path": "docs/spatial-primary-mask-support-prerequisite-v1.json",
+        "sha256": "577de835e7a37799b4feb4ee0f2b8ebd138bffdb766c3d41db143aacb7aa3082"
+      },
+      {
+        "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-diagnostic-kill.md",
+        "sha256": "5da07daa99b6efb8783f4a5c0ef1f37edd2a6b50f36c9e5d21e8a200de42820a"
+      },
+      {
+        "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+        "sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e"
+      },
+      {
+        "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+        "sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7"
+      },
+      {
+        "path": "scripts/analysis/materialize_primary_masks_train_only.py",
+        "sha256": "76812498214ba2e6ebe387b10f9a65ab3c93d6f17e56599b91a5a8883f208b16"
+      },
+      {
+        "path": "scripts/analysis/audit_spatial_primary_mask_support.py",
+        "sha256": "45add93e2944590c3b9abbbd562bbdb09b08161edc35b221afecbe658d9e9c7a"
+      },
+      {
+        "path": "tests/test_spatial_primary_mask_support_prerequisite.py",
+        "sha256": "5075d7b8ada2296652e60a25f89212c1310616f00e2004653e1b47b6fe1966a9"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md",
+        "sha256": "422170ac77db148b23b597c100d054ba3c8c5f69754a586f814b22b44c2453ae"
+      },
+      {
+        "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+        "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-diagnostic-kill.md",
+        "sha256": "01c6d854a7b1e70683c1697ecaf7b6357d12f5bbda0671cf96a1b5503c56ea9c"
+      },
+      {
+        "path": "outputs/reconstruction-stage-disagreement-materialization-20260812/manifest.json",
+        "sha256": "1f17a884735614303a5340cefcfc5962b5c15677b288d56f65a4ed850d9147c6"
+      },
+      {
+        "path": "outputs/reconstruction-stage-disagreement-prerequisite-20260812/audit.json",
+        "sha256": "c6564514041cde59e928032343d316d1f2a33c18e0931c79022a5368fbbbda1b"
+      },
+      {
+        "path": "scripts/analysis/materialize_reconstruction_stage_disagreement_train_only.py",
+        "sha256": "dc7710e6f8b50224c2ad9ccaad9f85f62dcc904beee48d678af0c357f697ef25"
+      },
+      {
+        "path": "scripts/analysis/audit_reconstruction_stage_disagreement.py",
+        "sha256": "1ce37584ca6ec43a24887b5c36ba7a221ae09663d511480f0a641a06f755ebe8"
+      },
+      {
+        "path": "tests/test_reconstruction_stage_disagreement_prerequisite.py",
+        "sha256": "8ceecedee5b2cba4c89bdf03e10861a1e194505cd301f6da983e083353e04c1c"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-source-output-support-preregistration.md",
+        "sha256": "f5c9c8eda68016b55c4a12d61065223a8c432b6d65bdb7d3ea0a9b549f506d3d"
+      },
+      {
+        "path": "docs/source-output-support-prerequisite-v1.json",
+        "sha256": "fba4b1d333d5993d5741a044ed0dfec044c014a3d5c2f502c6ce7cfa25f86f5d"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-source-output-support-diagnostic-kill.md",
+        "sha256": "a28dda0718677ec5fc0f47c7a37685b07ea45f73b5d57b3314b50890eaa2ca76"
+      },
+      {
+        "path": "outputs/source-output-support-prerequisite-20260812/audit.json",
+        "sha256": "29957a04e0ece3a4cdc0d0cdf97732536aa05caee96c5b571c64a191c953a2b6"
+      },
+      {
+        "path": "scripts/analysis/audit_source_output_support_separation.py",
+        "sha256": "5690bfcb04e9a69566ca67d8eb9ae479d98065926fd0d35c64a94e2d637d879e"
+      },
+      {
+        "path": "tests/test_source_output_support_prerequisite.py",
+        "sha256": "e81dad38d09bb9d0912849a007d1482149bb39b98ff0f89594d07ba8c0722e9b"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md",
+        "sha256": "9476654731d8560b43109b4daf62af3527e50ecf588ffe8b6198d59a2659f580"
+      },
+      {
+        "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+        "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+      },
+      {
+        "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
+        "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
+      },
+      {
+        "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+        "sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3"
+      },
+      {
+        "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+        "sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351"
+      },
+      {
+        "path": "scripts/analysis/materialize_second_stage_alpha_train_only.py",
+        "sha256": "8a9314b9e880ad968aabab10b144d59d489488db4e83d0371e11bedb6db89f06"
+      },
+      {
+        "path": "scripts/analysis/audit_second_stage_alpha_support.py",
+        "sha256": "1142e5d160702c617ea5163fe61ecda47b9903d13d2f4ec45293e5b8e3496731"
+      },
+      {
+        "path": "tests/test_second_stage_alpha_support_prerequisite.py",
+        "sha256": "ff7bee5358b8bb3b34f0528e217b9abd0c0e29ed143dd59243e84f8c5b8f9f66"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md",
+        "sha256": "03733208a1b20b8904852c052706908e4884912903a276725ad1531169b7629a"
+      },
+      {
+        "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
+        "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-diagnostic-kill.md",
+        "sha256": "905e99712fc4de7ccec76fd7f77fd7334d310c7977b9d4d1a61fe20bdf7d5104"
+      },
+      {
+        "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+        "sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f"
+      },
+      {
+        "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+        "sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4"
+      },
+      {
+        "path": "scripts/analysis/materialize_independent_hw5k_expert_outputs_train_only.py",
+        "sha256": "4e369f8d0b8d1e1da9a27db14e0799d85bf23d061a99bd3fc819a6ef9b29f4f9"
+      },
+      {
+        "path": "scripts/analysis/audit_independent_hw5k_expert_disagreement_support.py",
+        "sha256": "74c738c958aeef0ff0e7a5dd54b46a9d8c6197d71146ddc70ce853c44ec75923"
+      },
+      {
+        "path": "tests/test_independent_hw5k_expert_disagreement_support_prerequisite.py",
+        "sha256": "bc89d669e77aba92f5f6c63d3b434ebbce0edb93df22ff02eb8579f3fd1aba3e"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
+        "sha256": "914d9c40e95ffd7c6bcf73b466830b0911684e0383c163f72fbbe0ba1ab73a9c"
+      },
+      {
+        "path": "docs/external-text-layout-support-prerequisite-v1.json",
+        "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+      },
+      {
+        "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
+        "sha256": "32400353d0944251ea49a2c796a8e1f0b14cc64010ceeb7f3bf7ed62622a2ed1"
+      },
+      {
+        "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
+        "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
+      },
+      {
+        "path": "docs/external-text-layout-static-memory-risk-20260814.json",
+        "sha256": "144bf4b1c55cfa8b4b19ec125b603dfb5daaf0fa02d0f92a9725adf60ab1651f"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+        "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+      },
+      {
+        "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+        "sha256": "8b6c563a7e9f5d879cc962b35fcc6ede15ce341a5f790fc49233cda9d235b43e"
+      },
+      {
+        "path": "scripts/analysis/report_external_text_layout_static_memory_risk.py",
+        "sha256": "c919f88b82c6d368d6868e8aa5d9d27ae9d2387ebab8ff40a22aeb544e6d3a71"
+      },
+      {
+        "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+        "sha256": "9f075754889dd637432f9beac93c4fe68dd3d96f049b2497dec454f8f4573545"
+      },
+      {
+        "path": "tests/test_external_text_layout_static_memory_risk.py",
+        "sha256": "87473757551f021b2e9f5179347961e2e75cc1720f2c090a5e5359b6ebd8fd6e"
+      },
+      {
+        "path": "tests/test_external_text_layout_support_prerequisite.py",
+        "sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md",
+        "sha256": "2314a2061e9c0248b62c9b10cd0d13a0418576ecac43fc260cd19e7c078087a3"
+      },
+      {
+        "path": "docs/external-text-layout-runtime-equivalence-repair-v1.json",
+        "sha256": "70c0cb01eb5641b4619aeb46ba29b88a76070f97bc834efa75e37deb081f385b"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_transformers_runtime_repair.py",
+        "sha256": "2127729ee2d84f6402aaa685a1eec7cdbe94704fbbfffcb779d0c7c92b35972e"
+      },
+      {
+        "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+        "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+      },
+      {
+        "path": "tests/test_external_text_layout_runtime_equivalence_repair.py",
+        "sha256": "bf7146eebda2faab88986c1ce5286ad5a111b8e048a2f485cb2dd0b69465b9a8"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md",
+        "sha256": "b0967d49f8bfca2b6c24fbf0dfce64a59f3f3afa32d5a23155d1d92d823605c1"
+      },
+      {
+        "path": "docs/external-text-layout-frozen-cache-reconstruction-v1.json",
+        "sha256": "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
+      },
+      {
+        "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+        "sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502"
+      },
+      {
+        "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+        "sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md",
+        "sha256": "b565e0ccead26f2e04597d3b824088c1924c4a937e5424c6e573517ec002a324"
+      },
+      {
+        "path": "docs/external-text-layout-historical-runtime-restoration-20260814.json",
+        "sha256": "13d09cfbc3876947522c54ab34878cd67be710df1bc7df9bb8a999258aeb2c95"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-probe-kill.md",
+        "sha256": "838fc58f67dc2b9e638ec750fea4ffcb1533eb57f3fd46e804b64d3545012510"
+      },
+      {
+        "path": "docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json",
+        "sha256": "d56d49f9ac37d127b0a17359af9f2b53a2fbcee0fcff3beabf638487a29ae5b9"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-feasibility-20260814.json",
+        "sha256": "5b4a2cf381b8c0046b68d3b002c5676cc845b0e3bdd1cd00b275a439d9b2a723"
+      },
+      {
+        "path": "scripts/analysis/report_external_text_layout_tiled_9x9_feasibility.py",
+        "sha256": "8adc958c5446f3d9faf370b65a3d6610d0d1f40e64cffa75749cc352c2b55b15"
+      },
+      {
+        "path": "tests/test_external_text_layout_tiled_9x9_feasibility.py",
+        "sha256": "4fc40e6f6690141384b6cc15372b09674e3b55b5ca3e8f85eb4470e6108fda48"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-runtime-repair-v1.json",
+        "sha256": "203e67ac2d12557034f546d9e25e475d083bb2086d2f0ed7bfc1a3244ba3b250"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md",
+        "sha256": "ac4b8855557c14b6af65501ac04743992d85bd8e32f1baeb2374a5430f3b7b99"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+        "sha256": "07b894a5a43b5331c5ba866dd2a714e6346723c8112f0b23bebfb56852f839ac"
+      },
+      {
+        "path": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py",
+        "sha256": "01ef4e03ff41bbb440a7a028e05e07a4c6f2aa1dde049f124a362129b0b37b39"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json",
+        "sha256": "6961f9beff92626dcd65547687072473a4f230ab25a05e2746ef2a01dd6ad758"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md",
+        "sha256": "770121757369831ec4c8bdcb373949c8d8fd9db5bfdff58fb2c6ba27deed9d17"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+        "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md",
+        "sha256": "3cdaecefc5514e2af03582379244c2266b99523556ecb1597097084575f4f3d0"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+        "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md",
+        "sha256": "7ec16e150b161682257869f68cc34054fb00a0c6e2f5d761853dd9253a46de11"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
+        "sha256": "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md",
+        "sha256": "6891c0fa4ecb23e24d1e6c2dc65f7b4dc12c24408cf73753f2daec17d646ef61"
+      },
+      {
+        "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+        "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+        "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+      },
+      {
+        "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+        "sha256": "0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c"
+      },
+      {
+        "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+        "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
+      },
+      {
+        "path": "docs/external-text-layout-host-readiness-recovery-20260814.json",
+        "sha256": "7034474fe63fa38ea026221bef837c1f0dca0a4de582942da402e93870191637"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-host-readiness-recovery.md",
+        "sha256": "2fb608ddbbc41034ef7a645fb3b86ddc4c66646ca10ce37f58e8195bfcfe0e38"
+      }
+    ],
+    "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
+    "first_gate": "scut_inner_val15",
+    "id": "monotonic-residual-erase-support",
+    "next_action": "The hash-bound cache-stage monitor is integrated and verified, but safe in-session host cleanup left swap at 1,362.62 MiB versus the unchanged 512 MiB maximum. No OMX team, model process, or Booted Simulator remained; terminating user CoreSimulator services and sampling for two minutes did not close the gate, and no user applications were disrupted. The single tiled probe remains unconsumed and all cache paths remain absent. Use a fresh clean host restart as the next recovery boundary, then recheck every gate before opening unrelated applications. Do not auto-launch the probe or weaken the absolute swap limit. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "prerequisites": [
+      {
+        "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
+        "id": "monotonic_residual_erase_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "Deterministic CPU evidence proves exact identity, nonnegative bounded output, live brighten support and magnitude gradients, exact no-op preserve optimization, serialization, legacy compatibility, and a closed historical training CLI.",
+        "id": "monotonic_residual_erase_synthetic_prerequisite",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any image, mask, label, or target pixel decode, reuse the frozen mutually exclusive roles and prove that only train-role targets may define target-lighter edit support while target-darker and identity pixels become preserve negatives.",
+        "id": "monotonic_residual_erase_data_role_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before any real pixel decode, target-derived patch construction, or training, freeze a dedicated trainer and exactly one model, schedule, loss, train-role, output, and application configuration while all quality gates remain closed.",
+        "id": "monotonic_residual_erase_training_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "Before training, materialize only the exact train275 frozen pipeline and registered top-target-lighter patches, then prove role membership, content hashes, patch bounds, target-lighter support, and preserve-negative coverage.",
+        "id": "monotonic_residual_erase_train_materialization_audit",
+        "status": "passed"
+      },
+      {
+        "detail": "Deterministic evidence rejects the sub-integer v1 learning path and proves one target-free v2 application with a 12-gray reachable gate, exact preserve no-op, and a no-darkening runtime guard.",
+        "id": "monotonic_residual_erase_candidate_application_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "A materially different 13-channel target-free dual-pipeline representation and exact page-grouped closed-form ridge audit are frozen; no data execution, optimizer, candidate, or gate is authorized by the record.",
+        "id": "monotonic_residual_erase_support_separation_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The exact train275 diagnostic completed to KILL: full mean AUC was 0.648757 and its margin over second-stage RGB was only 0.004251, so the 13-channel family is closed without training or candidate inference.",
+        "id": "dual_input_support_separation_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "The exact train275 label-free mb/ms materialization, four-channel pixel representation, fixed second-stage-RGB ablation, page folds, sampling, AUC gates, and portable-checkpoint handoff are frozen without execution.",
+        "id": "spatial_primary_mask_support_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The label-free 275-page mb/ms materialization passed, but the exact diagnostic KILLed the family: mean AUC 0.580727, median page AUC 0.584623, and full-minus-RGB-ablation margin -0.063779. No training or quality surface opened.",
+        "id": "spatial_primary_mask_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "A materially different frozen-primary reconstruction-stage disagreement source, four exact channels, label-free NPZ materialization, fixed RGB ablation, and explicit terminal successors are frozen before implementation or data execution.",
+        "id": "materially_new_target_free_support_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The label-free 275-page stage materialization passed and the exact diagnostic reached mean AUC 0.657016, but KILLed the family because its margin over the fixed RGB ablation was only 0.012509 versus the frozen 0.03 minimum. No training or quality surface opened.",
+        "id": "reconstruction_stage_disagreement_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "The label-free raw source-plus-second-stage RGB representation, exact six channels, train roles, deterministic sampling, page folds, closed-form ridge, fixed RGB ablation, acceptance gates, and terminal successors are frozen before data execution.",
+        "id": "materially_new_support_successor_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The exact train275 diagnostic reached mean AUC 0.654677 but KILLed the family because its margin over the fixed second-stage RGB ablation was only 0.010171 versus the frozen 0.03 minimum. No training or quality surface opened.",
+        "id": "source_output_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "The frozen second-stage erasemap raw prethreshold alpha, exact four-channel RGB-plus-alpha representation, label-free materialization, fixed RGB ablation, and terminal successors are frozen before implementation or data execution.",
+        "id": "materially_new_support_successor_preregistration_v2",
+        "status": "passed"
+      },
+      {
+        "detail": "The target-free 275-page raw-alpha materialization passed and the exact diagnostic reached mean AUC 0.656274, but KILLed the family because its margin over the fixed second-stage RGB ablation was only 0.011768 versus the frozen 0.03 minimum. No training or quality surface opened.",
+        "id": "second_stage_alpha_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Paired same-page output from an independently trained frozen HW5K expert is frozen as a materially new support source. The exact 123-page specialist-unseen population, current-primary-RGB ablation, five page folds, sampling, AUC gates, and terminal successors are registered without routing, image decode, or quality access.",
+        "id": "materially_new_support_successor_preregistration_v3",
+        "status": "passed"
+      },
+      {
+        "detail": "The exact target-free paired materialization passed and the 123-page unseen-HW5K diagnostic reached mean AUC 0.664916, but KILLed the family because its 0.029727 margin over current-primary RGB missed the frozen 0.03 minimum by 0.000273. No training or quality surface opened.",
+        "id": "independent_hw5k_expert_support_train_only_diagnostic",
+        "status": "passed"
+      },
+      {
+        "detail": "Official frozen PP-OCRv6 text-detection occupancy and confidence, exact train275 target-free materialization, second-stage-RGB ablation, five page folds, sampling, AUC gates, upstream-overlap caveat, and terminal successors are frozen before data execution.",
+        "id": "materially_new_support_successor_preregistration_v4",
+        "status": "passed"
+      },
+      {
+        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator binds the tiled result identity and strict schema. The runtime monitor is integrated under both registered Python environments. Safe host cleanup confirmed no OMX team, model process, or Booted Simulator, but swap remained 1,362.62 MiB after user CoreSimulator termination and five stable samples. No detector or cache process executed; the single tiled page remains disabled until a fresh clean host passes the unchanged gate.",
+        "id": "external_text_layout_support_train_only_diagnostic",
+        "status": "pending"
+      },
+      {
+        "detail": "The v2 cache-reconstruction handoff is preregistered to consume only a complete PASS from the tiled one-page probe while retaining exact historical runtime, cache hashes, helper ordering, publication, and forbidden-access boundaries. Validator integration is allowed; OCR, cache reconstruction, formal materialization, quality, candidate, and promotion execution remain closed until the tiled probe passes.",
+        "id": "external_text_layout_tiled_probe_cache_reconstruction_v2_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The historical cache stage runtime-monitor wrapper is frozen to preserve the helper hash and atomic cache semantics while continuously enforcing the existing reconstruction resource limits and terminating the child process group on any breach. Integration and synthetic tests are allowed; model and cache execution remain closed.",
+        "id": "external_text_layout_cache_reconstruction_runtime_monitor_preregistration",
+        "status": "passed"
+      }
+    ],
+    "killed_family_prohibitions": [
+      "sign_separated_residual_v1_training",
+      "sign_separated_residual_v2_repeat_training",
+      "sign_separated_learning_rate_rescue",
+      "sign_separated_step_count_rescue",
+      "sign_separated_loss_weight_rescue",
+      "sign_separated_application_threshold_rescue",
+      "sign_separated_inner_val15",
+      "sign_separated_scut115",
+      "sign_separated_holdout40",
+      "sign_separated_reserved_blind",
+      "sign_separated_promotion",
+      "monotonic_residual_erase_v2_training",
+      "monotonic_residual_erase_v2_learning_rate_rescue",
+      "monotonic_residual_erase_v2_step_count_rescue",
+      "monotonic_residual_erase_v2_loss_weight_rescue",
+      "monotonic_residual_erase_v2_patch_selection_rescue",
+      "monotonic_residual_erase_v2_application_threshold_rescue",
+      "monotonic_residual_erase_v2_candidate_inference",
+      "monotonic_residual_erase_v2_inner_val15",
+      "monotonic_residual_erase_v2_promotion",
+      "dual_input_support_separation_v1_repeat_diagnostic",
+      "dual_input_support_separation_v1_feature_fold_sampling_lambda_or_threshold_rescue",
+      "dual_input_support_separation_v1_training",
+      "dual_input_support_separation_v1_candidate_inference",
+      "dual_input_support_separation_v1_quality_gate",
+      "dual_input_support_separation_v1_promotion",
+      "spatial_primary_mask_support_v1_repeat_diagnostic",
+      "spatial_primary_mask_support_v1_mask_channel_or_transform_rescue",
+      "spatial_primary_mask_support_v1_threshold_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "spatial_primary_mask_support_v1_training",
+      "spatial_primary_mask_support_v1_candidate_inference",
+      "spatial_primary_mask_support_v1_quality_gate",
+      "spatial_primary_mask_support_v1_promotion",
+      "reconstruction_stage_disagreement_v1_repeat_diagnostic",
+      "reconstruction_stage_disagreement_v1_stage_channel_or_transform_rescue",
+      "reconstruction_stage_disagreement_v1_threshold_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "reconstruction_stage_disagreement_v1_training",
+      "reconstruction_stage_disagreement_v1_candidate_inference",
+      "reconstruction_stage_disagreement_v1_quality_gate",
+      "reconstruction_stage_disagreement_v1_promotion",
+      "source_output_support_v1_repeat_diagnostic",
+      "source_output_support_v1_source_channel_or_transform_rescue",
+      "source_output_support_v1_threshold_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "source_output_support_v1_training",
+      "source_output_support_v1_candidate_inference",
+      "source_output_support_v1_quality_gate",
+      "source_output_support_v1_promotion",
+      "second_stage_alpha_support_v1_repeat_diagnostic",
+      "second_stage_alpha_support_v1_threshold_layer_channel_or_transform_rescue",
+      "second_stage_alpha_support_v1_neighborhood_fold_sampling_lambda_or_nonlinear_rescue",
+      "second_stage_alpha_support_v1_training",
+      "second_stage_alpha_support_v1_candidate_inference",
+      "second_stage_alpha_support_v1_quality_gate",
+      "second_stage_alpha_support_v1_promotion",
+      "independent_hw5k_expert_support_v1_repeat_diagnostic",
+      "independent_hw5k_expert_support_v1_margin_rounding_or_relaxation",
+      "independent_hw5k_expert_support_v1_channel_layer_transform_fold_sampling_lambda_checkpoint_or_nonlinear_rescue",
+      "independent_hw5k_expert_support_v1_routing_rescue",
+      "independent_hw5k_expert_support_v1_training",
+      "independent_hw5k_expert_support_v1_candidate_inference",
+      "independent_hw5k_expert_support_v1_quality_gate",
+      "independent_hw5k_expert_support_v1_promotion",
+      "external_text_layout_duplicate_upsample_repair_repeat_probe",
+      "external_text_layout_same_detector_runtime_geometry_rescue_without_preregistration"
+    ],
+    "prohibited_outside_registered_external_text_layout_diagnostic": [
+      "unregistered_implementation",
+      "unregistered_data_execution",
+      "training",
+      "checkpoint_generation",
+      "candidate_inference",
+      "scut_inner_val15",
+      "development_gate",
+      "scut115",
+      "holdout40",
+      "visual_review",
+      "reserved_blind",
+      "current_primary_replacement"
+    ],
+    "prohibited_before_first_gate": [
+      "development_gate",
+      "scut115",
+      "holdout40",
+      "visual_review",
+      "reserved_blind",
+      "threshold_rescue",
+      "learning_rate_or_step_sweep",
+      "loss_weight_sweep",
+      "current_primary_replacement"
+    ],
+    "terminal": "PREREQUISITE_NEEDED"
+  },
+  "baseline": {
+    "checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "inner_val15_manifest": {
+      "path": "hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+      "sha256": "fb25bb2aef2f9285403f908deb3da6d88b07b5d1c2c812965ce9e0636ddc172e"
+    },
+    "matched_copy_protocol": {
+      "batch_size": 8,
+      "change_threshold": 12,
+      "copy_input_outside_mask": "mb",
+      "copy_mask_dilate": 0,
+      "copy_mask_threshold_auto": "mb_cov8_step",
+      "eval_threshold": 12,
+      "page_overlap": 32
+    },
+    "product_default": "artifacts/current-primary"
+  },
+  "calibration": {
+    "decision": {
+      "path": "docs/decisions/2026-08-07-current-primary-inner-val15-replay-noise-calibration.md",
+      "sha256": "abecd8f6e7ea80b08a4f113d8457edf9deb909dea5776bab2e7028534387bab4"
+    },
+    "minimum_residual_gain": 0.0005,
+    "pages_per_run": 15,
+    "prediction_hashes_identical": true,
+    "run_count": 3,
+    "scope": "scut_inner_val15_current_primary_matched_copy",
+    "terminal": "PASS"
+  },
+  "program": {
+    "name": "EnsExam-GAN current-primary evidence-gated quality loop",
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "reserved_blind_state": "disabled"
+  },
+  "records": [
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-preregistration.md",
+          "sha256": "b5c7594b48529f97f2f117ce9003a5476973272472856a994cf808221bbc8c51"
+        }
+      ],
+      "id": "universal-sidecar-d4-primary-edit-direction-preregistration",
+      "outcome": "exact_d2_diff_frozen_pending_real_preflight",
+      "repeat_policy": "run_real_d4_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-real-preflight-pass.md",
+          "sha256": "86205ba3e063667072c9398fa02b1de7ab1e7762ce27275bd6f4ffde7e4f7510"
+        },
+        {
+          "path": "outputs/universal-sidecar-d4-preflight-20260809/preflight.json",
+          "sha256": "46ed97cb263a48189a5af10a480cce43637353efa6e3b610aea5ff3b2f94ed94"
+        }
+      ],
+      "id": "universal-sidecar-d4-real-preflight",
+      "outcome": "exact_d2_diff_fail_closed_preflight_passed",
+      "repeat_policy": "run_exact_registered_d4_step80_once",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
+          "sha256": "c257cc5ff43e6cf8ddeb45a1227503f8c587438b6ac042e7aae24b4797b8ab1f"
+        },
+        {
+          "path": "artifacts/trials/universal-sidecar-d4-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-20260809/ensexam/20260809_090610/epoch_1.pth",
+          "sha256": "0bbb27ed795d674912a09a60bcdcbc1ce2d50517f2e8b968b2b9662ddf40f97c"
+        },
+        {
+          "path": "outputs/universal-sidecar-d4-step80-20260809/train.log",
+          "sha256": "715e8a1359a6984a4deab71634a203586637d1037a9cee2606c0ad43ceff6254"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+          "sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+          "sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+          "sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+          "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
+        }
+      ],
+      "id": "universal-sidecar-d4-primary-edit-direction-inner-val15-step80",
+      "outcome": "direction_restricted_sidecar_subthreshold_noop",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-preregistration.md",
+          "sha256": "75df672f5aab164fde1cfe5fe97a7426f1e258a417639e571ad79ac67b577a9b"
+        },
+        {
+          "path": "docs/rejected-directions.md",
+          "sha256": "0907cabb76bec1ca338a3d31c9c6c968f683ef10e2b60c6ae27df70b06ecd10c"
+        },
+        {
+          "path": "docs/product-quality-labels.csv",
+          "sha256": "67d34e5b4a5d81dd846c523002c26e106ec288afc1d0d9e8438a8aa42e24d972"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
+          "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
+        }
+      ],
+      "id": "sign-separated-residual-repair-preregistration",
+      "outcome": "identity_brighten_darken_representation_selected_pending_synthetic_preflight",
+      "repeat_policy": "implement_and_run_synthetic_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-synthetic-prerequisite-pass.md",
+          "sha256": "11df22c9d1970a6c47f00806a318a10d1247f2ad30b862ec8455770e2c3ceaed"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json",
+          "sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5"
+        },
+        {
+          "path": "scripts/infer/patch_cleanup_erasemap.py",
+          "sha256": "dfa4b9946e6645fbc19f2267fb55cc26a61b5c8391c604eee691c7f229440727"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_residual_repair.py",
+          "sha256": "41e3d4544c590d657a440164014ab731bc1c259064cb064981ba7e4caf2d88eb"
+        },
+        {
+          "path": "tests/test_sign_separated_residual_repair.py",
+          "sha256": "6ce1e3c43c95a019a7d96f47e8ceb5449634ca65cfb9567397f59beb67a10e4b"
+        }
+      ],
+      "id": "sign-separated-residual-repair-synthetic-prerequisite",
+      "outcome": "identity_signed_routes_and_branch_isolation_contract_passed",
+      "repeat_policy": "reuse_exact_synthetic_audit_no_parameter_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-sign-separated-residual-repair-data-role-preflight-pass.md",
+          "sha256": "b60b15b8cfc4c6a9f1cf98ab70ebe7229bfb8d45aa79f75009cf82e0535a4b4d"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-data-role-preflight-20260809/preflight.json",
+          "sha256": "9bb38b018543db08f4e047bde08d2f0b2270bba1c2597e755917934f17539f0e"
+        },
+        {
+          "path": "docs/sign-separated-residual-data-roles.json",
+          "sha256": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_data_roles.py",
+          "sha256": "23b0fd092bb824cf9143fadaf4ac2265117f5c9ca14c2b2b712bd30f0f025c2f"
+        },
+        {
+          "path": "tests/test_validate_sign_separated_data_roles.py",
+          "sha256": "4e2e80b57c6c041fc0221f0dea73782a1ea1525263dc306136255849f4030273"
+        }
+      ],
+      "id": "sign-separated-residual-data-role-preflight",
+      "outcome": "metadata_only_roles_baseline_hashes_and_zero_overlap_passed",
+      "repeat_policy": "reuse_frozen_role_plan_and_hashes_no_pixel_access",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-training-preflight-pass.md",
+          "sha256": "cc015866e722c4cc050cb62845224a8a19b49e8418d11d6b41f2a5ce7da6c56f"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-training-preflight-20260810/preflight.json",
+          "sha256": "80511bc9d117fb61a4276dee05fa10a04c40b471d64dc494e09a3d540238246b"
+        },
+        {
+          "path": "docs/sign-separated-residual-training-plan.json",
+          "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+        },
+        {
+          "path": "scripts/train/train_sign_separated_residual_probe.py",
+          "sha256": "b2e018f46d797335688858455cc9807757afad2756f3acf8eb48205ee5d2e829"
+        },
+        {
+          "path": "scripts/analysis/build_sign_separated_residual_patch_index.py",
+          "sha256": "36aa768fd5df5ea6573416ef79685be8339d9ebcb2831e5635c5a40c9c2f3056"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_training_preflight.py",
+          "sha256": "82862ffff19e24a12261ce02d5ab759111533191e819be532346ba60012ace7a"
+        },
+        {
+          "path": "tests/test_validate_sign_separated_training_preflight.py",
+          "sha256": "ff725026bc224ec31d21e174d59e81f4c1dab9faba0c99e28a27851bd631a1b1"
+        }
+      ],
+      "id": "sign-separated-residual-training-preflight",
+      "outcome": "dedicated_train275_identity_initialized_training_path_passed_without_pixel_decode",
+      "repeat_policy": "reuse_exact_plan_and_hashes_no_parameter_or_data_role_drift",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-train275-materialization-pass.md",
+          "sha256": "f0113da1c798edeee0a01e30bbe64a650a9df996abca5c93a3e5074cd74dd807"
+        },
+        {
+          "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+          "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
+        },
+        {
+          "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train-patches-v1.csv",
+          "sha256": "62ac367251c0dc27f507f51c71dfc588c6ae3df70fd6c60005b226e2a5aef7d9"
+        },
+        {
+          "path": "outputs/archive/sign-separated-residual-repair-20260810/train-patches/summary.json",
+          "sha256": "783124b6fff121d1591565fb14c5e6316ec036ccefb8a0178dd1e920a8c0e75a"
+        },
+        {
+          "path": "scripts/analysis/materialize_sign_separated_train_inputs.py",
+          "sha256": "cbc3d107f9410f83d1698b17cd56c3b6121b3b698cdff7f66914ff960bcf19ec"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_train_materialization.py",
+          "sha256": "d57b351f7ea1d14e420e208ce77d6647d551d377f88e5e32e3cc07b1d36c352c"
+        },
+        {
+          "path": "tests/test_sign_separated_train_materialization.py",
+          "sha256": "82b851c6982d344c36cd4ff8094a15b67c34ea82072a6cf9e8c589a8934f0a83"
+        }
+      ],
+      "id": "sign-separated-residual-train275-materialization-audit",
+      "outcome": "exact_train275_frozen_pipeline_and_direction_balanced_patch_materialization_passed",
+      "repeat_policy": "reuse_exact_materialized_hashes_no_rebuild_or_patch_reselection",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-candidate-application-preflight-pass.md",
+          "sha256": "519dfbfe9ae2e84639c936546e709ef07c3d606146c7c4c4e20daf5294d237af"
+        },
+        {
+          "path": "outputs/sign-separated-residual-candidate-application-preflight-20260810/preflight.json",
+          "sha256": "e7d35ec3a3bb5090a2bb8335e2b8fb2086eb5d310cbb9e33f70951c890de933a"
+        },
+        {
+          "path": "docs/sign-separated-residual-candidate-plan-v2.json",
+          "sha256": "7f2c35a86efe05fb50c91008bba055c1ea5dd6d3578eee1256813721d707e205"
+        },
+        {
+          "path": "scripts/infer/run_sign_separated_residual_candidate.py",
+          "sha256": "2993e1dbfb739e9e883d0bac75c099cc9a79986c293e8a27215c8bae811f5550"
+        },
+        {
+          "path": "scripts/analysis/validate_sign_separated_candidate_application_preflight.py",
+          "sha256": "05c6d6e4c2ad4b8a7df718893bef5922526c34479a679583b7c2e0fcd896d7db"
+        },
+        {
+          "path": "tests/test_sign_separated_candidate_application_preflight.py",
+          "sha256": "8e111af45845e56bf4247d35e174207fc239383ba6b7014da7b9cacf0031e570"
+        }
+      ],
+      "id": "sign-separated-residual-candidate-application-preflight",
+      "outcome": "v1_unreachable_scale_rejected_and_v2_bounded_third_stage_application_passed",
+      "repeat_policy": "run_exact_v2_once_no_learning_rate_step_or_gate_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-sign-separated-residual-v2-checkpoint-kill.md",
+          "sha256": "54735b3b1579b923df2c25bef80b43ee4354ed068e6a839c1f5997b8c1041052"
+        },
+        {
+          "path": "outputs/archive/sign-separated-residual-repair-20260810/checkpoint-audit/audit.json",
+          "sha256": "3889612efe6ded767e1ecbb1fb44cad563dfbd6f04b0a76107b098e7060b6b3d"
+        },
+        {
+          "path": "scripts/analysis/audit_sign_separated_residual_checkpoint.py",
+          "sha256": "245f3ea65b71b05b2c93cf7b1e56ce33997cfbaab44430dd06302a09986d6212"
+        },
+        {
+          "path": "tests/test_sign_separated_residual_checkpoint_audit.py",
+          "sha256": "513f494f4fbd1f590b40fab89374b80430c10e2c3ae3717a88ed12d820c6e36b"
+        }
+      ],
+      "id": "sign-separated-residual-v2-checkpoint",
+      "outcome": "all_train_patch_routes_collapsed_to_darken_before_inner_val15",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
+          "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
+          "sha256": "c257cc5ff43e6cf8ddeb45a1227503f8c587438b6ac042e7aae24b4797b8ab1f"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+          "sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+          "sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+          "sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab"
+        },
+        {
+          "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+          "sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d"
+        }
+      ],
+      "id": "universal-sidecar-d4-subthreshold-noop-root-cause",
+      "outcome": "raw_direction_mode_magnitude_collapse_zero_positive_support",
+      "repeat_policy": "do_not_repeat_reuse_read_only_evidence",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-preregistration.md",
+          "sha256": "9d63193dab2492ad3352534ea104b45195dd016d11e049f11b5a44a731fc1c39"
+        },
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d4-subthreshold-noop-root-cause.md",
+          "sha256": "b911786b158e915d4779c56fff9fedb05661d6a82d2c41e7fc7b7d10e1880fbd"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-magnitude-preregistration",
+      "outcome": "folded_direction_magnitude_preregistered_pending_fail_closed_synthetic_preflight",
+      "repeat_policy": "implement_and_run_fail_closed_preflight_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite-pass.md",
+          "sha256": "837e4434a1b19c6449bf0824683b02dc27b42945a60bdd160b33848cdf069a48"
+        },
+        {
+          "path": "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json",
+          "sha256": "afe1eb4a500fd144f346ff6752285c574f49118318fab85e25668e2336371348"
+        },
+        {
+          "path": "scripts/analysis/audit_primary_edit_direction_folded_sidecar.py",
+          "sha256": "e72511b8487c2bc8c0c04c95d5dbd6ef85c2d3174323ebef563df481ff95a666"
+        },
+        {
+          "path": "tests/test_universal_sidecar_d5_folded_direction.py",
+          "sha256": "2ee2ae0a9bb310cef4232095f0113b38f219aad438833e37d68ba6bee2db9ca1"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-magnitude-synthetic-prerequisite",
+      "outcome": "synthetic_folded_direction_both_sign_gradient_contract_passed",
+      "repeat_policy": "reuse_exact_mechanism_audit_no_parameter_family_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-real-preflight-pass.md",
+          "sha256": "a0440a9b07095c45f150501342d075be67685872aefc84d5adc9ac38c2d40ee4"
+        },
+        {
+          "path": "outputs/universal-sidecar-d5-preflight-20260809/preflight.json",
+          "sha256": "7d8518e57b290a3b9a2de09d4953e83958894d65c1165113778b73a635c330c5"
+        },
+        {
+          "path": "configs/local/config.local-universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-mps.yaml",
+          "sha256": "602c91ccfa48bd71a6dee78c280a754f4f2342034ced7f554579537b2fc77f65"
+        },
+        {
+          "path": "scripts/analysis/validate_universal_sidecar_d5_preflight.py",
+          "sha256": "bc26a358b5335766d4225656f7801af2786430a6613307397449fc4f2c3cf1fe"
+        },
+        {
+          "path": "tests/test_universal_sidecar_d5_real_preflight.py",
+          "sha256": "e7048366df3316f1f6093bb22bda2cf7e9f67a3cee5d1b701f4d90344fbc292b"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-magnitude-real-preflight",
+      "outcome": "exact_d4_diff_fail_closed_preflight_passed",
+      "repeat_policy": "run_exact_registered_d5_step80_once",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md",
+          "sha256": "d90127ff58bf88e4606d741fb8415de8195b894ddc68e4a68605f45c2bc3cff8"
+        },
+        {
+          "path": "artifacts/trials/universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-20260809/ensexam/20260809_112035/epoch_1.pth",
+          "sha256": "875feb5b9f824b5075746b03415d07f1cfb9a1addb062d6d57181a3c9555c87b"
+        },
+        {
+          "path": "outputs/universal-sidecar-d5-step80-20260809/train.log",
+          "sha256": "2a13892194328df8d634b60081eb8f48c9c41bf8a464b37166f8047f6b4542dd"
+        },
+        {
+          "path": "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json",
+          "sha256": "b63ac6aee002386f9d2dea5c756a4780b11fc67aaeaab3440dafd1257b6b71ae"
+        },
+        {
+          "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/frozen_predictions/metrics.csv",
+          "sha256": "a13dafc92bf0accae8e901eb86c355d8a2f7e38ce714ea4b5c118a7384773654"
+        },
+        {
+          "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/post_freeze_metrics.csv",
+          "sha256": "13565b1dbd156b7dd797403a0d6fbd7132c6938313bd0a74b52b94a5e01bbe72"
+        },
+        {
+          "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json",
+          "sha256": "4e17003441c3e5a68a9f5e944ff351505f2bb150d65246611649697f0edc37ce"
+        },
+        {
+          "path": "scripts/analysis/audit_universal_sidecar_checkpoint.py",
+          "sha256": "59c6b087dadc76f8310c67da92b0273914ec72aba8e6026c0b5481ba4ca20cd2"
+        },
+        {
+          "path": "tests/test_universal_residual_adapter_sidecar.py",
+          "sha256": "198272623c6f62e23f2f52160616541023becaac7abe3c23bedda5a7e78aece0"
+        }
+      ],
+      "id": "universal-sidecar-d5-folded-direction-inner-val15-step80",
+      "outcome": "negative_global_scale_clamped_folded_branch_to_exact_zero_noop",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-primary-edit-direction-prerequisite-pass.md",
+          "sha256": "3767e5ebc9ee4b6e09e8d5dab78396d79b85b9da61e437fe978482897a816c02"
+        },
+        {
+          "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
+          "sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937"
+        },
+        {
+          "path": "scripts/analysis/audit_primary_edit_direction_sidecar.py",
+          "sha256": "0718021ebd5c96929294c9942b432e49d3576b31504087a8188ec96f1a990693"
+        }
+      ],
+      "id": "universal-sidecar-primary-edit-direction-prerequisite",
+      "outcome": "synthetic_direction_contract_passed",
+      "repeat_policy": "reuse_exact_mechanism_audit_no_parameter_family_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-d2-step80-kill.md",
+          "sha256": "106c8b2ceb8fa515ee03493d756ada4db06a121c47d5d62b01eaba71ae2c66ef"
+        }
+      ],
+      "id": "universal-sidecar-d2-step80",
+      "outcome": "source_guard_residual_regression",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-d2d-step80-halflr-decision.md",
+          "sha256": "cb65d9a705aec4419e721bc961d036d1f4744a40201b1f81bcc8af2ed8aee209"
+        }
+      ],
+      "id": "universal-sidecar-d2d-step80-half-lr",
+      "outcome": "safe_no_lift",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-baseline-tail-cache-prerequisite.md",
+          "sha256": "fff8e7db604dc92782d86f0469b2b318d940126b5a0ecd5ef7b32817709c4234"
+        }
+      ],
+      "id": "universal-sidecar-baseline-tail-cache-prerequisite",
+      "outcome": "train_only_support_prerequisite_passed",
+      "repeat_policy": "reuse_exact_cache_only",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
+          "sha256": "f129e860bdc6d473840cd41fd2375646b302c09aa65e7d8e504078ca643fa445"
+        }
+      ],
+      "id": "universal-sidecar-d3-baseline-tail-step80",
+      "outcome": "same_page_source_residual_regression_as_d2",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-preregistration.md",
+          "sha256": "17d0ec3aebb4b2937022bb7b0d67f52a8b69e61f3daf7acd54e2a93edf421544"
+        }
+      ],
+      "id": "monotonic-residual-erase-preregistration",
+      "outcome": "preserve_or_brighten_representation_selected_pending_synthetic_prerequisite",
+      "repeat_policy": "implement_and_run_exact_cpu_synthetic_prerequisite_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
+          "sha256": "e37a6f8ef3eac00f468fb9a55da208b4fadb60c32b857909366d953e9a27e198"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-synthetic-prerequisite-20260810/audit.json",
+          "sha256": "3a43b2a180642ebfe3edb1a7ef75f443e128ea760f2d2c17ccc40097beacd601"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_prerequisite.py",
+          "sha256": "b5151cbc43dcfa07fc500fa30330eeac9a86f7f90f8905c0edddfe9ae89f2aad"
+        },
+        {
+          "path": "scripts/infer/monotonic_residual_erase.py",
+          "sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_prerequisite.py",
+          "sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7"
+        },
+        {
+          "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+          "sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16"
+        }
+      ],
+      "id": "monotonic-residual-erase-synthetic-prerequisite",
+      "outcome": "identity_initialized_nonnegative_bounded_erase_contract_passed",
+      "repeat_policy": "reuse_exact_synthetic_audit_no_training_or_parameter_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-data-role-preflight-pass.md",
+          "sha256": "7b8931ef180a4e4d334e92cd922b876f67fb0954cbc079302026183a9fcec8e1"
+        },
+        {
+          "path": "docs/monotonic-residual-erase-data-roles.json",
+          "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-data-role-preflight-20260810/preflight.json",
+          "sha256": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b"
+        },
+        {
+          "path": "scripts/analysis/validate_monotonic_residual_erase_data_roles.py",
+          "sha256": "ffa22d36971249490494b38b500192411fd8fb62b009bdb4aa0ac37263920f26"
+        },
+        {
+          "path": "tests/test_validate_monotonic_residual_erase_data_roles.py",
+          "sha256": "665ee6d7dac64835044dd4aa58a4639d2bc219d6a8e06bcff73553684f991301"
+        }
+      ],
+      "id": "monotonic-residual-erase-data-role-preflight",
+      "outcome": "exact_frozen_roles_and_train_only_monotonic_supervision_passed_without_pixel_decode",
+      "repeat_policy": "reuse_exact_role_contract_no_split_or_target_access_drift",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-training-preflight-pass.md",
+          "sha256": "03f650cc9ac42c07417555f7d765e1b36016b8e27aff326d74c69383f1d5373c"
+        },
+        {
+          "path": "docs/monotonic-residual-erase-training-plan.json",
+          "sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-training-preflight-20260810/preflight.json",
+          "sha256": "eb34260fd05e3f56fac5a9d2ddbddb146d049692ce2b5d8f87649995a4fe12f5"
+        },
+        {
+          "path": "scripts/analysis/build_monotonic_residual_erase_patch_index.py",
+          "sha256": "2e8179cafb459a647aa27189d9d3cc73caf0fe3c9cf53ba8291319b7d7c925b8"
+        },
+        {
+          "path": "scripts/analysis/validate_monotonic_residual_erase_training_preflight.py",
+          "sha256": "d859b478b0ce717aaa2161a9b4b84a2a4c2085ac3013bdf51470e0c5003458eb"
+        },
+        {
+          "path": "scripts/train/train_monotonic_residual_erase.py",
+          "sha256": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_training.py",
+          "sha256": "e0bc7ca8e05298117ba16fe9cf32ce09e4950bb9d514de56c96e1203ddf05a0b"
+        },
+        {
+          "path": "tests/test_validate_monotonic_residual_erase_training_preflight.py",
+          "sha256": "36f03a0a71bc7d8a2c606230631a1d2b8a5cccd4bd1379b6ff50a15cc45a8bde"
+        }
+      ],
+      "id": "monotonic-residual-erase-training-preflight",
+      "outcome": "class_balanced_monotonic_train275_configuration_passed_without_pixel_decode",
+      "repeat_policy": "reuse_exact_plan_and_hashes_no_parameter_data_role_or_patch_selection_drift",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-train275-materialization-pass.md",
+          "sha256": "d623555978a38a7ed5291452415b737a9c7e9890319b65d17498bc9fa2e53622"
+        },
+        {
+          "path": "hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+          "sha256": "2503616f2d94fd5bfd65be4ad61c7c53af8726dc4f2307745ef1da6f74033943"
+        },
+        {
+          "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+          "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train-patches-v1/summary.json",
+          "sha256": "7373dfe313eb5c290b44c69950fdb0de6df9bec5b79bc5d4d79b9ba7949de2a2"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-audit-20260810/audit.json",
+          "sha256": "15ee947ed8abb877a2f0d3ea3ffc9392b40b6d800cb1d7372d801ba4b2366882"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/manifest.json",
+          "sha256": "1115ccdeabc1b2afb9d2046964ef8a062b3d481a3a97a8e1fb282b5bd9028a2e"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/patch_index.json",
+          "sha256": "6522dc267629bb563a63e2271859194ac6cb7a003fe7bfb3a6648684651b0d64"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/primary.json",
+          "sha256": "4cf932820424b862d620ab7e0f1fb245218e221d91b5d214b22f62372bdd5f0d"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-train275-materialization-v1/second_stage.json",
+          "sha256": "118bb89287e5dd9cbfe2fe009aa0999d6a40f02393049813a64a0a0aa8dac702"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_train_materialization.py",
+          "sha256": "02925b0e26a2fb046b43eeea0ddfe827adb45ca3306df334b9478660c98710ca"
+        },
+        {
+          "path": "scripts/analysis/materialize_monotonic_residual_erase_train_inputs.py",
+          "sha256": "fa63587d47d3d34f99d4976fbd9512ada076f23739e3b7b348d8e52ea6c28d8f"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_train_materialization.py",
+          "sha256": "4063c8d1f5381956240813e08ea357c01360ae3be62b53de4e3e6709170da6ea"
+        }
+      ],
+      "id": "monotonic-residual-erase-train275-materialization-audit",
+      "outcome": "exact_train275_frozen_pipeline_and_brighten_only_patch_materialization_passed",
+      "repeat_policy": "reuse_exact_materialized_hashes_no_rebuild_or_patch_reselection",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-10-monotonic-residual-erase-candidate-application-preflight-pass.md",
+          "sha256": "3289c9f0fe5e4c4028bf1958b98f7e93912ace6fa3d337230f38ca719fb6ea13"
+        },
+        {
+          "path": "docs/monotonic-residual-erase-candidate-plan-v2.json",
+          "sha256": "a5089e8a2a0877ef9e34966f7868d82efeeb24d5057d0e5d594c8eda0b1dfc56"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-candidate-application-preflight-20260810/preflight.json",
+          "sha256": "7e2a519210244544c94d5753980e9945690a46b964d6a7801eebc337168e27e8"
+        },
+        {
+          "path": "scripts/analysis/validate_monotonic_residual_erase_candidate_application_preflight.py",
+          "sha256": "ffc753cfd2ca20335158197d776eebdc1afa8909dfeb72c6cd0df2b31f66fb39"
+        },
+        {
+          "path": "scripts/infer/run_monotonic_residual_erase_candidate.py",
+          "sha256": "87ff65ae14bbb3eb821434f56381d5f2a84b77eece8d1237e7be12159775b636"
+        },
+        {
+          "path": "tests/test_monotonic_residual_erase_candidate_application_preflight.py",
+          "sha256": "87406a9b610133cc385467814afeb8e0b64502148afc7644db34ae4604950ed6"
+        }
+      ],
+      "id": "monotonic-residual-erase-candidate-application-preflight",
+      "outcome": "v1_unreachable_learning_and_legacy_gate_rejected_v2_monotonic_application_passed",
+      "repeat_policy": "run_exact_v2_once_no_learning_rate_step_loss_or_application_threshold_sweep",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-monotonic-residual-erase-v2-checkpoint-kill.md",
+          "sha256": "fffe2a0357f0a7de5b59bdb893b9f29ac15c6e1c27da72dd7b013f9890c75802"
+        },
+        {
+          "path": "outputs/monotonic-residual-erase-v2-checkpoint-audit-20260810/audit.json",
+          "sha256": "73782017723a75279f0d0fe1b69481835ac41570f60c655025c15a01edf6184a"
+        },
+        {
+          "path": "scripts/analysis/audit_monotonic_residual_erase_v2_checkpoint.py",
+          "sha256": "e9d9dfbe81f30a07e0e0b862ae448f10a493360cac6a158c3b67547a094a28a3"
+        },
+        {
+          "path": "tests/test_audit_monotonic_residual_erase_v2_checkpoint.py",
+          "sha256": "f6184e1ea64ea83f84c3497013344338d581a2195f413c78e059b2746e44f0be"
+        },
+        {
+          "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_residual_erase_probe.pt",
+          "sha256": "b12f358bc8457e7a90f7f7220e44867c531a810ad7f17fea2f52c71c18358c0e"
+        },
+        {
+          "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_loss_history.csv",
+          "sha256": "93392e60a82a008305aa3e6af13ebb79587f81ef5ec8d6070d2025dd9cf1bc13"
+        }
+      ],
+      "id": "monotonic-residual-erase-v2-checkpoint",
+      "outcome": "real_train_patch_gate_collapsed_to_subthreshold_noop",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-dual-input-support-separation-preregistration.md",
+          "sha256": "361767c6096c2cbb9c7c79123fdc0a47f054083bca488657d2a5edcb068b8788"
+        },
+        {
+          "path": "docs/dual-input-support-separation-prerequisite-v1.json",
+          "sha256": "702b0f4cb68e371589177f5b0013a106ef38ff9c73528b6f2325f38c01245585"
+        }
+      ],
+      "id": "dual-input-support-separation-preregistration",
+      "outcome": "thirteen_channel_dual_pipeline_support_diagnostic_frozen_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_closed_form_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-dual-input-support-separation-diagnostic-kill.md",
+          "sha256": "64c52693cc60bab60d33586e73a46a3789d0dcbd24a3b1f4492a88fc654f94d9"
+        },
+        {
+          "path": "outputs/dual-input-support-separation-prerequisite-20260811/audit.json",
+          "sha256": "415dd3720bbb70db541979a9675c938730c5da6d62a223127fe40997a40b92ff"
+        },
+        {
+          "path": "scripts/analysis/audit_dual_input_support_separation.py",
+          "sha256": "4821a27c860aef54878fc15016458244a3cbd195fdbffacdc535ded1b1b032e5"
+        },
+        {
+          "path": "tests/test_dual_input_support_separation_prerequisite.py",
+          "sha256": "cd16796d33c25c49b0132c175a1dbd61fbc0838d6697ea225cecfb81760e157b"
+        }
+      ],
+      "id": "dual-input-support-separation-train275-diagnostic",
+      "outcome": "page_broadcast_dual_pipeline_features_failed_independent_ablation_margin",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-preregistration.md",
+          "sha256": "03c02ab2f373dcf0ee4542dd9fca9e952afa5d7f3ca34401ae5ea3e64ced134e"
+        },
+        {
+          "path": "docs/spatial-primary-mask-support-prerequisite-v1.json",
+          "sha256": "577de835e7a37799b4feb4ee0f2b8ebd138bffdb766c3d41db143aacb7aa3082"
+        }
+      ],
+      "id": "spatial-primary-mask-support-preregistration",
+      "outcome": "pixel_aligned_frozen_mb_ms_support_diagnostic_frozen_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_mask_materialization_and_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-11-spatial-primary-mask-support-diagnostic-kill.md",
+          "sha256": "5da07daa99b6efb8783f4a5c0ef1f37edd2a6b50f36c9e5d21e8a200de42820a"
+        },
+        {
+          "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+          "sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e"
+        },
+        {
+          "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+          "sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7"
+        },
+        {
+          "path": "scripts/analysis/materialize_primary_masks_train_only.py",
+          "sha256": "76812498214ba2e6ebe387b10f9a65ab3c93d6f17e56599b91a5a8883f208b16"
+        },
+        {
+          "path": "scripts/analysis/audit_spatial_primary_mask_support.py",
+          "sha256": "45add93e2944590c3b9abbbd562bbdb09b08161edc35b221afecbe658d9e9c7a"
+        },
+        {
+          "path": "tests/test_spatial_primary_mask_support_prerequisite.py",
+          "sha256": "5075d7b8ada2296652e60a25f89212c1310616f00e2004653e1b47b6fe1966a9"
+        }
+      ],
+      "id": "spatial-primary-mask-support-train275-diagnostic",
+      "outcome": "frozen_primary_masks_have_weak_signal_but_underperform_second_stage_rgb_ablation",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-preregistration.md",
+          "sha256": "422170ac77db148b23b597c100d054ba3c8c5f69754a586f814b22b44c2453ae"
+        },
+        {
+          "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+          "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+        }
+      ],
+      "id": "reconstruction-stage-disagreement-preregistration",
+      "outcome": "frozen_primary_multiscale_reconstruction_disagreement_diagnostic_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_stage_disagreement_materialization_and_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-reconstruction-stage-disagreement-diagnostic-kill.md",
+          "sha256": "01c6d854a7b1e70683c1697ecaf7b6357d12f5bbda0671cf96a1b5503c56ea9c"
+        },
+        {
+          "path": "outputs/reconstruction-stage-disagreement-materialization-20260812/manifest.json",
+          "sha256": "1f17a884735614303a5340cefcfc5962b5c15677b288d56f65a4ed850d9147c6"
+        },
+        {
+          "path": "outputs/reconstruction-stage-disagreement-prerequisite-20260812/audit.json",
+          "sha256": "c6564514041cde59e928032343d316d1f2a33c18e0931c79022a5368fbbbda1b"
+        },
+        {
+          "path": "scripts/analysis/materialize_reconstruction_stage_disagreement_train_only.py",
+          "sha256": "dc7710e6f8b50224c2ad9ccaad9f85f62dcc904beee48d678af0c357f697ef25"
+        },
+        {
+          "path": "scripts/analysis/audit_reconstruction_stage_disagreement.py",
+          "sha256": "1ce37584ca6ec43a24887b5c36ba7a221ae09663d511480f0a641a06f755ebe8"
+        },
+        {
+          "path": "tests/test_reconstruction_stage_disagreement_prerequisite.py",
+          "sha256": "8ceecedee5b2cba4c89bdf03e10861a1e194505cd301f6da983e083353e04c1c"
+        },
+        {
+          "path": "docs/reconstruction-stage-disagreement-prerequisite-v1.json",
+          "sha256": "90310fbc9c435bf714fc427bf1a1c1f1fe7440183896d01713230c09374166e0"
+        }
+      ],
+      "id": "reconstruction-stage-disagreement-train275-diagnostic",
+      "outcome": "stage_disagreement_has_directional_signal_but_insufficient_margin_over_second_stage_rgb",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-source-output-support-preregistration.md",
+          "sha256": "f5c9c8eda68016b55c4a12d61065223a8c432b6d65bdb7d3ea0a9b549f506d3d"
+        },
+        {
+          "path": "docs/source-output-support-prerequisite-v1.json",
+          "sha256": "fba4b1d333d5993d5741a044ed0dfec044c014a3d5c2f502c6ce7cfa25f86f5d"
+        }
+      ],
+      "id": "source-output-support-preregistration",
+      "outcome": "raw_source_plus_second_stage_rgb_diagnostic_frozen_pending_train_only_execution",
+      "repeat_policy": "implement_and_run_exact_train275_source_output_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-source-output-support-diagnostic-kill.md",
+          "sha256": "a28dda0718677ec5fc0f47c7a37685b07ea45f73b5d57b3314b50890eaa2ca76"
+        },
+        {
+          "path": "outputs/source-output-support-prerequisite-20260812/audit.json",
+          "sha256": "29957a04e0ece3a4cdc0d0cdf97732536aa05caee96c5b571c64a191c953a2b6"
+        },
+        {
+          "path": "scripts/analysis/audit_source_output_support_separation.py",
+          "sha256": "5690bfcb04e9a69566ca67d8eb9ae479d98065926fd0d35c64a94e2d637d879e"
+        },
+        {
+          "path": "tests/test_source_output_support_prerequisite.py",
+          "sha256": "e81dad38d09bb9d0912849a007d1482149bb39b98ff0f89594d07ba8c0722e9b"
+        },
+        {
+          "path": "docs/source-output-support-prerequisite-v1.json",
+          "sha256": "fba4b1d333d5993d5741a044ed0dfec044c014a3d5c2f502c6ce7cfa25f86f5d"
+        }
+      ],
+      "id": "source-output-support-train275-diagnostic",
+      "outcome": "raw_source_adds_directional_signal_but_insufficient_margin_over_second_stage_rgb",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-second-stage-alpha-support-preregistration.md",
+          "sha256": "9476654731d8560b43109b4daf62af3527e50ecf588ffe8b6198d59a2659f580"
+        },
+        {
+          "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+          "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+        }
+      ],
+      "id": "second-stage-alpha-support-preregistration",
+      "outcome": "frozen_prethreshold_second_stage_erasemap_alpha_diagnostic_pending_label_free_train275_materialization",
+      "repeat_policy": "implement_and_run_exact_train275_alpha_materialization_and_four_channel_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
+          "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
+        },
+        {
+          "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+          "sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3"
+        },
+        {
+          "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+          "sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351"
+        },
+        {
+          "path": "scripts/analysis/materialize_second_stage_alpha_train_only.py",
+          "sha256": "8a9314b9e880ad968aabab10b144d59d489488db4e83d0371e11bedb6db89f06"
+        },
+        {
+          "path": "scripts/analysis/audit_second_stage_alpha_support.py",
+          "sha256": "1142e5d160702c617ea5163fe61ecda47b9903d13d2f4ec45293e5b8e3496731"
+        },
+        {
+          "path": "tests/test_second_stage_alpha_support_prerequisite.py",
+          "sha256": "ff7bee5358b8bb3b34f0528e217b9abd0c0e29ed143dd59243e84f8c5b8f9f66"
+        },
+        {
+          "path": "docs/second-stage-alpha-support-prerequisite-v1.json",
+          "sha256": "e0db918fa5641f063024b79c13686c63c1bf0df463a9fc7baa5cf56c4848c1e8"
+        }
+      ],
+      "id": "second-stage-alpha-support-train275-diagnostic",
+      "outcome": "raw_prethreshold_alpha_adds_directional_signal_but_insufficient_margin_over_second_stage_rgb",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-preregistration.md",
+          "sha256": "03733208a1b20b8904852c052706908e4884912903a276725ad1531169b7629a"
+        },
+        {
+          "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
+          "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
+        }
+      ],
+      "id": "independent-hw5k-expert-disagreement-support-preregistration",
+      "outcome": "paired_independent_expert_rgb_support_frozen_on_123_specialist_unseen_hw5k_train_pages_pending_target_free_materialization_and_train_only_diagnostic",
+      "repeat_policy": "implement_and_run_exact_paired_expert_materialization_and_six_channel_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-independent-hw5k-expert-disagreement-support-diagnostic-kill.md",
+          "sha256": "905e99712fc4de7ccec76fd7f77fd7334d310c7977b9d4d1a61fe20bdf7d5104"
+        },
+        {
+          "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+          "sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f"
+        },
+        {
+          "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+          "sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4"
+        },
+        {
+          "path": "scripts/analysis/materialize_independent_hw5k_expert_outputs_train_only.py",
+          "sha256": "4e369f8d0b8d1e1da9a27db14e0799d85bf23d061a99bd3fc819a6ef9b29f4f9"
+        },
+        {
+          "path": "scripts/analysis/audit_independent_hw5k_expert_disagreement_support.py",
+          "sha256": "74c738c958aeef0ff0e7a5dd54b46a9d8c6197d71146ddc70ce853c44ec75923"
+        },
+        {
+          "path": "tests/test_independent_hw5k_expert_disagreement_support_prerequisite.py",
+          "sha256": "bc89d669e77aba92f5f6c63d3b434ebbce0edb93df22ff02eb8579f3fd1aba3e"
+        },
+        {
+          "path": "docs/independent-hw5k-expert-disagreement-support-prerequisite-v1.json",
+          "sha256": "02b3f4081be88516b26ae69a8d2df346554bdd492310eda1ececdab398cf0355"
+        }
+      ],
+      "id": "independent-hw5k-expert-support-train-only-diagnostic",
+      "outcome": "paired_independent_expert_rgb_adds_signal_but_misses_frozen_incremental_margin_by_0.000273",
+      "repeat_policy": "do_not_repeat",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-external-text-layout-support-preregistration.md",
+          "sha256": "914d9c40e95ffd7c6bcf73b466830b0911684e0383c163f72fbbe0ba1ab73a9c"
+        },
+        {
+          "path": "docs/external-text-layout-support-prerequisite-v1.json",
+          "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+        }
+      ],
+      "id": "external-text-layout-support-preregistration",
+      "outcome": "frozen_external_text_occupancy_and_confidence_pending_target_free_train275_materialization_and_train_only_diagnostic",
+      "repeat_policy": "implement_and_run_exact_external_text_layout_materialization_and_five_channel_diagnostic_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md",
+          "sha256": "32400353d0944251ea49a2c796a8e1f0b14cc64010ceeb7f3bf7ed62622a2ed1"
+        },
+        {
+          "path": "docs/external-text-layout-runtime-safety-probe-20260813.json",
+          "sha256": "43423dec234c904d2117ae8dff8634d04b056109f635b2b2780d6f53b74b4f83"
+        },
+        {
+          "path": "docs/external-text-layout-static-memory-risk-20260814.json",
+          "sha256": "144bf4b1c55cfa8b4b19ec125b603dfb5daaf0fa02d0f92a9725adf60ab1651f"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+          "sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+        },
+        {
+          "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+          "sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+        },
+        {
+          "path": "scripts/analysis/report_external_text_layout_static_memory_risk.py",
+          "sha256": "c919f88b82c6d368d6868e8aa5d9d27ae9d2387ebab8ff40a22aeb544e6d3a71"
+        },
+        {
+          "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+          "sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c"
+        },
+        {
+          "path": "tests/test_external_text_layout_static_memory_risk.py",
+          "sha256": "87473757551f021b2e9f5179347961e2e75cc1720f2c090a5e5359b6ebd8fd6e"
+        },
+        {
+          "path": "tests/test_external_text_layout_support_prerequisite.py",
+          "sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131"
+        }
+      ],
+      "id": "external-text-layout-runtime-safety-probe",
+      "outcome": "single_target_free_cpu_detector_page_crossed_the_35_percent_memory_floor_and_left_swap_above_the_512_mib_launch_gate; static_exact_shape_audit_identified_full_resolution_9x9_and_duplicate_upsample_risk_without_claiming_root_cause_or_formal_evidence",
+      "repeat_policy": "justify_runtime_safety_without_parameter_rescue_then_retry_one_safe_page_only",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md",
+          "sha256": "2314a2061e9c0248b62c9b10cd0d13a0418576ecac43fc260cd19e7c078087a3"
+        },
+        {
+          "path": "docs/external-text-layout-runtime-equivalence-repair-v1.json",
+          "sha256": "70c0cb01eb5641b4619aeb46ba29b88a76070f97bc834efa75e37deb081f385b"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_transformers_runtime_repair.py",
+          "sha256": "2127729ee2d84f6402aaa685a1eec7cdbe94704fbbfffcb779d0c7c92b35972e"
+        },
+        {
+          "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+          "sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5"
+        },
+        {
+          "path": "tests/test_external_text_layout_runtime_equivalence_repair.py",
+          "sha256": "0c2805198d406e612f3ac395f55fa226e92556da900b0d43d001dabd10a16894"
+        }
+      ],
+      "id": "external-text-layout-runtime-equivalence-repair",
+      "outcome": "hash_version_and_ast_bound_in_memory_forward_repair_removes_only_the_overwritten_first_upsample_construction_and_passes_fake_feature_equivalence_without_real_model_import_or_execution",
+      "repeat_policy": "wait_for_swap_below_512_mib_then_run_one_isolated_target_free_hw5k_1011_safety_probe_under_unchanged_health_limits",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md",
+          "sha256": "b0967d49f8bfca2b6c24fbf0dfce64a59f3f3afa32d5a23155d1d92d823605c1"
+        },
+        {
+          "path": "docs/external-text-layout-frozen-cache-reconstruction-v1.json",
+          "sha256": "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
+        },
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039"
+        }
+      ],
+      "id": "external-text-layout-frozen-cache-reconstruction",
+      "outcome": "exact_historical_runtime_primary_then_second_stage_cache_reconstruction_and_relative_publication_are_preregistered_with_static_preflight_passed_but_execution_disabled",
+      "repeat_policy": "wait_for_swap_below_512_mib_then_require_one_safe_repaired_probe_before_serial_exact_hash_bound_cache_reconstruction",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md",
+          "sha256": "b565e0ccead26f2e04597d3b824088c1924c4a937e5424c6e573517ec002a324"
+        },
+        {
+          "path": "docs/external-text-layout-historical-runtime-restoration-20260814.json",
+          "sha256": "13d09cfbc3876947522c54ab34878cd67be710df1bc7df9bb8a999258aeb2c95"
+        },
+        {
+          "path": "docs/external-text-layout-frozen-cache-reconstruction-v1.json",
+          "sha256": "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
+        },
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039"
+        }
+      ],
+      "id": "external-text-layout-historical-runtime-restoration",
+      "outcome": "exact_python_3_10_11_torch_2_5_1_numpy_2_2_6_and_opencv_runtime_and_wheel_identity_restored_with_static_preflight_passed_without_model_execution",
+      "repeat_policy": "preserve_the_restored_environment_and_wait_for_swap_below_512_mib_before_one_repaired_target_free_probe",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-probe-kill.md",
+          "sha256": "838fc58f67dc2b9e638ec750fea4ffcb1533eb57f3fd46e804b64d3545012510"
+        },
+        {
+          "path": "docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json",
+          "sha256": "d56d49f9ac37d127b0a17359af9f2b53a2fbcee0fcff3beabf638487a29ae5b9"
+        }
+      ],
+      "id": "external-text-layout-runtime-equivalence-repair-probe",
+      "outcome": "clean_baseline_repaired_hw5k_1011_probe_crossed_the_memory_floor_at_26_percent_and_swap_cap_at_2973562306_bytes_before_page_completion_with_zero_residual_model_processes",
+      "repeat_policy": "do_not_repeat_the_same_detector_runtime_geometry_or_duplicate_upsample_repair_probe; require_separate_preregistration_for_a_materially_lower_memory_equivalent_path",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-feasibility-20260814.json",
+          "sha256": "5b4a2cf381b8c0046b68d3b002c5676cc845b0e3bdd1cd00b275a439d9b2a723"
+        },
+        {
+          "path": "scripts/analysis/report_external_text_layout_tiled_9x9_feasibility.py",
+          "sha256": "8adc958c5446f3d9faf370b65a3d6610d0d1f40e64cffa75749cc352c2b55b15"
+        },
+        {
+          "path": "tests/test_external_text_layout_tiled_9x9_feasibility.py",
+          "sha256": "4fc40e6f6690141384b6cc15372b09674e3b55b5ca3e8f85eb4470e6108fda48"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-static-feasibility",
+      "outcome": "four_output_row_tiling_preserves_exact_stride_one_padding_four_output_coordinates_and_reduces_the_highest_projection_unfold_comparison_bound_by_108x_without_model_import",
+      "repeat_policy": "implement_only_under_the_separately_frozen_fake_feature_equivalence_contract",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-runtime-repair-v1.json",
+          "sha256": "203e67ac2d12557034f546d9e25e475d083bb2086d2f0ed7bfc1a3244ba3b250"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md",
+          "sha256": "ac4b8855557c14b6af65501ac04743992d85bd8e32f1baeb2374a5430f3b7b99"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+          "sha256": "07b894a5a43b5331c5ba866dd2a714e6346723c8112f0b23bebfb56852f839ac"
+        },
+        {
+          "path": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py",
+          "sha256": "01ef4e03ff41bbb440a7a028e05e07a4c6f2aa1dde049f124a362129b0b37b39"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json",
+          "sha256": "6961f9beff92626dcd65547687072473a4f230ab25a05e2746ef2a01dd6ad758"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md",
+          "sha256": "770121757369831ec4c8bdcb373949c8d8fd9db5bfdff58fb2c6ba27deed9d17"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-runtime-repair-verification",
+      "outcome": "four_cpu_float32_projection_and_lateral_fake_feature_cases_are_bitwise_equal_with_zero_maximum_error_and_all_frozen_drift_guards_pass_without_real_detector_import",
+      "repeat_policy": "freeze_a_separate_hash_bound_one_page_integration_and_safety_probe_before_any_real_detector_import_or_execution",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+          "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md",
+          "sha256": "3cdaecefc5514e2af03582379244c2266b99523556ecb1597097084575f4f3d0"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-one-page-safety-probe-preregistration",
+      "outcome": "exactly_one_target_free_hw5k_1011_attempt_is_frozen_behind_bounded_integration_and_stricter_launch_and_runtime_resource_gates",
+      "repeat_policy": "integrate_exactly_as_frozen_then_execute_once_only_after_all_launch_gates_pass; any_non_pass_terminal_closes_the_exact_tiled_path",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+          "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+          "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+        },
+        {
+          "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+          "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+        },
+        {
+          "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+          "sha256": "8b6c563a7e9f5d879cc962b35fcc6ede15ce341a5f790fc49233cda9d235b43e"
+        },
+        {
+          "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+          "sha256": "9f075754889dd637432f9beac93c4fe68dd3d96f049b2497dec454f8f4573545"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+          "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md",
+          "sha256": "7ec16e150b161682257869f68cc34054fb00a0c6e2f5d761853dd9253a46de11"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-one-page-integration",
+      "outcome": "hash_bound_tiled_repair_and_fail_closed_one_attempt_probe_integration_passed_61_tests_in_both_registered_python_environments_without_model_execution",
+      "repeat_policy": "wait_for_every_launch_gate_then_run_exactly_once; never_overwrite_or_repeat_after_the_result_path_exists",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
+          "sha256": "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md",
+          "sha256": "6891c0fa4ecb23e24d1e6c2dc65f7b4dc12c24408cf73753f2daec17d646ef61"
+        }
+      ],
+      "id": "external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration",
+      "outcome": "v2_handoff_freezes_tiled_result_identity_strict_probe_schema_and_unchanged_historical_cache_boundaries_without_execution_authority",
+      "repeat_policy": "integrate_only_after_this_preregistration; do_not_accept_the_old_v1_probe_result_or_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
+          "sha256": "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md",
+          "sha256": "6891c0fa4ecb23e24d1e6c2dc65f7b4dc12c24408cf73753f2daec17d646ef61"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+          "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+        }
+      ],
+      "id": "external-text-layout-tiled-probe-cache-reconstruction-v2-integration",
+      "outcome": "hash_bound_v2_validator_passed_9_compatibility_tests_and_63_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_explicit_authority_source_hash_and_exact_integer_binding_static_preflight_closed_and_no_model_or_cache_execution",
+      "repeat_policy": "wait_for_all_host_swap_and_probe_gates; do_not_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+          "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+          "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+        }
+      ],
+      "id": "external-text-layout-cache-reconstruction-runtime-monitor-preregistration",
+      "outcome": "continuous_primary_and_second_stage_child_process_monitor_is_frozen_without_model_or_cache_execution",
+      "repeat_policy": "implement_only_the_registered_wrapper_then_hash_register_it_before_any_cache_reconstruction",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+          "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+          "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+        },
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
+        }
+      ],
+      "id": "external-text-layout-cache-reconstruction-runtime-monitor-integration",
+      "outcome": "hash_bound_process_group_monitor_passed_13_compatibility_tests_and_67_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_atomic_success_nonzero_failure_resource_and_reader_termination_sigkill_escalation_static_preflight_closed_and_no_model_or_cache_execution",
+      "repeat_policy": "wait_for_swap_at_or_below_512_mib_then_run_only_the_single_preregistered_tiled_probe_before_any_monitored_cache_reconstruction",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-host-readiness-recovery-20260814.json",
+          "sha256": "7034474fe63fa38ea026221bef837c1f0dca0a4de582942da402e93870191637"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-host-readiness-recovery.md",
+          "sha256": "2fb608ddbbc41034ef7a645fb3b86ddc4c66646ca10ce37f58e8195bfcfe0e38"
+        }
+      ],
+      "id": "external-text-layout-host-readiness-recovery",
+      "outcome": "safe_process_cleanup_removed_user_core_simulator_services_but_swap_remained_1362_62_mib_with_zero_booted_simulators_zero_model_processes_absent_probe_and_caches_and_no_attempt_consumed",
+      "repeat_policy": "use_a_fresh_clean_host_restart_then_recheck_all_frozen_gates_before_opening_unrelated_applications_or_manually_launching_the_single_probe",
+      "terminal": "PREREQUISITE_NEEDED"
+    }
+  ],
+  "schema_version": 1
+}

@@ -1,0 +1,108 @@
+{
+  "artifact_hashes": {
+    "base_role_contract": "1c57978a3231d87970d90fa685ca532aeb3f155009c44a706edcafcb418e810d",
+    "current_primary_checkpoint": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae",
+    "current_primary_config": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e",
+    "current_second_stage_checkpoint": "36dd96a7efb8145a010b37a2e5351b6e1efda8fa329ee33a81e48511a8e400b7",
+    "data_role_decision": "7b8931ef180a4e4d334e92cd922b876f67fb0954cbc079302026183a9fcec8e1",
+    "data_role_plan": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a",
+    "data_role_preflight": "e0f3962c45faf25dbbf9ba9281d1a629e64a677d4d33e0657ce913678bfdb28b",
+    "model": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b",
+    "patch_builder": "2e8179cafb459a647aa27189d9d3cc73caf0fe3c9cf53ba8291319b7d7c925b8",
+    "primary_inference": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8",
+    "second_stage_inference": "3b066db93a7f16896e3c2b432098d08d82ae6020c7e9defa87f6cc46e9d9560d",
+    "trainer": "ebad41cb0b6518e494bb0dae18b7305dff1b1420a65e630046da597417261197"
+  },
+  "checkpoint_generated": false,
+  "first_quality_gate": {
+    "manifest_role": "inner_val15",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true
+  },
+  "later_gates_enabled": false,
+  "ledger_authority": {
+    "evidence_count": 5,
+    "record_id": "monotonic-residual-erase-data-role-preflight",
+    "training_preflight_ledger_status": "passed"
+  },
+  "metadata_only": true,
+  "mps_available": true,
+  "planned_outputs_absent": [
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-inner-val15-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/monotonic-residual-erase-train-patches-v1.csv",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-train-patches-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-train275-primary-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/outputs/monotonic-residual-erase-train275-frozen-pipeline-v1",
+    "/private/tmp/ensexam-gan-h0-P0vNwp/artifacts/trials/monotonic-residual-erase-v1"
+  ],
+  "prediction_artifacts_generated": false,
+  "promotion_enabled": false,
+  "real_image_decode": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "status": "pass",
+  "synthetic_training_audit": {
+    "class_balance": "per_sample_separate_positive_and_preserve_means",
+    "exact_identity_init": true,
+    "gradient_cases": [
+      {
+        "case": "target_lighter",
+        "delta_max": 0.00032979249954223633,
+        "magnitude_gradient_abs": 0.07999999821186066,
+        "negative_delta_pixel_count": 0,
+        "support_gradient_abs": 0.5,
+        "target_delta": 0.04
+      },
+      {
+        "case": "identity",
+        "delta_max": 0.0,
+        "magnitude_gradient_abs": 0.0,
+        "negative_delta_pixel_count": 0,
+        "support_gradient_abs": 0.5,
+        "target_delta": 0.0
+      },
+      {
+        "case": "target_darker",
+        "delta_max": 0.0,
+        "magnitude_gradient_abs": 0.0,
+        "negative_delta_pixel_count": 0,
+        "support_gradient_abs": 0.5,
+        "target_delta": -0.04
+      }
+    ],
+    "has_global_scale": false,
+    "has_route_or_dark_branch": false,
+    "parameter_count": 384578,
+    "state_tensor_count": 32
+  },
+  "target_decode": false,
+  "target_patch_materialized": false,
+  "terminal": "PASS",
+  "train_files": {
+    "domain_counts": {
+      "hw5k": 253,
+      "scut": 22
+    },
+    "effective_train_count": 275,
+    "effective_train_filename_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039",
+    "label_file_count": 275,
+    "source_file_count": 275
+  },
+  "training_cli": {
+    "device": "mps",
+    "mask_source": "target_luma_delta",
+    "max_steps": 80,
+    "model_type": "monotonic_residual_erase",
+    "patch_selection": "top_target_lighter_support_only",
+    "patch_top_k": 256,
+    "validation_enabled": false
+  },
+  "training_plan": "/private/tmp/ensexam-gan-h0-P0vNwp/docs/monotonic-residual-erase-training-plan.json",
+  "training_plan_sha256": "904f25be15bf65f6dcd847e84e71d505699c987f83f825cfc57959537b521457",
+  "training_started": false
+}

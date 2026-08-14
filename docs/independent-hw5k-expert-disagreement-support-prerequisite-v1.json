@@ -1,0 +1,192 @@
+{
+  "acceptance": {
+    "full_auc_ablation_margin_min": 0.03,
+    "full_fold_auc_min": 0.55,
+    "full_mean_fold_auc_min": 0.65,
+    "macro_median_page_auc_min": 0.6,
+    "positive_mean_above_preserve_min_folds": 4,
+    "required_fold_count": 5,
+    "required_terminal_on_pass": "PASS"
+  },
+  "authorization": {
+    "candidate_checkpoint": false,
+    "candidate_inference": false,
+    "development_gate": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "paired_expert_materialization": true,
+    "paired_expert_materialization_reads_targets": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "separability_diagnostic_target_decode_roles": [
+      "train"
+    ],
+    "visual_review": false
+  },
+  "data": {
+    "data_root": "data-links/samples/SCUT-HW5K-mixed-20260729",
+    "derived_basename_newline_sha256": "e2921d717086c080606acd69dbec2de0e4a97281edc460aa6c0b74af41097698",
+    "derived_full_path_newline_sha256": "ad7c794706edb1b832cb30af978663853fb10646531bc4cf83011023338d81e2",
+    "diagnostic_count": 123,
+    "diagnostic_domain_counts": {
+      "hw5k": 123,
+      "scut": 0
+    },
+    "exclusion_manifest": {
+      "external_path": "/Volumes/Tool/source/ensexam-gan/hardcase_lists/mixed_scut130_hw5k130_50pct_20260730.txt",
+      "sha256": "12397a11b33f856e6db5c20447678e27428c6ee324175e8feca50a4ce565aefc"
+    },
+    "manifest": {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "overlap_count": 152,
+    "overlap_domain_counts": {
+      "hw5k": 130,
+      "scut": 22
+    },
+    "population_derivation": "preserve_train275_order_and_exclude_every_basename_in_specialist_training_manifest",
+    "source_count": 275,
+    "split": "train",
+    "target_lighter_margin_gray": 2.0
+  },
+  "diagnostic": {
+    "ablation_features": [
+      "current_primary_r",
+      "current_primary_g",
+      "current_primary_b"
+    ],
+    "auc_tie_policy": "average_rank",
+    "class_balance": "equal_per_page_target_lighter_and_preserve",
+    "coordinate_rank": "splitmix64(row_major_index XOR first_64_bits(sha256(utf8_basename))) then unsigned_hash_y_x",
+    "feature_normalization": "rgb_divided_by_255",
+    "fold_assignment": "int(sha256(utf8_basename), 16) % 5",
+    "fold_count": 5,
+    "full_feature_count": 6,
+    "lambda": 1.0,
+    "luma_definition": "arithmetic_mean_rgb_gray_units",
+    "max_samples_per_class_per_page": 1024,
+    "numeric_type": "float64",
+    "optimizer": "none_closed_form_ridge",
+    "ridge_intercept": "unpenalized",
+    "sampling_count": "min(1024, target_lighter_count, preserve_count) per class per page",
+    "standardization": "fitting_fold_mean_and_standard_deviation_only",
+    "target_definition": "target_luma_minus_current_primary_luma_greater_than_2_gray",
+    "target_encoding": {
+      "preserve": -1,
+      "target_lighter": 1
+    },
+    "threshold_derivation": "prohibited"
+  },
+  "evidence": {
+    "candidate5_routing_closure": {
+      "path": "docs/decisions/2026-08-03-explicit-domain-dual-checkpoint-research-harness.md",
+      "sha256": "24e67a33c0a9be2046539ddc5cee62042bdfb8a49c9cfc6f590186915139d980"
+    },
+    "current_primary_checkpoint": {
+      "path": "artifacts/current-primary/micro_region_probe_step0001.pth",
+      "sha256": "e6acf784bf6737eccbd68438acdc566f62cab699a52e2e57a995e7ef08958bae"
+    },
+    "current_primary_config": {
+      "path": "artifacts/current-primary/config.yaml",
+      "sha256": "8b47e383eb46c75171eec3b475e04a037f7afd9dc4bf51316120b197b5a8b42e"
+    },
+    "primary_inference_source": {
+      "path": "scripts/infer/run_primary_full_page.py",
+      "sha256": "5685d2ca9e27e3e77dea0d9240916e63f3a12d23eb7056f3969c5e9f6f12c9f8"
+    },
+    "role_plan": {
+      "path": "docs/monotonic-residual-erase-data-roles.json",
+      "sha256": "f2555ddec01981e44ad5ce965977ef2c88003bae3ca5966c60437c93f91a110a"
+    },
+    "second_stage_alpha_kill": {
+      "path": "docs/decisions/2026-08-12-second-stage-alpha-support-diagnostic-kill.md",
+      "sha256": "bb987891a987a75b4061ab4d46a1453e40f6e47e5589fb305ae85631503c2aa6"
+    },
+    "train_label_set": {
+      "content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+      "count": 275,
+      "directory": "data-links/samples/SCUT-HW5K-mixed-20260729/train/all_labels"
+    },
+    "specialist_checkpoint": {
+      "external_path": "/Volumes/Tool/source/ensexam-gan/artifacts/trials/hw5k-mixed-scut130-hw5k130-50pct-guard-jointtail-lite-step6400-respress-bs4-20260730/ensexam/20260801_183409/epoch_1.pth",
+      "sha256": "8da25117dd883f95059b6d7067e3dc3580da11339de365ef904f711db4a1f490"
+    },
+    "specialist_config": {
+      "external_path": "/Volumes/Tool/source/ensexam-gan/artifacts/trials/hw5k-mixed-scut130-hw5k130-50pct-guard-jointtail-lite-step6400-respress-bs4-20260730/ensexam/20260801_183409/config.yaml",
+      "sha256": "c0ab5cc2a96dcaffa86dc75754c2a9bb9bfdc741c8ff7319e93bf8e2abc8adf8"
+    }
+  },
+  "fail_closed": [
+    "current_or_specialist_artifact_hash_drift",
+    "primary_inference_source_or_role_hash_drift",
+    "specialist_training_manifest_missing_or_hash_drift",
+    "derived_set_count_domain_or_content_hash_drift",
+    "specialist_training_overlap_in_diagnostic_population",
+    "target_path_in_materialization_samples",
+    "output_directory_reuse",
+    "paired_source_prediction_shape_or_content_identity_drift",
+    "routing_or_domain_metadata_use",
+    "page_crosses_folds",
+    "fitting_statistics_leak_into_held_out_fold",
+    "empty_target_lighter_or_preserve_class",
+    "changed_sample_cap_coordinate_hash_fold_or_lambda",
+    "candidate_or_quality_output_created"
+  ],
+  "family": "independent_hw5k_expert_disagreement_support_v1",
+  "iteration_id": "monotonic-residual-erase-support",
+  "next_boundary_on_pass": "independent_hw5k_expert_data_and_training_preflight_only",
+  "paired_expert_materialization": {
+    "derived_manifest_creation": "reproduce_after_all_source_and_exclusion_hashes_validate_before_image_decode",
+    "inference": "run_both_frozen_checkpoints_on_every_same_source_page_without_routing",
+    "inference_protocol": {
+      "batch_size": 8,
+      "copy_input_outside_mask": "mb",
+      "copy_mask_dilate": 0,
+      "copy_mask_threshold": 70,
+      "copy_mask_threshold_auto": "mb_cov8_step",
+      "device": "auto",
+      "page_overlap": 32,
+      "skip_label_metrics": true
+    },
+    "output_root": "outputs/independent-hw5k-expert-support-materialization-20260813",
+    "target_access": false
+  },
+  "planned_implementation": {
+    "audit_output": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+    "audit_script": "scripts/analysis/audit_independent_hw5k_expert_disagreement_support.py",
+    "materialization_output": "outputs/independent-hw5k-expert-support-materialization-20260813",
+    "materializer": "scripts/analysis/materialize_independent_hw5k_expert_outputs_train_only.py",
+    "test": "tests/test_independent_hw5k_expert_disagreement_support_prerequisite.py"
+  },
+  "representation": {
+    "ablation_is_identical_probe_without_specialist_rgb": true,
+    "channels": [
+      "current_primary_r",
+      "current_primary_g",
+      "current_primary_b",
+      "frozen_hw5k_expert_r",
+      "frozen_hw5k_expert_g",
+      "frozen_hw5k_expert_b"
+    ],
+    "feature_count": 6,
+    "forbidden_features": [
+      "derived_expert_difference",
+      "domain_or_caller_label",
+      "split_path_route_or_expert_selection_metadata",
+      "page_scalars_masks_source_rgb_or_second_stage_rgb",
+      "thresholds_neighborhoods_transforms_or_alternative_checkpoints",
+      "nonlinear_probe"
+    ],
+    "single_causal_change": "add_frozen_independently_trained_hw5k_expert_rgb_to_current_primary_rgb_support_evidence"
+  },
+  "schema_version": 1,
+  "state": "preregistered_pending_paired_expert_materialization",
+  "terminal_successors": {
+    "KILL": "close_paired_independent_hw5k_expert_rgb_without_feature_checkpoint_probe_routing_or_training_rescue",
+    "PASS": "freeze_separate_expert_conditioned_data_training_and_application_preflight",
+    "PREREQUISITE_NEEDED": "repair_only_registered_provenance_or_exact_implementation_without_changing_population_features_or_gates"
+  }
+}
