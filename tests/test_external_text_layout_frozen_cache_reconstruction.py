@@ -13,18 +13,64 @@ from unittest import mock
 from scripts.analysis import reconstruct_external_text_layout_frozen_caches as reconstruction
 
 
-def runtime_gate() -> dict[str, object]:
+def probe_gate() -> dict[str, object]:
+    return {
+        "contract": {
+            "path": (
+                "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json"
+            ),
+            "sha256": (
+                "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+            ),
+        },
+        "integration_verification": {
+            "path": (
+                "docs/external-text-layout-tiled-9x9-one-page-integration-"
+                "verification-20260814.json"
+            ),
+            "sha256": (
+                "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+            ),
+        },
+        "maximum_process_tree_rss_bytes": 8 * 1024**3,
+        "maximum_swap_used_bytes": 512 * 1024**2,
+        "minimum_launch_memory_free_percent": 70.0,
+        "minimum_runtime_memory_free_percent": 45.0,
+        "probe_page": "hw5k_1011.jpg",
+        "probe_result": (
+            "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-20260814/"
+            "result.json"
+        ),
+        "required_attempt_count": 1,
+        "required_page_completed": True,
+        "required_probe": "external_text_layout_tiled_9x9_single_page_runtime_safety",
+        "required_probe_reason_code": "runtime_safety_probe_passed",
+        "required_probe_terminal": "PASS",
+        "required_result_authority": "runtime_prerequisite_only",
+        "required_residual_model_process_count": 0,
+        "required_safety_limits": {
+            "detector_process_tree_rss_bytes_max": 8 * 1024**3,
+            "launch_memory_free_percent_min": 70.0,
+            "runtime_memory_free_percent_min": 45.0,
+            "page_timeout_seconds": reconstruction.runtime.PAGE_TIMEOUT_SECONDS,
+            "swap_used_bytes_max": 512 * 1024**2,
+        },
+        "required_thread_caps": {
+            "MKL_NUM_THREADS": "1",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+        },
+        "result_must_be_absent_before_attempt": True,
+    }
+
+
+def reconstruction_gate() -> dict[str, object]:
     return {
         "maximum_process_tree_rss_bytes": reconstruction.runtime.MAX_DETECTOR_RSS_BYTES,
         "maximum_swap_used_bytes": reconstruction.runtime.MAX_SWAP_USED_BYTES,
         "minimum_system_free_memory_percent": reconstruction.runtime.MIN_MEMORY_FREE_PERCENT,
-        "probe_page": "hw5k_1011.jpg",
-        "probe_result": (
-            "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/"
-            "result.json"
-        ),
-        "required_probe_reason_code": "runtime_safety_probe_passed",
-        "required_probe_terminal": "PASS",
+        "probe_pass_required_before_helper_import": True,
         "stage_execution": (
             "one_model_process_at_a_time_under_the_external_layout_host_lock"
         ),
@@ -38,42 +84,49 @@ def safe_probe_result() -> dict[str, object]:
         "swap_used_bytes": 0,
     }
     return {
-        "detector": {"device": "cpu"},
+        "attempt_count": 1,
+        "booted_ios_simulator_count": 0,
+        "contract": probe_gate()["contract"],
+        "detector": {
+            "device": "cpu",
+            "engine": "transformers",
+            "model_name": "PP-OCRv6_medium_det",
+        },
         "formal_evidence": False,
         "formal_outputs_written": False,
         "initial_health": dict(safe_health),
         "label_access": False,
         "page": {"file": "hw5k_1011.jpg"},
+        "page_completed": True,
         "page_health": {
-            "minimum_memory_free_percent": 70.0,
+            "minimum_memory_free_percent": 50.0,
             "peak_process_tree_rss_bytes": 2048,
             "peak_swap_used_bytes": 0,
         },
         "post_run_health": dict(safe_health),
-        "probe": "external_text_layout_single_page_runtime_safety",
+        "probe": "external_text_layout_tiled_9x9_single_page_runtime_safety",
         "reason_code": "runtime_safety_probe_passed",
         "recognition": False,
+        "residual_model_process_count": 0,
         "result_authority": "runtime_prerequisite_only",
         "routing_metadata_access": False,
-        "safety_limits": {
-            "detector_process_tree_rss_bytes_max": (
-                reconstruction.runtime.MAX_DETECTOR_RSS_BYTES
-            ),
-            "memory_free_percent_min": reconstruction.runtime.MIN_MEMORY_FREE_PERCENT,
-            "page_timeout_seconds": reconstruction.runtime.PAGE_TIMEOUT_SECONDS,
-            "swap_used_bytes_max": reconstruction.runtime.MAX_SWAP_USED_BYTES,
-        },
+        "safety_limits": probe_gate()["required_safety_limits"],
         "schema_version": 1,
         "target_access": False,
         "temporary_page_outputs_retained": False,
+        "thread_caps": probe_gate()["required_thread_caps"],
         "terminal": "PASS",
     }
 
 
-def write_probe(root: Path, result: dict[str, object]) -> None:
-    destination = root / str(runtime_gate()["probe_result"])
+def write_result(root: Path, relative: str, result: dict[str, object]) -> None:
+    destination = root / relative
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(result), encoding="utf-8")
+
+
+def write_probe(root: Path, result: dict[str, object]) -> None:
+    write_result(root, str(probe_gate()["probe_result"]), result)
 
 
 def write_cache(
@@ -120,7 +173,8 @@ def cache_state(root: Path) -> dict[str, object]:
             "historical_runtime": dict(
                 reconstruction.EXPECTED_HISTORICAL_RUNTIME
             ),
-            "runtime_gate": runtime_gate(),
+            "probe_gate": probe_gate(),
+            "reconstruction_gate": reconstruction_gate(),
         },
         "manifest_lines": manifest_lines,
         "plan": {
@@ -151,16 +205,24 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
         reconstruction.validate_reconstruction_boundaries(contract)
 
         changed = copy.deepcopy(contract)
-        changed["runtime_gate"]["maximum_swap_used_bytes"] += 1
+        changed["probe_gate"]["maximum_swap_used_bytes"] += 1
         with self.assertRaisesRegex(
-            reconstruction.CacheReconstructionError, "runtime safety gate changed"
+            reconstruction.CacheReconstructionError, "tiled probe safety gate changed"
+        ):
+            reconstruction.validate_reconstruction_boundaries(changed)
+
+        changed = copy.deepcopy(contract)
+        changed["reconstruction_gate"]["maximum_swap_used_bytes"] += 1
+        with self.assertRaisesRegex(
+            reconstruction.CacheReconstructionError,
+            "reconstruction safety gate changed",
         ):
             reconstruction.validate_reconstruction_boundaries(changed)
 
     def test_probe_must_exist_and_pass_with_complete_nonnegative_health(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
-            contract = {"runtime_gate": runtime_gate()}
+            contract = {"probe_gate": probe_gate()}
             with self.assertRaisesRegex(
                 reconstruction.CacheReconstructionError, "probe is missing"
             ):
@@ -171,6 +233,76 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
             self.assertEqual(
                 reconstruction.validate_probe_pass(root, contract), result
             )
+
+            old_result = copy.deepcopy(result)
+            old_result["probe"] = "external_text_layout_single_page_runtime_safety"
+            write_result(
+                root,
+                "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/result.json",
+                old_result,
+            )
+            (root / str(probe_gate()["probe_result"])).unlink()
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page runtime probe is missing",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
+
+            write_probe(root, result)
+            old_identity = copy.deepcopy(result)
+            old_identity["probe"] = "external_text_layout_single_page_runtime_safety"
+            write_probe(root, old_identity)
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page runtime probe did not pass",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
+
+            old_schema = copy.deepcopy(result)
+            old_schema["safety_limits"] = {
+                "detector_process_tree_rss_bytes_max": (
+                    reconstruction.runtime.MAX_DETECTOR_RSS_BYTES
+                ),
+                "memory_free_percent_min": reconstruction.runtime.MIN_MEMORY_FREE_PERCENT,
+                "page_timeout_seconds": reconstruction.runtime.PAGE_TIMEOUT_SECONDS,
+                "swap_used_bytes_max": reconstruction.runtime.MAX_SWAP_USED_BYTES,
+            }
+            write_probe(root, old_schema)
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page probe limits changed",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
+
+            write_probe(root, result)
+            wrong_contract = copy.deepcopy(result)
+            wrong_contract["contract"]["sha256"] = "0" * 64
+            write_probe(root, wrong_contract)
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page runtime probe did not pass",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
+
+            write_probe(root, result)
+            missing_attempt = copy.deepcopy(result)
+            del missing_attempt["attempt_count"]
+            write_probe(root, missing_attempt)
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page runtime probe did not pass",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
+
+            write_probe(root, result)
+            wrong_threads = copy.deepcopy(result)
+            wrong_threads["thread_caps"]["OMP_NUM_THREADS"] = "2"
+            write_probe(root, wrong_threads)
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "tiled one-page probe thread caps changed",
+            ):
+                reconstruction.validate_probe_pass(root, contract)
 
             missing = copy.deepcopy(result)
             del missing["page_health"]["peak_swap_used_bytes"]

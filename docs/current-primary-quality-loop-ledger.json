@@ -522,7 +522,7 @@
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The hash-bound tiled one-page integration PASSed 61 external-text-layout tests in both registered Python 3.13.1 and historical Python 3.10.11 without detector execution. A separate v2 cache-reconstruction handoff is now preregistered because the old v1 validator cannot consume the tiled result path or strict safety schema. Implement only the v2 validator binding and compatibility tests next; keep all model and cache execution disabled while swap exceeds 512 MiB. Current measured swap is 1,690.69 MiB with 86% free memory, zero Booted simulators, no model processes, and an absent tiled result path. After v2 integration, wait for every one-page launch gate, run exactly one target-free hw5k_1011.jpg attempt, and only a complete PASS may authorize serial historical cache reconstruction. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The hash-bound v2 cache-reconstruction validator now passes its bounded compatibility suite under registered Python 3.13.1 and historical Python 3.10.11, and static preflight remains closed: historical runtime is ready, cache/build/archive paths are absent, execution_authorized=false, and the tiled result is absent. Keep all model and cache execution disabled while swap exceeds 512 MiB. After every one-page launch gate passes, run exactly one target-free hw5k_1011.jpg attempt; only a complete tiled PASS may authorize serial historical cache reconstruction. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -620,7 +620,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending the exact preregistered tiled one-page safety probe and v2 cache-reconstruction handoff. The old v1 reconstruction validator is intentionally not reused: it binds the superseded duplicate-only result identity, probe name, and weaker safety schema. The v2 contract now preserves the historical cache hashes and build/publication boundaries while binding only the tiled result path, contract, strict safety fields, completion, attempt, and residual-process fields. No detector or cache process executed. Current swap is 1,690.69 MiB, so the single tiled page remains disabled. Historical cache reconstruction remains blocked on a successful tiled safety probe and the v2 validator integration.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe. The old v1 reconstruction validator is intentionally not reused: it binds the superseded duplicate-only result identity, probe name, and weaker safety schema. The v2 contract and validator now preserve the historical cache hashes and build/publication boundaries while binding only the tiled result path, contract, strict safety fields, completion, attempt, and residual-process fields. No detector or cache process executed. Current swap is 1,450.62 MiB with 85% free memory, so the single tiled page remains disabled. Historical cache reconstruction remains blocked on a successful tiled safety probe.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       },
@@ -2045,6 +2045,34 @@
       "outcome": "v2_handoff_freezes_tiled_result_identity_strict_probe_schema_and_unchanged_historical_cache_boundaries_without_execution_authority",
       "repeat_policy": "integrate_only_after_this_preregistration; do_not_accept_the_old_v1_probe_result_or_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "699adf9b2abcbdbfb36913220a4decc5debaf77f1252bfb2b1b52e4a4bdde712"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "c2277f72e70b2a8da835ea1f2952f9f52a619260ee9c8e68f2a81a4b90d97faf"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
+          "sha256": "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md",
+          "sha256": "6891c0fa4ecb23e24d1e6c2dc65f7b4dc12c24408cf73753f2daec17d646ef61"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+          "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+        }
+      ],
+      "id": "external-text-layout-tiled-probe-cache-reconstruction-v2-integration",
+      "outcome": "hash_bound_v2_validator_passed_7_compatibility_tests_under_python_3_13_1_and_3_10_11_with_static_preflight_closed_and_no_model_or_cache_execution",
+      "repeat_policy": "wait_for_all_host_swap_and_probe_gates; do_not_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
+      "terminal": "PASS"
     }
   ],
   "schema_version": 1

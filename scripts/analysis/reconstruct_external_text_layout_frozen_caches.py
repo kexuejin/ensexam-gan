@@ -24,13 +24,15 @@ from scripts.analysis import external_text_layout_materialization_runtime as run
 from scripts.analysis import materialize_external_text_layout_support_train_only as materializer  # noqa: E402
 
 
-CONTRACT_PATH = Path("docs/external-text-layout-frozen-cache-reconstruction-v1.json")
+CONTRACT_PATH = Path(
+    "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json"
+)
 EXPECTED_CONTRACT_SHA256 = (
-    "6e03547f445523a5e89f226039b8d4a6583cca338429691345ed0d822bbbfd2f"
+    "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
 )
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
-RECONSTRUCTION_ID = "external_text_layout_frozen_cache_reconstruction_v1"
+RECONSTRUCTION_ID = "external_text_layout_tiled_probe_cache_reconstruction_v2"
 HISTORICAL_HELPER_MODULE = (
     "scripts.analysis.materialize_sign_separated_train_inputs"
 )
@@ -38,6 +40,7 @@ STAGES = ("preflight", "primary", "second_stage", "publish", "verify", "all")
 EXPECTED_AUTHORITY = {
     "candidate_inference": False,
     "formal_external_layout_materialization": False,
+    "model_execution": False,
     "product_default": "artifacts/current-primary",
     "promotion_state": "disabled",
     "quality_evaluation": False,
@@ -157,24 +160,72 @@ def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
         raise CacheReconstructionError("external layout authority changed")
 
 
-def validate_runtime_gate_contract(contract: dict[str, Any]) -> None:
+def validate_probe_gate_contract(contract: dict[str, Any]) -> None:
+    expected = {
+        "contract": {
+            "path": (
+                "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json"
+            ),
+            "sha256": (
+                "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+            ),
+        },
+        "integration_verification": {
+            "path": (
+                "docs/external-text-layout-tiled-9x9-one-page-integration-"
+                "verification-20260814.json"
+            ),
+            "sha256": (
+                "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+            ),
+        },
+        "maximum_process_tree_rss_bytes": 8 * 1024**3,
+        "maximum_swap_used_bytes": 512 * 1024**2,
+        "minimum_launch_memory_free_percent": 70.0,
+        "minimum_runtime_memory_free_percent": 45.0,
+        "probe_page": "hw5k_1011.jpg",
+        "probe_result": (
+            "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-20260814/"
+            "result.json"
+        ),
+        "required_attempt_count": 1,
+        "required_page_completed": True,
+        "required_probe": "external_text_layout_tiled_9x9_single_page_runtime_safety",
+        "required_probe_reason_code": "runtime_safety_probe_passed",
+        "required_probe_terminal": "PASS",
+        "required_result_authority": "runtime_prerequisite_only",
+        "required_residual_model_process_count": 0,
+        "required_safety_limits": {
+            "detector_process_tree_rss_bytes_max": 8 * 1024**3,
+            "launch_memory_free_percent_min": 70.0,
+            "runtime_memory_free_percent_min": 45.0,
+            "page_timeout_seconds": runtime.PAGE_TIMEOUT_SECONDS,
+            "swap_used_bytes_max": 512 * 1024**2,
+        },
+        "required_thread_caps": {
+            "MKL_NUM_THREADS": "1",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+        },
+        "result_must_be_absent_before_attempt": True,
+    }
+    if contract.get("probe_gate") != expected:
+        raise CacheReconstructionError("tiled probe safety gate changed")
+
+
+def validate_reconstruction_gate_contract(contract: dict[str, Any]) -> None:
     expected = {
         "maximum_process_tree_rss_bytes": runtime.MAX_DETECTOR_RSS_BYTES,
         "maximum_swap_used_bytes": runtime.MAX_SWAP_USED_BYTES,
         "minimum_system_free_memory_percent": runtime.MIN_MEMORY_FREE_PERCENT,
-        "probe_page": "hw5k_1011.jpg",
-        "probe_result": (
-            "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/"
-            "result.json"
-        ),
-        "required_probe_reason_code": "runtime_safety_probe_passed",
-        "required_probe_terminal": "PASS",
+        "probe_pass_required_before_helper_import": True,
         "stage_execution": (
             "one_model_process_at_a_time_under_the_external_layout_host_lock"
         ),
     }
-    if contract.get("runtime_gate") != expected:
-        raise CacheReconstructionError("runtime safety gate changed")
+    if contract.get("reconstruction_gate") != expected:
+        raise CacheReconstructionError("reconstruction safety gate changed")
     if (
         materializer.MAX_DETECTOR_RSS_BYTES != runtime.MAX_DETECTOR_RSS_BYTES
         or materializer.MAX_SWAP_USED_BYTES != runtime.MAX_SWAP_USED_BYTES
@@ -192,7 +243,8 @@ def validate_reconstruction_boundaries(contract: dict[str, Any]) -> None:
         raise CacheReconstructionError("cache reconstruction access boundary changed")
     if contract.get("historical_runtime") != EXPECTED_HISTORICAL_RUNTIME:
         raise CacheReconstructionError("historical reconstruction runtime changed")
-    validate_runtime_gate_contract(contract)
+    validate_probe_gate_contract(contract)
+    validate_reconstruction_gate_contract(contract)
 
 
 def current_reconstruction_runtime() -> dict[str, str]:
@@ -241,8 +293,9 @@ def validate_contract(
         raise CacheReconstructionError("cache reconstruction contract sha256 changed")
     contract = read_json(contract_file)
     if (
-        contract.get("schema_version") != 1
-        or contract.get("state") != "preregistered_reconstruction_preflight"
+        contract.get("schema_version") != 2
+        or contract.get("state")
+        != "preregistered_tiled_probe_cache_reconstruction_integration"
         or contract.get("terminal") != "PREREQUISITE_NEEDED"
     ):
         raise CacheReconstructionError("cache reconstruction contract changed")
@@ -250,6 +303,16 @@ def validate_contract(
     validate_authority(repo_root, contract)
     validate_artifact(
         repo_root, contract["external_layout_plan"], "external layout plan"
+    )
+    validate_artifact(
+        repo_root,
+        contract["probe_gate"]["contract"],
+        "tiled probe contract",
+    )
+    validate_artifact(
+        repo_root,
+        contract["probe_gate"]["integration_verification"],
+        "tiled probe integration verification",
     )
     historical = contract.get("historical_source", {})
     plan_path = validate_artifact(
@@ -495,17 +558,30 @@ def validate_health_summary(
     return normalized
 
 
+def _probe_health_gate(gate: dict[str, Any], *, launch: bool) -> dict[str, Any]:
+    return {
+        "maximum_process_tree_rss_bytes": gate["maximum_process_tree_rss_bytes"],
+        "maximum_swap_used_bytes": gate["maximum_swap_used_bytes"],
+        "minimum_system_free_memory_percent": gate[
+            "minimum_launch_memory_free_percent"
+            if launch
+            else "minimum_runtime_memory_free_percent"
+        ],
+    }
+
+
 def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, Any]:
-    validate_runtime_gate_contract(contract)
-    gate = contract["runtime_gate"]
+    validate_probe_gate_contract(contract)
+    gate = contract["probe_gate"]
     result_path = repo_path(repo_root, gate["probe_result"])
     if not result_path.is_file():
         raise CacheReconstructionError(
-            f"repaired one-page runtime probe is missing: {result_path}"
+            f"tiled one-page runtime probe is missing: {result_path}"
         )
     result = read_json(result_path)
     if (
-        result.get("terminal") != gate["required_probe_terminal"]
+        result.get("contract") != gate["contract"]
+        or result.get("terminal") != gate["required_probe_terminal"]
         or result.get("reason_code") != gate["required_probe_reason_code"]
         or result.get("formal_evidence") is not False
         or result.get("formal_outputs_written") is not False
@@ -514,28 +590,40 @@ def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, 
         or result.get("recognition") is not False
         or result.get("routing_metadata_access") is not False
         or result.get("temporary_page_outputs_retained") is not False
-        or result.get("result_authority") != "runtime_prerequisite_only"
-        or result.get("probe")
-        != "external_text_layout_single_page_runtime_safety"
+        or result.get("result_authority") != gate["required_result_authority"]
+        or result.get("probe") != gate["required_probe"]
         or result.get("schema_version") != 1
         or result.get("detector", {}).get("device") != "cpu"
+        or result.get("detector", {}).get("engine") != "transformers"
+        or result.get("detector", {}).get("model_name")
+        != "PP-OCRv6_medium_det"
         or result.get("page", {}).get("file") != gate["probe_page"]
+        or result.get("attempt_count") != gate["required_attempt_count"]
+        or result.get("page_completed") is not gate["required_page_completed"]
+        or result.get("residual_model_process_count")
+        != gate["required_residual_model_process_count"]
+        or result.get("booted_ios_simulator_count") != 0
     ):
-        raise CacheReconstructionError("repaired one-page runtime probe did not pass")
-    if result.get("safety_limits") != {
-        "detector_process_tree_rss_bytes_max": runtime.MAX_DETECTOR_RSS_BYTES,
-        "memory_free_percent_min": runtime.MIN_MEMORY_FREE_PERCENT,
-        "page_timeout_seconds": runtime.PAGE_TIMEOUT_SECONDS,
-        "swap_used_bytes_max": runtime.MAX_SWAP_USED_BYTES,
-    }:
-        raise CacheReconstructionError("repaired one-page probe limits changed")
+        raise CacheReconstructionError("tiled one-page runtime probe did not pass")
+    if result.get("safety_limits") != gate["required_safety_limits"]:
+        raise CacheReconstructionError("tiled one-page probe limits changed")
+    if result.get("thread_caps") != gate["required_thread_caps"]:
+        raise CacheReconstructionError("tiled one-page probe thread caps changed")
     validate_health_summary(
-        result.get("page_health"), gate=gate, label="probe page health"
+        result.get("page_health"),
+        gate=_probe_health_gate(gate, launch=False),
+        label="probe page health",
     )
-    for name in ("initial_health", "post_run_health"):
-        validate_health_snapshot(
-            result.get(name), gate=gate, label=f"probe {name}"
-        )
+    validate_health_snapshot(
+        result.get("initial_health"),
+        gate=_probe_health_gate(gate, launch=True),
+        label="probe initial_health",
+    )
+    validate_health_snapshot(
+        result.get("post_run_health"),
+        gate=_probe_health_gate(gate, launch=False),
+        label="probe post_run_health",
+    )
     return result
 
 
@@ -587,7 +675,7 @@ def validate_current_launch_health(
     health = runtime.runtime_health(os.getpid())
     normalized = validate_health_snapshot(
         health,
-        gate=contract["runtime_gate"],
+        gate=contract["reconstruction_gate"],
         label="current launch health",
     )
     materializer.enforce_health_limits(health)
@@ -744,7 +832,7 @@ def verify_published_caches(
 def preflight_report(repo_root: Path, state: dict[str, Any]) -> dict[str, Any]:
     contract = state["contract"]
     paths = stage_paths(repo_root, contract)
-    probe_path = repo_path(repo_root, contract["runtime_gate"]["probe_result"])
+    probe_path = repo_path(repo_root, contract["probe_gate"]["probe_result"])
     try:
         actual_runtime = current_reconstruction_runtime()
         runtime_ready = actual_runtime == contract["historical_runtime"]

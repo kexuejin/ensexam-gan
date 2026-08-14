@@ -1076,7 +1076,9 @@ tiled 9x9 integration verification: docs/external-text-layout-tiled-9x9-one-page
 tiled 9x9 integration decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md
 tiled probe cache reconstruction v2: docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json
 tiled probe cache reconstruction v2 decision: docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md
-cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
+v2 cache validator: scripts/analysis/reconstruct_external_text_layout_frozen_caches.py (sha256 699adf9b2abcbdbfb36913220a4decc5debaf77f1252bfb2b1b52e4a4bdde712)
+v2 cache validator tests: tests/test_external_text_layout_frozen_cache_reconstruction.py (sha256 c2277f72e70b2a8da835ea1f2952f9f52a619260ee9c8e68f2a81a4b90d97faf)
+historical cache reconstruction contract (immutable v1): docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
 runtime restoration decision: docs/decisions/2026-08-14-external-text-layout-historical-runtime-restoration.md
@@ -1090,9 +1092,10 @@ tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold
 tiled one-page authorization: bounded integration is complete; exactly one target-free hw5k_1011.jpg attempt is allowed only after every launch gate passes; any non-PASS terminal closes the exact tiled path
 tiled integration: PASS with 61/61 external-text-layout tests under Python 3.13.1 and 61/61 under Python 3.10.11; contract/source/result hashes, stricter limits, thread caps, parent-plus-child Simulator checks, RUNNING sentinel, non-overwrite, cleanup, and synthetic PASS behavior are verified without detector execution
 tiled cache handoff: v1 cannot consume the tiled result path, probe identity, or strict safety schema; v2 is preregistered to bind the tiled PASS while preserving historical cache hashes, runtime identity, helper ordering, and publication boundaries
+v2 cache validator integration: PASS with 7/7 compatibility tests under Python 3.13.1 and 7/7 under Python 3.10.11; old result path/identity/schema, incomplete attempt/completion/process fields, thread-cap drift, split probe/reconstruction health gates, helper ordering, exact historical runtime, and static preflight are verified without detector or cache execution
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: 86% free memory, 1,690.69 MiB swap used, zero Booted iOS Simulators, no model process, and tiled result absent; model and cache execution prohibited while swap exceeds 512 MiB
-next action: integrate the hash-bound v2 cache validator, then wait; when every one-page launch gate passes, run exactly one target-free hw5k_1011.jpg attempt before any historical cache reconstruction
+current host gate: 85% free memory, 1,450.62 MiB swap used, zero Booted iOS Simulators, no model process, and tiled result absent; model and cache execution prohibited while swap exceeds 512 MiB
+next action: wait for swap <=512 MiB and every one-page launch gate; then run exactly one target-free hw5k_1011.jpg attempt before any historical cache reconstruction
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
