@@ -693,12 +693,32 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-archive-publication-preregistration.md",
         "sha256": "1c7eb40ab31e97a52ba52b4581ac2157d831ee8eccb98ec66db14f2039e497fe"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-archive-publication-integration-verification-20260815.json",
+        "sha256": "9e6c60b31198784149323a3a663be74c66407f3ae739b85a23a7624fe05a6f58"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-archive-publication-integration-pass.md",
+        "sha256": "1f733dc18a7aaf137303b17d849049b344e1593ecefa23203fd1f174dc3e798b"
+      },
+      {
+        "path": "outputs/external-text-layout-recovered-archive-publication-20260815/result.json",
+        "sha256": "0f0bd291df5ef6c230835c9102a13e3425bafe17a964f5bba0e1610adf97e5ab"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-archive-publication-verification-20260815.json",
+        "sha256": "d98d250185b4493053664de800b195af3b635bdb1e77a50b9c74ab622add8f7a"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-archive-publication-pass.md",
+        "sha256": "49623950c1559e4687b88e8bf636e891331ffa29c9d87365931e136e28a976f4"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered recovered-identity archive publisher and synthetic tests. Validate the exact 275-name manifest, primary efd588/6400 cache, and recovered second-stage 79fd/2ffa cache before link mutation; preflight both final and temporary paths; create only relative registered links; support bounded partial-link recovery and current-attempt rollback; and keep the original b800-bound publish_caches route absent. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not create real archive links until a separate integration PASS is committed and pushed. Formal materialization, diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Preregister a recovered-input adapter for external text-layout materialization. Preserve docs/external-text-layout-support-prerequisite-v1.json and all detector, runtime, source, manifest, feature, output, health, and acceptance settings unchanged; bind the recovered archive PASS and exact canonical links; replace only second_stage_metrics validation from historical b800 to recovered 79fd plus exact 2ffa/275 predictions. Implementation and synthetic verification may open only after preregistration. Real materialization remains closed until separate adapter integration PASS is committed and pushed; diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -796,7 +816,7 @@
         "status": "passed"
       },
       {
-        "detail": "The exact tiled one-page CPU detector probe PASSed with 6.92 GiB peak process-tree RSS, 63% minimum free memory, and zero swap growth, residual model processes, or retained temporary output. The attempt is consumed. The diagnostic remains pending baseline-relative cache monitor adaptation, historical cache reconstruction, and the frozen train275 audit; no quality surface is open.",
+        "detail": "The exact tiled one-page CPU detector probe PASSed with 6.92 GiB peak process-tree RSS, 63% minimum free memory, and zero swap growth, residual model processes, or retained temporary output. Exact primary and recovered second-stage caches now exist behind canonical archive links. The diagnostic remains pending a preregistered recovered-input materializer adapter, formal train275 layout materialization, and the frozen audit; no quality surface is open.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       },
@@ -893,6 +913,11 @@
       {
         "detail": "The recovered-identity archive publisher passed 14 focused and 109 complete external-text-layout tests in Python 3.13.1 and 3.10.11. Exact dual-cache validation, dual-destination preflight, canonical relative targets, partial-link recovery, current-attempt rollback, linked-cache revalidation, terminal idempotency, and historical/model route closure are locked. A real closed-authority probe left all archive/result paths absent; one exact publication is now authorized after this PASS is pushed.",
         "id": "external_text_layout_recovered_archive_publication_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The single authorized no-model publisher created only the two canonical relative archive links and atomic PASS result. Exact 275-name validation proves linked primary efd588/6400 and recovered second-stage 79fd/2ffa identities equal their immutable sources; publishing temporaries are absent. Historical b800 remains unreproduced, so only a separate recovered-input materializer preregistration is open.",
+        "id": "external_text_layout_recovered_archive_publication",
         "status": "passed"
       }
     ],

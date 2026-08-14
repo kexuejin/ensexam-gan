@@ -1,0 +1,70 @@
+{
+  "authority": {
+    "cache_mutation": false,
+    "model_execution": false,
+    "result_authority": "recovered_archive_publication"
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "publication": {
+    "cache_identities_before": {
+      "primary": {
+        "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+        "prediction_set": {
+          "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+          "count": 275,
+          "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+        }
+      },
+      "second_stage": {
+        "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+        "prediction_set": {
+          "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+          "count": 275,
+          "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+        }
+      }
+    },
+    "linked_caches": {
+      "primary": {
+        "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+        "prediction_set": {
+          "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+          "count": 275,
+          "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+        }
+      },
+      "second_stage": {
+        "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+        "prediction_set": {
+          "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+          "count": 275,
+          "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+        }
+      }
+    },
+    "links": {
+      "primary": "../../sign-separated-residual-repair-train275-primary-v1",
+      "second_stage": "../../sign-separated-residual-repair-train275-frozen-pipeline-v1"
+    },
+    "state_before": {
+      "primary": "absent",
+      "second_stage": "absent"
+    },
+    "status": "published"
+  },
+  "recovered_second_stage_identity": {
+    "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+  },
+  "schema_version": 1,
+  "terminal": "PASS"
+}

@@ -1,0 +1,88 @@
+{
+  "authority": {
+    "cache_mutation": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "recovered_materializer_input_preregistration": true,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_archive_publication_pass",
+    "training": false
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "integration": {
+    "path": "docs/external-text-layout-recovered-archive-publication-integration-verification-20260815.json",
+    "sha256": "9e6c60b31198784149323a3a663be74c66407f3ae739b85a23a7624fe05a6f58",
+    "terminal": "PASS"
+  },
+  "linked_caches": {
+    "primary": {
+      "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+      "prediction_set": {
+        "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    },
+    "second_stage": {
+      "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      },
+      "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+    }
+  },
+  "publication": {
+    "links": {
+      "primary": {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+        "target": "../../sign-separated-residual-repair-train275-primary-v1"
+      },
+      "second_stage": {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+        "target": "../../sign-separated-residual-repair-train275-frozen-pipeline-v1"
+      }
+    },
+    "publishing_temporaries_absent": true,
+    "result": {
+      "path": "outputs/external-text-layout-recovered-archive-publication-20260815/result.json",
+      "sha256": "0f0bd291df5ef6c230835c9102a13e3425bafe17a964f5bba0e1610adf97e5ab",
+      "status": "published",
+      "terminal": "PASS"
+    }
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/publish_external_text_layout_recovered_archive_links.py",
+        "result": "PASS_once"
+      },
+      {
+        "command": "readlink both registered archive paths",
+        "result": "exact_canonical_relative_targets"
+      },
+      {
+        "command": "validate_source_caches and validate_linked_caches over exact 275-name manifest",
+        "result": "source_equals_linked"
+      },
+      {
+        "command": "assert_no_conflicting_model_processes",
+        "result": "passed"
+      }
+    ],
+    "source_cache_metrics_unchanged": true,
+    "terminal_result_read_back": "passed"
+  },
+  "next_action": "Preregister a recovered-input adapter for external text-layout materialization. Preserve the original b800-bound plan unchanged; bind the exact archive publication PASS, replace only second_stage_metrics evidence validation with recovered 79fd plus exact 2ffa predictions, require both canonical archive links, and keep detector/materialization execution closed until separate adapter integration PASS is committed and pushed.",
+  "schema_version": 1,
+  "terminal": "PASS"
+}
