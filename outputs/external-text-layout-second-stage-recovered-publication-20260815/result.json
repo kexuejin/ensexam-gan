@@ -1,0 +1,61 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "model_execution": false,
+    "result_authority": "recovered_second_stage_cache_publication"
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "publication": {
+    "final_cache": {
+      "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    },
+    "metrics_canonicalization": {
+      "data_rows": 275,
+      "metrics_sha256_after": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "metrics_sha256_before": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439",
+      "replacement_count": 275
+    },
+    "metrics_state_before": "source",
+    "prediction_set_before": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "status": "published",
+    "temporary_cache_before": {
+      "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    }
+  },
+  "recovered_identity": {
+    "canonicalization": {
+      "current_repository_root": "/Volumes/Tool/source/ensexam-gan-h0-monotonic-safe",
+      "expected_data_rows": 275,
+      "expected_replacement_count": 275,
+      "frozen_historical_repository_root": "/private/tmp/ensexam-gan-h0-P0vNwp",
+      "source_metrics_sha256": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439"
+    },
+    "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+  },
+  "schema_version": 1,
+  "terminal": "PASS"
+}

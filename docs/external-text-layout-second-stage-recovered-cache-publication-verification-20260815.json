@@ -1,0 +1,81 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_second_stage_cache_publication_pass",
+    "training": false
+  },
+  "historical_identity": {
+    "metrics_payload_present": false,
+    "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+    "status": "not_reproduced"
+  },
+  "integration": {
+    "path": "docs/external-text-layout-second-stage-recovered-cache-publication-integration-verification-20260815.json",
+    "sha256": "65bb4a13bf52d6d72c3af5b19fe0597306a2f4cbb0dae8c6d3fe0371bf239737",
+    "terminal": "PASS"
+  },
+  "path_state": {
+    "archive_primary_present": false,
+    "archive_second_stage_present": false,
+    "final": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+    "final_present": true,
+    "temporary_present": false
+  },
+  "publication": {
+    "metrics_canonicalization": {
+      "data_rows": 275,
+      "metrics_sha256_after": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "metrics_sha256_before": "4870821aa8672e228a23e375ec68597ac4176d4b7ef4f6ed5a2b527defb22439",
+      "replacement_count": 275
+    },
+    "model_process_count_after": 0,
+    "result": {
+      "path": "outputs/external-text-layout-second-stage-recovered-publication-20260815/result.json",
+      "sha256": "f505fd2cf0b998280f71872eed8d30b4deb1d84ee44f41b1b228295813b0e5ee",
+      "status": "published",
+      "terminal": "PASS"
+    }
+  },
+  "recovered_identity": {
+    "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+    "prediction_set": {
+      "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/publish_external_text_layout_recovered_second_stage_cache.py",
+        "result": "PASS_once"
+      },
+      {
+        "command": "shasum -a 256 outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1/metrics.csv",
+        "result": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b"
+      },
+      {
+        "command": "validate_prediction_set(final/pred, exact recovered prediction identity)",
+        "result": "275_exact"
+      },
+      {
+        "command": "assert_no_conflicting_model_processes",
+        "result": "passed"
+      }
+    ],
+    "archive_paths_absent": true,
+    "result_read_back": "passed",
+    "temporary_path_absent": true
+  },
+  "next_action": "Preregister a separate recovered-identity archive publisher that validates the exact primary cache and recovered second-stage cache, creates only the two registered relative symlinks atomically, and does not call the historical b800-bound controller publication route. Keep execution closed until its own integration PASS is committed and pushed.",
+  "schema_version": 1,
+  "terminal": "PASS"
+}

@@ -665,12 +665,32 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-recovered-cache-publication-preregistration.md",
         "sha256": "e5b5671c12002ca5aecef4a531ada5d46415a9ed80a6ae4b797c668e65640b16"
+      },
+      {
+        "path": "docs/external-text-layout-second-stage-recovered-cache-publication-integration-verification-20260815.json",
+        "sha256": "65bb4a13bf52d6d72c3af5b19fe0597306a2f4cbb0dae8c6d3fe0371bf239737"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-recovered-cache-publication-integration-pass.md",
+        "sha256": "4006eb79d4d3fff307ec6996113ca157b8258fd710f9cb57d022daa51d3bc920"
+      },
+      {
+        "path": "outputs/external-text-layout-second-stage-recovered-publication-20260815/result.json",
+        "sha256": "f505fd2cf0b998280f71872eed8d30b4deb1d84ee44f41b1b228295813b0e5ee"
+      },
+      {
+        "path": "docs/external-text-layout-second-stage-recovered-cache-publication-verification-20260815.json",
+        "sha256": "bab1ff8ab42ff28f5332894d86c4588a92faa39f26e50b3a03a919509aba6e72"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-second-stage-recovered-cache-publication-pass.md",
+        "sha256": "66bc45858bc8eb36e6bfe427ac2aed013cc5fa0d50453d36793345d78a8dec38"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered no-model recovered-cache publication path and synthetic tests. Bind the semantic audit and exact prediction set, allow only the 487082-to-79fd 275-root metrics mutation, validate complete temporary before atomic final rename, validate final again, preserve archive absence, and support only the registered already-canonical crash retry. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not execute real publication until a separate integration PASS is committed and pushed. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Preregister a separate recovered-identity archive publisher. It must validate the exact primary efd588/6400 cache and recovered second-stage 79fd/2ffa cache, create only the two frozen relative archive symlinks atomically, preserve both cache directories byte-for-byte, and avoid the original historical b800-bound controller route. Implement and test only after preregistration; real archive publication remains closed until a separate integration PASS is committed and pushed. Formal materialization, train275 diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -828,9 +848,9 @@
         "status": "passed"
       },
       {
-        "detail": "The second-stage command completed all 275 pages and produced the exact frozen prediction set without resource termination. All 275 gate ratios and the label-content hash match historical evidence, but the root-canonical metrics candidate SHA differs from the unavailable opaque historical payload. Final and archive paths remain absent; salvage audit is required without model rerun.",
+        "detail": "The second-stage command completed all 275 pages without resource termination and produced the exact frozen prediction set. A 4,400-field semantic audit established the recovered 79fd metrics identity without reproducing historical b800, and the pushed no-model publisher canonicalized 275 roots, validated the complete cache before and after rename, wrote terminal PASS, and left temporary/archive paths absent.",
         "id": "external_text_layout_second_stage_cache_reconstruction",
-        "status": "pending"
+        "status": "passed"
       },
       {
         "detail": "A read-only salvage audit now freezes the temporary cache, 16 field evidence sources, historical gate and label identities, exact 79fd canonical candidate, and PASS/KILL successors. PASS can authorize only a separate recovered-identity preregistration; no model, mutation, final/archive publication, or quality surface is open.",
@@ -850,6 +870,11 @@
       {
         "detail": "The no-model recovered-cache publisher passed 14 focused and 95 complete external-text-layout tests in Python 3.13.1 and 3.10.11. Exact prediction and metrics identities, mutation-before-publication rejection, complete pre/post-rename validation, result-write rollback, terminal idempotency, archive absence, and helper-route closure are locked. A real closed-authority probe left the 487082 temporary cache unchanged; one exact publication is now authorized after this PASS is pushed.",
         "id": "external_text_layout_second_stage_recovered_cache_publication_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The single authorized no-model publisher changed only 275 registered pred_path roots from source metrics 487082 to recovered metrics 79fd, preserved the exact 275-file 2ffa prediction payload, validated temporary and final caches, wrote terminal PASS, and left temporary/archive paths absent. Historical b800 remains explicitly unreproduced; only separate archive preregistration is open.",
+        "id": "external_text_layout_second_stage_recovered_cache_publication",
         "status": "passed"
       }
     ],
