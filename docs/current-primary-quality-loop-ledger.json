@@ -613,12 +613,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-cache-metrics-canonicalization-integration-pass.md",
         "sha256": "9584870b36f75a5f85f959c24db1e753a8b2aa5c3e8dd617ef9ba99332b4e754"
+      },
+      {
+        "path": "docs/external-text-layout-primary-cache-recovery-result-20260814.json",
+        "sha256": "8b2c3ad75010c106f5154238ae734cd495ceb540813e11b9924623cf1cf6914b"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-primary-cache-recovery-pass.md",
+        "sha256": "73d9fe5dafb970a4f65d928712f645aa292418c6705f0713576b7afab84bd182"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The metrics canonicalizer and publication-order fix passed 21 focused and 78 complete external-text-layout tests under Python 3.13.1 and 3.10.11. A temporary copy of the real 275-row metrics file reached the exact frozen hash, while pre-ledger recover-primary remained closed and left the retained cache unchanged. Commit and push this integration PASS, then run exactly the frozen Python 3.10.11 recover-primary stage once. Require status=recovered, exact primary metrics and prediction hashes, absent second-stage and archive paths, and no model process. Do not start second stage until the recovery result is recorded. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The retained primary cache now passes its exact frozen metrics and prediction hashes after one ledger-gated, metrics-only atomic recovery. No model/helper command ran, all 275 pred_path roots are canonical, and second-stage plus archive paths remain absent. Commit and push this recovery PASS. Then take a fresh point-in-time stage baseline and run only the frozen Python 3.10.11 second_stage reconstruction. The controller must stop on any relative resource or exact-hash failure and leave the final second-stage path absent. Do not publish archive links until both caches pass. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -756,9 +764,9 @@
         "status": "passed"
       },
       {
-        "detail": "The primary MPS command completed all 275 pages and produced the exact frozen prediction set, but exact cache validation returned PREREQUISITE_NEEDED because metrics pred_path values retained the current repository root. Second stage and archive publication did not start. The unverified final primary directory remains present because publication preceded rewrite and validation; deterministic recovery must be preregistered before mutation.",
+        "detail": "The primary MPS command completed all 275 pages with the exact frozen prediction set, and the ledger-gated metrics-only recovery converted all 275 pred_path roots to the historical root. The complete primary cache now passes exact metrics, filename, count, and prediction-content hashes without rerunning the model.",
         "id": "external_text_layout_primary_cache_reconstruction",
-        "status": "pending"
+        "status": "passed"
       },
       {
         "detail": "A metrics-only recovery now freezes the exact source and target SHA-256 values, 275 pred_path-only root substitutions, candidate-before-write validation, prediction identity, explicit no-model existing-cache recovery, and temporary-cache validation before publication. Only implementation and synthetic verification are authorized; the retained primary cache remains unchanged.",
@@ -768,6 +776,11 @@
       {
         "detail": "The canonicalizer and controller passed 21 focused and 78 complete external-text-layout tests in both registered Python environments. Candidate bytes and complete temporary caches are validated before publication, failures leave final absent, recovery has no model/helper route, ledger PASS is required, and a real 275-row temporary copy reached the exact frozen metrics hash. Only the exact retained-primary metrics recovery is now authorized.",
         "id": "external_text_layout_cache_metrics_canonicalization_recovery_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The one authorized recover-primary command replaced only metrics.csv atomically, changed the exact registered root-drift SHA to the frozen SHA with 275 substitutions, preserved the exact 275-file prediction set, and left no candidate, temporary, second-stage, archive, or conflicting model process.",
+        "id": "external_text_layout_primary_cache_metrics_recovery",
         "status": "passed"
       }
     ],

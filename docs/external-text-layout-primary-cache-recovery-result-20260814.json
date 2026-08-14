@@ -1,0 +1,53 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "exact_primary_cache_recovery_only",
+    "second_stage_execution_before_result_commit": false,
+    "training": false
+  },
+  "cache": {
+    "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "path": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "prediction_set": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "validation": "exact_match"
+  },
+  "completed_at": "2026-08-14T23:44:36+08:00",
+  "downstream_state": {
+    "archive_primary_present": false,
+    "archive_second_stage_present": false,
+    "conflicting_model_process_count": 0,
+    "primary_canonicalization_candidate_present": false,
+    "primary_materialization_temporary_present": false,
+    "second_stage_present": false
+  },
+  "implementation_commit": "f83db8d",
+  "metrics_canonicalization": {
+    "current_repository_root_occurrences_after": 0,
+    "data_rows": 275,
+    "frozen_historical_repository_root_occurrences_after": 275,
+    "metrics_sha256_after": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "metrics_sha256_before": "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
+    "replacement_count": 275
+  },
+  "recovery": {
+    "command_stage": "recover-primary",
+    "historical_helper_loaded": false,
+    "model_command_started": false,
+    "prediction_bytes_mutated": false,
+    "status": "recovered",
+    "write_scope": "metrics_csv_only_atomic_file_replacement"
+  },
+  "schema_version": 1,
+  "terminal": "PASS"
+}
