@@ -1065,6 +1065,11 @@ runtime repair contract: docs/external-text-layout-runtime-equivalence-repair-v1
 runtime repair decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
 repaired probe result: docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json
 repaired probe decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-probe-kill.md
+tiled 9x9 static feasibility: docs/external-text-layout-tiled-9x9-feasibility-20260814.json
+tiled 9x9 repair contract: docs/external-text-layout-tiled-9x9-runtime-repair-v1.json
+tiled 9x9 repair preregistration: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md
+tiled 9x9 fake verification: docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json
+tiled 9x9 verification decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md
 cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
@@ -1075,9 +1080,10 @@ inner-val15 / development / promotion: disabled / disabled / disabled
 runtime status: the only clean-baseline repaired page crossed the free-memory floor at 26.0% and swap cap at 2,973,562,306 bytes; peak process-tree RSS 5,643,206,656 bytes; no formal evidence or residual model process
 static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
 runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction and remains statically equivalent, but its only authorized clean-baseline probe KILLed the exact repeat path as empirically unsafe
+tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold comparison bound from 21,785,739,264 to 201,719,808 bytes; four exact CPU float32 fake cases covering 256-to-64 and 64-to-64 are bitwise equal with maximum error 0.0; real detector integration remains disabled
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: post-cleanup 79% free memory and 1,906.69 MiB swap used; repaired probe terminal KILL for the exact runtime path and all model execution prohibited
-next action: read-only static equivalence and memory analysis for the full-resolution 9x9 path; any lower-memory implementation or model run needs separate preregistration and new one-page authorization
+current host gate: 86% free memory and 1,810.69 MiB swap used; repaired probe terminal KILL for the exact runtime path and all model execution prohibited
+next action: freeze a separate hash-bound one-page integration and safety-probe contract for the tiled successor; do not integrate or execute until that contract exists and swap is at most 512 MiB
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
@@ -1106,6 +1112,11 @@ must not be relaxed. The cache reconstruction path remains recovery
 infrastructure only: its successful-probe prerequisite is unmet and neither
 archive may be published before both reconstructed caches match every
 registered historical hash. The exact historical cache runtime remains
-restored. The only open next step is read-only analysis of a materially
-lower-memory equivalent full-resolution `9x9` path; implementation and model
-execution require separate preregistration.
+restored. Static analysis and the implementation-only gate for a materially
+lower-memory full-resolution `9x9` path now PASS: four-row tiles preserve
+tested CPU float32 values bitwise while reducing the highest projection unfold
+comparison bound by `108x`. The result does not establish full-map backend
+identity, timeout, or host peak memory. The only open next step is a separate
+one-page contract that binds the exact implementation and test hashes; real
+detector integration and execution remain disabled until that contract exists
+and every host launch gate passes.

@@ -457,12 +457,48 @@
       {
         "path": "docs/external-text-layout-runtime-equivalence-repair-probe-20260814.json",
         "sha256": "d56d49f9ac37d127b0a17359af9f2b53a2fbcee0fcff3beabf638487a29ae5b9"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-feasibility-20260814.json",
+        "sha256": "5b4a2cf381b8c0046b68d3b002c5676cc845b0e3bdd1cd00b275a439d9b2a723"
+      },
+      {
+        "path": "scripts/analysis/report_external_text_layout_tiled_9x9_feasibility.py",
+        "sha256": "8adc958c5446f3d9faf370b65a3d6610d0d1f40e64cffa75749cc352c2b55b15"
+      },
+      {
+        "path": "tests/test_external_text_layout_tiled_9x9_feasibility.py",
+        "sha256": "4fc40e6f6690141384b6cc15372b09674e3b55b5ca3e8f85eb4470e6108fda48"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-runtime-repair-v1.json",
+        "sha256": "203e67ac2d12557034f546d9e25e475d083bb2086d2f0ed7bfc1a3244ba3b250"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md",
+        "sha256": "ac4b8855557c14b6af65501ac04743992d85bd8e32f1baeb2374a5430f3b7b99"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+        "sha256": "07b894a5a43b5331c5ba866dd2a714e6346723c8112f0b23bebfb56852f839ac"
+      },
+      {
+        "path": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py",
+        "sha256": "01ef4e03ff41bbb440a7a028e05e07a4c6f2aa1dde049f124a362129b0b37b39"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json",
+        "sha256": "6961f9beff92626dcd65547687072473a4f230ab25a05e2746ef2a01dd6ad758"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md",
+        "sha256": "770121757369831ec4c8bdcb373949c8d8fd9db5bfdff58fb2c6ba27deed9d17"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The exact historical cache runtime is restored, but the only authorized repaired hw5k_1011.jpg detector probe KILLed the exact duplicate-upsample repair path: from 82% free memory and 367.00 MiB swap, free memory fell to 26%, process-tree RSS peaked at 5,643,206,656 bytes, and swap peaked at 2,973,562,306 bytes before active termination. Cleanup left zero model processes and no booted simulator. Do not clear swap and repeat the same detector/runtime/geometry/repair probe, and do not reconstruct caches because its successful-probe prerequisite is unmet. Perform read-only static equivalence and memory analysis of the full-resolution 9x9 path next. Any tiled or streamed implementation and any further model run require separate preregistration, fake-feature equivalence, a fixed memory bound, and new one-page authorization. Keep every optimizer, candidate, quality, visual, promotion, and reserved-blind surface closed.",
+    "next_action": "The four-row tiled 9x9 implementation and fake-feature gate PASSed without importing the detector: four CPU float32 cases covering 256-to-64 and 64-to-64 signatures are bitwise equal with maximum absolute difference zero, exact tile boundaries, fail-closed drift guards, and idempotent combined duplicate-upsample removal. The highest-resolution projection explicit-unfold comparison bound falls from 21,785,739,264 to 201,719,808 bytes, but full-map backend identity, 406-call timeout, and total process memory remain unproven. Do not integrate or execute the real detector yet. Freeze a separate one-page integration and safety-probe contract that binds the exact implementation and test hashes, retains every host gate, and authorizes at most one target-free hw5k_1011.jpg run only after swap is at most 512 MiB. Cache reconstruction, formal materialization, optimizer, candidate, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -560,7 +596,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending a materially lower-memory detector runtime and frozen-cache reconstruction. The only authorized target-free repaired hw5k_1011.jpg probe launched cleanly at 82% free memory and 367.00 MiB swap with exact runtime and detector hashes, but free memory fell to 26%, process-tree RSS peaked at 5,643,206,656 bytes, and swap peaked at 2,973,562,306 bytes before active termination. Cleanup proved zero residual model processes and no formal, target, label, recognition, quality, or temporary page output. The duplicate-upsample repair remains statically equivalent but is empirically insufficient, so its exact probe path is KILLed and must not be repeated. Historical cache reconstruction remains blocked on a successful safety probe. Next permit read-only static equivalence and memory analysis of the full-resolution 9x9 path only; any implementation or model execution needs separate preregistration.",
+        "detail": "Pending a separately authorized safe detector page and frozen-cache reconstruction. The exact duplicate-upsample-only probe path is KILLed after a clean-baseline memory failure. Its four-row tiled 9x9 successor now PASSes the implementation-only gate: static bounds reduce the highest-resolution projection unfold equivalent from 21,785,739,264 to 201,719,808 bytes, and four Python 3.13.1/Torch 2.12.0 CPU float32 fake-feature cases covering both real channel signatures are bitwise identical with maximum error zero. No detector or model was imported. Full-map backend identity, 406-call timeout, and host peak memory remain unknown, so integration and real execution stay closed until a separate one-page contract is frozen and swap is at most 512 MiB. Historical cache reconstruction remains blocked on a successful safety probe.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       }
@@ -1860,6 +1896,58 @@
       "outcome": "clean_baseline_repaired_hw5k_1011_probe_crossed_the_memory_floor_at_26_percent_and_swap_cap_at_2973562306_bytes_before_page_completion_with_zero_residual_model_processes",
       "repeat_policy": "do_not_repeat_the_same_detector_runtime_geometry_or_duplicate_upsample_repair_probe; require_separate_preregistration_for_a_materially_lower_memory_equivalent_path",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-feasibility-20260814.json",
+          "sha256": "5b4a2cf381b8c0046b68d3b002c5676cc845b0e3bdd1cd00b275a439d9b2a723"
+        },
+        {
+          "path": "scripts/analysis/report_external_text_layout_tiled_9x9_feasibility.py",
+          "sha256": "8adc958c5446f3d9faf370b65a3d6610d0d1f40e64cffa75749cc352c2b55b15"
+        },
+        {
+          "path": "tests/test_external_text_layout_tiled_9x9_feasibility.py",
+          "sha256": "4fc40e6f6690141384b6cc15372b09674e3b55b5ca3e8f85eb4470e6108fda48"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-static-feasibility",
+      "outcome": "four_output_row_tiling_preserves_exact_stride_one_padding_four_output_coordinates_and_reduces_the_highest_projection_unfold_comparison_bound_by_108x_without_model_import",
+      "repeat_policy": "implement_only_under_the_separately_frozen_fake_feature_equivalence_contract",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-runtime-repair-v1.json",
+          "sha256": "203e67ac2d12557034f546d9e25e475d083bb2086d2f0ed7bfc1a3244ba3b250"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-preregistration.md",
+          "sha256": "ac4b8855557c14b6af65501ac04743992d85bd8e32f1baeb2374a5430f3b7b99"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_tiled_9x9_runtime_repair.py",
+          "sha256": "07b894a5a43b5331c5ba866dd2a714e6346723c8112f0b23bebfb56852f839ac"
+        },
+        {
+          "path": "tests/test_external_text_layout_tiled_9x9_runtime_repair.py",
+          "sha256": "01ef4e03ff41bbb440a7a028e05e07a4c6f2aa1dde049f124a362129b0b37b39"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-runtime-repair-verification-20260814.json",
+          "sha256": "6961f9beff92626dcd65547687072473a4f230ab25a05e2746ef2a01dd6ad758"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md",
+          "sha256": "770121757369831ec4c8bdcb373949c8d8fd9db5bfdff58fb2c6ba27deed9d17"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-runtime-repair-verification",
+      "outcome": "four_cpu_float32_projection_and_lateral_fake_feature_cases_are_bitwise_equal_with_zero_maximum_error_and_all_frozen_drift_guards_pass_without_real_detector_import",
+      "repeat_policy": "freeze_a_separate_hash_bound_one_page_integration_and_safety_probe_before_any_real_detector_import_or_execution",
+      "terminal": "PASS"
     }
   ],
   "schema_version": 1
