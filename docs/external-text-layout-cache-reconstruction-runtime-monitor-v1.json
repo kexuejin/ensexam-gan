@@ -1,0 +1,77 @@
+{
+  "acceptance": {
+    "child_process_group_terminated_on_health_reader_failure": true,
+    "child_process_group_terminated_on_resource_limit": true,
+    "command_failure_never_publishes_final_cache": true,
+    "historical_helper_sha256_unchanged": true,
+    "monitor_covers_entire_child_lifetime": true,
+    "successful_command_preserves_atomic_cache_and_metrics_rewrite": true
+  },
+  "authority": {
+    "cache_reconstruction_execution": false,
+    "candidate_inference": false,
+    "detector_model_execution": false,
+    "formal_external_layout_materialization": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "cache_reconstruction_runtime_monitor_integration_only",
+    "training": false
+  },
+  "frozen_inputs": {
+    "historical_helper": {
+      "path": "scripts/analysis/materialize_sign_separated_train_inputs.py",
+      "sha256": "cbc3d107f9410f83d1698b17cd56c3b6121b3b698cdff7f66914ff960bcf19ec"
+    },
+    "materialization_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    },
+    "reconstruction_v2": {
+      "path": "docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json",
+      "sha256": "a21575643bfedc4daa762658d037c511d6eb3290e935b1d66eb48bc0db317ae1"
+    }
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "tests/test_external_text_layout_frozen_cache_reconstruction.py"
+    ],
+    "historical_helper_write": false,
+    "new_dependency": false,
+    "reconstruction_script_preintegration_sha256": "8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786",
+    "site_packages_write": false,
+    "test_preintegration_sha256": "747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97"
+  },
+  "monitor": {
+    "child_launch": "subprocess.Popen_start_new_session_true",
+    "health_reader": "external_text_layout_materialization_runtime.runtime_health_child_pid",
+    "maximum_process_tree_rss_bytes": 10737418240,
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 35.0,
+    "monitor_interval_seconds": 1.0,
+    "process_scope": "entire_primary_or_second_stage_child_process_tree",
+    "stages": [
+      "primary",
+      "second_stage"
+    ],
+    "termination": {
+      "grace_seconds": 5.0,
+      "initial_signal": "SIGTERM",
+      "scope": "child_process_group",
+      "terminal_signal": "SIGKILL"
+    }
+  },
+  "preserved_behavior": {
+    "command_builder": "historical_helper_primary_and_second_stage_commands",
+    "final_cache_publish": "temporary_directory_replace_after_zero_exit_only",
+    "host_lock": "external_layout_host_user_run_lock",
+    "log": "exclusive_create_existing_control_log_path",
+    "metrics_rewrite": "historical_helper_rewrite_metrics_paths",
+    "temporary_cache_suffix": ".materializing"
+  },
+  "schema_version": 1,
+  "state": "preregistered_runtime_monitor_integration_only",
+  "terminal": "PREREQUISITE_NEEDED"
+}

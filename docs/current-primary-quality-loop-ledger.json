@@ -517,12 +517,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md",
         "sha256": "6891c0fa4ecb23e24d1e6c2dc65f7b4dc12c24408cf73753f2daec17d646ef61"
+      },
+      {
+        "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+        "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+        "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The hash-bound v2 cache-reconstruction validator now passes its bounded compatibility suite under registered Python 3.13.1 and historical Python 3.10.11, and static preflight remains closed: historical runtime is ready, cache/build/archive paths are absent, execution_authorized=false, and the tiled result is absent. Keep all model and cache execution disabled while swap exceeds 512 MiB. After every one-page launch gate passes, run exactly one target-free hw5k_1011.jpg attempt; only a complete tiled PASS may authorize serial historical cache reconstruction. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The v2 validator is hash-bound and fail-closed, but the historical cache helper still uses an unmonitored subprocess.run between launch and post-stage checks. A runtime-monitor wrapper is now preregistered to preserve the historical helper and cache hashes while continuously enforcing the existing 10 GiB RSS, 35% free-memory, and 512 MiB swap limits with process-group termination. Implement and synthetically verify only that wrapper next. Keep all model and cache execution disabled while swap exceeds 512 MiB; the tiled result remains absent. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -620,13 +628,18 @@
         "status": "passed"
       },
       {
-        "detail": "Pending the exact preregistered tiled one-page safety probe. The old v1 reconstruction validator is intentionally not reused: it binds the superseded duplicate-only result identity, probe name, and weaker safety schema. The v2 contract and validator now preserve the historical cache hashes and build/publication boundaries while binding only the tiled result path, contract, strict safety fields, completion, attempt, and residual-process fields. No detector or cache process executed. Current swap is 1,450.62 MiB with 85% free memory, so the single tiled page remains disabled. Historical cache reconstruction remains blocked on a successful tiled safety probe.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator now binds the tiled result identity and strict schema. A separate runtime-monitor contract is registered because the historical helper currently leaves the full child lifetime inside unmonitored subprocess.run; implementation must preserve helper/cache hashes while enforcing resource limits continuously. No detector or cache process executed. Current swap is about 1,410.62 MiB, so the single tiled page remains disabled.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       },
       {
         "detail": "The v2 cache-reconstruction handoff is preregistered to consume only a complete PASS from the tiled one-page probe while retaining exact historical runtime, cache hashes, helper ordering, publication, and forbidden-access boundaries. Validator integration is allowed; OCR, cache reconstruction, formal materialization, quality, candidate, and promotion execution remain closed until the tiled probe passes.",
         "id": "external_text_layout_tiled_probe_cache_reconstruction_v2_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The historical cache stage runtime-monitor wrapper is frozen to preserve the helper hash and atomic cache semantics while continuously enforcing the existing reconstruction resource limits and terminating the child process group on any breach. Integration and synthetic tests are allowed; model and cache execution remain closed.",
+        "id": "external_text_layout_cache_reconstruction_runtime_monitor_preregistration",
         "status": "passed"
       }
     ],
@@ -2073,6 +2086,22 @@
       "outcome": "hash_bound_v2_validator_passed_9_compatibility_tests_and_63_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_explicit_authority_source_hash_and_exact_integer_binding_static_preflight_closed_and_no_model_or_cache_execution",
       "repeat_policy": "wait_for_all_host_swap_and_probe_gates; do_not_execute_cache_reconstruction_before_a_complete_tiled_probe_pass",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+          "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+          "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+        }
+      ],
+      "id": "external-text-layout-cache-reconstruction-runtime-monitor-preregistration",
+      "outcome": "continuous_primary_and_second_stage_child_process_monitor_is_frozen_without_model_or_cache_execution",
+      "repeat_policy": "implement_only_the_registered_wrapper_then_hash_register_it_before_any_cache_reconstruction",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
