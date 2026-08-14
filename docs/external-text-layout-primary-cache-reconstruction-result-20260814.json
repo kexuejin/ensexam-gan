@@ -1,0 +1,70 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "cache_recovery": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "new_model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "primary_cache_reconstruction_failure_only",
+    "training": false
+  },
+  "cache_state": {
+    "archive_primary_present": false,
+    "archive_second_stage_present": false,
+    "final_primary_present": true,
+    "final_second_stage_present": false,
+    "primary_temporary_present": false
+  },
+  "execution": {
+    "completed_at": "2026-08-14T23:18:59+08:00",
+    "historical_runtime": {
+      "device": "mps",
+      "numpy": "2.2.6",
+      "opencv": "5.0.0",
+      "opencv_distribution": "5.0.0.93",
+      "python": "3.10.11",
+      "torch": "2.5.1"
+    },
+    "model_pages_completed": 275,
+    "monitor_outcome": "passed_to_atomic_publication",
+    "resource_limit_termination": false,
+    "second_stage_started": false,
+    "stage": "primary"
+  },
+  "failure": {
+    "actual_metrics_sha256": "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
+    "expected_metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "final_directory_published_before_exact_hash_validation": true,
+    "reason_code": "metrics_pred_path_repository_root_drift_after_model_completion",
+    "validation_stage": "exact_primary_cache_hash"
+  },
+  "prediction_set": {
+    "actual": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "expected": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "status": "exact_match"
+  },
+  "recovery_evidence": {
+    "canonicalized_metrics_sha256_in_memory": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "current_repository_root": "/Volumes/Tool/source/ensexam-gan-h0-monotonic-safe",
+    "expected_replacement_count": 275,
+    "frozen_historical_repository_root": "/private/tmp/ensexam-gan-h0-P0vNwp",
+    "metrics_data_row_count": 275,
+    "observed_replacement_count": 275,
+    "only_metrics_csv_requires_recovery": true,
+    "recovery_applied": false
+  },
+  "schema_version": 1,
+  "terminal": "PREREQUISITE_NEEDED"
+}

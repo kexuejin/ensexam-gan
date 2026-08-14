@@ -581,12 +581,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-baseline-relative-integration-pass.md",
         "sha256": "ea7b3542556a1ef8ea58d23e2a5a1c00f4aabc79b99aea3b9f5d08c83b192d83"
+      },
+      {
+        "path": "docs/external-text-layout-primary-cache-reconstruction-result-20260814.json",
+        "sha256": "10d05d01858b6b7a1b3c31c748ee41b7e7683acb240ce5bcaf7c646e26362453"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-primary-cache-reconstruction-prerequisite-needed.md",
+        "sha256": "400b7b8e250ea5785af23883e11ba3c50d3f43959311b003903faacf6c0f03c7"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The cache baseline-relative adapter passed 14 focused and 71 complete external-text-layout tests in both registered Python environments, and the real static preflight verified the exact probe result, frozen Python 3.10.11 runtime, all 275 historical sources, and absent cache destinations. Run a point-in-time host readiness check. If at least 35% memory is free, no conflicting model or control path exists, and the locked per-stage baseline passes, execute only the primary cache stage. Validate its exact historical hashes before considering the serial second stage. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The frozen primary MPS stage completed 275/275 pages without resource-limit termination, and its prediction set is hash-exact. Exact cache validation returned PREREQUISITE_NEEDED only because all 275 metrics pred_path values contain the current repository root; deterministic in-memory replacement with the frozen historical root produces the exact expected metrics hash. Before touching the cache, preregister a 275-replacement metrics-only recovery and a publication-order fix that canonicalizes and validates the temporary cache before atomic replacement. Do not rerun primary or start second stage. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -722,6 +730,11 @@
         "detail": "The cache adapter passed 14 focused and 71 complete external-text-layout tests in Python 3.13.1 and 3.10.11. Exact v2 result binding, required relative readers, high stable swap, zero clamping, 512 MiB termination, explicit evidence, atomic publication, and helper ordering are locked. Real preflight verified 275 sources, frozen runtime, and absent destinations without cache execution.",
         "id": "external_text_layout_cache_reconstruction_baseline_relative_swap_integration",
         "status": "passed"
+      },
+      {
+        "detail": "The primary MPS command completed all 275 pages and produced the exact frozen prediction set, but exact cache validation returned PREREQUISITE_NEEDED because metrics pred_path values retained the current repository root. Second stage and archive publication did not start. The unverified final primary directory remains present because publication preceded rewrite and validation; deterministic recovery must be preregistered before mutation.",
+        "id": "external_text_layout_primary_cache_reconstruction",
+        "status": "pending"
       }
     ],
     "killed_family_prohibitions": [
