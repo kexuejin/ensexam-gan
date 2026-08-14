@@ -945,6 +945,11 @@
         "detail": "A v2 launcher now preserves the probe-bound shared materializer and test hashes, deterministically derives exact plan 39d5 with recovered 79fd/2ffa evidence and explicit original/v1/archive provenance, and lets the unchanged materializer bind that plan in resume and final manifests. Only launcher implementation and synthetic verification are open; derived-plan write and detector execution remain closed until v2 integration PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_launch_v2_preregistration",
         "status": "passed"
+      },
+      {
+        "detail": "The v2 launcher passed 9 focused and 118 complete external-text-layout tests in Python 3.13.1 and 3.10.11 while shared materializer/test hashes remained probe-exact. Archive/cache/ledger gates, deterministic 39d5 plan derivation, atomic plan persistence, exact unchanged one-worker invocation, resume/final plan provenance, 275-page output validation, result-gap recovery, terminal idempotency, and closed-authority rejection are locked. Real execution remains contingent on a fresh Python 3.13.1 host-health preflight after this PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_launch_v2_integration",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
