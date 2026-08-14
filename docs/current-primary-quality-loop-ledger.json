@@ -745,12 +745,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-baseline-relative-launch-v3-preregistration.md",
         "sha256": "ed3ded34a464bd247612409a32e01b84332444b94413f62914e91171e74faa43"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-baseline-relative-launch-v3-integration-verification-20260815.json",
+        "sha256": "b7fc960325333e7a20788b487ac17d603f7c7e5bc4fdacecd4625c0b53da1ead"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-baseline-relative-launch-v3-integration-pass.md",
+        "sha256": "8a2d754648b55b7428e61f117ced7485c8332b26c294b1647eb2d9ec7b8e843d"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered launcher v3 baseline-relative adapter and its focused tests. Preserve exact shared materializer, runtime, probe, and shared-test hashes. Hold the existing exclusive lock across the 60-second 70%-free zero-growth readiness window and materialization; use the locked absolute swap reading only as history, retain the 512 MiB runtime growth cap, 8 GiB process-tree RSS cap, 45% runtime free-memory floor, CPU one-page isolation, child Simulator recheck, process-group termination, resume state, and 39d5 plan provenance. Restore all process-local call adapters in finally. Do not execute the detector until dual-runtime integration PASS is committed and pushed; diagnostic and quality surfaces remain closed.",
+    "next_action": "Commit and push the launcher v3 integration PASS, then run exactly once with /Volumes/Tool/source/ensexam-gan/.venv-py313-mps/bin/python3.13. The launcher must acquire the host-user lock, pass the 60-second 70%-free zero-growth readiness window, and retain the 512 MiB runtime swap-growth cap, 8 GiB process-tree RSS cap, 45% runtime free-memory floor, CPU one-page isolation, child Simulator recheck, process-group termination, 15-minute page timeout, resume state, and exact 39d5 plan provenance. Preserve completed page records after rejection or interruption. Require a schema-v3 launcher PASS, all 275 NPZ hashes, exact manifest plan binding, and no marker/cleanup residue before recording materialization PASS; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -970,6 +978,11 @@
       {
         "detail": "The pushed v2 launcher reached a read-only live preflight and exposed two fail-closed host facts before detector creation: bare pyenv Python has cv2 4.10 instead of registered 4.13, while the exact project Python 3.13 environment is present; the healthy 84%-free host retains about 970 MiB historical swap, which the unchanged materializer still interprets through its absolute 512 MiB gate. V3 is limited to a launcher-local, lock-scoped adapter reusing the proven 60-second baseline-relative probe semantics and stronger 70%/45% free-memory, 8 GiB RSS, 512 MiB growth, CPU serial, child Simulator, restoration, and resume boundaries. Only implementation and synthetic verification are open.",
         "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The launcher-local baseline-relative adapter passed 13 focused and 122 complete external-layout tests in Python 3.13.1 and 3.10.11 while shared materializer, runtime, probe, and shared-test hashes remained exact. Lock ownership, 60-second 70%-free zero-growth readiness, high stable swap, 512 MiB runtime growth termination, 8 GiB RSS, 45% runtime free memory, child Simulator recheck, CPU serial invocation, process-local restoration, schema-v3 evidence validation, exact 39d5 plan, terminal recovery, and closed-authority no-state rejection are locked. One resumable real materialization is authorized only after this PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_integration",
         "status": "passed"
       }
     ],
