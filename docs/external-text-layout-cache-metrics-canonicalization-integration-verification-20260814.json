@@ -1,0 +1,97 @@
+{
+  "authority": {
+    "archive_publication": false,
+    "candidate_inference": false,
+    "exact_existing_primary_metrics_recovery": true,
+    "formal_external_layout_materialization": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "cache_metrics_canonicalization_integration_pass",
+    "second_stage_execution": false,
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-cache-metrics-canonicalization-recovery-v1.json",
+    "sha256": "8c301ac5316ab75928ab2d2cd744a71c2842b0389ffb71b5f68a72d9c257551c"
+  },
+  "implementation": {
+    "canonicalizer": {
+      "path": "scripts/analysis/external_text_layout_cache_metrics.py",
+      "sha256": "5020440e7572f6df39ae4c54c2bf38c4ad8c634eeadb2fc84bf33af352661950"
+    },
+    "canonicalizer_test": {
+      "path": "tests/test_external_text_layout_cache_metrics.py",
+      "sha256": "55243f6200038f35aa32abd53492e275bfcc244bb04b1762c0cde8753cce596e"
+    },
+    "controller": {
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "sha256": "abcde54e842c512b41bbdfe4382d9c200232f9e5b75bb3b9763376f9442f032c"
+    },
+    "controller_test": {
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "sha256": "cc2048430cbb77806620b193e55bbef470aad5472b36a5a16634f3efc354165f"
+    }
+  },
+  "integration": {
+    "candidate_bytes_validated_before_metrics_replace": true,
+    "complete_temporary_cache_validated_before_directory_replace": true,
+    "existing_recovery_has_no_model_or_historical_helper_route": true,
+    "failed_temporary_validation_leaves_final_directory_absent": true,
+    "ledger_integration_pass_required_before_existing_recovery": true,
+    "prediction_set_validated_before_and_after_metrics_recovery": true
+  },
+  "retained_primary_before_recovery": {
+    "actual_metrics_sha256": "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
+    "expected_metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+    "metrics_unchanged_during_integration": true,
+    "prediction_set": {
+      "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+      "count": 275,
+      "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+    },
+    "second_stage_present": false
+  },
+  "verification": {
+    "commands": [
+      {
+        "command": "/Users/kexuejin/.pyenv/versions/3.13.1/bin/python3.13 -m unittest tests.test_external_text_layout_cache_metrics tests.test_external_text_layout_frozen_cache_reconstruction",
+        "result": "21_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest tests.test_external_text_layout_cache_metrics tests.test_external_text_layout_frozen_cache_reconstruction",
+        "result": "21_passed"
+      },
+      {
+        "command": "/Users/kexuejin/.pyenv/versions/3.13.1/bin/python3.13 -m unittest discover -s tests -p test_external_text_layout*.py",
+        "result": "78_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest discover -s tests -p test_external_text_layout*.py",
+        "result": "78_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/reconstruct_external_text_layout_frozen_caches.py --stage preflight",
+        "result": "static_pass_historical_runtime_ready"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/reconstruct_external_text_layout_frozen_caches.py --stage recover-primary",
+        "result": "prerequisite_needed_before_ledger_integration_pass"
+      }
+    ],
+    "compile_check": "passed",
+    "diff_check": "passed",
+    "real_metrics_temporary_copy": {
+      "data_rows": 275,
+      "metrics_sha256_after": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+      "metrics_sha256_before": "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
+      "replacement_count": 275,
+      "terminal": "PASS"
+    }
+  },
+  "next_action": "Commit and push this integration PASS, then run exactly the frozen Python 3.10.11 recover-primary stage once. Require status=recovered, exact primary metrics and prediction hashes, absent second-stage and archive paths, and no model process before considering second stage.",
+  "schema_version": 1,
+  "terminal": "PASS"
+}

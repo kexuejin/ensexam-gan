@@ -22,6 +22,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from scripts.analysis import external_text_layout_cache_metrics as cache_metrics  # noqa: E402
 from scripts.analysis import external_text_layout_materialization_runtime as runtime  # noqa: E402
 from scripts.analysis import materialize_external_text_layout_support_train_only as materializer  # noqa: E402
 
@@ -47,13 +48,27 @@ BASELINE_RELATIVE_CONTRACT_PATH = Path(
 EXPECTED_BASELINE_RELATIVE_CONTRACT_SHA256 = (
     "a7cafb5358370585da926a99ad7d844a2cb9b5ec676dbead4803f53e35a09b12"
 )
+METRICS_RECOVERY_PATH = Path(
+    "docs/external-text-layout-cache-metrics-canonicalization-recovery-v1.json"
+)
+EXPECTED_METRICS_RECOVERY_SHA256 = (
+    "8c301ac5316ab75928ab2d2cd744a71c2842b0389ffb71b5f68a72d9c257551c"
+)
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
 RECONSTRUCTION_ID = "external_text_layout_tiled_probe_cache_reconstruction_v2"
 HISTORICAL_HELPER_MODULE = (
     "scripts.analysis.materialize_sign_separated_train_inputs"
 )
-STAGES = ("preflight", "primary", "second_stage", "publish", "verify", "all")
+STAGES = (
+    "preflight",
+    "recover-primary",
+    "primary",
+    "second_stage",
+    "publish",
+    "verify",
+    "all",
+)
 EXPECTED_AUTHORITY = {
     "candidate_inference": False,
     "formal_external_layout_materialization": False,
@@ -75,6 +90,19 @@ EXPECTED_BASELINE_RELATIVE_AUTHORITY = {
     "quality_evaluation": False,
     "reserved_blind_state": "disabled",
     "result_authority": "cache_reconstruction_baseline_relative_integration_only",
+    "training": False,
+}
+EXPECTED_METRICS_RECOVERY_AUTHORITY = {
+    "archive_publication": False,
+    "cache_recovery_execution": False,
+    "candidate_inference": False,
+    "formal_external_layout_materialization": False,
+    "model_execution": False,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": False,
+    "reserved_blind_state": "disabled",
+    "result_authority": "cache_metrics_canonicalization_integration_only",
     "training": False,
 }
 EXPECTED_BUILD = {
@@ -197,6 +225,11 @@ def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
         != "passed"
         or prerequisites.get(
             "external_text_layout_tiled_one_page_runtime_safety_probe"
+        )
+        != "passed"
+        or prerequisites.get(
+            "external_text_layout_cache_metrics_canonicalization_"
+            "recovery_preregistration"
         )
         != "passed"
         or prerequisites.get("external_text_layout_support_train_only_diagnostic")
@@ -530,6 +563,104 @@ def validate_baseline_relative_contract(repo_root: Path) -> dict[str, Any]:
     return contract
 
 
+def validate_metrics_recovery_contract(
+    repo_root: Path, cache_contract: dict[str, Any]
+) -> dict[str, Any]:
+    contract_path = repo_path(repo_root, str(METRICS_RECOVERY_PATH))
+    if sha256_file(contract_path) != EXPECTED_METRICS_RECOVERY_SHA256:
+        raise CacheReconstructionError(
+            "cache metrics recovery contract sha256 changed"
+        )
+    contract = read_json(contract_path)
+    if (
+        contract.get("schema_version") != 1
+        or contract.get("state")
+        != "preregistered_cache_metrics_canonicalization_recovery"
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+        or contract.get("authority") != EXPECTED_METRICS_RECOVERY_AUTHORITY
+    ):
+        raise CacheReconstructionError("cache metrics recovery contract changed")
+    evidence = contract.get("evidence", {})
+    for name in (
+        "cache_contract",
+        "failure_decision",
+        "failure_result",
+        "probe_result",
+    ):
+        validate_artifact(
+            repo_root, evidence.get(name, {}), f"metrics recovery {name}"
+        )
+    canonicalization = contract.get("canonicalization", {})
+    if (
+        canonicalization.get("current_repository_root") != str(repo_root.resolve())
+        or canonicalization.get("frozen_historical_repository_root")
+        != "/private/tmp/ensexam-gan-h0-P0vNwp"
+        or canonicalization.get("allowed_field") != "pred_path"
+        or canonicalization.get("expected_data_rows") != 275
+        or canonicalization.get("expected_replacement_count") != 275
+        or canonicalization.get("rewrite")
+        != "literal_current_repository_root_to_frozen_historical_repository_root"
+        or canonicalization.get("write_semantics")
+        != "validate_candidate_bytes_then_atomic_metrics_file_replace"
+    ):
+        raise CacheReconstructionError("metrics recovery canonicalization changed")
+    expected_primary = cache_contract.get("expected_outputs", {}).get("primary")
+    if not isinstance(expected_primary, dict):
+        raise CacheReconstructionError(
+            "cache contract lacks the primary metrics recovery target"
+        )
+    existing = contract.get("existing_primary_recovery", {})
+    if (
+        existing.get("cache_path")
+        != cache_contract.get("build", {}).get("primary")
+        or existing.get("expected_metrics_sha256_after")
+        != expected_primary.get("metrics_sha256")
+        or existing.get("prediction_set") != expected_primary.get("prediction_set")
+        or existing.get("model_rerun") is not False
+        or existing.get("second_stage_before_recovery_pass") is not False
+        or existing.get("allowed_after_complete_integration_verification") is not True
+    ):
+        raise CacheReconstructionError("metrics recovery existing-cache boundary changed")
+    if contract.get("future_publication_order") != [
+        "materialize_model_output_in_registered_temporary_directory",
+        "rewrite_temporary_paths_to_registered_final_cache_path",
+        "canonicalize_current_repository_root_to_frozen_historical_root",
+        "validate_exact_metrics_and_prediction_hashes_in_temporary_directory",
+        "atomically_replace_absent_final_directory",
+        "validate_published_final_directory",
+    ]:
+        raise CacheReconstructionError("metrics recovery publication order changed")
+    return contract
+
+
+def validate_metrics_recovery_execution_authority(repo_root: Path) -> None:
+    ledger = read_json(repo_root / LEDGER_PATH)
+    active = ledger.get("active_iteration", {})
+    prerequisites = {
+        item.get("id"): item.get("status")
+        for item in active.get("prerequisites", [])
+        if isinstance(item, dict)
+    }
+    if (
+        active.get("terminal") != "PREREQUISITE_NEEDED"
+        or prerequisites.get(
+            "external_text_layout_cache_metrics_canonicalization_"
+            "recovery_preregistration"
+        )
+        != "passed"
+        or prerequisites.get(
+            "external_text_layout_cache_metrics_canonicalization_"
+            "recovery_integration"
+        )
+        != "passed"
+        or prerequisites.get("external_text_layout_primary_cache_reconstruction")
+        != "pending"
+    ):
+        raise CacheReconstructionError(
+            "cache metrics recovery execution authority is closed"
+        )
+
+
 def current_reconstruction_runtime() -> dict[str, str]:
     try:
         opencv_distribution = metadata.version("opencv-python")
@@ -628,6 +759,9 @@ def validate_contract(
         validate_artifact(repo_root, artifact, f"runtime repair evidence {index}")
 
     baseline_relative_contract = validate_baseline_relative_contract(repo_root)
+    metrics_recovery_contract = validate_metrics_recovery_contract(
+        repo_root, contract
+    )
 
     plan = read_json(plan_path)
     audit = read_json(audit_path)
@@ -664,6 +798,13 @@ def validate_contract(
     ]
     if len(lines) != 275 or len(set(lines)) != 275:
         raise CacheReconstructionError("historical sample manifest population changed")
+    if (
+        metrics_recovery_contract["canonicalization"]["expected_data_rows"]
+        != len(lines)
+    ):
+        raise CacheReconstructionError(
+            "metrics recovery population disagrees with historical manifest"
+        )
     missing_sources = [
         value for value in lines if not repo_path(repo_root, value).is_file()
     ]
@@ -687,6 +828,7 @@ def validate_contract(
         "contract": contract,
         "manifest_lines": lines,
         "manifest_path": manifest_path,
+        "metrics_recovery_contract": metrics_recovery_contract,
         "monitor_contract": baseline_relative_contract,
         "plan": plan,
         "runtime_contract": baseline_relative_contract,
@@ -775,6 +917,49 @@ def validate_reconstructed_cache(
         expected_names=expected_names,
         expected=expected,
     )
+
+
+def prepare_reconstructed_cache_for_publication(
+    *,
+    repo_root: Path,
+    temporary_dir: Path,
+    final_dir: Path,
+    expected_names: list[str],
+    expected: dict[str, Any],
+    metrics_recovery_contract: dict[str, Any],
+    helper: Any,
+) -> dict[str, Any]:
+    prediction_set_before = validate_prediction_set(
+        temporary_dir / "pred",
+        expected_names,
+        expected["prediction_set"],
+    )
+    helper.rewrite_metrics_paths(
+        temporary_dir / "metrics.csv", temporary_dir, final_dir
+    )
+    canonicalization = metrics_recovery_contract["canonicalization"]
+    metrics = cache_metrics.canonicalize_repository_root(
+        temporary_dir / "metrics.csv",
+        current_repository_root=str(repo_root.resolve()),
+        frozen_historical_repository_root=canonicalization[
+            "frozen_historical_repository_root"
+        ],
+        expected_data_rows=canonicalization["expected_data_rows"],
+        expected_replacement_count=canonicalization[
+            "expected_replacement_count"
+        ],
+        expected_metrics_sha256_after=expected["metrics_sha256"],
+    )
+    cache = validate_reconstructed_cache(
+        temporary_dir,
+        expected_names=expected_names,
+        expected=expected,
+    )
+    if cache["prediction_set"] != prediction_set_before:
+        raise CacheReconstructionError(
+            "prediction set changed during metrics canonicalization"
+        )
+    return {"cache": cache, "metrics_canonicalization": metrics}
 
 
 def _required_health_number(
@@ -1251,7 +1436,7 @@ def run_monitored_atomic_directory_command(
     command_builder: Callable[[Path], list[str]],
     log_path: Path,
     monitor_contract: dict[str, Any],
-    helper: Any,
+    prepare_temporary: Callable[[Path], Any],
     health_reader: Callable[[int], dict[str, float | int]],
     popen_factory: Callable[..., Any] = subprocess.Popen,
 ) -> tuple[list[str], dict[str, float | int]]:
@@ -1281,8 +1466,8 @@ def run_monitored_atomic_directory_command(
         )
     if not temporary.is_dir():
         raise RuntimeError(f"command did not create expected directory: {temporary}")
+    prepare_temporary(temporary)
     temporary.replace(final_dir)
-    helper.rewrite_metrics_paths(final_dir / "metrics.csv", temporary, final_dir)
     return command, observed
 
 
@@ -1337,7 +1522,19 @@ def reconstruct_stage(
             ),
             log_path=log_path,
             monitor_contract=state["monitor_contract"],
-            helper=helper,
+            prepare_temporary=lambda temporary: (
+                prepare_reconstructed_cache_for_publication(
+                    repo_root=repo_root,
+                    temporary_dir=temporary,
+                    final_dir=cache_dir,
+                    expected_names=names,
+                    expected=expected,
+                    metrics_recovery_contract=state[
+                        "metrics_recovery_contract"
+                    ],
+                    helper=helper,
+                )
+            ),
             health_reader=relative_health_reader,
         )
         post_health = validate_post_stage_health(
@@ -1355,6 +1552,84 @@ def reconstruct_stage(
         "stage": stage,
         "status": "reconstructed",
     }
+
+
+def recover_existing_primary_cache(
+    repo_root: Path, state: dict[str, Any]
+) -> dict[str, Any]:
+    contract = state["contract"]
+    runtime_contract = state["runtime_contract"]
+    recovery_contract = state["metrics_recovery_contract"]
+    validate_metrics_recovery_execution_authority(repo_root)
+    validate_probe_pass(repo_root, runtime_contract)
+    paths = stage_paths(repo_root, contract)
+    forbidden_paths = {
+        name: paths[name]
+        for name in ("second_stage", "archive_primary", "archive_second_stage")
+    }
+    with runtime.exclusive_run_lock(runtime.HOST_USER_RUN_LOCK_PATH):
+        materializer.assert_no_conflicting_model_processes()
+        present = [
+            name
+            for name, path in forbidden_paths.items()
+            if path.exists() or path.is_symlink()
+        ]
+        if present:
+            raise CacheReconstructionError(
+                f"primary recovery downstream paths must be absent: {present}"
+            )
+        primary = paths["primary"]
+        if primary.is_symlink() or not primary.is_dir():
+            raise CacheReconstructionError(
+                f"recoverable primary cache is missing: {primary}"
+            )
+        names = expected_prediction_names(state["manifest_lines"])
+        expected = contract["expected_outputs"]["primary"]
+        prediction_set_before = validate_prediction_set(
+            primary / "pred", names, expected["prediction_set"]
+        )
+        metrics_path = primary / "metrics.csv"
+        actual_metrics_sha256 = sha256_file(metrics_path)
+        if actual_metrics_sha256 == expected["metrics_sha256"]:
+            return {
+                "cache": validate_reconstructed_cache(
+                    primary, expected_names=names, expected=expected
+                ),
+                "stage": "primary",
+                "status": "already_recovered",
+            }
+        registered = recovery_contract["existing_primary_recovery"]
+        canonicalization = recovery_contract["canonicalization"]
+        metrics = cache_metrics.canonicalize_repository_root(
+            metrics_path,
+            current_repository_root=canonicalization["current_repository_root"],
+            frozen_historical_repository_root=canonicalization[
+                "frozen_historical_repository_root"
+            ],
+            expected_data_rows=canonicalization["expected_data_rows"],
+            expected_replacement_count=canonicalization[
+                "expected_replacement_count"
+            ],
+            expected_metrics_sha256_before=registered[
+                "actual_metrics_sha256_before"
+            ],
+            expected_metrics_sha256_after=registered[
+                "expected_metrics_sha256_after"
+            ],
+        )
+        cache = validate_reconstructed_cache(
+            primary, expected_names=names, expected=expected
+        )
+        if cache["prediction_set"] != prediction_set_before:
+            raise CacheReconstructionError(
+                "prediction set changed during existing primary recovery"
+            )
+        return {
+            "cache": cache,
+            "metrics_canonicalization": metrics,
+            "stage": "primary",
+            "status": "recovered",
+        }
 
 
 def validate_publication_destination(
@@ -1484,6 +1759,8 @@ def run_stage(repo_root: Path, contract_path: Path, stage: str) -> dict[str, Any
     state = validate_contract(repo_root, contract_path)
     if stage == "preflight":
         return preflight_report(repo_root, state)
+    if stage == "recover-primary":
+        return recover_existing_primary_cache(repo_root, state)
     if stage == "primary":
         return reconstruct_stage(repo_root=repo_root, state=state, stage=stage)
     if stage == "second_stage":

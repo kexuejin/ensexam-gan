@@ -528,11 +528,11 @@
       },
       {
         "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
-        "sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157"
+        "sha256": "abcde54e842c512b41bbdfe4382d9c200232f9e5b75bb3b9763376f9442f032c"
       },
       {
         "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
-        "sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c"
+        "sha256": "cc2048430cbb77806620b193e55bbef470aad5472b36a5a16634f3efc354165f"
       },
       {
         "path": "docs/external-text-layout-host-readiness-recovery-20260814.json",
@@ -597,12 +597,28 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-cache-metrics-canonicalization-recovery-preregistration.md",
         "sha256": "f203663336681504807d7ef9aa8bffebd5dffa60ef068f92e3aa3ca2f1b1bf34"
+      },
+      {
+        "path": "scripts/analysis/external_text_layout_cache_metrics.py",
+        "sha256": "5020440e7572f6df39ae4c54c2bf38c4ad8c634eeadb2fc84bf33af352661950"
+      },
+      {
+        "path": "tests/test_external_text_layout_cache_metrics.py",
+        "sha256": "55243f6200038f35aa32abd53492e275bfcc244bb04b1762c0cde8753cce596e"
+      },
+      {
+        "path": "docs/external-text-layout-cache-metrics-canonicalization-integration-verification-20260814.json",
+        "sha256": "9337c60d2ea33d4eed02257b649ace3cf91057ceae55c9b263e28c022f319df3"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-cache-metrics-canonicalization-integration-pass.md",
+        "sha256": "9584870b36f75a5f85f959c24db1e753a8b2aa5c3e8dd617ef9ba99332b4e754"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered metrics canonicalization overlay. Require exactly 275 current-root substitutions confined to pred_path, validate candidate bytes before atomic metrics replacement, preserve exact predictions, and validate complete temporary caches before final-directory publication. Add an explicit existing-primary recovery path that cannot execute a model or historical helper, but do not run it until focused and complete external-text-layout suites pass under Python 3.13.1 and 3.10.11 and an integration PASS is recorded. Do not rerun primary or start second stage. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The metrics canonicalizer and publication-order fix passed 21 focused and 78 complete external-text-layout tests under Python 3.13.1 and 3.10.11. A temporary copy of the real 275-row metrics file reached the exact frozen hash, while pre-ledger recover-primary remained closed and left the retained cache unchanged. Commit and push this integration PASS, then run exactly the frozen Python 3.10.11 recover-primary stage once. Require status=recovered, exact primary metrics and prediction hashes, absent second-stage and archive paths, and no model process. Do not start second stage until the recovery result is recorded. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -747,6 +763,11 @@
       {
         "detail": "A metrics-only recovery now freezes the exact source and target SHA-256 values, 275 pred_path-only root substitutions, candidate-before-write validation, prediction identity, explicit no-model existing-cache recovery, and temporary-cache validation before publication. Only implementation and synthetic verification are authorized; the retained primary cache remains unchanged.",
         "id": "external_text_layout_cache_metrics_canonicalization_recovery_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "The canonicalizer and controller passed 21 focused and 78 complete external-text-layout tests in both registered Python environments. Candidate bytes and complete temporary caches are validated before publication, failures leave final absent, recovery has no model/helper route, ledger PASS is required, and a real 275-row temporary copy reached the exact frozen metrics hash. Only the exact retained-primary metrics recovery is now authorized.",
+        "id": "external_text_layout_cache_metrics_canonicalization_recovery_integration",
         "status": "passed"
       }
     ],

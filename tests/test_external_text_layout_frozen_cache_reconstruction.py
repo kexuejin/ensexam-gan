@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 from contextlib import contextmanager
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -63,6 +64,13 @@ def authority_ledger() -> dict[str, object]:
                 },
                 {
                     "id": "external_text_layout_tiled_one_page_runtime_safety_probe",
+                    "status": "passed",
+                },
+                {
+                    "id": (
+                        "external_text_layout_cache_metrics_canonicalization_"
+                        "recovery_preregistration"
+                    ),
                     "status": "passed",
                 },
             ],
@@ -190,7 +198,7 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
             ):
                 reconstruction.validate_authority(root, contract)
 
-            for index in (4, 5):
+            for index in (4, 5, 6):
                 changed = copy.deepcopy(ledger)
                 changed["active_iteration"]["prerequisites"][index][
                     "status"
@@ -261,6 +269,21 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
             "runtime monitor changed",
         ):
             reconstruction.validate_runtime_monitor_settings(changed_adapter)
+
+        recovery_path = reconstruction.ROOT / reconstruction.METRICS_RECOVERY_PATH
+        self.assertEqual(
+            reconstruction.sha256_file(recovery_path),
+            reconstruction.EXPECTED_METRICS_RECOVERY_SHA256,
+        )
+        recovery = reconstruction.validate_metrics_recovery_contract(
+            reconstruction.ROOT, contract
+        )
+        self.assertEqual(
+            recovery["existing_primary_recovery"][
+                "actual_metrics_sha256_before"
+            ],
+            "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
+        )
 
     def test_probe_must_exist_and_pass_with_complete_nonnegative_health(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -540,7 +563,9 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                     command_builder=lambda _temporary: command,
                     log_path=root / "control/success.log",
                     monitor_contract=monitor_contract(),
-                    helper=helper,
+                    prepare_temporary=lambda path: helper.rewrite_metrics_paths(
+                        path / "metrics.csv", path, final_dir
+                    ),
                     health_reader=lambda _pid: {
                         "memory_free_percent": 80.0,
                         "process_tree_rss_bytes": 1024,
@@ -573,7 +598,7 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                     ],
                     log_path=root / "control/nonzero.log",
                     monitor_contract=monitor_contract(),
-                    helper=mock.Mock(),
+                    prepare_temporary=mock.Mock(),
                     health_reader=lambda _pid: {
                         "memory_free_percent": 80.0,
                         "process_tree_rss_bytes": 1024,
@@ -632,7 +657,7 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                             command_builder=lambda _temporary: ["synthetic"],
                             log_path=root / f"control/{name}.log",
                             monitor_contract=monitor_contract(),
-                            helper=mock.Mock(),
+                            prepare_temporary=mock.Mock(),
                             health_reader=health_reader,
                             popen_factory=popen_factory,
                         )
@@ -645,6 +670,236 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
                 )
                 process.wait.assert_called_once_with(timeout=5.0)
                 self.assertFalse(final_dir.exists())
+
+    def test_temporary_validation_failure_never_publishes_final_cache(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            final_dir = root / "build/cache"
+            temporary = final_dir.with_name(f".{final_dir.name}.materializing")
+            prepare = mock.Mock(side_effect=RuntimeError("cache hash mismatch"))
+            with self.assertRaisesRegex(RuntimeError, "cache hash mismatch"):
+                reconstruction.run_monitored_atomic_directory_command(
+                    repo_root=root,
+                    final_dir=final_dir,
+                    command_builder=lambda _temporary: [
+                        sys.executable,
+                        "-c",
+                        (
+                            "from pathlib import Path; import sys; "
+                            "p=Path(sys.argv[1]); p.mkdir(parents=True)"
+                        ),
+                        str(temporary),
+                    ],
+                    log_path=root / "control/hash-failure.log",
+                    monitor_contract=monitor_contract(),
+                    prepare_temporary=prepare,
+                    health_reader=lambda _pid: {
+                        "memory_free_percent": 80.0,
+                        "process_tree_rss_bytes": 1024,
+                        "swap_used_bytes": 0,
+                    },
+                )
+            prepare.assert_called_once_with(temporary)
+            self.assertTrue(temporary.is_dir())
+            self.assertFalse(final_dir.exists())
+
+    def test_temporary_cache_is_canonicalized_and_validated_before_publication(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw).resolve()
+            state = cache_state(root)
+            final_dir = root / "build/cache"
+            temporary = final_dir.with_name(f".{final_dir.name}.materializing")
+            predictions = temporary / "pred"
+            predictions.mkdir(parents=True)
+            names = reconstruction.expected_prediction_names(
+                state["manifest_lines"]
+            )
+            for name in names:
+                (predictions / name).write_bytes(f"prediction:{name}".encode())
+            before = (
+                "file,pred_path\n"
+                + "".join(
+                    f"{name},{temporary}/pred/{name}\n" for name in names
+                )
+            ).encode()
+            (temporary / "metrics.csv").write_bytes(before)
+            frozen_root = "/frozen/repository"
+            canonical = before.replace(
+                str(temporary).encode(), str(final_dir).encode()
+            ).replace(str(root).encode(), frozen_root.encode())
+            rows = [
+                f"{name} {reconstruction.sha256_file(predictions / name)}"
+                for name in names
+            ]
+            expected = {
+                "metrics_sha256": hashlib.sha256(canonical).hexdigest(),
+                "prediction_set": {
+                    "content_sha256": reconstruction.sha256_rows(rows),
+                    "count": len(names),
+                    "filename_sha256": reconstruction.sha256_rows(names),
+                },
+            }
+
+            class LiteralPathHelper:
+                @staticmethod
+                def rewrite_metrics_paths(metrics_path, old, new):
+                    metrics_path.write_bytes(
+                        metrics_path.read_bytes().replace(
+                            str(old).encode(), str(new).encode()
+                        )
+                    )
+
+            result = reconstruction.prepare_reconstructed_cache_for_publication(
+                repo_root=root,
+                temporary_dir=temporary,
+                final_dir=final_dir,
+                expected_names=names,
+                expected=expected,
+                metrics_recovery_contract={
+                    "canonicalization": {
+                        "expected_data_rows": len(names),
+                        "expected_replacement_count": len(names),
+                        "frozen_historical_repository_root": frozen_root,
+                    }
+                },
+                helper=LiteralPathHelper,
+            )
+
+            self.assertEqual((temporary / "metrics.csv").read_bytes(), canonical)
+            self.assertEqual(result["cache"], expected)
+            self.assertFalse(final_dir.exists())
+
+    def test_existing_primary_recovery_is_metrics_only_and_idempotent(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw).resolve()
+            state = cache_state(root)
+            write_probe(root, safe_probe_result())
+            primary = root / state["contract"]["build"]["primary"]
+            predictions = primary / "pred"
+            predictions.mkdir(parents=True)
+            names = reconstruction.expected_prediction_names(
+                state["manifest_lines"]
+            )
+            prediction_bytes = {}
+            for name in names:
+                payload = f"prediction:{name}".encode()
+                prediction_bytes[name] = payload
+                (predictions / name).write_bytes(payload)
+            before = (
+                "file,pred_path\n"
+                + "".join(
+                    f"{name},{primary}/pred/{name}\n" for name in names
+                )
+            ).encode()
+            frozen_root = "/frozen/repository"
+            after = before.replace(str(root).encode(), frozen_root.encode())
+            metrics = primary / "metrics.csv"
+            metrics.write_bytes(before)
+            rows = [
+                f"{name} {reconstruction.sha256_file(predictions / name)}"
+                for name in names
+            ]
+            expected = {
+                "metrics_sha256": hashlib.sha256(after).hexdigest(),
+                "prediction_set": {
+                    "content_sha256": reconstruction.sha256_rows(rows),
+                    "count": len(names),
+                    "filename_sha256": reconstruction.sha256_rows(names),
+                },
+            }
+            state["contract"]["expected_outputs"] = {"primary": expected}
+            state["metrics_recovery_contract"] = {
+                "canonicalization": {
+                    "current_repository_root": str(root),
+                    "expected_data_rows": len(names),
+                    "expected_replacement_count": len(names),
+                    "frozen_historical_repository_root": frozen_root,
+                },
+                "existing_primary_recovery": {
+                    "actual_metrics_sha256_before": hashlib.sha256(
+                        before
+                    ).hexdigest(),
+                    "expected_metrics_sha256_after": expected["metrics_sha256"],
+                },
+            }
+            with (
+                mock.patch.object(
+                    reconstruction,
+                    "validate_metrics_recovery_execution_authority",
+                ),
+                mock.patch.object(
+                    reconstruction.runtime,
+                    "exclusive_run_lock",
+                    side_effect=unlocked,
+                ),
+                mock.patch.object(
+                    reconstruction.materializer,
+                    "assert_no_conflicting_model_processes",
+                ),
+            ):
+                recovered = reconstruction.recover_existing_primary_cache(
+                    root, state
+                )
+                repeated = reconstruction.recover_existing_primary_cache(root, state)
+
+            self.assertEqual(recovered["status"], "recovered")
+            self.assertEqual(repeated["status"], "already_recovered")
+            self.assertEqual(metrics.read_bytes(), after)
+            for name, payload in prediction_bytes.items():
+                self.assertEqual((predictions / name).read_bytes(), payload)
+
+    def test_existing_primary_recovery_requires_integration_pass_authority(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            ledger_path = root / reconstruction.LEDGER_PATH
+            ledger_path.parent.mkdir(parents=True)
+            ledger = authority_ledger()
+            ledger["active_iteration"]["prerequisites"].append(
+                {
+                    "id": "external_text_layout_primary_cache_reconstruction",
+                    "status": "pending",
+                }
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "recovery execution authority is closed",
+            ):
+                reconstruction.validate_metrics_recovery_execution_authority(root)
+
+            ledger["active_iteration"]["prerequisites"].append(
+                {
+                    "id": (
+                        "external_text_layout_cache_metrics_canonicalization_"
+                        "recovery_integration"
+                    ),
+                    "status": "passed",
+                }
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            reconstruction.validate_metrics_recovery_execution_authority(root)
+
+    def test_recovery_stage_cannot_route_to_model_reconstruction(self) -> None:
+        state = cache_state(Path("unused"))
+        with (
+            mock.patch.object(reconstruction, "validate_contract", return_value=state),
+            mock.patch.object(
+                reconstruction,
+                "recover_existing_primary_cache",
+                return_value={"status": "recovered"},
+            ) as recover,
+            mock.patch.object(reconstruction, "reconstruct_stage") as reconstruct,
+        ):
+            result = reconstruction.run_stage(
+                Path("/repo"), reconstruction.CONTRACT_PATH, "recover-primary"
+            )
+        self.assertEqual(result, {"status": "recovered"})
+        recover.assert_called_once_with(Path("/repo"), state)
+        reconstruct.assert_not_called()
 
     def test_stage_launch_swap_baseline_allows_history_and_clamps_growth(self) -> None:
         baseline = 2 * 1024**3
