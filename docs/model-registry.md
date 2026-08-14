@@ -1074,6 +1074,8 @@ tiled 9x9 one-page contract: docs/external-text-layout-tiled-9x9-one-page-safety
 tiled 9x9 one-page decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md
 tiled 9x9 integration verification: docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json
 tiled 9x9 integration decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md
+tiled probe cache reconstruction v2: docs/external-text-layout-tiled-probe-cache-reconstruction-v2.json
+tiled probe cache reconstruction v2 decision: docs/decisions/2026-08-14-external-text-layout-tiled-probe-cache-reconstruction-v2-preregistration.md
 cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
@@ -1087,9 +1089,10 @@ runtime repair: hash/version/AST-bound in-memory forward replacement removes onl
 tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold comparison bound from 21,785,739,264 to 201,719,808 bytes; four exact CPU float32 fake cases covering 256-to-64 and 64-to-64 are bitwise equal with maximum error 0.0; real detector execution remains disabled
 tiled one-page authorization: bounded integration is complete; exactly one target-free hw5k_1011.jpg attempt is allowed only after every launch gate passes; any non-PASS terminal closes the exact tiled path
 tiled integration: PASS with 61/61 external-text-layout tests under Python 3.13.1 and 61/61 under Python 3.10.11; contract/source/result hashes, stricter limits, thread caps, parent-plus-child Simulator checks, RUNNING sentinel, non-overwrite, cleanup, and synthetic PASS behavior are verified without detector execution
+tiled cache handoff: v1 cannot consume the tiled result path, probe identity, or strict safety schema; v2 is preregistered to bind the tiled PASS while preserving historical cache hashes, runtime identity, helper ordering, and publication boundaries
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: 86% free memory, 1,778.69 MiB swap used, zero Booted iOS Simulators, and tiled result absent; model execution prohibited while swap exceeds 512 MiB
-next action: preserve the integrated hashes and wait; when every launch gate passes, run exactly one target-free hw5k_1011.jpg attempt and never overwrite or repeat after the result path exists
+current host gate: 86% free memory, 1,690.69 MiB swap used, zero Booted iOS Simulators, no model process, and tiled result absent; model and cache execution prohibited while swap exceeds 512 MiB
+next action: integrate the hash-bound v2 cache validator, then wait; when every one-page launch gate passes, run exactly one target-free hw5k_1011.jpg attempt before any historical cache reconstruction
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
