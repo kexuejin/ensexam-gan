@@ -1061,11 +1061,14 @@ decision: docs/decisions/2026-08-13-external-text-layout-support-preregistration
 runtime prerequisite: docs/decisions/2026-08-13-external-text-layout-runtime-safety-prerequisite.md
 runtime result: docs/external-text-layout-runtime-safety-probe-20260813.json
 static memory risk: docs/external-text-layout-static-memory-risk-20260814.json
+runtime repair contract: docs/external-text-layout-runtime-equivalence-repair-v1.json
+runtime repair decision: docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md
 data execution / training / candidate: exact layout materialization only / false / false
 inner-val15 / development / promotion: disabled / disabled / disabled
 runtime status: one target-free CPU page crossed 35% free-memory floor at 31.0%; post-stop swap 1,269.75 MiB; no formal evidence or residual model process
 static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
-next action: justify a safe runtime without parameter rescue, obtain one safe page below all fixed gates, then reconstruct exact frozen prediction caches before formal materialization
+runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction; fake-feature equivalence and fail-closed guards pass without real model import or execution
+next action: wait for swap below 512 MiB, obtain one safe target-free page below all fixed gates, then reconstruct exact frozen prediction caches before formal materialization
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
@@ -1088,4 +1091,7 @@ fail-closed prerequisites: a safe detector runtime and reconstruction of the
 missing frozen primary/second-stage prediction caches with exact historical
 content hashes. No model process may be retried while swap use exceeds
 `512 MiB`, and the registered detector/runtime parameters and acceptance gates
-must not be relaxed.
+must not be relaxed. The repository-local runtime repair is statically
+verified and changes only overwritten control flow; it does not by itself
+establish a safe detector runtime or authorize the one-page probe before the
+swap gate passes.

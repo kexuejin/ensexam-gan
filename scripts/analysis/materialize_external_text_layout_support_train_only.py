@@ -26,6 +26,10 @@ from scripts.analysis.build_sign_separated_residual_patch_index import (  # noqa
     effective_train_filenames,
 )
 from scripts.analysis import external_text_layout_materialization_runtime as runtime  # noqa: E402
+from scripts.analysis.external_text_layout_transformers_runtime_repair import (  # noqa: E402
+    RuntimeEquivalenceRepairError,
+    apply_runtime_equivalence_repair,
+)
 
 
 PLAN_PATH = Path("docs/external-text-layout-support-prerequisite-v1.json")
@@ -554,6 +558,12 @@ def extract_result(result: Any) -> tuple[Any, Any]:
 
 
 def create_detector(spec: dict[str, Any]) -> Any:
+    try:
+        apply_runtime_equivalence_repair()
+    except RuntimeEquivalenceRepairError as error:
+        raise MaterializationError(
+            "Transformers detector runtime equivalence repair failed"
+        ) from error
     try:
         from paddleocr import TextDetection
     except ImportError as error:

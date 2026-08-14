@@ -1,0 +1,97 @@
+{
+  "authority": {
+    "candidate_inference": false,
+    "formal_materialization": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "runtime_safety_prerequisite_only",
+    "training": false
+  },
+  "family": "external_printed_text_layout_support_v1",
+  "forbidden_access": [
+    "target_or_label_pixels",
+    "recognized_text_or_ocr_recognition",
+    "quality_splits_or_metrics",
+    "routing_or_domain_metadata",
+    "primary_or_second_stage_inference",
+    "optimizer_checkpoint_or_candidate_surfaces"
+  ],
+  "next_gate": {
+    "maximum_process_tree_rss_bytes": 10737418240,
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 35.0,
+    "page": "hw5k_1011.jpg",
+    "required_result": "success_with_zero_residual_processes",
+    "scope": "one_nonformal_target_free_raw_source_page",
+    "state": "disabled_until_swap_gate_passes"
+  },
+  "original_preregistration": {
+    "path": "docs/external-text-layout-support-prerequisite-v1.json",
+    "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+  },
+  "repair": {
+    "application_boundary": "isolated_detector_subprocess_before_paddleocr_import_and_TextDetection_construction",
+    "fail_closed_on": [
+      "transformers_version_drift",
+      "model_source_hash_drift",
+      "duplicate_upsample_ast_drift",
+      "loaded_module_path_or_forward_identity_drift",
+      "conflicting_runtime_repair_marker"
+    ],
+    "id": "external_text_layout_transformers_neck_duplicate_upsample_v1",
+    "in_memory_only": true,
+    "mutation": "replace_only_PPOCRV6MediumDetNeck_forward",
+    "preserved": [
+      "model_and_weights",
+      "cpu_transformers_engine_and_float32_dtype",
+      "input_geometry_and_preprocessing",
+      "detector_thresholds_and_batch_size",
+      "all_neck_computation_except_the_overwritten_first_upsampled_construction",
+      "scale_factors_and_scale_one_object_reuse",
+      "reverse_output_order_and_torch_cat_dim_one",
+      "detector_result_and_materialization_contracts"
+    ],
+    "removed_control_flow": "first_upsampled_empty_list_and_loop_overwritten_before_read",
+    "site_packages_write": false
+  },
+  "runtime_binding": {
+    "class": "PPOCRV6MediumDetNeck",
+    "method": "forward",
+    "model_source_sha256": "4bb27b16b04056ee00779391a4943efa5b5c2745e9431e4e9aa652423b271210",
+    "module": "transformers.models.pp_ocrv6_medium_det.modeling_pp_ocrv6_medium_det",
+    "removed_assignment_line": 306,
+    "replacement_assignment_line": 314,
+    "transformers_version": "5.12.1"
+  },
+  "schema_version": 1,
+  "state": "preregistered_static_verification_only",
+  "terminal": "PREREQUISITE_NEEDED",
+  "verification_contract": {
+    "detector_construction_order": "repair_before_TextDetection",
+    "expected_interpolation_calls_in_overwritten_region": {
+      "original": [
+        2,
+        4,
+        8,
+        2,
+        4,
+        8
+      ],
+      "repaired": [
+        2,
+        4,
+        8
+      ]
+    },
+    "model_execution": false,
+    "quality_or_formal_output_access": false,
+    "required_static_checks": [
+      "original_and_repaired_fake_feature_outputs_are_identical",
+      "scale_one_feature_object_is_reused",
+      "version_hash_and_ast_drift_are_rejected",
+      "repair_is_idempotent"
+    ]
+  }
+}
