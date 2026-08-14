@@ -1080,6 +1080,8 @@ cache reconstruction runtime monitor: docs/external-text-layout-cache-reconstruc
 cache reconstruction runtime monitor decision: docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md
 v2 cache validator: scripts/analysis/reconstruct_external_text_layout_frozen_caches.py (sha256 8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786)
 v2 cache validator tests: tests/test_external_text_layout_frozen_cache_reconstruction.py (sha256 747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97)
+monitored v2 cache validator: scripts/analysis/reconstruct_external_text_layout_frozen_caches.py (sha256 0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c)
+monitored v2 cache validator tests: tests/test_external_text_layout_frozen_cache_reconstruction.py (sha256 b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6)
 historical cache reconstruction contract (immutable v1): docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
@@ -1095,10 +1097,10 @@ tiled one-page authorization: bounded integration is complete; exactly one targe
 tiled integration: PASS with 61/61 external-text-layout tests under Python 3.13.1 and 61/61 under Python 3.10.11; contract/source/result hashes, stricter limits, thread caps, parent-plus-child Simulator checks, RUNNING sentinel, non-overwrite, cleanup, and synthetic PASS behavior are verified without detector execution
 tiled cache handoff: v1 cannot consume the tiled result path, probe identity, or strict safety schema; v2 is preregistered to bind the tiled PASS while preserving historical cache hashes, runtime identity, helper ordering, and publication boundaries
 v2 cache validator integration: PASS with 9/9 compatibility tests and 63/63 current external-text-layout tests under both Python 3.13.1 and Python 3.10.11, run serially because the suites intentionally share the host lock; explicit v2 preregistration authority, frozen probe source hash, exact integer evidence, old result path/identity/schema, incomplete attempt/completion/process fields, thread-cap drift, split probe/reconstruction health gates, helper ordering, exact historical runtime, and static preflight are verified without detector or cache execution
-cache runtime monitor prerequisite: PREREQUISITE_NEEDED; v2 currently checks health only before and after each cache stage while the historical helper runs the full child lifetime in unmonitored subprocess.run; a hash-bound Popen process-group monitor is preregistered before any cache execution
+cache runtime monitor integration: PASS with 13/13 compatibility tests and 67/67 current external-text-layout tests under both Python 3.13.1 and Python 3.10.11; each stage launches with Popen(start_new_session=true), samples child-plus-descendant health every second, terminates the process group on resource or health-reader failure with SIGTERM-to-SIGKILL escalation, and preserves zero-exit atomic publication plus historical metrics rewrite behavior
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: 85% free memory, 1,450.62 MiB swap used, zero Booted iOS Simulators, no model process, and tiled result absent; model and cache execution prohibited while swap exceeds 512 MiB
-next action: implement and synthetically verify the preregistered cache-stage runtime monitor; continue waiting for swap <=512 MiB before the single tiled hw5k_1011.jpg attempt or any historical cache reconstruction
+current host gate: 87% free memory, 1,410.62 MiB swap used, zero Booted iOS Simulators, no model process, and tiled result absent; model and cache execution prohibited while swap exceeds 512 MiB
+next action: continue waiting for swap <=512 MiB, then run only the single preregistered tiled hw5k_1011.jpg attempt; monitored historical cache reconstruction remains downstream of a complete tiled probe PASS
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN

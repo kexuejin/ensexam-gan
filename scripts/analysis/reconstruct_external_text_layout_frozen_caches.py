@@ -12,6 +12,8 @@ import json
 import math
 import os
 from pathlib import Path
+import signal
+import subprocess
 import sys
 from typing import Any, Callable
 
@@ -32,6 +34,12 @@ EXPECTED_CONTRACT_SHA256 = (
 )
 EXPECTED_PROBE_SOURCE_SHA256 = (
     "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+)
+MONITOR_CONTRACT_PATH = Path(
+    "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json"
+)
+EXPECTED_MONITOR_CONTRACT_SHA256 = (
+    "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
 )
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
@@ -161,6 +169,10 @@ def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
             "external_text_layout_tiled_probe_cache_reconstruction_v2_preregistration"
         )
         != "passed"
+        or prerequisites.get(
+            "external_text_layout_cache_reconstruction_runtime_monitor_preregistration"
+        )
+        != "passed"
         or prerequisites.get("external_text_layout_support_train_only_diagnostic")
         != "pending"
     ):
@@ -254,6 +266,72 @@ def validate_reconstruction_boundaries(contract: dict[str, Any]) -> None:
     validate_reconstruction_gate_contract(contract)
 
 
+def expected_runtime_monitor() -> dict[str, Any]:
+    return {
+        "child_launch": "subprocess.Popen_start_new_session_true",
+        "health_reader": (
+            "external_text_layout_materialization_runtime.runtime_health_child_pid"
+        ),
+        "maximum_process_tree_rss_bytes": runtime.MAX_DETECTOR_RSS_BYTES,
+        "maximum_swap_used_bytes": runtime.MAX_SWAP_USED_BYTES,
+        "minimum_system_free_memory_percent": runtime.MIN_MEMORY_FREE_PERCENT,
+        "monitor_interval_seconds": runtime.MONITOR_INTERVAL_SECONDS,
+        "process_scope": "entire_primary_or_second_stage_child_process_tree",
+        "stages": ["primary", "second_stage"],
+        "termination": {
+            "grace_seconds": 5.0,
+            "initial_signal": "SIGTERM",
+            "scope": "child_process_group",
+            "terminal_signal": "SIGKILL",
+        },
+    }
+
+
+def validate_runtime_monitor_settings(
+    monitor_contract: dict[str, Any],
+) -> dict[str, Any]:
+    monitor = monitor_contract.get("monitor")
+    if monitor != expected_runtime_monitor():
+        raise CacheReconstructionError("cache reconstruction runtime monitor changed")
+    return monitor
+
+
+def validate_runtime_monitor_contract(repo_root: Path) -> dict[str, Any]:
+    contract_path = repo_path(repo_root, str(MONITOR_CONTRACT_PATH))
+    if sha256_file(contract_path) != EXPECTED_MONITOR_CONTRACT_SHA256:
+        raise CacheReconstructionError(
+            "cache reconstruction runtime monitor contract sha256 changed"
+        )
+    contract = read_json(contract_path)
+    if (
+        contract.get("schema_version") != 1
+        or contract.get("state")
+        != "preregistered_runtime_monitor_integration_only"
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+        or contract.get("implementation", {}).get("allowed_files")
+        != [
+            "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+            "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+        ]
+        or contract.get("implementation", {}).get("historical_helper_write")
+        is not False
+        or contract.get("implementation", {}).get("new_dependency") is not False
+        or contract.get("implementation", {}).get("site_packages_write") is not False
+    ):
+        raise CacheReconstructionError(
+            "cache reconstruction runtime monitor contract changed"
+        )
+    validate_runtime_monitor_settings(contract)
+    frozen_inputs = contract.get("frozen_inputs", {})
+    for name, label in (
+        ("historical_helper", "runtime monitor historical helper"),
+        ("materialization_runtime", "runtime monitor shared runtime"),
+        ("reconstruction_v2", "runtime monitor reconstruction v2 contract"),
+    ):
+        validate_artifact(repo_root, frozen_inputs[name], label)
+    return contract
+
+
 def current_reconstruction_runtime() -> dict[str, str]:
     try:
         opencv_distribution = metadata.version("opencv-python")
@@ -306,6 +384,7 @@ def validate_contract(
         or contract.get("terminal") != "PREREQUISITE_NEEDED"
     ):
         raise CacheReconstructionError("cache reconstruction contract changed")
+    monitor_contract = validate_runtime_monitor_contract(repo_root)
     validate_reconstruction_boundaries(contract)
     validate_authority(repo_root, contract)
     validate_artifact(
@@ -395,6 +474,7 @@ def validate_contract(
         "contract": contract,
         "manifest_lines": lines,
         "manifest_path": manifest_path,
+        "monitor_contract": monitor_contract,
         "plan": plan,
     }
 
@@ -697,6 +777,134 @@ def validate_current_launch_health(
     return normalized
 
 
+def terminate_monitored_process_group(
+    process: Any,
+    *,
+    grace_seconds: float,
+) -> None:
+    pid = getattr(process, "pid", None)
+    if isinstance(pid, bool) or not isinstance(pid, int) or pid <= 0:
+        raise CacheReconstructionError("cache stage child process has no valid pid")
+    try:
+        os.killpg(pid, signal.SIGTERM)
+    except ProcessLookupError:
+        return
+    try:
+        process.wait(timeout=grace_seconds)
+    except subprocess.TimeoutExpired:
+        pass
+    try:
+        os.killpg(pid, 0)
+    except ProcessLookupError:
+        return
+    try:
+        os.killpg(pid, signal.SIGKILL)
+    except ProcessLookupError:
+        return
+    try:
+        process.wait(timeout=grace_seconds)
+    except subprocess.TimeoutExpired as error:
+        raise CacheReconstructionError(
+            "cache stage process group survived SIGKILL"
+        ) from error
+
+
+def wait_for_monitored_command(
+    process: Any,
+    *,
+    monitor_contract: dict[str, Any],
+    health_reader: Callable[[int], dict[str, float | int]] = runtime.runtime_health,
+) -> dict[str, float | int]:
+    monitor = validate_runtime_monitor_settings(monitor_contract)
+    pid = getattr(process, "pid", None)
+    if isinstance(pid, bool) or not isinstance(pid, int) or pid <= 0:
+        raise CacheReconstructionError("cache stage child process did not start")
+    observed = runtime.health_summary(
+        {
+            "memory_free_percent": 100.0,
+            "process_tree_rss_bytes": 0,
+            "swap_used_bytes": 0,
+        }
+    )
+    try:
+        while process.poll() is None:
+            health = validate_health_snapshot(
+                health_reader(pid),
+                gate=monitor,
+                label="cache stage runtime health",
+            )
+            observed = runtime.health_summary(health, observed)
+            runtime.enforce_health_limits(
+                health,
+                observed_health=observed,
+                maximum_process_tree_rss_bytes=int(
+                    monitor["maximum_process_tree_rss_bytes"]
+                ),
+                minimum_memory_free_percent=float(
+                    monitor["minimum_system_free_memory_percent"]
+                ),
+                maximum_swap_used_bytes=int(monitor["maximum_swap_used_bytes"]),
+            )
+            try:
+                process.wait(timeout=float(monitor["monitor_interval_seconds"]))
+            except subprocess.TimeoutExpired:
+                continue
+    except BaseException:
+        terminate_monitored_process_group(
+            process,
+            grace_seconds=float(monitor["termination"]["grace_seconds"]),
+        )
+        raise
+    returncode = process.wait()
+    if returncode != 0:
+        raise RuntimeError(
+            f"materialization command failed ({returncode}); child process exited"
+        )
+    return observed
+
+
+def run_monitored_atomic_directory_command(
+    *,
+    repo_root: Path,
+    final_dir: Path,
+    command_builder: Callable[[Path], list[str]],
+    log_path: Path,
+    monitor_contract: dict[str, Any],
+    helper: Any,
+    health_reader: Callable[[int], dict[str, float | int]] = runtime.runtime_health,
+    popen_factory: Callable[..., Any] = subprocess.Popen,
+) -> tuple[list[str], dict[str, float | int]]:
+    validate_runtime_monitor_settings(monitor_contract)
+    if final_dir.exists() or final_dir.is_symlink():
+        raise FileExistsError(final_dir)
+    temporary = final_dir.with_name(f".{final_dir.name}.materializing")
+    if temporary.exists() or temporary.is_symlink():
+        raise FileExistsError(f"stale materialization directory: {temporary}")
+    command = command_builder(temporary)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    if log_path.exists() or log_path.is_symlink():
+        raise FileExistsError(log_path)
+    with log_path.open("x", encoding="utf-8") as log:
+        process = popen_factory(
+            command,
+            cwd=repo_root,
+            stdout=log,
+            stderr=subprocess.STDOUT,
+            text=True,
+            start_new_session=True,
+        )
+        observed = wait_for_monitored_command(
+            process,
+            monitor_contract=monitor_contract,
+            health_reader=health_reader,
+        )
+    if not temporary.is_dir():
+        raise RuntimeError(f"command did not create expected directory: {temporary}")
+    temporary.replace(final_dir)
+    helper.rewrite_metrics_paths(final_dir / "metrics.csv", temporary, final_dir)
+    return command, observed
+
+
 def reconstruct_stage(
     *,
     repo_root: Path,
@@ -731,7 +939,7 @@ def reconstruct_stage(
     with runtime.exclusive_run_lock(runtime.HOST_USER_RUN_LOCK_PATH):
         initial_health = validate_current_launch_health(contract)
         helper = helper_loader()
-        command = helper.run_atomic_directory_command(
+        command, runtime_health = run_monitored_atomic_directory_command(
             repo_root=repo_root,
             final_dir=cache_dir,
             command_builder=lambda temporary: build_stage_command(
@@ -742,6 +950,8 @@ def reconstruct_stage(
                 helper=helper,
             ),
             log_path=log_path,
+            monitor_contract=state["monitor_contract"],
+            helper=helper,
         )
         post_health = validate_current_launch_health(contract)
     return {
@@ -751,6 +961,7 @@ def reconstruct_stage(
         "command": command,
         "initial_health": initial_health,
         "post_health": post_health,
+        "runtime_health": runtime_health,
         "stage": stage,
         "status": "reconstructed",
     }

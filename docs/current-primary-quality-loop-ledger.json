@@ -525,12 +525,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
         "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+      },
+      {
+        "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+        "sha256": "0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c"
+      },
+      {
+        "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+        "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The v2 validator is hash-bound and fail-closed, but the historical cache helper still uses an unmonitored subprocess.run between launch and post-stage checks. A runtime-monitor wrapper is now preregistered to preserve the historical helper and cache hashes while continuously enforcing the existing 10 GiB RSS, 35% free-memory, and 512 MiB swap limits with process-group termination. Implement and synthetically verify only that wrapper next. Keep all model and cache execution disabled while swap exceeds 512 MiB; the tiled result remains absent. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The hash-bound cache-stage monitor now launches each historical primary or second-stage command in an independent process group, samples child-plus-descendant health every second, terminates on any resource or health-reader failure, and publishes only after zero exit plus valid temporary output. Synthetic integration passed 13 compatibility tests and 67 external-text-layout tests under both registered Python environments; static preflight remains PASS with execution_authorized=false. Keep all detector and cache execution disabled while swap exceeds 512 MiB; the tiled result remains absent. Once the unchanged host gate passes, the only next execution is the single preregistered tiled hw5k_1011.jpg probe. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -628,7 +636,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator now binds the tiled result identity and strict schema. A separate runtime-monitor contract is registered because the historical helper currently leaves the full child lifetime inside unmonitored subprocess.run; implementation must preserve helper/cache hashes while enforcing resource limits continuously. No detector or cache process executed. Current swap is about 1,410.62 MiB, so the single tiled page remains disabled.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator binds the tiled result identity and strict schema. The separate runtime-monitor integration now preserves the historical helper/cache hashes while continuously enforcing resource limits across the child process tree, with synthetic tests passing under both registered Python environments. No detector or cache process executed. Current swap is about 1,410.62 MiB, so the single tiled page remains disabled.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       },
@@ -2102,6 +2110,30 @@
       "outcome": "continuous_primary_and_second_stage_child_process_monitor_is_frozen_without_model_or_cache_execution",
       "repeat_policy": "implement_only_the_registered_wrapper_then_hash_register_it_before_any_cache_reconstruction",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-cache-reconstruction-runtime-monitor-v1.json",
+          "sha256": "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-cache-reconstruction-runtime-monitor-preregistration.md",
+          "sha256": "96795e68c19145c6642160b41d0f147d7aa9a428de1f22b0da7f2ddd1feabb24"
+        },
+        {
+          "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+          "sha256": "0afd03fbec78fd30a1043ec765a747e854c876e6016e88ec18c105212b9ac93c"
+        },
+        {
+          "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+          "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
+        }
+      ],
+      "id": "external-text-layout-cache-reconstruction-runtime-monitor-integration",
+      "outcome": "hash_bound_process_group_monitor_passed_13_compatibility_tests_and_67_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_atomic_success_nonzero_failure_resource_and_reader_termination_sigkill_escalation_static_preflight_closed_and_no_model_or_cache_execution",
+      "repeat_policy": "wait_for_swap_at_or_below_512_mib_then_run_only_the_single_preregistered_tiled_probe_before_any_monitored_cache_reconstruction",
+      "terminal": "PASS"
     }
   ],
   "schema_version": 1

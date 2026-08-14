@@ -5,6 +5,9 @@ from contextlib import contextmanager
 import json
 import os
 from pathlib import Path
+import signal
+import subprocess
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -77,6 +80,10 @@ def reconstruction_gate() -> dict[str, object]:
     }
 
 
+def monitor_contract() -> dict[str, object]:
+    return {"monitor": reconstruction.expected_runtime_monitor()}
+
+
 def authority_ledger() -> dict[str, object]:
     return {
         "active_iteration": {
@@ -89,6 +96,13 @@ def authority_ledger() -> dict[str, object]:
                     "id": (
                         "external_text_layout_tiled_probe_cache_reconstruction_"
                         "v2_preregistration"
+                    ),
+                    "status": "passed",
+                },
+                {
+                    "id": (
+                        "external_text_layout_cache_reconstruction_runtime_"
+                        "monitor_preregistration"
                     ),
                     "status": "passed",
                 },
@@ -210,6 +224,7 @@ def cache_state(root: Path) -> dict[str, object]:
             "reconstruction_gate": reconstruction_gate(),
         },
         "manifest_lines": manifest_lines,
+        "monitor_contract": monitor_contract(),
         "plan": {
             "pipeline_preparation": {
                 "primary": {"samples_file": "original/train.txt"},
@@ -228,7 +243,7 @@ def unlocked(_path: Path):
 
 
 class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
-    def test_authority_requires_the_v2_preregistration(self) -> None:
+    def test_authority_requires_v2_and_monitor_preregistrations(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             ledger_path = root / reconstruction.LEDGER_PATH
@@ -240,6 +255,15 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
 
             changed = copy.deepcopy(ledger)
             changed["active_iteration"]["prerequisites"][1]["status"] = "pending"
+            ledger_path.write_text(json.dumps(changed), encoding="utf-8")
+            with self.assertRaisesRegex(
+                reconstruction.CacheReconstructionError,
+                "external layout authority changed",
+            ):
+                reconstruction.validate_authority(root, contract)
+
+            changed = copy.deepcopy(ledger)
+            changed["active_iteration"]["prerequisites"][2]["status"] = "pending"
             ledger_path.write_text(json.dumps(changed), encoding="utf-8")
             with self.assertRaisesRegex(
                 reconstruction.CacheReconstructionError,
@@ -270,6 +294,22 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
             "reconstruction safety gate changed",
         ):
             reconstruction.validate_reconstruction_boundaries(changed)
+
+        monitor_path = reconstruction.ROOT / reconstruction.MONITOR_CONTRACT_PATH
+        self.assertEqual(
+            reconstruction.sha256_file(monitor_path),
+            reconstruction.EXPECTED_MONITOR_CONTRACT_SHA256,
+        )
+        registered_monitor = reconstruction.validate_runtime_monitor_contract(
+            reconstruction.ROOT
+        )
+        changed_monitor = copy.deepcopy(registered_monitor)
+        changed_monitor["monitor"]["maximum_swap_used_bytes"] += 1
+        with self.assertRaisesRegex(
+            reconstruction.CacheReconstructionError,
+            "runtime monitor changed",
+        ):
+            reconstruction.validate_runtime_monitor_settings(changed_monitor)
 
     def test_probe_must_exist_and_pass_with_complete_nonnegative_health(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -513,6 +553,149 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
         self.assertEqual(
             observed["second_stage"][2],
             Path("/repo/build/.second-stage.materializing"),
+        )
+
+    def test_monitored_command_publishes_atomically_and_rewrites_metrics(self) -> None:
+        from scripts.analysis import materialize_sign_separated_train_inputs as helper
+
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            final_dir = root / "build/cache"
+            temporary = final_dir.with_name(f".{final_dir.name}.materializing")
+            command = [
+                sys.executable,
+                "-c",
+                (
+                    "from pathlib import Path; import sys; "
+                    "p=Path(sys.argv[1]); (p/'pred').mkdir(parents=True); "
+                    "(p/'metrics.csv').write_text('path\\n'+str(p)+'\\n', "
+                    "encoding='utf-8')"
+                ),
+                str(temporary),
+            ]
+            actual_command, _health = (
+                reconstruction.run_monitored_atomic_directory_command(
+                    repo_root=root,
+                    final_dir=final_dir,
+                    command_builder=lambda _temporary: command,
+                    log_path=root / "control/success.log",
+                    monitor_contract=monitor_contract(),
+                    helper=helper,
+                    health_reader=lambda _pid: {
+                        "memory_free_percent": 80.0,
+                        "process_tree_rss_bytes": 1024,
+                        "swap_used_bytes": 0,
+                    },
+                )
+            )
+
+            self.assertEqual(actual_command, command)
+            self.assertTrue(final_dir.is_dir())
+            self.assertFalse(temporary.exists())
+            metrics = (final_dir / "metrics.csv").read_text(encoding="utf-8")
+            self.assertIn(str(final_dir), metrics)
+            self.assertNotIn(str(temporary), metrics)
+
+    def test_nonzero_monitored_command_never_publishes_final_cache(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            final_dir = root / "build/cache"
+            with self.assertRaisesRegex(RuntimeError, r"failed \(7\)"):
+                reconstruction.run_monitored_atomic_directory_command(
+                    repo_root=root,
+                    final_dir=final_dir,
+                    command_builder=lambda _temporary: [
+                        sys.executable,
+                        "-c",
+                        "raise SystemExit(7)",
+                    ],
+                    log_path=root / "control/nonzero.log",
+                    monitor_contract=monitor_contract(),
+                    helper=mock.Mock(),
+                    health_reader=lambda _pid: {
+                        "memory_free_percent": 80.0,
+                        "process_tree_rss_bytes": 1024,
+                        "swap_used_bytes": 0,
+                    },
+                )
+            self.assertFalse(final_dir.exists())
+
+    def test_monitor_failures_terminate_the_child_process_group(self) -> None:
+        failures = (
+            (
+                "resource_limit",
+                lambda _pid: {
+                    "memory_free_percent": 80.0,
+                    "process_tree_rss_bytes": (
+                        reconstruction.runtime.MAX_DETECTOR_RSS_BYTES + 1
+                    ),
+                    "swap_used_bytes": 0,
+                },
+                reconstruction.CacheReconstructionError,
+            ),
+            (
+                "health_reader",
+                mock.Mock(side_effect=OSError("health reader failed")),
+                OSError,
+            ),
+        )
+        for name, health_reader, error_type in failures:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as raw:
+                root = Path(raw)
+                final_dir = root / "build/cache"
+                process = mock.Mock(pid=43210)
+                process.poll.return_value = None
+                process.wait.return_value = 0
+                popen_factory = mock.Mock(return_value=process)
+                with mock.patch.object(
+                    reconstruction.os,
+                    "killpg",
+                    side_effect=[None, ProcessLookupError()],
+                ) as killpg:
+                    with self.assertRaises(error_type):
+                        reconstruction.run_monitored_atomic_directory_command(
+                            repo_root=root,
+                            final_dir=final_dir,
+                            command_builder=lambda _temporary: ["synthetic"],
+                            log_path=root / f"control/{name}.log",
+                            monitor_contract=monitor_contract(),
+                            helper=mock.Mock(),
+                            health_reader=health_reader,
+                            popen_factory=popen_factory,
+                        )
+                popen_factory.assert_called_once()
+                self.assertTrue(
+                    popen_factory.call_args.kwargs["start_new_session"]
+                )
+                killpg.assert_has_calls(
+                    [mock.call(process.pid, signal.SIGTERM), mock.call(process.pid, 0)]
+                )
+                process.wait.assert_called_once_with(timeout=5.0)
+                self.assertFalse(final_dir.exists())
+
+    def test_process_group_termination_escalates_to_sigkill(self) -> None:
+        process = mock.Mock(pid=54321)
+        process.wait.side_effect = [
+            subprocess.TimeoutExpired(cmd="synthetic", timeout=5.0),
+            0,
+        ]
+        with mock.patch.object(reconstruction.os, "killpg") as killpg:
+            reconstruction.terminate_monitored_process_group(
+                process,
+                grace_seconds=5.0,
+            )
+
+        self.assertEqual(
+            killpg.call_args_list,
+            [
+                mock.call(process.pid, signal.SIGTERM),
+                mock.call(process.pid, 0),
+                mock.call(process.pid, signal.SIGKILL),
+            ],
+        )
+        self.assertEqual(
+            process.wait.call_args_list,
+            [mock.call(timeout=5.0), mock.call(timeout=5.0)],
         )
 
     def test_publication_is_relative_idempotent_and_preflights_conflicts(self) -> None:
