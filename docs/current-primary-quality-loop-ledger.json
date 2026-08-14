@@ -589,12 +589,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-primary-cache-reconstruction-prerequisite-needed.md",
         "sha256": "400b7b8e250ea5785af23883e11ba3c50d3f43959311b003903faacf6c0f03c7"
+      },
+      {
+        "path": "docs/external-text-layout-cache-metrics-canonicalization-recovery-v1.json",
+        "sha256": "8c301ac5316ab75928ab2d2cd744a71c2842b0389ffb71b5f68a72d9c257551c"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-cache-metrics-canonicalization-recovery-preregistration.md",
+        "sha256": "f203663336681504807d7ef9aa8bffebd5dffa60ef068f92e3aa3ca2f1b1bf34"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The frozen primary MPS stage completed 275/275 pages without resource-limit termination, and its prediction set is hash-exact. Exact cache validation returned PREREQUISITE_NEEDED only because all 275 metrics pred_path values contain the current repository root; deterministic in-memory replacement with the frozen historical root produces the exact expected metrics hash. Before touching the cache, preregister a 275-replacement metrics-only recovery and a publication-order fix that canonicalizes and validates the temporary cache before atomic replacement. Do not rerun primary or start second stage. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Implement only the preregistered metrics canonicalization overlay. Require exactly 275 current-root substitutions confined to pred_path, validate candidate bytes before atomic metrics replacement, preserve exact predictions, and validate complete temporary caches before final-directory publication. Add an explicit existing-primary recovery path that cannot execute a model or historical helper, but do not run it until focused and complete external-text-layout suites pass under Python 3.13.1 and 3.10.11 and an integration PASS is recorded. Do not rerun primary or start second stage. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -735,6 +743,11 @@
         "detail": "The primary MPS command completed all 275 pages and produced the exact frozen prediction set, but exact cache validation returned PREREQUISITE_NEEDED because metrics pred_path values retained the current repository root. Second stage and archive publication did not start. The unverified final primary directory remains present because publication preceded rewrite and validation; deterministic recovery must be preregistered before mutation.",
         "id": "external_text_layout_primary_cache_reconstruction",
         "status": "pending"
+      },
+      {
+        "detail": "A metrics-only recovery now freezes the exact source and target SHA-256 values, 275 pred_path-only root substitutions, candidate-before-write validation, prediction identity, explicit no-model existing-cache recovery, and temporary-cache validation before publication. Only implementation and synthetic verification are authorized; the retained primary cache remains unchanged.",
+        "id": "external_text_layout_cache_metrics_canonicalization_recovery_preregistration",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
