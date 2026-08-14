@@ -1,0 +1,84 @@
+{
+  "attempt_count": 1,
+  "booted_ios_simulator_count": 0,
+  "contract": {
+    "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v2.json",
+    "sha256": "2fb92aa625e0409fd7ed9db301d854333ca0852d714a8ed5fa8dcfc20e3527f6"
+  },
+  "detector": {
+    "device": "cpu",
+    "engine": "transformers",
+    "model_name": "PP-OCRv6_medium_det"
+  },
+  "detector_files": {
+    "config_json": "3ea7e760f64255c152ba139e2f5f798303f7189b87c923cf498e2b2e830cadd3",
+    "gitattributes": "11ad7efa24975ee4b0c3c3a38ed18737f0658a5f75a0a96787b576a78a023361",
+    "inference_yml": "7298d5ead546584af2504d03355f881ac7a7bc0eb1e282d3e159277c1d0af871",
+    "model_safetensors": "bd393266c02e1a680b1b34c301d5d0d81e6290440b7f8ab0f5d5032276b17eb1",
+    "preprocessor_config_json": "74421569a28a78d417db320f9bc039ce0997a1defe2b35f259dfc74299c9f1ed",
+    "readme_md": "cdba9f31531fe1a4ff1323a21d7cf671a7a042b23a788ffeb081d1845acccdb6"
+  },
+  "formal_evidence": false,
+  "formal_outputs_written": false,
+  "label_access": false,
+  "launch_health": {
+    "minimum_memory_free_percent": 85.0,
+    "peak_process_tree_rss_bytes": 71073792,
+    "peak_swap_growth_bytes": 0,
+    "sample_count": 61,
+    "stability_sample_interval_seconds": 1.0,
+    "stability_window_seconds": 60.0
+  },
+  "launch_swap_baseline_bytes": 1108994949,
+  "page": {
+    "file": "hw5k_1011.jpg",
+    "source_sha256": "9255f285aa37890421519659a4994587c2467e021c7b1488d1665a7cd0edfa2d"
+  },
+  "page_completed": true,
+  "page_health": {
+    "minimum_memory_free_percent": 63.0,
+    "peak_process_tree_rss_bytes": 7429668864,
+    "peak_swap_growth_bytes": 0
+  },
+  "peak_swap_growth_bytes": 0,
+  "post_run_health": {
+    "memory_free_percent": 73.0,
+    "process_tree_rss_bytes": 52969472,
+    "swap_growth_bytes": 0
+  },
+  "probe": "external_text_layout_tiled_9x9_single_page_runtime_safety",
+  "reason_code": "runtime_safety_probe_passed",
+  "recognition": false,
+  "residual_model_process_count": 0,
+  "result_authority": "runtime_prerequisite_only",
+  "routing_metadata_access": false,
+  "runtime": {
+    "cv2": "4.13.0",
+    "numpy": "2.3.5",
+    "paddle": "3.0.0",
+    "paddleocr": "3.7.0",
+    "paddlex": "3.7.2",
+    "python": "3.13.1",
+    "torch": "2.12.0",
+    "transformers": "5.12.1"
+  },
+  "safety_limits": {
+    "detector_process_tree_rss_bytes_max": 8589934592,
+    "launch_memory_free_percent_min": 70.0,
+    "launch_stability_sample_interval_seconds": 1.0,
+    "launch_stability_window_seconds": 60.0,
+    "page_timeout_seconds": 900.0,
+    "runtime_memory_free_percent_min": 45.0,
+    "runtime_swap_growth_bytes_max": 536870912
+  },
+  "schema_version": 2,
+  "target_access": false,
+  "temporary_page_outputs_retained": false,
+  "terminal": "PASS",
+  "thread_caps": {
+    "MKL_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1"
+  }
+}
