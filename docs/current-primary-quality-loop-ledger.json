@@ -729,12 +729,28 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-launch-v2-preregistration.md",
         "sha256": "8a2102f61e7c3304d4e7eb92a2a06f64ba8448c59e966d8b7db60389bb24634a"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-launch-v2-integration-verification-20260815.json",
+        "sha256": "74f33381bcc90f1775aede5e12968a0d4ae0a3e62f6b831e6a54ca11703139cc"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-launch-v2-integration-pass.md",
+        "sha256": "2388f12520d835854cc310cc2e16c666b7b512a82ba30c5a6561d5387fbaa7df"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-baseline-relative-launch-v3.json",
+        "sha256": "8602c2ff972ed45ee6e62514f75d3bcade9e8c4056398d0c47976124153e023f"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-baseline-relative-launch-v3-preregistration.md",
+        "sha256": "ed3ded34a464bd247612409a32e01b84332444b94413f62914e91171e74faa43"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered recovered materializer launcher v2 and its tests; do not modify the shared materializer or shared test. Validate the v2 contract, original plan, v1 overlay, archive PASS, canonical links, exact recovered cache, ledger, and deterministic 39d5 derived-plan candidate before any write or detector call. Persist or reuse only the exact derived plan, invoke the unchanged materializer with that plan and one worker, and require derived-plan provenance in resume and final manifest. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not execute the real launcher until separate v2 integration PASS is committed and pushed; diagnostic and all quality surfaces remain closed.",
+    "next_action": "Implement only the preregistered launcher v3 baseline-relative adapter and its focused tests. Preserve exact shared materializer, runtime, probe, and shared-test hashes. Hold the existing exclusive lock across the 60-second 70%-free zero-growth readiness window and materialization; use the locked absolute swap reading only as history, retain the 512 MiB runtime growth cap, 8 GiB process-tree RSS cap, 45% runtime free-memory floor, CPU one-page isolation, child Simulator recheck, process-group termination, resume state, and 39d5 plan provenance. Restore all process-local call adapters in finally. Do not execute the detector until dual-runtime integration PASS is committed and pushed; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -949,6 +965,11 @@
       {
         "detail": "The v2 launcher passed 9 focused and 118 complete external-text-layout tests in Python 3.13.1 and 3.10.11 while shared materializer/test hashes remained probe-exact. Archive/cache/ledger gates, deterministic 39d5 plan derivation, atomic plan persistence, exact unchanged one-worker invocation, resume/final plan provenance, 275-page output validation, result-gap recovery, terminal idempotency, and closed-authority rejection are locked. Real execution remains contingent on a fresh Python 3.13.1 host-health preflight after this PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_launch_v2_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The pushed v2 launcher reached a read-only live preflight and exposed two fail-closed host facts before detector creation: bare pyenv Python has cv2 4.10 instead of registered 4.13, while the exact project Python 3.13 environment is present; the healthy 84%-free host retains about 970 MiB historical swap, which the unchanged materializer still interprets through its absolute 512 MiB gate. V3 is limited to a launcher-local, lock-scoped adapter reusing the proven 60-second baseline-relative probe semantics and stronger 70%/45% free-memory, 8 GiB RSS, 512 MiB growth, CPU serial, child Simulator, restoration, and resume boundaries. Only implementation and synthetic verification are open.",
+        "id": "external_text_layout_recovered_materializer_baseline_relative_launch_v3_preregistration",
         "status": "passed"
       }
     ],
