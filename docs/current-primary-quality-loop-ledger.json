@@ -721,12 +721,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-input-preregistration.md",
         "sha256": "0e409ee90caaae3d5b6c4a647ea934e5155c371a33dbbed04cb1b74d06722f46"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-launch-v2.json",
+        "sha256": "26eec02ad8c7dcbbb7ebfea2e03b2b431c35cacff0e78f5c2029f459b00d6978"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-launch-v2-preregistration.md",
+        "sha256": "8a2102f61e7c3304d4e7eb92a2a06f64ba8448c59e966d8b7db60389bb24634a"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered recovered-input adapter inside the existing external text-layout materializer and tests. Keep the original plan byte-exact; validate overlay, archive PASS, canonical links, recovered 79fd metrics, exact 2ffa/275 predictions, and ledger before detector creation; prove the effective plan differs at only evidence.second_stage_metrics.sha256; bind original-plan and overlay hashes in every materialization manifest and resume path; preserve legacy programmatic behavior without overlay. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not execute real materialization until separate adapter integration PASS is committed and pushed; diagnostic and all quality surfaces remain closed.",
+    "next_action": "Implement only the preregistered recovered materializer launcher v2 and its tests; do not modify the shared materializer or shared test. Validate the v2 contract, original plan, v1 overlay, archive PASS, canonical links, exact recovered cache, ledger, and deterministic 39d5 derived-plan candidate before any write or detector call. Persist or reuse only the exact derived plan, invoke the unchanged materializer with that plan and one worker, and require derived-plan provenance in resume and final manifest. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not execute the real launcher until separate v2 integration PASS is committed and pushed; diagnostic and all quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -929,8 +937,13 @@
         "status": "passed"
       },
       {
-        "detail": "A recovered-input adapter now freezes the original materializer plan byte-for-byte and permits exactly one in-memory evidence hash substitution from historical b800 to audited 79fd. It binds the archive PASS, canonical links, exact 2ffa/275 predictions, and dual plan/overlay manifest provenance while preserving every detector, runtime, source, feature, output, health, and acceptance setting. Only implementation and synthetic verification are open.",
+        "detail": "The v1 in-place adapter design froze the required b800-to-79fd evidence substitution but was rejected before integration because changing the shared materializer broke its probe-bound source SHA. Shared source and tests were restored exactly. V2 supersedes this execution surface; v1 remains only provenance for the derived-plan inputs.",
         "id": "external_text_layout_recovered_materializer_input_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "A v2 launcher now preserves the probe-bound shared materializer and test hashes, deterministically derives exact plan 39d5 with recovered 79fd/2ffa evidence and explicit original/v1/archive provenance, and lets the unchanged materializer bind that plan in resume and final manifests. Only launcher implementation and synthetic verification are open; derived-plan write and detector execution remain closed until v2 integration PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_launch_v2_preregistration",
         "status": "passed"
       }
     ],
