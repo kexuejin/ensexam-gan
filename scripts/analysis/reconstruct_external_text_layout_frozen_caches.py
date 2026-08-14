@@ -41,6 +41,12 @@ MONITOR_CONTRACT_PATH = Path(
 EXPECTED_MONITOR_CONTRACT_SHA256 = (
     "ebed5d80277cc458d505a93588d01c5908f330f5a8e457a4af13027c6e987556"
 )
+BASELINE_RELATIVE_CONTRACT_PATH = Path(
+    "docs/external-text-layout-cache-reconstruction-baseline-relative-swap-v1.json"
+)
+EXPECTED_BASELINE_RELATIVE_CONTRACT_SHA256 = (
+    "a7cafb5358370585da926a99ad7d844a2cb9b5ec676dbead4803f53e35a09b12"
+)
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
 RECONSTRUCTION_ID = "external_text_layout_tiled_probe_cache_reconstruction_v2"
@@ -57,6 +63,18 @@ EXPECTED_AUTHORITY = {
     "quality_evaluation": False,
     "reserved_blind_state": "disabled",
     "result_authority": "frozen_cache_reconstruction_only",
+    "training": False,
+}
+EXPECTED_BASELINE_RELATIVE_AUTHORITY = {
+    "cache_reconstruction_execution": False,
+    "candidate_inference": False,
+    "detector_model_execution": False,
+    "formal_external_layout_materialization": False,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": False,
+    "reserved_blind_state": "disabled",
+    "result_authority": "cache_reconstruction_baseline_relative_integration_only",
     "training": False,
 }
 EXPECTED_BUILD = {
@@ -173,6 +191,14 @@ def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
             "external_text_layout_cache_reconstruction_runtime_monitor_preregistration"
         )
         != "passed"
+        or prerequisites.get(
+            "external_text_layout_cache_reconstruction_baseline_relative_swap_preregistration"
+        )
+        != "passed"
+        or prerequisites.get(
+            "external_text_layout_tiled_one_page_runtime_safety_probe"
+        )
+        != "passed"
         or prerequisites.get("external_text_layout_support_train_only_diagnostic")
         != "pending"
     ):
@@ -266,7 +292,7 @@ def validate_reconstruction_boundaries(contract: dict[str, Any]) -> None:
     validate_reconstruction_gate_contract(contract)
 
 
-def expected_runtime_monitor() -> dict[str, Any]:
+def expected_legacy_runtime_monitor() -> dict[str, Any]:
     return {
         "child_launch": "subprocess.Popen_start_new_session_true",
         "health_reader": (
@@ -287,12 +313,48 @@ def expected_runtime_monitor() -> dict[str, Any]:
     }
 
 
+def expected_runtime_monitor() -> dict[str, Any]:
+    return {
+        "child_launch": "subprocess.Popen_start_new_session_true",
+        "health_reader": (
+            "baseline_relative_wrapper_around_external_text_layout_"
+            "runtime.runtime_health"
+        ),
+        "maximum_process_tree_rss_bytes": runtime.MAX_DETECTOR_RSS_BYTES,
+        "maximum_swap_growth_bytes": runtime.MAX_SWAP_USED_BYTES,
+        "minimum_system_free_memory_percent": runtime.MIN_MEMORY_FREE_PERCENT,
+        "monitor_interval_seconds": runtime.MONITOR_INTERVAL_SECONDS,
+        "process_scope": "entire_primary_or_second_stage_child_process_tree",
+        "stages": ["primary", "second_stage"],
+        "swap_baseline": (
+            "absolute_sample_after_locked_launch_health_passes_before_helper_import"
+        ),
+        "termination": {
+            "grace_seconds": 5.0,
+            "initial_signal": "SIGTERM",
+            "scope": "child_process_group",
+            "terminal_signal": "SIGKILL",
+        },
+    }
+
+
 def validate_runtime_monitor_settings(
     monitor_contract: dict[str, Any],
 ) -> dict[str, Any]:
     monitor = monitor_contract.get("monitor")
     if monitor != expected_runtime_monitor():
         raise CacheReconstructionError("cache reconstruction runtime monitor changed")
+    return monitor
+
+
+def validate_legacy_runtime_monitor_settings(
+    monitor_contract: dict[str, Any],
+) -> dict[str, Any]:
+    monitor = monitor_contract.get("monitor")
+    if monitor != expected_legacy_runtime_monitor():
+        raise CacheReconstructionError(
+            "legacy cache reconstruction runtime monitor changed"
+        )
     return monitor
 
 
@@ -321,7 +383,7 @@ def validate_runtime_monitor_contract(repo_root: Path) -> dict[str, Any]:
         raise CacheReconstructionError(
             "cache reconstruction runtime monitor contract changed"
         )
-    validate_runtime_monitor_settings(contract)
+    validate_legacy_runtime_monitor_settings(contract)
     frozen_inputs = contract.get("frozen_inputs", {})
     for name, label in (
         ("historical_helper", "runtime monitor historical helper"),
@@ -329,6 +391,142 @@ def validate_runtime_monitor_contract(repo_root: Path) -> dict[str, Any]:
         ("reconstruction_v2", "runtime monitor reconstruction v2 contract"),
     ):
         validate_artifact(repo_root, frozen_inputs[name], label)
+    return contract
+
+
+def expected_probe_gate_v2() -> dict[str, Any]:
+    return {
+        "contract": {
+            "path": (
+                "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v2.json"
+            ),
+            "sha256": (
+                "2fb92aa625e0409fd7ed9db301d854333ca0852d714a8ed5fa8dcfc20e3527f6"
+            ),
+        },
+        "integration_verification": {
+            "path": (
+                "docs/external-text-layout-baseline-relative-swap-gate-"
+                "integration-verification-20260814.json"
+            ),
+            "sha256": (
+                "6177e4e6e8642cc0c4abdf86f9fd93adff0b6b4eea8b35937fa3135b435b02a8"
+            ),
+        },
+        "maximum_process_tree_rss_bytes": 8 * 1024**3,
+        "maximum_swap_growth_bytes": 512 * 1024**2,
+        "minimum_launch_memory_free_percent": 70.0,
+        "minimum_runtime_memory_free_percent": 45.0,
+        "probe_page": "hw5k_1011.jpg",
+        "probe_result": {
+            "path": (
+                "outputs/external-text-layout-runtime-safety-probe-tiled-9x9-"
+                "20260814/result.json"
+            ),
+            "sha256": (
+                "1909d66f29d18ca5805fb29b8b89ac054e240bc9231b2a7fa96121466e0ad550"
+            ),
+        },
+        "required_attempt_count": 1,
+        "required_page_completed": True,
+        "required_probe": "external_text_layout_tiled_9x9_single_page_runtime_safety",
+        "required_probe_reason_code": "runtime_safety_probe_passed",
+        "required_probe_terminal": "PASS",
+        "required_result_authority": "runtime_prerequisite_only",
+        "required_residual_model_process_count": 0,
+        "required_safety_limits": {
+            "detector_process_tree_rss_bytes_max": 8 * 1024**3,
+            "launch_memory_free_percent_min": 70.0,
+            "launch_stability_sample_interval_seconds": 1.0,
+            "launch_stability_window_seconds": 60.0,
+            "page_timeout_seconds": runtime.PAGE_TIMEOUT_SECONDS,
+            "runtime_memory_free_percent_min": 45.0,
+            "runtime_swap_growth_bytes_max": 512 * 1024**2,
+        },
+        "required_schema_version": 2,
+        "required_thread_caps": {
+            "MKL_NUM_THREADS": "1",
+            "OMP_NUM_THREADS": "1",
+            "OPENBLAS_NUM_THREADS": "1",
+            "VECLIB_MAXIMUM_THREADS": "1",
+        },
+    }
+
+
+def expected_baseline_reconstruction_gate() -> dict[str, Any]:
+    return {
+        "maximum_process_tree_rss_bytes": runtime.MAX_DETECTOR_RSS_BYTES,
+        "maximum_swap_growth_bytes": runtime.MAX_SWAP_USED_BYTES,
+        "minimum_system_free_memory_percent": runtime.MIN_MEMORY_FREE_PERCENT,
+        "probe_pass_required_before_helper_import": True,
+        "stage_execution": (
+            "one_model_process_at_a_time_under_the_external_layout_host_lock"
+        ),
+        "swap_baseline_absolute_maximum_bytes": None,
+    }
+
+
+def validate_baseline_relative_contract(repo_root: Path) -> dict[str, Any]:
+    contract_path = repo_path(repo_root, str(BASELINE_RELATIVE_CONTRACT_PATH))
+    if sha256_file(contract_path) != EXPECTED_BASELINE_RELATIVE_CONTRACT_SHA256:
+        raise CacheReconstructionError(
+            "cache reconstruction baseline-relative contract sha256 changed"
+        )
+    contract = read_json(contract_path)
+    implementation = contract.get("implementation", {})
+    if (
+        contract.get("schema_version") != 1
+        or contract.get("state")
+        != "preregistered_cache_reconstruction_baseline_relative_integration_only"
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+        or contract.get("authority") != EXPECTED_BASELINE_RELATIVE_AUTHORITY
+        or implementation.get("allowed_files")
+        != [
+            "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+            "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+        ]
+        or implementation.get("new_dependency") is not False
+        or implementation.get("site_packages_write") is not False
+        or contract.get("probe_gate") != expected_probe_gate_v2()
+        or contract.get("reconstruction_gate")
+        != expected_baseline_reconstruction_gate()
+        or contract.get("result_evidence")
+        != {
+            "launch": ["launch_swap_baseline_bytes", "initial_health"],
+            "runtime": "peak_swap_growth_bytes",
+            "post_run": "swap_growth_bytes",
+        }
+    ):
+        raise CacheReconstructionError(
+            "cache reconstruction baseline-relative contract changed"
+        )
+    validate_runtime_monitor_settings(contract)
+    frozen = contract.get("frozen_inputs", {})
+    expected_names = {
+        "historical_helper",
+        "monitor_v1",
+        "probe_contract_v2",
+        "probe_integration_v2",
+        "probe_result_v2",
+        "reconstruction_v2",
+        "shared_runtime",
+    }
+    if set(frozen) != expected_names:
+        raise CacheReconstructionError(
+            "cache reconstruction baseline-relative frozen inputs changed"
+        )
+    paths = {
+        name: validate_artifact(
+            repo_root, frozen[name], f"baseline-relative {name}"
+        )
+        for name in sorted(expected_names)
+    }
+    integration = read_json(paths["probe_integration_v2"])
+    validate_artifact(
+        repo_root,
+        integration.get("implementation", {}).get("probe", {}),
+        "baseline-relative current probe implementation",
+    )
     return contract
 
 
@@ -384,7 +582,7 @@ def validate_contract(
         or contract.get("terminal") != "PREREQUISITE_NEEDED"
     ):
         raise CacheReconstructionError("cache reconstruction contract changed")
-    monitor_contract = validate_runtime_monitor_contract(repo_root)
+    validate_runtime_monitor_contract(repo_root)
     validate_reconstruction_boundaries(contract)
     validate_authority(repo_root, contract)
     validate_artifact(
@@ -413,8 +611,23 @@ def validate_contract(
     validate_artifact(
         repo_root, historical["materializer"], "historical materializer"
     )
-    for index, artifact in enumerate(contract.get("runtime_repair_evidence", [])):
+    legacy_probe_source = {
+        "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+        "sha256": (
+            "8b6c563a7e9f5d879cc962b35fcc6ede15ce341a5f790fc49233cda9d235b43e"
+        ),
+    }
+    runtime_repair_evidence = contract.get("runtime_repair_evidence", [])
+    if legacy_probe_source not in runtime_repair_evidence:
+        raise CacheReconstructionError(
+            "legacy probe source binding changed before adapter application"
+        )
+    for index, artifact in enumerate(runtime_repair_evidence):
+        if artifact == legacy_probe_source:
+            continue
         validate_artifact(repo_root, artifact, f"runtime repair evidence {index}")
+
+    baseline_relative_contract = validate_baseline_relative_contract(repo_root)
 
     plan = read_json(plan_path)
     audit = read_json(audit_path)
@@ -474,8 +687,9 @@ def validate_contract(
         "contract": contract,
         "manifest_lines": lines,
         "manifest_path": manifest_path,
-        "monitor_contract": monitor_contract,
+        "monitor_contract": baseline_relative_contract,
         "plan": plan,
+        "runtime_contract": baseline_relative_contract,
     }
 
 
@@ -610,7 +824,7 @@ def validate_health_snapshot(
         or normalized["process_tree_rss_bytes"]
         > int(gate["maximum_process_tree_rss_bytes"])
         or normalized["swap_used_bytes"]
-        > int(gate["maximum_swap_used_bytes"])
+        > int(gate["maximum_swap_growth_bytes"])
     ):
         raise CacheReconstructionError(f"{label} crossed a runtime limit")
     return normalized
@@ -639,7 +853,7 @@ def validate_health_summary(
         or normalized["peak_process_tree_rss_bytes"]
         > int(gate["maximum_process_tree_rss_bytes"])
         or normalized["peak_swap_used_bytes"]
-        > int(gate["maximum_swap_used_bytes"])
+        > int(gate["maximum_swap_growth_bytes"])
     ):
         raise CacheReconstructionError(f"{label} crossed a runtime limit")
     return normalized
@@ -648,7 +862,7 @@ def validate_health_summary(
 def _probe_health_gate(gate: dict[str, Any], *, launch: bool) -> dict[str, Any]:
     return {
         "maximum_process_tree_rss_bytes": gate["maximum_process_tree_rss_bytes"],
-        "maximum_swap_used_bytes": gate["maximum_swap_used_bytes"],
+        "maximum_swap_growth_bytes": gate["maximum_swap_growth_bytes"],
         "minimum_system_free_memory_percent": gate[
             "minimum_launch_memory_free_percent"
             if launch
@@ -657,10 +871,69 @@ def _probe_health_gate(gate: dict[str, Any], *, launch: bool) -> dict[str, Any]:
     }
 
 
+def validate_explicit_growth_snapshot(
+    health: Any,
+    *,
+    gate: dict[str, Any],
+    label: str,
+) -> dict[str, float | int]:
+    normalized = {
+        "memory_free_percent": _required_health_number(
+            health, "memory_free_percent", label=label, integer=False
+        ),
+        "process_tree_rss_bytes": _required_health_number(
+            health, "process_tree_rss_bytes", label=label, integer=True
+        ),
+        "swap_growth_bytes": _required_health_number(
+            health, "swap_growth_bytes", label=label, integer=True
+        ),
+    }
+    if (
+        normalized["memory_free_percent"]
+        < float(gate["minimum_system_free_memory_percent"])
+        or normalized["process_tree_rss_bytes"]
+        > int(gate["maximum_process_tree_rss_bytes"])
+        or normalized["swap_growth_bytes"]
+        > int(gate["maximum_swap_growth_bytes"])
+    ):
+        raise CacheReconstructionError(f"{label} crossed a runtime limit")
+    return normalized
+
+
+def validate_explicit_growth_summary(
+    health: Any,
+    *,
+    gate: dict[str, Any],
+    label: str,
+) -> dict[str, float | int]:
+    normalized = {
+        "minimum_memory_free_percent": _required_health_number(
+            health, "minimum_memory_free_percent", label=label, integer=False
+        ),
+        "peak_process_tree_rss_bytes": _required_health_number(
+            health, "peak_process_tree_rss_bytes", label=label, integer=True
+        ),
+        "peak_swap_growth_bytes": _required_health_number(
+            health, "peak_swap_growth_bytes", label=label, integer=True
+        ),
+    }
+    if (
+        normalized["minimum_memory_free_percent"]
+        < float(gate["minimum_system_free_memory_percent"])
+        or normalized["peak_process_tree_rss_bytes"]
+        > int(gate["maximum_process_tree_rss_bytes"])
+        or normalized["peak_swap_growth_bytes"]
+        > int(gate["maximum_swap_growth_bytes"])
+    ):
+        raise CacheReconstructionError(f"{label} crossed a runtime limit")
+    return normalized
+
+
 def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, Any]:
-    validate_probe_gate_contract(contract)
+    if contract.get("probe_gate") != expected_probe_gate_v2():
+        raise CacheReconstructionError("tiled v2 probe safety gate changed")
     gate = contract["probe_gate"]
-    result_path = repo_path(repo_root, gate["probe_result"])
+    result_path = repo_path(repo_root, gate["probe_result"]["path"])
     if not result_path.is_file():
         raise CacheReconstructionError(
             f"tiled one-page runtime probe is missing: {result_path}"
@@ -682,7 +955,7 @@ def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, 
         or result.get("temporary_page_outputs_retained") is not False
         or result.get("result_authority") != gate["required_result_authority"]
         or result.get("probe") != gate["required_probe"]
-        or result.get("schema_version") != 1
+        or result.get("schema_version") != gate["required_schema_version"]
         or result.get("detector", {}).get("device") != "cpu"
         or result.get("detector", {}).get("engine") != "transformers"
         or result.get("detector", {}).get("model_name")
@@ -704,21 +977,48 @@ def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, 
         raise CacheReconstructionError("tiled one-page probe limits changed")
     if result.get("thread_caps") != gate["required_thread_caps"]:
         raise CacheReconstructionError("tiled one-page probe thread caps changed")
-    validate_health_summary(
+    runtime_gate = _probe_health_gate(gate, launch=False)
+    launch_gate = _probe_health_gate(gate, launch=True)
+    _required_health_number(
+        result, "launch_swap_baseline_bytes", label="probe result", integer=True
+    )
+    launch_health = validate_explicit_growth_summary(
+        result.get("launch_health"),
+        gate=launch_gate,
+        label="probe launch health",
+    )
+    if (
+        launch_health["peak_swap_growth_bytes"] != 0
+        or result.get("launch_health", {}).get("sample_count") != 61
+        or result.get("launch_health", {}).get(
+            "stability_sample_interval_seconds"
+        )
+        != 1.0
+        or result.get("launch_health", {}).get("stability_window_seconds")
+        != 60.0
+    ):
+        raise CacheReconstructionError("probe launch stability evidence changed")
+    page_health = validate_explicit_growth_summary(
         result.get("page_health"),
-        gate=_probe_health_gate(gate, launch=False),
+        gate=runtime_gate,
         label="probe page health",
     )
-    validate_health_snapshot(
-        result.get("initial_health"),
-        gate=_probe_health_gate(gate, launch=True),
-        label="probe initial_health",
-    )
-    validate_health_snapshot(
+    post_health = validate_explicit_growth_snapshot(
         result.get("post_run_health"),
-        gate=_probe_health_gate(gate, launch=False),
+        gate=runtime_gate,
         label="probe post_run_health",
     )
+    peak_growth = _required_health_number(
+        result, "peak_swap_growth_bytes", label="probe result", integer=True
+    )
+    if peak_growth != max(
+        int(launch_health["peak_swap_growth_bytes"]),
+        int(page_health["peak_swap_growth_bytes"]),
+        int(post_health["swap_growth_bytes"]),
+    ):
+        raise CacheReconstructionError("probe peak swap growth evidence changed")
+    if sha256_file(result_path) != gate["probe_result"]["sha256"]:
+        raise CacheReconstructionError("tiled one-page runtime probe sha256 changed")
     return result
 
 
@@ -765,16 +1065,93 @@ def build_stage_command(
 
 def validate_current_launch_health(
     contract: dict[str, Any],
-) -> dict[str, float | int]:
+    *,
+    health_reader: Callable[[int], dict[str, float | int]] = runtime.runtime_health,
+) -> tuple[
+    int,
+    dict[str, float | int],
+    Callable[[int], dict[str, float | int]],
+]:
     materializer.assert_no_conflicting_model_processes()
-    health = runtime.runtime_health(os.getpid())
+    health = dict(health_reader(os.getpid()))
+    launch_swap_baseline_bytes = int(
+        _required_health_number(
+            health,
+            "swap_used_bytes",
+            label="current launch health",
+            integer=True,
+        )
+    )
+
+    def relative_reader(pid: int) -> dict[str, float | int]:
+        current = dict(health_reader(pid))
+        absolute_swap = int(
+            _required_health_number(
+                current,
+                "swap_used_bytes",
+                label="cache stage runtime health",
+                integer=True,
+            )
+        )
+        current["swap_used_bytes"] = max(
+            0, absolute_swap - launch_swap_baseline_bytes
+        )
+        return current
+
+    relative_launch = dict(health)
+    relative_launch["swap_used_bytes"] = 0
     normalized = validate_health_snapshot(
-        health,
+        relative_launch,
         gate=contract["reconstruction_gate"],
         label="current launch health",
     )
-    materializer.enforce_health_limits(health)
-    return normalized
+    runtime.enforce_health_limits(
+        relative_launch,
+        maximum_process_tree_rss_bytes=int(
+            contract["reconstruction_gate"]["maximum_process_tree_rss_bytes"]
+        ),
+        minimum_memory_free_percent=float(
+            contract["reconstruction_gate"]["minimum_system_free_memory_percent"]
+        ),
+        maximum_swap_used_bytes=int(
+            contract["reconstruction_gate"]["maximum_swap_growth_bytes"]
+        ),
+    )
+    initial_health = {
+        "memory_free_percent": normalized["memory_free_percent"],
+        "process_tree_rss_bytes": normalized["process_tree_rss_bytes"],
+    }
+    return launch_swap_baseline_bytes, initial_health, relative_reader
+
+
+def validate_post_stage_health(
+    contract: dict[str, Any],
+    health_reader: Callable[[int], dict[str, float | int]],
+) -> dict[str, float | int]:
+    materializer.assert_no_conflicting_model_processes()
+    health = health_reader(os.getpid())
+    normalized = validate_health_snapshot(
+        health,
+        gate=contract["reconstruction_gate"],
+        label="current post-run health",
+    )
+    runtime.enforce_health_limits(
+        health,
+        maximum_process_tree_rss_bytes=int(
+            contract["reconstruction_gate"]["maximum_process_tree_rss_bytes"]
+        ),
+        minimum_memory_free_percent=float(
+            contract["reconstruction_gate"]["minimum_system_free_memory_percent"]
+        ),
+        maximum_swap_used_bytes=int(
+            contract["reconstruction_gate"]["maximum_swap_growth_bytes"]
+        ),
+    )
+    return {
+        "memory_free_percent": normalized["memory_free_percent"],
+        "process_tree_rss_bytes": normalized["process_tree_rss_bytes"],
+        "swap_growth_bytes": normalized["swap_used_bytes"],
+    }
 
 
 def terminate_monitored_process_group(
@@ -813,7 +1190,7 @@ def wait_for_monitored_command(
     process: Any,
     *,
     monitor_contract: dict[str, Any],
-    health_reader: Callable[[int], dict[str, float | int]] = runtime.runtime_health,
+    health_reader: Callable[[int], dict[str, float | int]],
 ) -> dict[str, float | int]:
     monitor = validate_runtime_monitor_settings(monitor_contract)
     pid = getattr(process, "pid", None)
@@ -843,7 +1220,7 @@ def wait_for_monitored_command(
                 minimum_memory_free_percent=float(
                     monitor["minimum_system_free_memory_percent"]
                 ),
-                maximum_swap_used_bytes=int(monitor["maximum_swap_used_bytes"]),
+                maximum_swap_used_bytes=int(monitor["maximum_swap_growth_bytes"]),
             )
             try:
                 process.wait(timeout=float(monitor["monitor_interval_seconds"]))
@@ -860,7 +1237,11 @@ def wait_for_monitored_command(
         raise RuntimeError(
             f"materialization command failed ({returncode}); child process exited"
         )
-    return observed
+    return {
+        "minimum_memory_free_percent": observed["minimum_memory_free_percent"],
+        "peak_process_tree_rss_bytes": observed["peak_process_tree_rss_bytes"],
+        "peak_swap_growth_bytes": observed["peak_swap_used_bytes"],
+    }
 
 
 def run_monitored_atomic_directory_command(
@@ -871,7 +1252,7 @@ def run_monitored_atomic_directory_command(
     log_path: Path,
     monitor_contract: dict[str, Any],
     helper: Any,
-    health_reader: Callable[[int], dict[str, float | int]] = runtime.runtime_health,
+    health_reader: Callable[[int], dict[str, float | int]],
     popen_factory: Callable[..., Any] = subprocess.Popen,
 ) -> tuple[list[str], dict[str, float | int]]:
     validate_runtime_monitor_settings(monitor_contract)
@@ -915,7 +1296,8 @@ def reconstruct_stage(
     if stage not in {"primary", "second_stage"}:
         raise CacheReconstructionError(f"unsupported reconstruction stage: {stage}")
     contract = state["contract"]
-    validate_probe_pass(repo_root, contract)
+    runtime_contract = state["runtime_contract"]
+    validate_probe_pass(repo_root, runtime_contract)
     validate_reconstruction_runtime(contract)
     paths = stage_paths(repo_root, contract)
     names = expected_prediction_names(state["manifest_lines"])
@@ -937,7 +1319,11 @@ def reconstruct_stage(
         }
     log_path = repo_root / CONTROL_DIR / f"{stage}.log"
     with runtime.exclusive_run_lock(runtime.HOST_USER_RUN_LOCK_PATH):
-        initial_health = validate_current_launch_health(contract)
+        (
+            launch_swap_baseline_bytes,
+            initial_health,
+            relative_health_reader,
+        ) = validate_current_launch_health(runtime_contract)
         helper = helper_loader()
         command, runtime_health = run_monitored_atomic_directory_command(
             repo_root=repo_root,
@@ -952,14 +1338,18 @@ def reconstruct_stage(
             log_path=log_path,
             monitor_contract=state["monitor_contract"],
             helper=helper,
+            health_reader=relative_health_reader,
         )
-        post_health = validate_current_launch_health(contract)
+        post_health = validate_post_stage_health(
+            runtime_contract, relative_health_reader
+        )
     return {
         "cache": validate_reconstructed_cache(
             cache_dir, expected_names=names, expected=expected
         ),
         "command": command,
         "initial_health": initial_health,
+        "launch_swap_baseline_bytes": launch_swap_baseline_bytes,
         "post_health": post_health,
         "runtime_health": runtime_health,
         "stage": stage,
@@ -1057,8 +1447,11 @@ def verify_published_caches(
 
 def preflight_report(repo_root: Path, state: dict[str, Any]) -> dict[str, Any]:
     contract = state["contract"]
+    runtime_contract = state["runtime_contract"]
     paths = stage_paths(repo_root, contract)
-    probe_path = repo_path(repo_root, contract["probe_gate"]["probe_result"])
+    probe_gate = runtime_contract["probe_gate"]
+    probe_path = repo_path(repo_root, probe_gate["probe_result"]["path"])
+    validate_probe_pass(repo_root, runtime_contract)
     try:
         actual_runtime = current_reconstruction_runtime()
         runtime_ready = actual_runtime == contract["historical_runtime"]
@@ -1079,6 +1472,7 @@ def preflight_report(repo_root: Path, state: dict[str, Any]) -> dict[str, Any]:
         "historical_runtime_ready": runtime_ready,
         "observed_runtime": actual_runtime,
         "probe_result_present": probe_path.is_file(),
+        "probe_result_sha256": sha256_file(probe_path),
         "reconstruction_id": RECONSTRUCTION_ID,
         "result_authority": "frozen_cache_reconstruction_preflight_only",
         "static_terminal": "PASS",

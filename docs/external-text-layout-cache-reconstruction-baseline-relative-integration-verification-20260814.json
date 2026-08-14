@@ -1,0 +1,99 @@
+{
+  "authority": {
+    "cache_reconstruction_executed": false,
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "mps_used": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "cache_reconstruction_baseline_relative_integration_only",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-cache-reconstruction-baseline-relative-swap-v1.json",
+    "sha256": "a7cafb5358370585da926a99ad7d844a2cb9b5ec676dbead4803f53e35a09b12"
+  },
+  "implementation": {
+    "historical_helper": {
+      "changed": false,
+      "path": "scripts/analysis/materialize_sign_separated_train_inputs.py",
+      "sha256": "cbc3d107f9410f83d1698b17cd56c3b6121b3b698cdff7f66914ff960bcf19ec"
+    },
+    "reconstruction_script": {
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157"
+    },
+    "shared_runtime": {
+      "changed": false,
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    },
+    "test": {
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c"
+    }
+  },
+  "next_action": "Run a point-in-time static host check under the frozen Python 3.10 runtime. Only if free memory, conflict-process, cache-path, log-path, and relative-baseline gates pass may the serial primary stage execute.",
+  "preflight": {
+    "archive_paths_absent": true,
+    "build_paths_absent": true,
+    "execution_authorized": false,
+    "historical_manifest_count": 275,
+    "historical_runtime_ready": true,
+    "observed_runtime": {
+      "numpy": "2.2.6",
+      "opencv": "5.0.0",
+      "opencv_distribution": "5.0.0.93",
+      "python": "3.10.11",
+      "torch": "2.5.1"
+    },
+    "probe_result_present": true,
+    "probe_result_sha256": "1909d66f29d18ca5805fb29b8b89ac054e240bc9231b2a7fa96121466e0ad550",
+    "static_terminal": "PASS",
+    "terminal": "PREREQUISITE_NEEDED"
+  },
+  "schema_version": 1,
+  "terminal": "PASS",
+  "verification": {
+    "behaviors": {
+      "absolute_launch_swap_is_recorded_not_capped": true,
+      "exact_probe_v2_result_is_required": true,
+      "health_reader_must_be_explicit": true,
+      "negative_swap_growth_is_clamped_to_zero": true,
+      "runtime_and_post_run_evidence_use_growth_names": true,
+      "swap_growth_above_512_mib_terminates_process_group": true
+    },
+    "commands": [
+      {
+        "command": "python3.13 -m unittest tests.test_external_text_layout_frozen_cache_reconstruction -v",
+        "result": "14_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest tests.test_external_text_layout_frozen_cache_reconstruction -v",
+        "result": "14_passed"
+      },
+      {
+        "command": "python3.13 -m unittest discover -s tests -p test_external_text_layout*.py",
+        "result": "71_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON -m unittest discover -s tests -p test_external_text_layout*.py",
+        "result": "71_passed"
+      },
+      {
+        "command": "source .env && $ENSEXAM_PYTHON scripts/analysis/reconstruct_external_text_layout_frozen_caches.py --stage preflight",
+        "result": "static_pass_execution_closed"
+      },
+      {
+        "command": "git diff --check",
+        "result": "passed"
+      }
+    ],
+    "python": [
+      "3.13.1",
+      "3.10.11"
+    ]
+  }
+}
