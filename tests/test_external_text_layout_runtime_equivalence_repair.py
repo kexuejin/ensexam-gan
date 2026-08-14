@@ -11,6 +11,7 @@ from unittest import mock
 
 import scripts.analysis.materialize_external_text_layout_support_train_only as materializer
 from scripts.analysis import external_text_layout_transformers_runtime_repair as repair
+from scripts.analysis import external_text_layout_tiled_9x9_runtime_repair as tiled_repair
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -351,7 +352,7 @@ class ExternalTextLayoutRuntimeEquivalenceRepairTest(unittest.TestCase):
         with (
             mock.patch.object(
                 materializer,
-                "apply_runtime_equivalence_repair",
+                "apply_tiled_9x9_runtime_repair",
                 side_effect=apply_repair,
             ),
             mock.patch.dict(sys.modules, {"paddleocr": paddleocr}),
@@ -369,13 +370,13 @@ class ExternalTextLayoutRuntimeEquivalenceRepairTest(unittest.TestCase):
         with (
             mock.patch.object(
                 materializer,
-                "apply_runtime_equivalence_repair",
-                side_effect=repair.RuntimeEquivalenceRepairError("source drift"),
+                "apply_tiled_9x9_runtime_repair",
+                side_effect=tiled_repair.Tiled9x9RuntimeRepairError("source drift"),
             ),
             mock.patch.dict(sys.modules, {"paddleocr": paddleocr}),
             self.assertRaisesRegex(
                 materializer.MaterializationError,
-                "runtime equivalence repair failed",
+                "tiled 9x9 runtime repair failed",
             ),
         ):
             materializer.create_detector(

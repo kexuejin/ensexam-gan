@@ -1072,6 +1072,8 @@ tiled 9x9 fake verification: docs/external-text-layout-tiled-9x9-runtime-repair-
 tiled 9x9 verification decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-runtime-repair-verification-pass.md
 tiled 9x9 one-page contract: docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json
 tiled 9x9 one-page decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md
+tiled 9x9 integration verification: docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json
+tiled 9x9 integration decision: docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md
 cache reconstruction contract: docs/external-text-layout-frozen-cache-reconstruction-v1.json
 cache reconstruction decision: docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md
 runtime restoration report: docs/external-text-layout-historical-runtime-restoration-20260814.json
@@ -1082,11 +1084,12 @@ inner-val15 / development / promotion: disabled / disabled / disabled
 runtime status: the only clean-baseline repaired page crossed the free-memory floor at 26.0% and swap cap at 2,973,562,306 bytes; peak process-tree RSS 5,643,206,656 bytes; no formal evidence or residual model process
 static finding: limit_type=min preserves the large page at 2432x1728 after 32-pixel rounding; full-resolution 9x9 neck work and duplicate upsample construction are concrete but unproven memory-risk contributors
 runtime repair: hash/version/AST-bound in-memory forward replacement removes only the overwritten first upsample construction and remains statically equivalent, but its only authorized clean-baseline probe KILLed the exact repeat path as empirically unsafe
-tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold comparison bound from 21,785,739,264 to 201,719,808 bytes; four exact CPU float32 fake cases covering 256-to-64 and 64-to-64 are bitwise equal with maximum error 0.0; real detector integration remains disabled
-tiled one-page authorization: bounded integration is allowed now; exactly one target-free hw5k_1011.jpg attempt is allowed only after the integration commit and every launch gate passes; any non-PASS terminal closes the exact tiled path
+tiled 9x9 successor: four-row spatial tiles reduce the highest projection unfold comparison bound from 21,785,739,264 to 201,719,808 bytes; four exact CPU float32 fake cases covering 256-to-64 and 64-to-64 are bitwise equal with maximum error 0.0; real detector execution remains disabled
+tiled one-page authorization: bounded integration is complete; exactly one target-free hw5k_1011.jpg attempt is allowed only after every launch gate passes; any non-PASS terminal closes the exact tiled path
+tiled integration: PASS with 61/61 external-text-layout tests under Python 3.13.1 and 61/61 under Python 3.10.11; contract/source/result hashes, stricter limits, thread caps, parent-plus-child Simulator checks, RUNNING sentinel, non-overwrite, cleanup, and synthetic PASS behavior are verified without detector execution
 cache recovery: original build paths, archived manifest, exact historical runtime and metrics/prediction hashes, then relative archive symlinks; static preflight PASS with historical_runtime_ready=true and execution_authorized=false
-current host gate: 86% free memory and 1,810.69 MiB swap used; repaired probe terminal KILL for the exact runtime path and all model execution prohibited
-next action: integrate only the hash-bound tiled repair and stricter safeguards; do not execute until the integration is committed and swap is at most 512 MiB with every other launch gate passing
+current host gate: 86% free memory, 1,778.69 MiB swap used, zero Booted iOS Simulators, and tiled result absent; model execution prohibited while swap exceeds 512 MiB
+next action: preserve the integrated hashes and wait; when every launch gate passes, run exactly one target-free hw5k_1011.jpg attempt and never overwrite or repeat after the result path exists
 ```
 
 This is the first registered support producer trained outside the EnsExam-GAN
@@ -1120,7 +1123,10 @@ lower-memory full-resolution `9x9` path now PASS: four-row tiles preserve
 tested CPU float32 values bitwise while reducing the highest projection unfold
 comparison bound by `108x`. The result does not establish full-map backend
 identity, timeout, or host peak memory. A separate one-page contract now binds
-the exact implementation and test hashes, authorizes only bounded integration,
-and keeps detector execution disabled until the integration is committed and
-every host launch gate passes. The resulting probe is exactly one attempt;
-any non-PASS terminal closes this tiled path without retry.
+the exact implementation and test hashes. Its bounded integration now PASSes
+under both registered Python environments without detector execution. The
+probe requires stricter resource limits, fixed thread caps, parent and child
+Simulator checks, and an atomic `RUNNING` sentinel before page start. Detector
+execution remains disabled until every host launch gate passes. The resulting
+probe is exactly one attempt; any non-PASS terminal or existing result closes
+this tiled path without retry.

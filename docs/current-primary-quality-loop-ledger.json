@@ -384,11 +384,11 @@
       },
       {
         "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
-        "sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+        "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
       },
       {
         "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
-        "sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+        "sha256": "8b6c563a7e9f5d879cc962b35fcc6ede15ce341a5f790fc49233cda9d235b43e"
       },
       {
         "path": "scripts/analysis/report_external_text_layout_static_memory_risk.py",
@@ -396,7 +396,7 @@
       },
       {
         "path": "tests/test_external_text_layout_runtime_safety_probe.py",
-        "sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c"
+        "sha256": "9f075754889dd637432f9beac93c4fe68dd3d96f049b2497dec454f8f4573545"
       },
       {
         "path": "tests/test_external_text_layout_static_memory_risk.py",
@@ -404,7 +404,7 @@
       },
       {
         "path": "tests/test_external_text_layout_support_prerequisite.py",
-        "sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131"
+        "sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2"
       },
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-runtime-equivalence-repair-preregistration.md",
@@ -420,11 +420,11 @@
       },
       {
         "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
-        "sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5"
+        "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
       },
       {
         "path": "tests/test_external_text_layout_runtime_equivalence_repair.py",
-        "sha256": "0c2805198d406e612f3ac395f55fa226e92556da900b0d43d001dabd10a16894"
+        "sha256": "bf7146eebda2faab88986c1ce5286ad5a111b8e048a2f485cb2dd0b69465b9a8"
       },
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-frozen-cache-reconstruction-preregistration.md",
@@ -501,12 +501,20 @@
       {
         "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-safety-probe-preregistration.md",
         "sha256": "3cdaecefc5514e2af03582379244c2266b99523556ecb1597097084575f4f3d0"
+      },
+      {
+        "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+        "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md",
+        "sha256": "7ec16e150b161682257869f68cc34054fb00a0c6e2f5d761853dd9253a46de11"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The hash-bound one-page integration and safety-probe contract is preregistered. Integrate only the combined tiled 9x9 repair, probe-specific 45% free-memory and 8 GiB process-tree RSS limits, Booted iOS Simulator rejection before detector import, and the new contract/result bindings. Keep model execution disabled until the integration is committed and every launch gate passes, including at least 70% free memory, at most 512 MiB swap, zero Booted simulators, no conflicting model process, and an absent result path. Then allow exactly one target-free hw5k_1011.jpg attempt; any non-PASS terminal closes this exact tiled path without retry. Cache reconstruction, formal materialization, optimizer, candidate, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The hash-bound one-page integration PASSed 61 external-text-layout tests in both registered Python 3.13.1 and historical Python 3.10.11 without detector execution. The materializer now applies only the combined tiled repair; the probe enforces 70% launch and 45% runtime free-memory floors, an 8 GiB process-tree RSS cap, 512 MiB swap cap, thread caps, parent and child Booted Simulator checks, and an atomic non-repeatable RUNNING sentinel. Keep model execution disabled while swap exceeds 512 MiB; current measured swap is 1,778.69 MiB with 86% free memory, zero Booted simulators, and an absent result path. When every launch gate passes, allow exactly one target-free hw5k_1011.jpg attempt. Any non-PASS terminal or existing result closes this exact tiled path. Cache reconstruction, formal materialization, optimizer, candidate, quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -604,7 +612,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending the exact preregistered tiled one-page safety probe and frozen-cache reconstruction. The contract permits only bounded integration of the combined tiled 9x9 repair and stricter safeguards, followed by exactly one target-free hw5k_1011.jpg attempt after the integration is committed and all launch gates pass. Current swap is 1,810.69 MiB versus the unchanged 512 MiB maximum, so model execution remains disabled. Full-map backend identity, 406-call timeout, and host peak memory remain unknown; any non-PASS terminal closes this exact tiled path without retry. Historical cache reconstruction remains blocked on a successful safety probe.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe and frozen-cache reconstruction. Bounded integration PASSed: the combined tiled repair, stricter 70% launch and 45% runtime free-memory floors, 8 GiB process-tree RSS cap, 512 MiB swap cap, mandatory thread caps, parent-plus-child Booted Simulator rejection, exact contract/source/result binding, non-overwrite behavior, and crash-durable RUNNING sentinel pass 61 external-text-layout tests under both registered runtimes. No detector executed. Current swap is 1,778.69 MiB, so the single hw5k_1011.jpg attempt remains disabled. Full-map backend identity, 406-call timeout, and host peak memory remain unknown; any non-PASS terminal or existing result closes this exact tiled path without retry. Historical cache reconstruction remains blocked on a successful safety probe.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       }
@@ -1972,6 +1980,42 @@
       "outcome": "exactly_one_target_free_hw5k_1011_attempt_is_frozen_behind_bounded_integration_and_stricter_launch_and_runtime_resource_gates",
       "repeat_policy": "integrate_exactly_as_frozen_then_execute_once_only_after_all_launch_gates_pass; any_non_pass_terminal_closes_the_exact_tiled_path",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-safety-probe-v1.json",
+          "sha256": "1fd02d49250150f85ce190601b21b36d60a308ef92b07e564c8a21575124aee4"
+        },
+        {
+          "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+          "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+        },
+        {
+          "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+          "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+        },
+        {
+          "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+          "sha256": "8b6c563a7e9f5d879cc962b35fcc6ede15ce341a5f790fc49233cda9d235b43e"
+        },
+        {
+          "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+          "sha256": "9f075754889dd637432f9beac93c4fe68dd3d96f049b2497dec454f8f4573545"
+        },
+        {
+          "path": "docs/external-text-layout-tiled-9x9-one-page-integration-verification-20260814.json",
+          "sha256": "1572b890b76837aa5448d463abb13b9cd152d10c76f22655023ebae004322731"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-tiled-9x9-one-page-integration-pass.md",
+          "sha256": "7ec16e150b161682257869f68cc34054fb00a0c6e2f5d761853dd9253a46de11"
+        }
+      ],
+      "id": "external-text-layout-tiled-9x9-one-page-integration",
+      "outcome": "hash_bound_tiled_repair_and_fail_closed_one_attempt_probe_integration_passed_61_tests_in_both_registered_python_environments_without_model_execution",
+      "repeat_policy": "wait_for_every_launch_gate_then_run_exactly_once; never_overwrite_or_repeat_after_the_result_path_exists",
+      "terminal": "PASS"
     }
   ],
   "schema_version": 1

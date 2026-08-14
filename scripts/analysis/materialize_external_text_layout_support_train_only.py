@@ -26,9 +26,9 @@ from scripts.analysis.build_sign_separated_residual_patch_index import (  # noqa
     effective_train_filenames,
 )
 from scripts.analysis import external_text_layout_materialization_runtime as runtime  # noqa: E402
-from scripts.analysis.external_text_layout_transformers_runtime_repair import (  # noqa: E402
-    RuntimeEquivalenceRepairError,
-    apply_runtime_equivalence_repair,
+from scripts.analysis.external_text_layout_tiled_9x9_runtime_repair import (  # noqa: E402
+    Tiled9x9RuntimeRepairError,
+    apply_tiled_9x9_runtime_repair,
 )
 
 
@@ -559,10 +559,10 @@ def extract_result(result: Any) -> tuple[Any, Any]:
 
 def create_detector(spec: dict[str, Any]) -> Any:
     try:
-        apply_runtime_equivalence_repair()
-    except RuntimeEquivalenceRepairError as error:
+        apply_tiled_9x9_runtime_repair()
+    except Tiled9x9RuntimeRepairError as error:
         raise MaterializationError(
-            "Transformers detector runtime equivalence repair failed"
+            "Transformers detector tiled 9x9 runtime repair failed"
         ) from error
     try:
         from paddleocr import TextDetection
@@ -739,8 +739,11 @@ def materialize_page_child(
     source_path_value: str,
     page_dir_value: str,
     record_path_value: str,
+    reject_booted_ios_simulators: bool,
 ) -> None:
     os.setsid()
+    if reject_booted_ios_simulators:
+        runtime.assert_no_booted_ios_simulators()
     detector = create_detector(spec)
     try:
         row = materialize_one(
@@ -761,8 +764,17 @@ def wait_for_page_process(
     process: multiprocessing.Process,
     *,
     health_reader: Callable[[int], dict[str, float | int]] = runtime_health,
+    maximum_process_tree_rss_bytes: int = MAX_DETECTOR_RSS_BYTES,
+    minimum_memory_free_percent: float = MIN_MEMORY_FREE_PERCENT,
+    maximum_swap_used_bytes: int = MAX_SWAP_USED_BYTES,
 ) -> dict[str, float | int]:
-    return runtime.wait_for_page_process(process, health_reader=health_reader)
+    return runtime.wait_for_page_process(
+        process,
+        health_reader=health_reader,
+        maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
+        minimum_memory_free_percent=minimum_memory_free_percent,
+        maximum_swap_used_bytes=maximum_swap_used_bytes,
+    )
 
 
 def run_isolated_page(
@@ -772,15 +784,31 @@ def run_isolated_page(
     source_path: Path,
     page_dir: Path,
     record_path: Path,
+    maximum_process_tree_rss_bytes: int = MAX_DETECTOR_RSS_BYTES,
+    minimum_memory_free_percent: float = MIN_MEMORY_FREE_PERCENT,
+    maximum_swap_used_bytes: int = MAX_SWAP_USED_BYTES,
+    reject_booted_ios_simulators: bool = False,
 ) -> dict[str, float | int]:
     context = multiprocessing.get_context("spawn")
     process = context.Process(
         target=materialize_page_child,
-        args=(spec, file_name, str(source_path), str(page_dir), str(record_path)),
+        args=(
+            spec,
+            file_name,
+            str(source_path),
+            str(page_dir),
+            str(record_path),
+            reject_booted_ios_simulators,
+        ),
         daemon=False,
     )
     process.start()
-    return wait_for_page_process(process)
+    return wait_for_page_process(
+        process,
+        maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
+        minimum_memory_free_percent=minimum_memory_free_percent,
+        maximum_swap_used_bytes=maximum_swap_used_bytes,
+    )
 
 
 def run_in_process_page(

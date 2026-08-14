@@ -223,6 +223,53 @@ def assert_no_conflicting_model_processes(
         )
 
 
+def booted_ios_simulator_count(output: str | None = None) -> int:
+    if output is None:
+        try:
+            result = subprocess.run(
+                ["xcrun", "simctl", "list", "devices", "booted", "--json"],
+                check=True,
+                capture_output=True,
+                text=True,
+                timeout=SYSTEM_COMMAND_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.SubprocessError) as error:
+            raise MaterializationError(
+                "could not inspect Booted iOS Simulators"
+            ) from error
+        output = result.stdout
+    try:
+        payload = json.loads(output)
+    except json.JSONDecodeError as error:
+        raise MaterializationError("could not parse Booted iOS Simulators") from error
+    devices = payload.get("devices") if isinstance(payload, dict) else None
+    if not isinstance(devices, dict):
+        raise MaterializationError("Booted iOS Simulator inventory changed")
+    count = 0
+    for runtime_devices in devices.values():
+        if not isinstance(runtime_devices, list):
+            raise MaterializationError("Booted iOS Simulator inventory changed")
+        for device in runtime_devices:
+            if not isinstance(device, dict) or not isinstance(device.get("state"), str):
+                raise MaterializationError("Booted iOS Simulator inventory changed")
+            if device["state"] == "Booted":
+                count += 1
+    return count
+
+
+def assert_no_booted_ios_simulators(
+    counter: Callable[[], int] | None = None,
+) -> int:
+    count = (counter or booted_ios_simulator_count)()
+    if isinstance(count, bool) or not isinstance(count, int) or count < 0:
+        raise MaterializationError("Booted iOS Simulator count is invalid")
+    if count != 0:
+        raise MaterializationError(
+            f"Booted iOS Simulator must be zero before detector import: {count}"
+        )
+    return count
+
+
 def parse_memory_free_percent(output: str) -> float:
     match = re.search(r"System-wide memory free percentage:\s*([0-9.]+)%", output)
     if match is None:
@@ -328,26 +375,36 @@ def enforce_health_limits(
     health: dict[str, float | int],
     *,
     observed_health: dict[str, float | int] | None = None,
+    maximum_process_tree_rss_bytes: int = MAX_DETECTOR_RSS_BYTES,
+    minimum_memory_free_percent: float = MIN_MEMORY_FREE_PERCENT,
+    maximum_swap_used_bytes: int = MAX_SWAP_USED_BYTES,
 ) -> None:
+    if (
+        maximum_process_tree_rss_bytes > MAX_DETECTOR_RSS_BYTES
+        or minimum_memory_free_percent < MIN_MEMORY_FREE_PERCENT
+        or maximum_swap_used_bytes > MAX_SWAP_USED_BYTES
+    ):
+        raise MaterializationError("health limit override would weaken shared defaults")
     rss = int(health["process_tree_rss_bytes"])
     free = float(health["memory_free_percent"])
     swap = int(health["swap_used_bytes"])
     observed = observed_health or health_summary(health)
-    if rss > MAX_DETECTOR_RSS_BYTES:
+    if rss > maximum_process_tree_rss_bytes:
         raise ResourceLimitError(
-            f"detector RSS safety limit exceeded: {rss} > {MAX_DETECTOR_RSS_BYTES}",
+            "detector RSS safety limit exceeded: "
+            f"{rss} > {maximum_process_tree_rss_bytes}",
             trigger_health=health,
             observed_health=observed,
         )
-    if free < MIN_MEMORY_FREE_PERCENT:
+    if free < minimum_memory_free_percent:
         raise ResourceLimitError(
             f"system memory safety limit crossed: {free:.1f}% free",
             trigger_health=health,
             observed_health=observed,
         )
-    if swap > MAX_SWAP_USED_BYTES:
+    if swap > maximum_swap_used_bytes:
         raise ResourceLimitError(
-            f"swap safety limit exceeded: {swap} > {MAX_SWAP_USED_BYTES}",
+            f"swap safety limit exceeded: {swap} > {maximum_swap_used_bytes}",
             trigger_health=health,
             observed_health=observed,
         )
@@ -577,6 +634,9 @@ def wait_for_page_process(
     process: Any,
     *,
     health_reader: Callable[[int], dict[str, float | int]] = runtime_health,
+    maximum_process_tree_rss_bytes: int = MAX_DETECTOR_RSS_BYTES,
+    minimum_memory_free_percent: float = MIN_MEMORY_FREE_PERCENT,
+    maximum_swap_used_bytes: int = MAX_SWAP_USED_BYTES,
 ) -> dict[str, float | int]:
     if process.pid is None:
         raise MaterializationError("detector process did not start")
@@ -592,7 +652,13 @@ def wait_for_page_process(
         while process.is_alive():
             health = health_reader(process.pid)
             observed = health_summary(health, observed)
-            enforce_health_limits(health, observed_health=observed)
+            enforce_health_limits(
+                health,
+                observed_health=observed,
+                maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
+                minimum_memory_free_percent=minimum_memory_free_percent,
+                maximum_swap_used_bytes=maximum_swap_used_bytes,
+            )
             if time.monotonic() - started > PAGE_TIMEOUT_SECONDS:
                 raise MaterializationError("detector page timeout exceeded")
             process.join(timeout=MONITOR_INTERVAL_SECONDS)

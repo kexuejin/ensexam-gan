@@ -609,6 +609,48 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
             with self.assertRaises(MaterializationError):
                 enforce_health_limits(changed)
 
+    def test_probe_limits_may_strengthen_but_never_weaken_shared_defaults(self) -> None:
+        strict = {
+            "memory_free_percent": 44.9,
+            "process_tree_rss_bytes": 100,
+            "swap_used_bytes": 0,
+        }
+        with self.assertRaisesRegex(MaterializationError, "memory safety"):
+            enforce_health_limits(
+                strict,
+                maximum_process_tree_rss_bytes=8 * 1024**3,
+                minimum_memory_free_percent=45.0,
+                maximum_swap_used_bytes=512 * 1024**2,
+            )
+        with self.assertRaisesRegex(MaterializationError, "weaken shared defaults"):
+            enforce_health_limits(
+                {**strict, "memory_free_percent": 80.0},
+                maximum_process_tree_rss_bytes=11 * 1024**3,
+            )
+
+    def test_booted_ios_simulator_inventory_is_structured_and_fail_closed(self) -> None:
+        inventory = json.dumps(
+            {
+                "devices": {
+                    "iOS 26.2": [
+                        {"name": "iPhone", "state": "Booted"},
+                        {"name": "iPad", "state": "Shutdown"},
+                    ],
+                    "iOS 25.0": [{"name": "Older", "state": "Booted"}],
+                }
+            }
+        )
+        self.assertEqual(
+            materializer.runtime.booted_ios_simulator_count(inventory), 2
+        )
+        with self.assertRaisesRegex(MaterializationError, "inventory changed"):
+            materializer.runtime.booted_ios_simulator_count('{"devices":[]}')
+        with self.assertRaisesRegex(MaterializationError, "must be zero"):
+            materializer.runtime.assert_no_booted_ios_simulators(lambda: 1)
+        self.assertEqual(
+            materializer.runtime.assert_no_booted_ios_simulators(lambda: 0), 0
+        )
+
     def test_process_tree_rss_includes_all_descendants(self) -> None:
         output = "1 0 10\n2 1 20\n3 2 30\n4 0 40\n"
         self.assertEqual(process_tree_rss_bytes(1, output), 60 * 1024)
@@ -661,6 +703,70 @@ class ExternalTextLayoutSupportTest(unittest.TestCase):
                 "peak_swap_used_bytes": 20,
             },
         )
+
+    def test_probe_specific_monitor_limits_terminate_before_shared_floor(self) -> None:
+        class FakeProcess:
+            pid = 123
+            exitcode = None
+
+            def is_alive(self) -> bool:
+                return True
+
+            def join(self, timeout=None) -> None:
+                del timeout
+
+        process = FakeProcess()
+        health = {
+            "memory_free_percent": 44.9,
+            "process_tree_rss_bytes": 100,
+            "swap_used_bytes": 0,
+        }
+        with mock.patch.object(materializer.runtime, "terminate_page_process") as terminate:
+            with self.assertRaisesRegex(MaterializationError, "memory safety"):
+                wait_for_page_process(
+                    process,
+                    health_reader=lambda _pid: health,
+                    maximum_process_tree_rss_bytes=8 * 1024**3,
+                    minimum_memory_free_percent=45.0,
+                    maximum_swap_used_bytes=512 * 1024**2,
+                )
+        terminate.assert_called_once_with(process)
+
+    def test_probe_child_checks_simulator_before_detector_import(self) -> None:
+        events: list[str] = []
+        detector = mock.Mock()
+
+        def simulator_check() -> int:
+            events.append("simulator")
+            return 0
+
+        def detector_factory(_spec):
+            events.append("detector")
+            return detector
+
+        with (
+            mock.patch.object(materializer.os, "setsid"),
+            mock.patch.object(
+                materializer.runtime,
+                "assert_no_booted_ios_simulators",
+                side_effect=simulator_check,
+            ),
+            mock.patch.object(
+                materializer, "create_detector", side_effect=detector_factory
+            ),
+            mock.patch.object(materializer, "materialize_one", return_value={}),
+            mock.patch.object(materializer, "atomic_write_json"),
+        ):
+            materializer.materialize_page_child(
+                {},
+                "page.png",
+                "/source/page.png",
+                "/pages",
+                "/records/page.json",
+                True,
+            )
+
+        self.assertEqual(events, ["simulator", "detector"])
 
     def test_resume_rejects_progress_provenance_drift(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
