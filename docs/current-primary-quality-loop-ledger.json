@@ -713,12 +713,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-archive-publication-pass.md",
         "sha256": "49623950c1559e4687b88e8bf636e891331ffa29c9d87365931e136e28a976f4"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-input-v1.json",
+        "sha256": "41e84182e85ae85fcaae3fd52253d9ef8bc29a8af21d04a60928db15cb61bdb0"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-input-preregistration.md",
+        "sha256": "0e409ee90caaae3d5b6c4a647ea934e5155c371a33dbbed04cb1b74d06722f46"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Preregister a recovered-input adapter for external text-layout materialization. Preserve docs/external-text-layout-support-prerequisite-v1.json and all detector, runtime, source, manifest, feature, output, health, and acceptance settings unchanged; bind the recovered archive PASS and exact canonical links; replace only second_stage_metrics validation from historical b800 to recovered 79fd plus exact 2ffa/275 predictions. Implementation and synthetic verification may open only after preregistration. Real materialization remains closed until separate adapter integration PASS is committed and pushed; diagnostic, quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "Implement only the preregistered recovered-input adapter inside the existing external text-layout materializer and tests. Keep the original plan byte-exact; validate overlay, archive PASS, canonical links, recovered 79fd metrics, exact 2ffa/275 predictions, and ledger before detector creation; prove the effective plan differs at only evidence.second_stage_metrics.sha256; bind original-plan and overlay hashes in every materialization manifest and resume path; preserve legacy programmatic behavior without overlay. Run focused and complete external-text-layout tests in Python 3.13.1 and 3.10.11. Do not execute real materialization until separate adapter integration PASS is committed and pushed; diagnostic and all quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -918,6 +926,11 @@
       {
         "detail": "The single authorized no-model publisher created only the two canonical relative archive links and atomic PASS result. Exact 275-name validation proves linked primary efd588/6400 and recovered second-stage 79fd/2ffa identities equal their immutable sources; publishing temporaries are absent. Historical b800 remains unreproduced, so only a separate recovered-input materializer preregistration is open.",
         "id": "external_text_layout_recovered_archive_publication",
+        "status": "passed"
+      },
+      {
+        "detail": "A recovered-input adapter now freezes the original materializer plan byte-for-byte and permits exactly one in-memory evidence hash substitution from historical b800 to audited 79fd. It binds the archive PASS, canonical links, exact 2ffa/275 predictions, and dual plan/overlay manifest provenance while preserving every detector, runtime, source, feature, output, health, and acceptance setting. Only implementation and synthetic verification are open.",
+        "id": "external_text_layout_recovered_materializer_input_preregistration",
         "status": "passed"
       }
     ],

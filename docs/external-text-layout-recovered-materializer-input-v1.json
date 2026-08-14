@@ -1,0 +1,109 @@
+{
+  "authority": {
+    "adapter_implementation_and_synthetic_verification": true,
+    "candidate_inference": false,
+    "formal_external_layout_materialization_execution": false,
+    "model_execution": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "recovered_materializer_input_integration_only",
+    "training": false
+  },
+  "evidence": {
+    "archive_publication_result": {
+      "path": "outputs/external-text-layout-recovered-archive-publication-20260815/result.json",
+      "sha256": "0f0bd291df5ef6c230835c9102a13e3425bafe17a964f5bba0e1610adf97e5ab"
+    },
+    "archive_publication_verification": {
+      "path": "docs/external-text-layout-recovered-archive-publication-verification-20260815.json",
+      "sha256": "d98d250185b4493053664de800b195af3b635bdb1e77a50b9c74ab622add8f7a"
+    },
+    "original_plan": {
+      "path": "docs/external-text-layout-support-prerequisite-v1.json",
+      "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+    }
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "tests/test_external_text_layout_support_prerequisite.py"
+    ],
+    "materializer_sha256_before": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf",
+    "new_dependency": false,
+    "site_packages_write": false,
+    "test_sha256_before": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2"
+  },
+  "input_overlay": {
+    "effective_second_stage_identity": {
+      "metrics_sha256": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      },
+      "provenance": "semantic_equivalence_audit_pass_not_historical_payload_reproduction"
+    },
+    "historical_identity": {
+      "metrics_payload_present": false,
+      "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+      "status": "not_reproduced"
+    },
+    "only_effective_plan_change": {
+      "after": "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
+      "before": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+      "json_path": "evidence.second_stage_metrics.sha256",
+      "path_unchanged": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/metrics.csv"
+    },
+    "required_archive_links": {
+      "primary": {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+        "target": "../../sign-separated-residual-repair-train275-primary-v1"
+      },
+      "second_stage": {
+        "path": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+        "target": "../../sign-separated-residual-repair-train275-frozen-pipeline-v1"
+      }
+    }
+  },
+  "invariants": {
+    "acceptance_contract_unchanged": true,
+    "data_and_manifest_contract_unchanged": true,
+    "detector_model_and_thresholds_unchanged": true,
+    "feature_and_ablation_contract_unchanged": true,
+    "health_limits_and_single_process_execution_unchanged": true,
+    "original_plan_file_unchanged": true,
+    "output_paths_and_transaction_protocol_unchanged": true,
+    "runtime_identity_unchanged": true,
+    "target_and_quality_access_unchanged": true
+  },
+  "manifest_provenance": {
+    "field": "input_evidence_overlay",
+    "required": true,
+    "value": {
+      "path": "docs/external-text-layout-recovered-materializer-input-v1.json",
+      "sha256_source": "materializer_expected_overlay_sha256_constant"
+    }
+  },
+  "output_state": {
+    "cleanup_present": false,
+    "final_present": false,
+    "published_marker_present": false,
+    "temporary_present": false
+  },
+  "required_verification": [
+    "wrong_overlay_plan_archive_result_verification_link_or_cache_identity_rejected_before_detector_creation",
+    "effective_plan_diff_is_exactly_one_second_stage_metrics_sha256_value",
+    "legacy_programmatic_calls_without_overlay_keep_existing_behavior",
+    "cli_defaults_to_the_exact_recovered_overlay",
+    "materialization_manifest_binds_original_plan_and_recovered_overlay_hashes",
+    "resume_and_published_validation_require_the_same_overlay",
+    "detector_runtime_source_feature_output_health_and_acceptance_contracts_unchanged",
+    "preintegration_real_cli_rejects_before_detector_creation_and_output_mutation",
+    "focused_and_complete_external_text_layout_tests_in_python_3_13_1_and_3_10_11"
+  ],
+  "schema_version": 1,
+  "state": "preregistered_recovered_materializer_input",
+  "terminal": "PREREQUISITE_NEEDED"
+}
