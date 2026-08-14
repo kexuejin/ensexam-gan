@@ -777,12 +777,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-formal-memory-launch-v5-preregistration.md",
         "sha256": "d561487007a4fa731fab8caa0a93fb90db22162d544c5e95564c1e83813f601a"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-formal-memory-launch-v5-integration-verification-20260815.json",
+        "sha256": "0fcfc659fdb57ce63bc3e98b3c4915a3d6854e83778679fd54572b9c23d5d0b9"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-formal-memory-launch-v5-integration-pass.md",
+        "sha256": "0da6c82987d2d0c6618920cdb5d977358db6e4ff52d70d10b43e2a715d9c191f"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Implement only the preregistered launcher v5 formal-memory correction and focused tests. Keep launch readiness at 70% free memory but restore the unchanged shared formal runtime floor from the one-page probe-specific 45% to 35%. Preserve formal 10 GiB RSS, 0.25-second monitoring, 512 MiB swap-growth termination, CPU one-page isolation, child Simulator recheck, 15-minute timeout, exact 39d5 plan, and all eight retained page/record hashes. Prove 39% is allowed and below 35% still terminates. Do not resume from hw5k_1214 until dual-runtime v5 integration PASS is committed and pushed; diagnostic and quality surfaces remain closed.",
+    "next_action": "Commit and push the launcher v5 integration PASS, then resume from hw5k_1214 with the exact project Python 3.13 executable and four thread caps set to one. Require 70% locked launch readiness, the formal 35% runtime free-memory floor, 10 GiB RSS cap, 0.25-second monitoring, 512 MiB swap-growth termination, CPU one-page isolation, Simulator recheck, timeout, exact 39d5 plan, and all eight retained page/record hashes. Preserve completed records after any stop. Require schema-v5 PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1022,6 +1030,11 @@
       {
         "detail": "The pushed v4 launcher resumed without recomputing page one and completed pages 2 through 8, then safely terminated page 9 when free memory reached 39% because v4 still used the one-page probe's 45% runtime floor instead of the unchanged shared formal 35% floor. Post-stop free memory recovered to 69%, swap growth is exactly zero, no model process remains, and all eight NPZ/record content sets are hash-bound. V5 may only restore the formal 35% runtime floor while keeping 70% launch readiness and every v4 RSS, interval, swap, CPU, Simulator, timeout, restoration, and resume boundary. Implementation and tests are open; detector resume is closed until v5 integration PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_formal_memory_launch_v5_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "V5 passed 15 focused and 124 complete external-layout tests in Python 3.13.1 and 3.10.11. Launch readiness remains 70%, observed 39% runtime free memory passes under the unchanged formal 35% floor, 34.9% terminates the process group, and all formal RSS, interval, swap, CPU, Simulator, timeout, restoration, and resume limits remain exact. Shared hashes and all eight retained page/record pairs are unchanged after a closed-authority schema-v5 probe. Resume from hw5k_1214 is authorized only after this PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_formal_memory_launch_v5_integration",
         "status": "passed"
       }
     ],

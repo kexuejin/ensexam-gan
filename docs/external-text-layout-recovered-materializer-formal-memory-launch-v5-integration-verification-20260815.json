@@ -1,0 +1,59 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": true,
+    "model_execution": "frozen_target_free_cpu_detector_only",
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_launcher_v5_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-recovered-materializer-formal-memory-launch-v5.json",
+    "sha256": "f15bcd18157235fc5957a1674d205fd338c8bec2b558df2a3eb7fc2324405498"
+  },
+  "implementation": {
+    "launcher_sha256": "ea223d28590b0bcce07dab7c546be6af1d0c91ba95f2cba61c9ae67d8e548361",
+    "launcher_test_sha256": "65748b00acbe2cebb6342aab345dd99b3eb862bca66a0b7c5b33e9117c1ab717",
+    "shared_materializer_sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf",
+    "shared_materializer_test_sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2",
+    "shared_runtime_sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+  },
+  "limits": {
+    "launch_memory_free_percent_min": 70.0,
+    "launch_process_tree_rss_bytes_max": 8589934592,
+    "runtime_memory_free_percent_min": 35.0,
+    "runtime_monitor_interval_seconds": 0.25,
+    "runtime_process_tree_rss_bytes_max": 10737418240,
+    "runtime_swap_growth_bytes_max": 536870912
+  },
+  "retained_resume_state": {
+    "next_file": "hw5k_1214.jpg",
+    "pages_content_sha256": "6f64c927663e0882d3f2780ad8ec88115d529985a0a4b691a525485642eb1bcf",
+    "pages_count": 8,
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "94a06c2bd2a2a7f00c4ce2fd4d02b46805e2425fe27a27d2631e239e73ab2691",
+    "records_count": 8
+  },
+  "verification": {
+    "closed_authority_probe": {
+      "changed_resume_state": false,
+      "exit_code": 2,
+      "schema_version": 5,
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    "complete_external_layout_tests": {
+      "python_3_10_11": "124_passed",
+      "python_3_13_1": "124_passed"
+    },
+    "compile_check": "passed_both_runtimes",
+    "diff_check": "passed",
+    "focused_tests": {
+      "python_3_10_11": "15_passed",
+      "python_3_13_1": "15_passed"
+    },
+    "runtime_memory_boundary": "39_percent_allowed_and_34_9_percent_terminated",
+    "shared_hashes_unchanged": true
+  },
+  "next_action": "Commit and push, then resume from hw5k_1214 with the exact project Python 3.13 executable and four thread caps set to one. Preserve completed records after any stop. Require schema-v5 PASS, exact 39d5 plan binding, all 275 NPZ hashes, zero residual model processes, and no transaction residue before recording materialization PASS.",
+  "schema_version": 5,
+  "terminal": "PASS"
+}

@@ -23,6 +23,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         contract = launcher.validate_repository_contract(launcher.ROOT)
         self.assertEqual(contract["schema_version"], 2)
         self.assertEqual(launcher.validate_v4_contract(launcher.ROOT)["schema_version"], 4)
+        self.assertEqual(launcher.validate_v5_contract(launcher.ROOT)["schema_version"], 5)
         self.assertEqual(
             launcher.materializer.sha256_file(
                 launcher.ROOT
@@ -78,7 +79,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
-    def test_execution_authority_requires_v4_integration_pass(self) -> None:
+    def test_execution_authority_requires_v5_integration_pass(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             ledger_path = root / launcher.LEDGER_PATH
@@ -113,6 +114,14 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                     "status": "passed",
                 },
                 {
+                    "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_integration",
+                    "status": "passed",
+                },
+                {
+                    "id": "external_text_layout_recovered_materializer_formal_memory_launch_v5_preregistration",
+                    "status": "passed",
+                },
+                {
                     "id": "external_text_layout_support_train_only_diagnostic",
                     "status": "pending",
                 },
@@ -128,7 +137,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 launcher.validate_execution_authority(root)
             prerequisites.append(
                 {
-                    "id": "external_text_layout_recovered_materializer_formal_rss_launch_v4_integration",
+                    "id": "external_text_layout_recovered_materializer_formal_memory_launch_v5_integration",
                     "status": "passed",
                 }
             )
@@ -250,7 +259,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 derived_plan_path=root / "generated/effective-plan.json",
             )
             self.assertEqual(result["terminal"], "PASS")
-            self.assertEqual(result["schema_version"], 4)
+            self.assertEqual(result["schema_version"], 5)
             self.assertEqual(result["runtime_safety"], runtime_safety)
             self.assertEqual(
                 json.loads((root / launcher.RESULT_PATH).read_text()), result
@@ -272,7 +281,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 },
                 "evidence": {"original_plan": {"path": "docs/plan.json"}},
             }
-            terminal = {"schema_version": 4, "terminal": "PASS"}
+            terminal = {"schema_version": 5, "terminal": "PASS"}
             with (
                 mock.patch.object(
                     launcher, "validate_repository_contract", return_value=contract
@@ -390,7 +399,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             )
             launcher.materializer.enforce_health_limits(
                 {
-                    "memory_free_percent": 45.0,
+                    "memory_free_percent": 39.0,
                     "process_tree_rss_bytes": 8 * 1024**3,
                     "swap_used_bytes": 512 * 1024**2,
                 }
@@ -557,12 +566,12 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             "launch_swap_baseline_bytes": 1024,
             "limits": launcher.launcher_safety_limits(),
             "materialization_health": {
-                "minimum_memory_free_percent": 45.0,
+                "minimum_memory_free_percent": 35.0,
                 "peak_process_tree_rss_bytes": 8 * 1024**3,
                 "peak_swap_growth_bytes": 512 * 1024**2,
             },
             "post_run_health": {
-                "memory_free_percent": 45.0,
+                "memory_free_percent": 35.0,
                 "process_tree_rss_bytes": 0,
                 "swap_growth_bytes": 0,
             },
@@ -577,6 +586,54 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         recovered["unexpected"] = True
         with self.assertRaises(launcher.RecoveredMaterializationError):
             launcher.validate_runtime_safety(recovered)
+
+    def test_formal_memory_floor_allows_39_and_terminates_below_35_percent(self) -> None:
+        baseline = 2 * 1024**3
+        calls = 0
+
+        def health(_pid: int) -> dict[str, float | int]:
+            nonlocal calls
+            calls += 1
+            free = 80.0 if calls <= 61 else 34.9
+            return {
+                "memory_free_percent": free,
+                "process_tree_rss_bytes": 1024,
+                "swap_used_bytes": baseline,
+            }
+
+        class Process:
+            pid = 12345
+            exitcode = 0
+
+            def is_alive(self) -> bool:
+                return True
+
+        def runner(**_kwargs: object) -> dict[str, object]:
+            launcher.materializer.enforce_health_limits(
+                {
+                    "memory_free_percent": 39.0,
+                    "process_tree_rss_bytes": 1024,
+                    "swap_used_bytes": 0,
+                }
+            )
+            launcher.materializer.wait_for_page_process(Process())
+            raise AssertionError("free memory below the formal floor should terminate")
+
+        with mock.patch.object(
+            launcher.materializer.runtime, "terminate_page_process"
+        ) as terminate:
+            with self.assertRaises(launcher.materializer.runtime.ResourceLimitError):
+                launcher.run_baseline_relative_materializer(
+                    repo_root=Path("/repo"),
+                    derived_plan_path=Path("/repo/effective-plan.json"),
+                    health_reader=health,
+                    sleeper=lambda _seconds: None,
+                    materialize_runner=runner,
+                    lock_factory=noop_lock,
+                    conflict_checker=lambda: None,
+                    simulator_checker=lambda: 0,
+                )
+            terminate.assert_called_once()
 
     def test_formal_rss_limit_allows_observed_page_and_terminates_above_10_gib(self) -> None:
         baseline = 2 * 1024**3
