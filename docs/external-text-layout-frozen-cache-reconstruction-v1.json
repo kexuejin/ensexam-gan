@@ -1,0 +1,110 @@
+{
+  "authority": {
+    "candidate_inference": false,
+    "formal_external_layout_materialization": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "frozen_cache_reconstruction_only",
+    "training": false
+  },
+  "build": {
+    "archive_manifest": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train275-v1.txt",
+    "archive_primary": "outputs/archive/sign-separated-residual-repair-20260810/train275-primary",
+    "archive_second_stage": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline",
+    "primary": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "publication": "relative_symlinks_after_both_caches_pass_exact_hash_validation",
+    "second_stage": "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1",
+    "stages": [
+      "primary",
+      "second_stage",
+      "publish",
+      "verify"
+    ]
+  },
+  "expected_outputs": {
+    "primary": {
+      "metrics_sha256": "efd58814583089e888482a7e1604efc1d19ee5f514085cbef0e0c6cabf479846",
+      "prediction_set": {
+        "content_sha256": "6400c9413af963e3de280e348bd635cd962e5387c2e975e930036d320214274a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    },
+    "second_stage": {
+      "metrics_sha256": "b800fdf385075bac46cc50db08a726dc2b9a6201b11a1229a164738b595a708d",
+      "prediction_set": {
+        "content_sha256": "2ffa40fc0c9b2a7e721d560f6f12edfe2ccdc1c1988582fa7a8104665cdc088a",
+        "count": 275,
+        "filename_sha256": "8c75e1dbebc162f316c24137540add99e51877e07aedc6abb419de872c58b5de"
+      }
+    }
+  },
+  "external_layout_plan": {
+    "path": "docs/external-text-layout-support-prerequisite-v1.json",
+    "sha256": "bf7b9c7d74adabb9a0d5b0f35f83d015642952c5d5b0e56389b1b05508d7d3c7"
+  },
+  "forbidden_access": [
+    "target_or_label_pixels",
+    "quality_splits_or_metrics",
+    "ocr_recognition_or_recognized_text",
+    "optimizer_checkpoint_or_candidate_surfaces",
+    "formal_external_layout_outputs_before_cache_verification"
+  ],
+  "historical_runtime": {
+    "numpy": "2.2.6",
+    "opencv": "5.0.0.93",
+    "python": "3.10.11",
+    "torch": "2.5.1"
+  },
+  "historical_source": {
+    "materialization_audit": {
+      "path": "outputs/sign-separated-residual-repair-train275-materialization-audit-20260810/audit.json",
+      "sha256": "d91c3ec25e5ec861aa38a05dbd27448f981befc70c814d4a60ae8f972f5ca741"
+    },
+    "materializer": {
+      "path": "scripts/analysis/materialize_sign_separated_train_inputs.py",
+      "sha256": "cbc3d107f9410f83d1698b17cd56c3b6121b3b698cdff7f66914ff960bcf19ec"
+    },
+    "sample_manifest": {
+      "path": "hardcase_lists/archive/sign-separated-residual-repair-20260810-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    },
+    "training_plan": {
+      "path": "docs/sign-separated-residual-training-plan.json",
+      "sha256": "b298f0faf2de2c6a9e0f7c2c9a44dd64a7457962d1fdd42226b24e99a8ad470b"
+    }
+  },
+  "runtime_gate": {
+    "maximum_process_tree_rss_bytes": 10737418240,
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 35.0,
+    "probe_page": "hw5k_1011.jpg",
+    "probe_result": "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/result.json",
+    "required_probe_reason_code": "runtime_safety_probe_passed",
+    "required_probe_terminal": "PASS",
+    "stage_execution": "one_model_process_at_a_time_under_the_external_layout_host_lock"
+  },
+  "runtime_repair_evidence": [
+    {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf"
+    },
+    {
+      "path": "scripts/analysis/external_text_layout_transformers_runtime_repair.py",
+      "sha256": "2127729ee2d84f6402aaa685a1eec7cdbe94704fbbfffcb779d0c7c92b35972e"
+    },
+    {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5"
+    },
+    {
+      "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+      "sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7"
+    }
+  ],
+  "schema_version": 1,
+  "state": "preregistered_reconstruction_preflight",
+  "terminal": "PREREQUISITE_NEEDED"
+}

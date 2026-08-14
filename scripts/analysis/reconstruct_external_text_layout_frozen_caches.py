@@ -1,0 +1,828 @@
+#!/usr/bin/env python3
+"""Reconstruct and verify the frozen train275 caches needed by layout support."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import importlib
+from importlib import metadata
+import json
+import math
+import os
+from pathlib import Path
+import sys
+from typing import Any, Callable
+
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts.analysis import external_text_layout_materialization_runtime as runtime  # noqa: E402
+from scripts.analysis import materialize_external_text_layout_support_train_only as materializer  # noqa: E402
+
+
+CONTRACT_PATH = Path("docs/external-text-layout-frozen-cache-reconstruction-v1.json")
+EXPECTED_CONTRACT_SHA256 = (
+    "e23d13c7cd93346153940bd42198f74f4114dd9ad6221a246cbe9893cc7b70a8"
+)
+LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
+CONTROL_DIR = Path("outputs/external-text-layout-cache-reconstruction-20260814")
+RECONSTRUCTION_ID = "external_text_layout_frozen_cache_reconstruction_v1"
+HISTORICAL_HELPER_MODULE = (
+    "scripts.analysis.materialize_sign_separated_train_inputs"
+)
+STAGES = ("preflight", "primary", "second_stage", "publish", "verify", "all")
+EXPECTED_AUTHORITY = {
+    "candidate_inference": False,
+    "formal_external_layout_materialization": False,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": False,
+    "reserved_blind_state": "disabled",
+    "result_authority": "frozen_cache_reconstruction_only",
+    "training": False,
+}
+EXPECTED_BUILD = {
+    "archive_manifest": (
+        "hardcase_lists/archive/"
+        "sign-separated-residual-repair-20260810-train275-v1.txt"
+    ),
+    "archive_primary": (
+        "outputs/archive/sign-separated-residual-repair-20260810/"
+        "train275-primary"
+    ),
+    "archive_second_stage": (
+        "outputs/archive/sign-separated-residual-repair-20260810/"
+        "train275-frozen-pipeline"
+    ),
+    "primary": "outputs/sign-separated-residual-repair-train275-primary-v1",
+    "publication": (
+        "relative_symlinks_after_both_caches_pass_exact_hash_validation"
+    ),
+    "second_stage": (
+        "outputs/sign-separated-residual-repair-train275-frozen-pipeline-v1"
+    ),
+    "stages": ["primary", "second_stage", "publish", "verify"],
+}
+EXPECTED_FORBIDDEN_ACCESS = [
+    "target_or_label_pixels",
+    "quality_splits_or_metrics",
+    "ocr_recognition_or_recognized_text",
+    "optimizer_checkpoint_or_candidate_surfaces",
+    "formal_external_layout_outputs_before_cache_verification",
+]
+EXPECTED_HISTORICAL_RUNTIME = {
+    "numpy": "2.2.6",
+    "opencv": "5.0.0.93",
+    "python": "3.10.11",
+    "torch": "2.5.1",
+}
+
+
+class CacheReconstructionError(RuntimeError):
+    pass
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def sha256_rows(rows: list[str]) -> str:
+    payload = "\n".join(sorted(rows)) + "\n"
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise CacheReconstructionError(f"expected JSON object: {path}")
+    return value
+
+
+def repo_path(repo_root: Path, value: str) -> Path:
+    relative = Path(value)
+    if relative.is_absolute() or ".." in relative.parts:
+        raise CacheReconstructionError(
+            f"registered path must stay repository-relative: {value}"
+        )
+    return repo_root / relative
+
+
+def validate_artifact(repo_root: Path, artifact: dict[str, Any], label: str) -> Path:
+    if set(artifact) != {"path", "sha256"}:
+        raise CacheReconstructionError(f"{label} artifact contract changed")
+    path = repo_path(repo_root, str(artifact["path"]))
+    if not path.is_file():
+        raise CacheReconstructionError(f"missing {label}: {path}")
+    actual = sha256_file(path)
+    if actual != artifact["sha256"]:
+        raise CacheReconstructionError(
+            f"{label} sha256 changed: expected {artifact['sha256']}, got {actual}"
+        )
+    return path
+
+
+def validate_authority(repo_root: Path, contract: dict[str, Any]) -> None:
+    ledger = read_json(repo_root / LEDGER_PATH)
+    program = ledger.get("program", {})
+    authority = contract.get("authority", {})
+    if (
+        program.get("product_default") != authority.get("product_default")
+        or program.get("promotion_state") != authority.get("promotion_state")
+        or program.get("reserved_blind_state")
+        != authority.get("reserved_blind_state")
+    ):
+        raise CacheReconstructionError("quality-loop authority changed")
+    active = ledger.get("active_iteration", {})
+    prerequisites = {
+        item.get("id"): item.get("status")
+        for item in active.get("prerequisites", [])
+        if isinstance(item, dict)
+    }
+    if (
+        active.get("terminal") != "PREREQUISITE_NEEDED"
+        or prerequisites.get("materially_new_support_successor_preregistration_v4")
+        != "passed"
+        or prerequisites.get("external_text_layout_support_train_only_diagnostic")
+        != "pending"
+    ):
+        raise CacheReconstructionError("external layout authority changed")
+
+
+def validate_runtime_gate_contract(contract: dict[str, Any]) -> None:
+    expected = {
+        "maximum_process_tree_rss_bytes": runtime.MAX_DETECTOR_RSS_BYTES,
+        "maximum_swap_used_bytes": runtime.MAX_SWAP_USED_BYTES,
+        "minimum_system_free_memory_percent": runtime.MIN_MEMORY_FREE_PERCENT,
+        "probe_page": "hw5k_1011.jpg",
+        "probe_result": (
+            "outputs/external-text-layout-runtime-safety-probe-repaired-20260814/"
+            "result.json"
+        ),
+        "required_probe_reason_code": "runtime_safety_probe_passed",
+        "required_probe_terminal": "PASS",
+        "stage_execution": (
+            "one_model_process_at_a_time_under_the_external_layout_host_lock"
+        ),
+    }
+    if contract.get("runtime_gate") != expected:
+        raise CacheReconstructionError("runtime safety gate changed")
+    if (
+        materializer.MAX_DETECTOR_RSS_BYTES != runtime.MAX_DETECTOR_RSS_BYTES
+        or materializer.MAX_SWAP_USED_BYTES != runtime.MAX_SWAP_USED_BYTES
+        or materializer.MIN_MEMORY_FREE_PERCENT != runtime.MIN_MEMORY_FREE_PERCENT
+    ):
+        raise CacheReconstructionError("materializer runtime limits disagree")
+
+
+def validate_reconstruction_boundaries(contract: dict[str, Any]) -> None:
+    if contract.get("authority") != EXPECTED_AUTHORITY:
+        raise CacheReconstructionError("cache reconstruction authority changed")
+    if contract.get("build") != EXPECTED_BUILD:
+        raise CacheReconstructionError("cache reconstruction paths changed")
+    if contract.get("forbidden_access") != EXPECTED_FORBIDDEN_ACCESS:
+        raise CacheReconstructionError("cache reconstruction access boundary changed")
+    if contract.get("historical_runtime") != EXPECTED_HISTORICAL_RUNTIME:
+        raise CacheReconstructionError("historical reconstruction runtime changed")
+    validate_runtime_gate_contract(contract)
+
+
+def current_reconstruction_runtime() -> dict[str, str]:
+    try:
+        torch_version = metadata.version("torch")
+    except metadata.PackageNotFoundError as error:
+        raise CacheReconstructionError(
+            "historical reconstruction runtime lacks torch"
+        ) from error
+    return {
+        "numpy": materializer.np.__version__,
+        "opencv": materializer.cv2.__version__,
+        "python": ".".join(str(value) for value in sys.version_info[:3]),
+        "torch": torch_version,
+    }
+
+
+def validate_reconstruction_runtime(
+    contract: dict[str, Any],
+    identity_reader: Callable[[], dict[str, str]] = current_reconstruction_runtime,
+) -> dict[str, str]:
+    actual = identity_reader()
+    expected = contract["historical_runtime"]
+    if actual != expected:
+        raise CacheReconstructionError(
+            f"historical reconstruction runtime changed: expected {expected}, "
+            f"got {actual}"
+        )
+    return actual
+
+
+def _expected_prediction_set(audit: dict[str, Any], name: str) -> dict[str, Any]:
+    value = audit.get(name)
+    if not isinstance(value, dict):
+        raise CacheReconstructionError(f"historical audit lacks {name}")
+    return value
+
+
+def validate_contract(
+    repo_root: Path, contract_path: Path = CONTRACT_PATH
+) -> dict[str, Any]:
+    contract_file = repo_path(repo_root, str(contract_path))
+    if sha256_file(contract_file) != EXPECTED_CONTRACT_SHA256:
+        raise CacheReconstructionError("cache reconstruction contract sha256 changed")
+    contract = read_json(contract_file)
+    if (
+        contract.get("schema_version") != 1
+        or contract.get("state") != "preregistered_reconstruction_preflight"
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+    ):
+        raise CacheReconstructionError("cache reconstruction contract changed")
+    validate_reconstruction_boundaries(contract)
+    validate_authority(repo_root, contract)
+    validate_artifact(
+        repo_root, contract["external_layout_plan"], "external layout plan"
+    )
+    historical = contract.get("historical_source", {})
+    plan_path = validate_artifact(
+        repo_root, historical["training_plan"], "historical training plan"
+    )
+    audit_path = validate_artifact(
+        repo_root, historical["materialization_audit"], "historical audit"
+    )
+    manifest_path = validate_artifact(
+        repo_root, historical["sample_manifest"], "historical sample manifest"
+    )
+    validate_artifact(
+        repo_root, historical["materializer"], "historical materializer"
+    )
+    for index, artifact in enumerate(contract.get("runtime_repair_evidence", [])):
+        validate_artifact(repo_root, artifact, f"runtime repair evidence {index}")
+
+    plan = read_json(plan_path)
+    audit = read_json(audit_path)
+    if (
+        audit.get("terminal") != "PASS"
+        or audit.get("train_count") != 275
+        or audit.get("training_plan_sha256") != historical["training_plan"]["sha256"]
+        or audit.get("sample_manifest_sha256")
+        != historical["sample_manifest"]["sha256"]
+    ):
+        raise CacheReconstructionError("historical train275 audit changed")
+    expected = contract.get("expected_outputs", {})
+    for stage, audit_prefix in (
+        ("primary", "primary"),
+        ("second_stage", "second_stage"),
+    ):
+        stage_expected = expected.get(stage, {})
+        if stage_expected.get("metrics_sha256") != audit.get(
+            f"{audit_prefix}_metrics", {}
+        ).get("metrics_sha256"):
+            raise CacheReconstructionError(
+                f"{stage} metrics expectation disagrees with historical audit"
+            )
+        if stage_expected.get("prediction_set") != _expected_prediction_set(
+            audit, f"{audit_prefix}_predictions"
+        ):
+            raise CacheReconstructionError(
+                f"{stage} prediction expectation disagrees with historical audit"
+            )
+    lines = [
+        line.strip()
+        for line in manifest_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    if len(lines) != 275 or len(set(lines)) != 275:
+        raise CacheReconstructionError("historical sample manifest population changed")
+    missing_sources = [
+        value for value in lines if not repo_path(repo_root, value).is_file()
+    ]
+    if missing_sources:
+        raise CacheReconstructionError(
+            f"historical sample sources are missing: {missing_sources[:5]}"
+        )
+    evidence = plan.get("evidence", {})
+    for name in (
+        "cleanup_model",
+        "current_primary_checkpoint",
+        "current_primary_config",
+        "current_second_stage_checkpoint",
+        "data_role_plan",
+        "primary_inference",
+        "second_stage_inference",
+    ):
+        validate_artifact(repo_root, evidence[name], f"historical plan {name}")
+    return {
+        "audit": audit,
+        "contract": contract,
+        "manifest_lines": lines,
+        "manifest_path": manifest_path,
+        "plan": plan,
+    }
+
+
+def expected_prediction_names(manifest_lines: list[str]) -> list[str]:
+    names = sorted(f"{Path(value).stem}.png" for value in manifest_lines)
+    if len(names) != len(set(names)):
+        raise CacheReconstructionError("manifest names collide after PNG conversion")
+    return names
+
+
+def validate_prediction_set(
+    prediction_dir: Path,
+    expected_names: list[str],
+    expected: dict[str, Any],
+) -> dict[str, Any]:
+    if not prediction_dir.is_dir():
+        raise CacheReconstructionError(
+            f"prediction directory is missing: {prediction_dir}"
+        )
+    if prediction_dir.is_symlink():
+        raise CacheReconstructionError("prediction directory surface changed")
+    predictions = list(prediction_dir.iterdir())
+    if any(not path.is_file() or path.is_symlink() for path in predictions):
+        raise CacheReconstructionError("prediction directory surface changed")
+    actual_names = sorted(path.name for path in predictions)
+    if actual_names != expected_names:
+        raise CacheReconstructionError("prediction filename population changed")
+    rows = [
+        f"{name} {sha256_file(prediction_dir / name)}" for name in actual_names
+    ]
+    actual = {
+        "content_sha256": sha256_rows(rows),
+        "count": len(actual_names),
+        "filename_sha256": sha256_rows(actual_names),
+    }
+    if actual != expected:
+        raise CacheReconstructionError(
+            f"prediction content changed: expected {expected}, got {actual}"
+        )
+    return actual
+
+
+def validate_cache(
+    cache_dir: Path,
+    *,
+    expected_names: list[str],
+    expected: dict[str, Any],
+) -> dict[str, Any]:
+    if not cache_dir.is_dir():
+        raise CacheReconstructionError(f"cache directory is missing: {cache_dir}")
+    if {path.name for path in cache_dir.iterdir()} != {"metrics.csv", "pred"}:
+        raise CacheReconstructionError(f"cache surface changed: {cache_dir}")
+    metrics_path = cache_dir / "metrics.csv"
+    if not metrics_path.is_file() or metrics_path.is_symlink():
+        raise CacheReconstructionError(f"cache metrics surface changed: {metrics_path}")
+    actual_metrics_sha256 = sha256_file(metrics_path)
+    if actual_metrics_sha256 != expected["metrics_sha256"]:
+        raise CacheReconstructionError(
+            f"cache metrics changed: expected {expected['metrics_sha256']}, "
+            f"got {actual_metrics_sha256}"
+        )
+    predictions = validate_prediction_set(
+        cache_dir / "pred", expected_names, expected["prediction_set"]
+    )
+    return {
+        "metrics_sha256": actual_metrics_sha256,
+        "prediction_set": predictions,
+    }
+
+
+def validate_reconstructed_cache(
+    cache_dir: Path,
+    *,
+    expected_names: list[str],
+    expected: dict[str, Any],
+) -> dict[str, Any]:
+    if cache_dir.is_symlink():
+        raise CacheReconstructionError(
+            f"reconstructed cache must be a real directory: {cache_dir}"
+        )
+    return validate_cache(
+        cache_dir,
+        expected_names=expected_names,
+        expected=expected,
+    )
+
+
+def _required_health_number(
+    health: Any,
+    field: str,
+    *,
+    label: str,
+    integer: bool,
+) -> float | int:
+    if not isinstance(health, dict) or field not in health:
+        raise CacheReconstructionError(f"{label} lacks {field}")
+    value = health[field]
+    if isinstance(value, bool):
+        raise CacheReconstructionError(f"{label} has invalid {field}")
+    if integer:
+        if not isinstance(value, int) or value < 0:
+            raise CacheReconstructionError(f"{label} has invalid {field}")
+        return value
+    if not isinstance(value, (int, float)):
+        raise CacheReconstructionError(f"{label} has invalid {field}")
+    numeric = float(value)
+    if not math.isfinite(numeric) or numeric < 0.0 or numeric > 100.0:
+        raise CacheReconstructionError(f"{label} has invalid {field}")
+    return numeric
+
+
+def validate_health_snapshot(
+    health: Any,
+    *,
+    gate: dict[str, Any],
+    label: str,
+) -> dict[str, float | int]:
+    normalized = {
+        "memory_free_percent": _required_health_number(
+            health, "memory_free_percent", label=label, integer=False
+        ),
+        "process_tree_rss_bytes": _required_health_number(
+            health, "process_tree_rss_bytes", label=label, integer=True
+        ),
+        "swap_used_bytes": _required_health_number(
+            health, "swap_used_bytes", label=label, integer=True
+        ),
+    }
+    if (
+        normalized["memory_free_percent"]
+        < float(gate["minimum_system_free_memory_percent"])
+        or normalized["process_tree_rss_bytes"]
+        > int(gate["maximum_process_tree_rss_bytes"])
+        or normalized["swap_used_bytes"]
+        > int(gate["maximum_swap_used_bytes"])
+    ):
+        raise CacheReconstructionError(f"{label} crossed a runtime limit")
+    return normalized
+
+
+def validate_health_summary(
+    health: Any,
+    *,
+    gate: dict[str, Any],
+    label: str,
+) -> dict[str, float | int]:
+    normalized = {
+        "minimum_memory_free_percent": _required_health_number(
+            health, "minimum_memory_free_percent", label=label, integer=False
+        ),
+        "peak_process_tree_rss_bytes": _required_health_number(
+            health, "peak_process_tree_rss_bytes", label=label, integer=True
+        ),
+        "peak_swap_used_bytes": _required_health_number(
+            health, "peak_swap_used_bytes", label=label, integer=True
+        ),
+    }
+    if (
+        normalized["minimum_memory_free_percent"]
+        < float(gate["minimum_system_free_memory_percent"])
+        or normalized["peak_process_tree_rss_bytes"]
+        > int(gate["maximum_process_tree_rss_bytes"])
+        or normalized["peak_swap_used_bytes"]
+        > int(gate["maximum_swap_used_bytes"])
+    ):
+        raise CacheReconstructionError(f"{label} crossed a runtime limit")
+    return normalized
+
+
+def validate_probe_pass(repo_root: Path, contract: dict[str, Any]) -> dict[str, Any]:
+    validate_runtime_gate_contract(contract)
+    gate = contract["runtime_gate"]
+    result_path = repo_path(repo_root, gate["probe_result"])
+    if not result_path.is_file():
+        raise CacheReconstructionError(
+            f"repaired one-page runtime probe is missing: {result_path}"
+        )
+    result = read_json(result_path)
+    if (
+        result.get("terminal") != gate["required_probe_terminal"]
+        or result.get("reason_code") != gate["required_probe_reason_code"]
+        or result.get("formal_evidence") is not False
+        or result.get("formal_outputs_written") is not False
+        or result.get("target_access") is not False
+        or result.get("label_access") is not False
+        or result.get("recognition") is not False
+        or result.get("routing_metadata_access") is not False
+        or result.get("temporary_page_outputs_retained") is not False
+        or result.get("result_authority") != "runtime_prerequisite_only"
+        or result.get("probe")
+        != "external_text_layout_single_page_runtime_safety"
+        or result.get("schema_version") != 1
+        or result.get("detector", {}).get("device") != "cpu"
+        or result.get("page", {}).get("file") != gate["probe_page"]
+    ):
+        raise CacheReconstructionError("repaired one-page runtime probe did not pass")
+    if result.get("safety_limits") != {
+        "detector_process_tree_rss_bytes_max": runtime.MAX_DETECTOR_RSS_BYTES,
+        "memory_free_percent_min": runtime.MIN_MEMORY_FREE_PERCENT,
+        "page_timeout_seconds": runtime.PAGE_TIMEOUT_SECONDS,
+        "swap_used_bytes_max": runtime.MAX_SWAP_USED_BYTES,
+    }:
+        raise CacheReconstructionError("repaired one-page probe limits changed")
+    validate_health_summary(
+        result.get("page_health"), gate=gate, label="probe page health"
+    )
+    for name in ("initial_health", "post_run_health"):
+        validate_health_snapshot(
+            result.get(name), gate=gate, label=f"probe {name}"
+        )
+    return result
+
+
+def reconstruction_plan(state: dict[str, Any]) -> dict[str, Any]:
+    plan = copy.deepcopy(state["plan"])
+    manifest = state["contract"]["build"]["archive_manifest"]
+    plan["pipeline_preparation"]["primary"]["samples_file"] = manifest
+    plan["pipeline_preparation"]["second_stage"]["samples_file"] = manifest
+    return plan
+
+
+def stage_paths(repo_root: Path, contract: dict[str, Any]) -> dict[str, Path]:
+    build = contract["build"]
+    return {
+        name: repo_path(repo_root, build[name])
+        for name in ("primary", "second_stage", "archive_primary", "archive_second_stage")
+    }
+
+
+def _load_historical_helper() -> Any:
+    try:
+        return importlib.import_module(HISTORICAL_HELPER_MODULE)
+    except ImportError as error:
+        raise CacheReconstructionError(
+            "historical cache materialization helper is unavailable"
+        ) from error
+
+
+def build_stage_command(
+    *,
+    repo_root: Path,
+    state: dict[str, Any],
+    stage: str,
+    output_dir: Path,
+    helper: Any,
+) -> list[str]:
+    plan = reconstruction_plan(state)
+    if stage == "primary":
+        return helper.primary_command(repo_root, plan, output_dir)
+    if stage == "second_stage":
+        return helper.second_stage_command(repo_root, plan, output_dir)
+    raise CacheReconstructionError(f"stage has no model command: {stage}")
+
+
+def validate_current_launch_health(
+    contract: dict[str, Any],
+) -> dict[str, float | int]:
+    materializer.assert_no_conflicting_model_processes()
+    health = runtime.runtime_health(os.getpid())
+    normalized = validate_health_snapshot(
+        health,
+        gate=contract["runtime_gate"],
+        label="current launch health",
+    )
+    materializer.enforce_health_limits(health)
+    return normalized
+
+
+def reconstruct_stage(
+    *,
+    repo_root: Path,
+    state: dict[str, Any],
+    stage: str,
+    helper_loader: Callable[[], Any] = _load_historical_helper,
+) -> dict[str, Any]:
+    if stage not in {"primary", "second_stage"}:
+        raise CacheReconstructionError(f"unsupported reconstruction stage: {stage}")
+    contract = state["contract"]
+    validate_probe_pass(repo_root, contract)
+    validate_reconstruction_runtime(contract)
+    paths = stage_paths(repo_root, contract)
+    names = expected_prediction_names(state["manifest_lines"])
+    if stage == "second_stage":
+        validate_reconstructed_cache(
+            paths["primary"],
+            expected_names=names,
+            expected=contract["expected_outputs"]["primary"],
+        )
+    cache_dir = paths[stage]
+    expected = contract["expected_outputs"][stage]
+    if cache_dir.exists() or cache_dir.is_symlink():
+        return {
+            "cache": validate_reconstructed_cache(
+                cache_dir, expected_names=names, expected=expected
+            ),
+            "stage": stage,
+            "status": "already_reconstructed",
+        }
+    log_path = repo_root / CONTROL_DIR / f"{stage}.log"
+    with runtime.exclusive_run_lock(runtime.HOST_USER_RUN_LOCK_PATH):
+        initial_health = validate_current_launch_health(contract)
+        helper = helper_loader()
+        command = helper.run_atomic_directory_command(
+            repo_root=repo_root,
+            final_dir=cache_dir,
+            command_builder=lambda temporary: build_stage_command(
+                repo_root=repo_root,
+                state=state,
+                stage=stage,
+                output_dir=temporary,
+                helper=helper,
+            ),
+            log_path=log_path,
+        )
+        post_health = validate_current_launch_health(contract)
+    return {
+        "cache": validate_reconstructed_cache(
+            cache_dir, expected_names=names, expected=expected
+        ),
+        "command": command,
+        "initial_health": initial_health,
+        "post_health": post_health,
+        "stage": stage,
+        "status": "reconstructed",
+    }
+
+
+def validate_publication_destination(
+    final_path: Path, source_path: Path
+) -> str | None:
+    if final_path.exists() or final_path.is_symlink():
+        if not final_path.is_symlink():
+            raise CacheReconstructionError(
+                f"archive cache path already has different content: {final_path}"
+            )
+        target = os.readlink(final_path)
+        if Path(target).is_absolute() or final_path.resolve() != source_path.resolve():
+            raise CacheReconstructionError(
+                f"archive cache path is not the registered relative symlink: "
+                f"{final_path}"
+            )
+        return target
+    return None
+
+
+def atomic_relative_symlink(final_path: Path, source_path: Path) -> str:
+    if not source_path.is_dir():
+        raise CacheReconstructionError(f"cache publication source is missing: {source_path}")
+    existing = validate_publication_destination(final_path, source_path)
+    if existing is not None:
+        return existing
+    final_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = final_path.with_name(f".{final_path.name}.publishing")
+    if temporary.exists() or temporary.is_symlink():
+        raise CacheReconstructionError(f"stale cache publication: {temporary}")
+    target = os.path.relpath(source_path, start=final_path.parent)
+    temporary.symlink_to(target, target_is_directory=True)
+    temporary.replace(final_path)
+    return target
+
+
+def publish_caches(repo_root: Path, state: dict[str, Any]) -> dict[str, Any]:
+    contract = state["contract"]
+    paths = stage_paths(repo_root, contract)
+    names = expected_prediction_names(state["manifest_lines"])
+    for stage in ("primary", "second_stage"):
+        validate_reconstructed_cache(
+            paths[stage],
+            expected_names=names,
+            expected=contract["expected_outputs"][stage],
+        )
+    for stage, archive_name in (
+        ("primary", "archive_primary"),
+        ("second_stage", "archive_second_stage"),
+    ):
+        validate_publication_destination(paths[archive_name], paths[stage])
+    links = {
+        "primary": atomic_relative_symlink(
+            paths["archive_primary"], paths["primary"]
+        ),
+        "second_stage": atomic_relative_symlink(
+            paths["archive_second_stage"], paths["second_stage"]
+        ),
+    }
+    return {"links": links, "status": "published"}
+
+
+def verify_published_caches(
+    repo_root: Path, state: dict[str, Any]
+) -> dict[str, Any]:
+    contract = state["contract"]
+    paths = stage_paths(repo_root, contract)
+    names = expected_prediction_names(state["manifest_lines"])
+    result: dict[str, Any] = {}
+    for stage, archive_name in (
+        ("primary", "archive_primary"),
+        ("second_stage", "archive_second_stage"),
+    ):
+        archive = paths[archive_name]
+        if (
+            not archive.is_symlink()
+            or Path(os.readlink(archive)).is_absolute()
+            or archive.resolve() != paths[stage].resolve()
+        ):
+            raise CacheReconstructionError(
+                f"published {stage} cache is not the registered relative symlink"
+            )
+        result[stage] = validate_cache(
+            archive,
+            expected_names=names,
+            expected=contract["expected_outputs"][stage],
+        )
+    return {"caches": result, "status": "verified"}
+
+
+def preflight_report(repo_root: Path, state: dict[str, Any]) -> dict[str, Any]:
+    contract = state["contract"]
+    paths = stage_paths(repo_root, contract)
+    probe_path = repo_path(repo_root, contract["runtime_gate"]["probe_result"])
+    try:
+        actual_runtime = current_reconstruction_runtime()
+        runtime_ready = actual_runtime == contract["historical_runtime"]
+    except CacheReconstructionError as error:
+        actual_runtime = {"error": str(error)}
+        runtime_ready = False
+    return {
+        "archive_paths_absent": all(
+            not paths[name].exists() and not paths[name].is_symlink()
+            for name in ("archive_primary", "archive_second_stage")
+        ),
+        "build_paths_absent": all(
+            not paths[name].exists() and not paths[name].is_symlink()
+            for name in ("primary", "second_stage")
+        ),
+        "execution_authorized": False,
+        "historical_manifest_count": len(state["manifest_lines"]),
+        "historical_runtime_ready": runtime_ready,
+        "observed_runtime": actual_runtime,
+        "probe_result_present": probe_path.is_file(),
+        "reconstruction_id": RECONSTRUCTION_ID,
+        "result_authority": "frozen_cache_reconstruction_preflight_only",
+        "static_terminal": "PASS",
+        "terminal": "PREREQUISITE_NEEDED",
+    }
+
+
+def run_stage(repo_root: Path, contract_path: Path, stage: str) -> dict[str, Any]:
+    state = validate_contract(repo_root, contract_path)
+    if stage == "preflight":
+        return preflight_report(repo_root, state)
+    if stage == "primary":
+        return reconstruct_stage(repo_root=repo_root, state=state, stage=stage)
+    if stage == "second_stage":
+        return reconstruct_stage(repo_root=repo_root, state=state, stage=stage)
+    if stage == "publish":
+        return publish_caches(repo_root, state)
+    if stage == "verify":
+        return verify_published_caches(repo_root, state)
+    if stage == "all":
+        return {
+            "primary": reconstruct_stage(
+                repo_root=repo_root, state=state, stage="primary"
+            ),
+            "second_stage": reconstruct_stage(
+                repo_root=repo_root, state=state, stage="second_stage"
+            ),
+            "publish": publish_caches(repo_root, state),
+            "verify": verify_published_caches(repo_root, state),
+        }
+    raise CacheReconstructionError(f"unsupported stage: {stage}")
+
+
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--repo-root", type=Path, default=ROOT)
+    parser.add_argument("--contract", type=Path, default=CONTRACT_PATH)
+    parser.add_argument("--stage", choices=STAGES, required=True)
+    return parser
+
+
+def main() -> int:
+    args = build_parser().parse_args()
+    try:
+        result = run_stage(args.repo_root.resolve(), args.contract, args.stage)
+    except (KeyError, RuntimeError, OSError, ValueError) as error:
+        print(
+            json.dumps(
+                {
+                    "reason": str(error),
+                    "reconstruction_id": RECONSTRUCTION_ID,
+                    "terminal": "PREREQUISITE_NEEDED",
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+        return 2
+    print(json.dumps(result, sort_keys=True), flush=True)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
