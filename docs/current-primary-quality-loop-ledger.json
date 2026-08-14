@@ -533,12 +533,20 @@
       {
         "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
         "sha256": "b8d3702e810e4e71f91f256589b0e9e3b7c90bbfdecf50fc220b1e88dde7e1a6"
+      },
+      {
+        "path": "docs/external-text-layout-host-readiness-recovery-20260814.json",
+        "sha256": "7034474fe63fa38ea026221bef837c1f0dca0a4de582942da402e93870191637"
+      },
+      {
+        "path": "docs/decisions/2026-08-14-external-text-layout-host-readiness-recovery.md",
+        "sha256": "2fb608ddbbc41034ef7a645fb3b86ddc4c66646ca10ce37f58e8195bfcfe0e38"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "The hash-bound cache-stage monitor now launches each historical primary or second-stage command in an independent process group, samples child-plus-descendant health every second, terminates on any resource or health-reader failure, and publishes only after zero exit plus valid temporary output. Synthetic integration passed 13 compatibility tests and 67 external-text-layout tests under both registered Python environments; static preflight remains PASS with execution_authorized=false. Keep all detector and cache execution disabled while swap exceeds 512 MiB; the tiled result remains absent. Once the unchanged host gate passes, the only next execution is the single preregistered tiled hw5k_1011.jpg probe. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
+    "next_action": "The hash-bound cache-stage monitor is integrated and verified, but safe in-session host cleanup left swap at 1,362.62 MiB versus the unchanged 512 MiB maximum. No OMX team, model process, or Booted Simulator remained; terminating user CoreSimulator services and sampling for two minutes did not close the gate, and no user applications were disrupted. The single tiled probe remains unconsumed and all cache paths remain absent. Use a fresh clean host restart as the next recovery boundary, then recheck every gate before opening unrelated applications. Do not auto-launch the probe or weaken the absolute swap limit. Quality, visual, promotion, and reserved-blind surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -636,7 +644,7 @@
         "status": "passed"
       },
       {
-        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator binds the tiled result identity and strict schema. The separate runtime-monitor integration now preserves the historical helper/cache hashes while continuously enforcing resource limits across the child process tree, with synthetic tests passing under both registered Python environments. No detector or cache process executed. Current swap is about 1,410.62 MiB, so the single tiled page remains disabled.",
+        "detail": "Pending the exact preregistered tiled one-page safety probe and monitored historical cache reconstruction. The old v1 validator is intentionally not reused, and the v2 validator binds the tiled result identity and strict schema. The runtime monitor is integrated under both registered Python environments. Safe host cleanup confirmed no OMX team, model process, or Booted Simulator, but swap remained 1,362.62 MiB after user CoreSimulator termination and five stable samples. No detector or cache process executed; the single tiled page remains disabled until a fresh clean host passes the unchanged gate.",
         "id": "external_text_layout_support_train_only_diagnostic",
         "status": "pending"
       },
@@ -2134,6 +2142,22 @@
       "outcome": "hash_bound_process_group_monitor_passed_13_compatibility_tests_and_67_external_text_layout_tests_under_python_3_13_1_and_3_10_11_with_atomic_success_nonzero_failure_resource_and_reader_termination_sigkill_escalation_static_preflight_closed_and_no_model_or_cache_execution",
       "repeat_policy": "wait_for_swap_at_or_below_512_mib_then_run_only_the_single_preregistered_tiled_probe_before_any_monitored_cache_reconstruction",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/external-text-layout-host-readiness-recovery-20260814.json",
+          "sha256": "7034474fe63fa38ea026221bef837c1f0dca0a4de582942da402e93870191637"
+        },
+        {
+          "path": "docs/decisions/2026-08-14-external-text-layout-host-readiness-recovery.md",
+          "sha256": "2fb608ddbbc41034ef7a645fb3b86ddc4c66646ca10ce37f58e8195bfcfe0e38"
+        }
+      ],
+      "id": "external-text-layout-host-readiness-recovery",
+      "outcome": "safe_process_cleanup_removed_user_core_simulator_services_but_swap_remained_1362_62_mib_with_zero_booted_simulators_zero_model_processes_absent_probe_and_caches_and_no_attempt_consumed",
+      "repeat_policy": "use_a_fresh_clean_host_restart_then_recheck_all_frozen_gates_before_opening_unrelated_applications_or_manually_launching_the_single_probe",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1

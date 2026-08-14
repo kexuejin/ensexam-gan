@@ -1,0 +1,60 @@
+{
+  "authority": {
+    "cache_reconstruction_execution": false,
+    "candidate_inference": false,
+    "detector_model_execution": false,
+    "formal_external_layout_materialization": false,
+    "product_default": "artifacts/current-primary",
+    "promotion_state": "disabled",
+    "quality_evaluation": false,
+    "reserved_blind_state": "disabled",
+    "result_authority": "host_readiness_recovery_only",
+    "training": false
+  },
+  "cleanup": {
+    "booted_ios_simulator_count_before": 0,
+    "conflicting_model_process_count_before": 0,
+    "interactive_sudo_used": false,
+    "omx_team_states": {
+      "correct-commit-4755e21-in-exac": "absent",
+      "read-omx-context-monotonic-res": "absent"
+    },
+    "system_purge": "not_authorized_without_interactive_sudo",
+    "user_applications_terminated": false,
+    "user_core_simulator_services_terminated": true
+  },
+  "final_state": {
+    "booted_ios_simulator_count": 0,
+    "memory_free_percent": 87.0,
+    "primary_cache_present": false,
+    "second_stage_cache_present": false,
+    "swap_used_bytes": 1428810629,
+    "swap_used_mib": 1362.62,
+    "tiled_probe_result_present": false
+  },
+  "host": {
+    "booted_at": "2026-08-13T22:16:48+08:00",
+    "initial_swap_used_bytes": 1470753669,
+    "initial_swap_used_mib": 1402.62,
+    "minimum_memory_free_percent_observed": 87.0,
+    "post_cleanup_swap_samples_mib": [
+      1370.62,
+      1370.62,
+      1370.62,
+      1370.62,
+      1370.62
+    ],
+    "sample_interval_seconds": 30,
+    "sampled_at": "2026-08-14T21:45:45+08:00"
+  },
+  "next_action": "After a fresh clean host restart, recheck the unchanged 512 MiB swap gate before opening unrelated applications. Do not automatically launch or consume the single tiled probe attempt.",
+  "reason_code": "swap_gate_remains_closed_after_safe_process_cleanup",
+  "registered_gate": {
+    "maximum_swap_used_bytes": 536870912,
+    "minimum_system_free_memory_percent": 70.0,
+    "required_booted_ios_simulator_count": 0,
+    "required_conflicting_model_process_count": 0
+  },
+  "schema_version": 1,
+  "terminal": "PREREQUISITE_NEEDED"
+}
