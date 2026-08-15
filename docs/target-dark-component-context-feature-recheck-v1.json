@@ -1,0 +1,83 @@
+{
+  "allowed_successors": [
+    "select another named failure bucket with an available leakage-safe train-only path",
+    "preregister a materially different non-component-ranker candidate family with train-only evidence",
+    "record durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "frozen_next120": false,
+    "generator_training": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "visual_review": false
+  },
+  "evidence": [
+    {
+      "path": "outputs/target_dark_component_page_holdout_preflight_20260719/summary.json",
+      "sha256": "ab50439856b90b0cd18b89a59c2d5004a865bd532095c915db8501a481d500d7"
+    },
+    {
+      "path": "outputs/target_dark_component_page_holdout_preflight_20260719/context_feature_preflight.json",
+      "sha256": "b0fe8093702efc276d3260b6788a407a44b794f337b9d8d5e81b78835ef6bf21"
+    },
+    {
+      "path": "outputs/target_dark_component_page_holdout_preflight_20260719/context_feature_ablation.json",
+      "sha256": "0177bca125d292d18c5a741e11e428d4424d861720a89a8bcceb0173eb4c9f0c"
+    },
+    {
+      "path": "outputs/target_dark_component_page_holdout_preflight_20260719/decision.json",
+      "sha256": "3af307e19a5ffbd0044627490ec9f63e362c897320c54ce1e70dc50e7b65e48b"
+    }
+  ],
+  "failure_bucket": "target_dark_or_overerase_risk",
+  "family": "target_dark_component_context_feature_v1",
+  "forbidden_next_steps_inside_family": [
+    "add_more_labels_to_same_component_ranker",
+    "threshold_or_top_k_rescue",
+    "feature_subset_cherry_pick",
+    "run_generator_finetune_from_failed_component_selector",
+    "use_next120_scut115_holdout40_or_reserved_blind_for_selection",
+    "promote_or_replace_current_primary"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "metrics": {
+    "component_rows": 55948,
+    "context_feature_count": 26,
+    "context_feature_delta_reviewed_minus_weak": {
+      "macro_average_precision": -0.1057951931742872,
+      "macro_roc_auc": -0.11339957395126077,
+      "top_k_reject_ratio": 0.09876543209876543
+    },
+    "context_feature_status": "failed",
+    "evaluable_pages": 10,
+    "failed_criteria": [
+      "macro_roc_auc_delta_below_0.02",
+      "macro_average_precision_delta_below_0.02",
+      "top50_per_page_reject_ratio_delta_above_-0.02"
+    ],
+    "reviewed_label_counts": {
+      "negative": 16,
+      "positive": 20,
+      "usable": 36
+    },
+    "scalar_feature_count": 18,
+    "scalar_feature_delta_reviewed_minus_weak": {
+      "macro_average_precision": -0.07793004418448701,
+      "macro_roc_auc": -0.09419069659268742,
+      "top_k_reject_ratio": 0.08024691358024694
+    },
+    "scalar_feature_status": "failed"
+  },
+  "schema_version": 1,
+  "state": "preexisting_train160_recheck_terminal",
+  "terminal_result": {
+    "reason": "The prior train160 leave-one-page-out component-selector evidence rejects both the same 18 scalar features and the 26-feature multiscale context / printed-line continuity extension: reviewed labels underperform weak labels on macro ROC-AUC and average precision and increase top-50-per-page reject ratio. The family should not feed a generator fine-tune or validation gate.",
+    "terminal": "KILL"
+  }
+}
