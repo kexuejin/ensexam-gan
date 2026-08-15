@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Close the available target-dark component-ranker context-feature successor using existing leakage-safe train160 evidence, then require the next route to select another named failure bucket, a materially different non-component-ranker family, or broader durable exhaustion.",
+    "causal_change": "Close the balanced007 Delta-Trust oracle-ceiling route using existing development-only oracle evidence, then require the next route to select another named failure bucket, a materially different non-Delta-Trust family, or broader durable exhaustion.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1629,12 +1629,36 @@
       {
         "path": "outputs/target_dark_component_page_holdout_preflight_20260719/decision.json",
         "sha256": "3af307e19a5ffbd0044627490ec9f63e362c897320c54ce1e70dc50e7b65e48b"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-balanced007-delta-trust-oracle-ceiling-recheck-kill.md",
+        "sha256": "cf782d2d7d5ccdf0a59259435ca38993f9c3ceb44f73ae35eacbf67077bb4128"
+      },
+      {
+        "path": "docs/balanced007-delta-trust-oracle-ceiling-recheck-v1.json",
+        "sha256": "1024407a756c50029eac2e63887c9ec442353032109ba5ffe63209917c74c635"
+      },
+      {
+        "path": "outputs/delta_trust_oracle_20260719/train160_reverify/summary.json",
+        "sha256": "9202aca988e394316515ada017fa5ea2969886c627ca5fe5227f3374de237875"
+      },
+      {
+        "path": "outputs/delta_trust_oracle_20260719/train160_reverify/per_page.csv",
+        "sha256": "da7e29f12efead9842ed137a8ccf6fec5267ae4865b8adca556c86842ba5b2d4"
+      },
+      {
+        "path": "outputs/delta_trust_oracle_20260719/next120_reverify/summary.json",
+        "sha256": "3526ad266e723f6c012cd9264bee7d9303b58632851dc2d633c9d336afa403c1"
+      },
+      {
+        "path": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
+        "sha256": "6f7ca3d933d75e07f9c1d923527d1501117733c459a40853e9a02fb80121f28d"
       }
     ],
     "failure_bucket": "target_dark_or_overerase_risk",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "select another named failure bucket with an available leakage-safe train-only path, preregister a materially different non-component-ranker candidate family with train-only evidence, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "select another named failure bucket with an available leakage-safe train-only path, preregister a materially different non-Delta-Trust candidate family with train-only evidence, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -2038,8 +2062,13 @@
       },
       {
         "id": "post_target_dark_component_context_feature_recheck_successor_selection",
+        "status": "passed",
+        "detail": "The next available target_dark_or_overerase_risk route was rechecked as balanced007 Delta-Trust oracle ceiling, but the existing development-only oracle was worse than the current candidate on train160 and next120. The loop must choose another named bucket, a materially different non-Delta-Trust family, or broader durable exhaustion."
+      },
+      {
+        "id": "post_balanced007_delta_trust_oracle_ceiling_recheck_successor_selection",
         "status": "pending",
-        "detail": "After closing the target-dark component-ranker context-feature route, choose another leakage-safe train-only route: a different named failure bucket, a materially different non-component-ranker family, or broader durable exhaustion if none remain."
+        "detail": "After closing the balanced007 Delta-Trust no-headroom route, choose another leakage-safe train-only route: a different named failure bucket, a materially different non-Delta-Trust family, or broader durable exhaustion if none remain."
       }
     ],
     "killed_family_prohibitions": [
@@ -2166,7 +2195,10 @@
       "stroke_only_source_candidate_page_specific_visual_heldout_or_promotion_rescue",
       "target_dark_component_context_feature_v1_repeat",
       "target_dark_component_context_feature_v1_label_threshold_topk_or_feature_subset_rescue",
-      "target_dark_component_context_feature_v1_generator_training_validation_or_promotion"
+      "target_dark_component_context_feature_v1_generator_training_validation_or_promotion",
+      "balanced007_delta_trust_oracle_ceiling_v1_repeat",
+      "balanced007_delta_trust_oracle_ceiling_v1_threshold_margin_selector_or_page_rescue",
+      "balanced007_delta_trust_oracle_ceiling_v1_patch_index_training_validation_or_promotion"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -4863,6 +4895,38 @@
         {
           "path": "outputs/target_dark_component_page_holdout_preflight_20260719/decision.json",
           "sha256": "3af307e19a5ffbd0044627490ec9f63e362c897320c54ce1e70dc50e7b65e48b"
+        }
+      ]
+    },
+    {
+      "id": "balanced007-delta-trust-oracle-ceiling-recheck-kill",
+      "terminal": "KILL",
+      "outcome": "balanced007_delta_trust_target_aware_oracle_worse_than_current_candidate_on_train160_and_next120_before_patch_index_or_training",
+      "repeat_policy": "do_not_repeat_balanced007_delta_trust_oracle_ceiling_v1_or_rescue_with_threshold_margin_selector_page_patch_index_training_or_validation_selection",
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-balanced007-delta-trust-oracle-ceiling-recheck-kill.md",
+          "sha256": "cf782d2d7d5ccdf0a59259435ca38993f9c3ceb44f73ae35eacbf67077bb4128"
+        },
+        {
+          "path": "docs/balanced007-delta-trust-oracle-ceiling-recheck-v1.json",
+          "sha256": "1024407a756c50029eac2e63887c9ec442353032109ba5ffe63209917c74c635"
+        },
+        {
+          "path": "outputs/delta_trust_oracle_20260719/train160_reverify/summary.json",
+          "sha256": "9202aca988e394316515ada017fa5ea2969886c627ca5fe5227f3374de237875"
+        },
+        {
+          "path": "outputs/delta_trust_oracle_20260719/train160_reverify/per_page.csv",
+          "sha256": "da7e29f12efead9842ed137a8ccf6fec5267ae4865b8adca556c86842ba5b2d4"
+        },
+        {
+          "path": "outputs/delta_trust_oracle_20260719/next120_reverify/summary.json",
+          "sha256": "3526ad266e723f6c012cd9264bee7d9303b58632851dc2d633c9d336afa403c1"
+        },
+        {
+          "path": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
+          "sha256": "6f7ca3d933d75e07f9c1d923527d1501117733c459a40853e9a02fb80121f28d"
         }
       ]
     }

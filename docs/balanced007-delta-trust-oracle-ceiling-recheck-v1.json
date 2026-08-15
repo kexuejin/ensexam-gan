@@ -1,0 +1,71 @@
+{
+  "allowed_successors": [
+    "select another named failure bucket with an available leakage-safe train-only path",
+    "preregister a materially different non-Delta-Trust candidate family with train-only evidence",
+    "record broader durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "generator_training": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "patch_index_generation": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "visual_review": false
+  },
+  "evidence": [
+    {
+      "path": "outputs/delta_trust_oracle_20260719/train160_reverify/summary.json",
+      "sha256": "9202aca988e394316515ada017fa5ea2969886c627ca5fe5227f3374de237875"
+    },
+    {
+      "path": "outputs/delta_trust_oracle_20260719/train160_reverify/per_page.csv",
+      "sha256": "da7e29f12efead9842ed137a8ccf6fec5267ae4865b8adca556c86842ba5b2d4"
+    },
+    {
+      "path": "outputs/delta_trust_oracle_20260719/next120_reverify/summary.json",
+      "sha256": "3526ad266e723f6c012cd9264bee7d9303b58632851dc2d633c9d336afa403c1"
+    },
+    {
+      "path": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
+      "sha256": "6f7ca3d933d75e07f9c1d923527d1501117733c459a40853e9a02fb80121f28d"
+    }
+  ],
+  "failure_bucket": "target_dark_or_overerase_risk",
+  "family": "balanced007_delta_trust_oracle_ceiling_v1",
+  "forbidden_next_steps_inside_family": [
+    "patch_index_generation",
+    "gate_trainer_or_generator_finetune",
+    "threshold_or_margin_rescue",
+    "selector_overlay_or_page_specific_rescue",
+    "inner_val15_or_later_gate_execution",
+    "scut115_holdout40_reserved_blind_or_promotion"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "metrics": {
+    "next120_reverify": {
+      "candidate_mean_residual_ratio": 0.15770184436039653,
+      "oracle_mean_residual_ratio": 0.16027805143857732,
+      "oracle_minus_candidate_residual": 0.002576207078180792,
+      "pages": 120,
+      "support_pixels": 7479564
+    },
+    "train160_reverify": {
+      "candidate_mean_residual_ratio": 0.13961410057582127,
+      "oracle_mean_residual_ratio": 0.1426499990852715,
+      "oracle_minus_candidate_residual": 0.003035898509450241,
+      "pages": 160,
+      "support_pixels": 4523003
+    }
+  },
+  "schema_version": 1,
+  "state": "preexisting_development_oracle_ceiling_terminal",
+  "terminal_result": {
+    "reason": "The target-aware Delta-Trust oracle is worse than the current balanced007 candidate on both train160 and next120 reverify splits, so the route has no development-only residual headroom before any patch index, trainer, validation, or promotion surface opens.",
+    "terminal": "KILL"
+  }
+}
