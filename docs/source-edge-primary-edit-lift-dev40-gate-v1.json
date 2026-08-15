@@ -1,0 +1,135 @@
+{
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": "completed_passed_dev40_metric_gate",
+    "holdout40": "authorized_next_for_fixed_source_candidate_only_after_or_alongside_scut115",
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": "authorized_next_for_fixed_source_candidate_only",
+    "visual_review": false
+  },
+  "candidate": "source_edge_primary_edit_lift_v1_primary_edit_source_edge_core",
+  "family": "source_edge_primary_edit_lift_source_candidate_v1",
+  "forbidden_rescues": [
+    "source_edge_primary_edit_lift_v1_dev40_threshold_rescue",
+    "source_edge_primary_edit_lift_v1_dev40_alpha_or_lift_rescue",
+    "source_edge_primary_edit_lift_v1_dev40_page_specific_selection",
+    "source_edge_primary_edit_lift_v1_dev40_review_acceptance_substitution",
+    "source_edge_primary_edit_lift_v1_reserved_blind_before_scut115_holdout40",
+    "source_edge_primary_edit_lift_v1_current_primary_replacement_before_reserved_blind_pass"
+  ],
+  "gate": "dev40",
+  "gate_protocol": "scut_dev_candidate_gate",
+  "gate_result": {
+    "baseline_csv": "/Volumes/Kapp/tmp/scut_dev40_current_primary_baseline_20260726_primaryonly/post_freeze_metrics.csv",
+    "baseline_csv_sha256": "d409591570434507a401b801361d7156e2039b4eb7a2203a41f258fd1c1aebe7",
+    "baseline_summary": {
+      "max_overerase_ratio": 0.010905079318222868,
+      "max_residual_ratio": 0.46329031644365526,
+      "mean_overerase_ratio": 0.002511352723878475,
+      "mean_residual_ratio": 0.13591130004908952,
+      "p95_overerase_ratio": 0.0064474865233278816,
+      "p95_residual_ratio": 0.3049251144096621
+    },
+    "candidate_csv": "outputs/source-edge-primary-edit-dev40-gate-20260816-v1/source_candidate/post_freeze_metrics.csv",
+    "candidate_csv_sha256": "092089d5a70cca5b5f6842a699a43fde8e4258d6fe8beb2636ae81c54d80282b",
+    "candidate_is_whole_checkpoint": true,
+    "candidate_summary": {
+      "max_overerase_ratio": 0.010905079318222868,
+      "max_residual_ratio": 0.4619902974189866,
+      "mean_overerase_ratio": 0.002511352723878475,
+      "mean_residual_ratio": 0.13470177127700783,
+      "p95_overerase_ratio": 0.0064474865233278816,
+      "p95_residual_ratio": 0.30289272749294965
+    },
+    "checks": [
+      {
+        "actual": 0.13470177127700783,
+        "bound": 0.13591130004908952,
+        "name": "mean_residual_improves",
+        "passed": true
+      },
+      {
+        "actual": 0.002511352723878475,
+        "bound": 0.002511352723878475,
+        "name": "mean_overerase_ratio_does_not_regress",
+        "passed": true
+      },
+      {
+        "actual": 0.30289272749294965,
+        "bound": 0.3049251144096621,
+        "name": "p95_residual_ratio_does_not_regress",
+        "passed": true
+      },
+      {
+        "actual": 0.0064474865233278816,
+        "bound": 0.0064474865233278816,
+        "name": "p95_overerase_ratio_does_not_regress",
+        "passed": true
+      },
+      {
+        "actual": 0.4619902974189866,
+        "bound": 0.46329031644365526,
+        "name": "max_residual_ratio_does_not_regress",
+        "passed": true
+      },
+      {
+        "actual": 0.010905079318222868,
+        "bound": 0.010905079318222868,
+        "name": "max_overerase_ratio_does_not_regress",
+        "passed": true
+      },
+      {
+        "count": 0,
+        "files": [],
+        "name": "no_page_residual_regressions",
+        "passed": true
+      },
+      {
+        "count": 0,
+        "files": [],
+        "name": "no_page_overerase_regressions",
+        "passed": true
+      }
+    ],
+    "decision": "accept",
+    "gate_scope": "six_metrics_plus_per_page_nonregression",
+    "mean_residual_bound": 0.13591130004908952,
+    "min_mean_residual_improvement_pct": 0.0,
+    "p95_convention": "linear",
+    "p95_method": "numpy.quantile(q=0.95, method='linear')",
+    "page_specific_selection_forbidden": true,
+    "paired_source_and_label_identity_required": true,
+    "protocol": "scut_dev_candidate_gate",
+    "sample_count": 40,
+    "tolerance": 1e-12
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "scope_note": "This is a deterministic postprocess source-candidate gate using the generic dev candidate metric gate; it is not a whole-checkpoint blind_eval_manifest gate.",
+  "source_candidate_summary": {
+    "baseline_overerase_ratio": 0.002511352723878475,
+    "baseline_residual_ratio": 0.1359113000490895,
+    "candidate_overerase_ratio": 0.002511352723878475,
+    "candidate_residual_ratio": 0.1347017712770078,
+    "changed_px": 284966,
+    "mask_px": 377978,
+    "max_page_overerase_delta": 0.0,
+    "min_page_residual_gain": 0.0,
+    "overerase_delta": 0.0,
+    "pages": 40,
+    "residual_gain": 0.0012095287720816912
+  },
+  "state": "dev40_candidate_gate_passed_pending_scut115_holdout40",
+  "terminal_result": {
+    "reason": "The fixed source-edge primary-edit source candidate improved Dev40 mean residual, did not regress mean/p95/max residual or overerase, and had zero page-level residual or overerase regressions.",
+    "terminal": "PASS"
+  },
+  "terminal_successors": {
+    "KILL": "close source_edge_primary_edit_lift_v1 without metric, threshold, alpha, component, kernel, or page-specific rescue",
+    "PASS": "authorize SCUT115 and holdout40 evaluation for the fixed source_edge_primary_edit_lift_v1 source candidate only; keep reserved blind, visual review, promotion, and current-primary replacement closed",
+    "PREREQUISITE_NEEDED": "repair deterministic candidate-gate evidence or metadata only"
+  }
+}

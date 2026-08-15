@@ -1,0 +1,174 @@
+{
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": "authorized_next_for_fixed_source_candidate_only",
+    "holdout40": false,
+    "inner_val15": "completed_once_source_candidate_passed",
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "source_candidate_materialization": "train160_completed",
+    "stroke_only_materialization": "train160_completed_and_inner_val15_stroke_soft_completed",
+    "visual_review": false
+  },
+  "causal_change": "Create a target-free train-only source candidate by applying a small lift only where source-edge magnitude is high, current-primary already brightened that pixel, and the baseline still remains below local paper tone.",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "family": "source_edge_primary_edit_lift_source_candidate_v1",
+  "fixed_config": {
+    "alpha": 0.18,
+    "baseline_dark": 242,
+    "local_dark_delta": 3,
+    "local_median_kernel": 81,
+    "max_component_area": 5000,
+    "max_lift": 16,
+    "min_component_area": 2,
+    "name": "primary_edit_source_edge_core",
+    "primary_edit_floor": 24,
+    "seed_lift_floor": 1,
+    "source_edge_floor": 28
+  },
+  "forbidden_rescues": [
+    "source_edge_primary_edit_lift_v1_source_edge_threshold_rescue",
+    "source_edge_primary_edit_lift_v1_primary_edit_floor_rescue",
+    "source_edge_primary_edit_lift_v1_alpha_or_max_lift_rescue",
+    "source_edge_primary_edit_lift_v1_component_area_kernel_or_dilation_rescue",
+    "source_edge_primary_edit_lift_v1_stroke_only_variant_tuning_after_result",
+    "source_edge_primary_edit_lift_v1_inner_val15_repeat",
+    "source_edge_primary_edit_lift_v1_scut115_before_development_gate",
+    "source_edge_primary_edit_lift_v1_holdout40_before_development_gate",
+    "source_edge_primary_edit_lift_v1_reserved_blind_before_promotion_gates",
+    "source_edge_primary_edit_lift_v1_current_primary_replacement_before_reserved_blind_pass"
+  ],
+  "generation_inputs": {
+    "allowed_splits": [
+      "train",
+      "train160",
+      "inner_val15"
+    ],
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "source_image": "target_free_original_input",
+    "target_image": "read_only_after_candidate_write_for_train_only_and_inner_val15_scoring"
+  },
+  "inner_val15_metrics": {
+    "source_candidate": {
+      "baseline_overerase_ratio": 0.0023790117704119633,
+      "baseline_residual_ratio": 0.176724008240876,
+      "candidate_overerase_ratio": 0.0023790117704119633,
+      "candidate_residual_ratio": 0.1748908665247916,
+      "gate_checks": {
+        "max_overerase_nonregression": true,
+        "max_residual_nonregression": true,
+        "mean_overerase_nonregression": true,
+        "minimum_residual_gain_met": true,
+        "no_page_overerase_regression": true,
+        "no_page_residual_regression": true,
+        "p95_overerase_nonregression": true,
+        "p95_residual_nonregression": true
+      },
+      "lower_index_p95_overerase_baseline": 0.00358020181151661,
+      "lower_index_p95_overerase_candidate": 0.00358020181151661,
+      "lower_index_p95_residual_baseline": 0.2853321124307632,
+      "lower_index_p95_residual_candidate": 0.28203747093623477,
+      "max_overerase_ratio_baseline": 0.0063860319992422076,
+      "max_overerase_ratio_candidate": 0.0063860319992422076,
+      "max_page_overerase_delta": 0.0,
+      "max_residual_ratio_baseline": 0.38686215615401587,
+      "max_residual_ratio_candidate": 0.383668482411037,
+      "min_page_residual_gain": 4.453192493698854e-05,
+      "overerase_delta": 0.0,
+      "overerase_regression_pages": [],
+      "pages": 15,
+      "residual_gain": 0.001833141716084386,
+      "residual_regression_pages": [],
+      "terminal": "PASS"
+    },
+    "stroke_soft": {
+      "baseline_overerase_ratio": 0.0023790117704119633,
+      "baseline_residual_ratio": 0.176724008240876,
+      "candidate_overerase_ratio": 0.0023790117704119633,
+      "candidate_residual_ratio": 0.1764883385469651,
+      "gate_checks": {
+        "max_overerase_nonregression": true,
+        "max_residual_nonregression": true,
+        "mean_overerase_nonregression": true,
+        "minimum_residual_gain_met": false,
+        "no_page_overerase_regression": true,
+        "no_page_residual_regression": false,
+        "p95_overerase_nonregression": true,
+        "p95_residual_nonregression": true
+      },
+      "lower_index_p95_overerase_baseline": 0.00358020181151661,
+      "lower_index_p95_overerase_candidate": 0.00358020181151661,
+      "lower_index_p95_residual_baseline": 0.2853321124307632,
+      "lower_index_p95_residual_candidate": 0.285035864012999,
+      "max_overerase_ratio_baseline": 0.0063860319992422076,
+      "max_overerase_ratio_candidate": 0.0063860319992422076,
+      "max_page_overerase_delta": 0.0,
+      "max_residual_ratio_baseline": 0.38686215615401587,
+      "max_residual_ratio_candidate": 0.3864480985592832,
+      "min_page_residual_gain": -4.453192493703018e-06,
+      "overerase_delta": 0.0,
+      "overerase_regression_pages": [],
+      "pages": 15,
+      "residual_gain": 0.0002356696939108958,
+      "residual_regression_pages": [
+        "506.jpg"
+      ],
+      "terminal": "KILL"
+    }
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "source_candidate_train160_metrics": {
+    "baseline_overerase_ratio": 0.0025530178200578405,
+    "baseline_residual_ratio": 0.2421483934598291,
+    "candidate_overerase_ratio": 0.0025530178200578405,
+    "candidate_residual_ratio": 0.2399776224349824,
+    "changed_px": 21506,
+    "mask_px": 28974,
+    "max_page_overerase_delta": 0.0,
+    "min_page_residual_gain": 0.0013586956521739052,
+    "overerase_delta": 0.0,
+    "pages": 3,
+    "residual_gain": 0.0021707710248467377
+  },
+  "state": "passed_inner_val15_pending_development_gate",
+  "stroke_only_train160_metrics": {
+    "stroke_balanced": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.0,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0
+    },
+    "stroke_soft": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.0002803657694962075,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0004963534150312412
+    },
+    "stroke_strict": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.0,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0
+    }
+  },
+  "terminal_result": {
+    "reason": "The fixed source-edge primary-edit candidate passed train160 preserve-first screening and the frozen inner_val15 gate: mean residual gain exceeded the calibrated 0.0005 floor, every inner_val15 page improved residual, and no page increased overerase. The registered stroke_soft derivative is KILLed and must not be substituted for the source candidate because it missed the residual floor and regressed 506.jpg.",
+    "terminal": "PASS"
+  },
+  "terminal_successors": {
+    "KILL": "close source_edge_primary_edit_lift_v1 without source-edge, edit-floor, alpha, component-size, kernel, or stroke-only variant rescue",
+    "PASS": "authorize the next development gate only for the fixed source_edge_primary_edit_lift_v1 source candidate; keep SCUT115, holdout40, reserved blind, visual review, promotion, and current-primary replacement closed until development gates pass",
+    "PREREQUISITE_NEEDED": "repair registered evidence or metadata only"
+  },
+  "why_materially_different": [
+    "Does not depend on missing selector-replay candidate PNGs.",
+    "Uses source edge magnitude as the causal selector, not source saturation or achromatic color class.",
+    "Uses current-primary existing edit as the permission signal, not broad source-dark local-paper lifting.",
+    "Uses component area only as an oversized-region guard, not as the causal selector from source_dark_thin_component_lift_v1.",
+    "Uses no external text-layout detector, learned edit head, target pixels during generation, validation surface, or blind surface."
+  ]
+}
