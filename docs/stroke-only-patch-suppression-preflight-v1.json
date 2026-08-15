@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "state": "preregistered_pending_stroke_only_patch_suppression_preflight",
+  "iteration_id": "monotonic-residual-erase-support",
+  "family": "stroke_only_patch_suppression_v1",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "causal_change": "Constrain a separately supplied repair candidate to source-dark lifted stroke pixels only, leaving baseline paper/background pixels unchanged before any quality surface opens.",
+  "rationale": {
+    "why_now": "External text layout as direct edit support is closed after conditioned monotonic, direct score, incremental score, and binary occupancy paths failed before promotion-safe candidate gates.",
+    "why_materially_different": "This route uses no external layout score, detector threshold, model checkpoint, or learned edit head. It gates an existing candidate by source-dark stroke locality to address paper-tone and overerase risk directly.",
+    "not_a_rescue_of_killed_families": [
+      "external_text_layout_direct_support_residual_v1",
+      "external_text_layout_incremental_support_residual_v1",
+      "external_text_layout_binary_mask_residual_v1",
+      "external_text_layout_conditioned_monotonic_v1",
+      "monotonic_residual_erase_v2"
+    ]
+  },
+  "authorization": {
+    "state": "preflight_only",
+    "model_training": false,
+    "checkpoint_generation": false,
+    "candidate_inference": false,
+    "inner_val15": false,
+    "development_gate": false,
+    "scut115": false,
+    "holdout40": false,
+    "reserved_blind": false,
+    "visual_review": false,
+    "promotion": false,
+    "current_primary_replacement": false
+  },
+  "inputs": {
+    "source_image": "target_free_original_input",
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "source_candidate_prediction": "separately_registered_non_promoted_candidate_prediction",
+    "target_image": "for_downstream_scoring_metadata_only_not_read_during_generation",
+    "allowed_default_splits": [
+      "train",
+      "train160"
+    ],
+    "validation_splits_forbidden_before_gate": [
+      "inner_val15",
+      "scut115",
+      "holdout40",
+      "reserved_blind"
+    ]
+  },
+  "stroke_only_mask": {
+    "source_dark_stroke_required": true,
+    "baseline_residual_required": true,
+    "candidate_lift_required": true,
+    "oversized_component_rejection": true,
+    "paper_background_must_remain_baseline": true,
+    "default_variants": [
+      "stroke_strict",
+      "stroke_balanced",
+      "stroke_soft"
+    ]
+  },
+  "planned_outputs_must_be_absent": {
+    "preflight_output": "outputs/stroke-only-patch-suppression-preflight-20260815",
+    "inner_val15_candidate": "outputs/stroke-only-patch-suppression-inner-val15-candidate",
+    "scut115_candidate": "outputs/stroke-only-patch-suppression-scut115-candidate",
+    "holdout40_candidate": "outputs/stroke-only-patch-suppression-holdout40-candidate",
+    "reserved_blind_candidate": "outputs/stroke-only-patch-suppression-reserved-blind-candidate"
+  },
+  "preflight_requirements": {
+    "implementation": "scripts/analysis/generate_stroke_only_patch_suppression.py",
+    "test": "tests/test_generate_stroke_only_patch_suppression.py",
+    "required_checks": [
+      "synthetic bright patch background remains unchanged",
+      "synthetic source-dark lifted stroke can change",
+      "default split authority rejects validation surfaces",
+      "train/train160 rows are accepted",
+      "planned validation and blind outputs are absent"
+    ]
+  },
+  "terminal_successors": {
+    "PASS": "authorize train-only preflight materialization only; still no inner-val15, SCUT115, holdout40, reserved blind, or promotion",
+    "KILL": "close stroke_only_patch_suppression_v1 without threshold, component-size, blend, or split rescue",
+    "PREREQUISITE_NEEDED": "repair preregistered preflight implementation or evidence only"
+  },
+  "forbidden_rescues": [
+    "source_dark_threshold_sweep_after_result",
+    "baseline_dark_threshold_sweep_after_result",
+    "lift_threshold_sweep_after_result",
+    "component_area_sweep_after_result",
+    "blend_sweep_after_result",
+    "review_or_metric_selection_on_scut115_before_inner_val15",
+    "holdout40_before_development_gates",
+    "reserved_blind_before_promotion_gates",
+    "using_target_pixels_during_generation"
+  ],
+  "evidence": {
+    "implementation": {
+      "path": "scripts/analysis/generate_stroke_only_patch_suppression.py",
+      "sha256": "df4e621fc2779bed04c311c80f3da82d01be3e0953071c96714a32077faa5d6e"
+    },
+    "test": {
+      "path": "tests/test_generate_stroke_only_patch_suppression.py",
+      "sha256": "3641a1085089b7b71807a77389dbbf726ea772c108cfb439cc929583cf2fb238"
+    },
+    "external_layout_binary_mask_kill": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-binary-mask-residual-reachability-kill.md",
+      "sha256": "66448e87a2efcda16c2b0ea7f7cde78edf0c7bd5b6e096259bdcabefd781b777"
+    },
+    "external_layout_direct_support_kill": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md",
+      "sha256": "4c8815ae6e1390dff27814335ff5f952a63dad46a73d2c9fb80bfa37ed0610e5"
+    },
+    "external_layout_incremental_support_kill": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md",
+      "sha256": "74d95f8bcc2cae0a886a4030bbed8610a6162618861a23c59b982e596be72a37"
+    }
+  }
+}

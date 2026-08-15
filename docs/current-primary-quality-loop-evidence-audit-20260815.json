@@ -1,5 +1,5 @@
 {
-  "artifact_reference_count": 606,
+  "artifact_reference_count": 614,
   "gap_class_counts": {
     "documented_ignored_evidence_hash_drift": 1,
     "documented_missing_ignored_artifact": 4,
@@ -1001,7 +1001,7 @@
     "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json": 1,
     "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json": 1
   },
-  "ok_count": 542,
+  "ok_count": 550,
   "status": "evidence_incomplete",
   "successor_readiness": {
     "blocking_gap_class_counts": {},

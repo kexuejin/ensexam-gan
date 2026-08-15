@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Choose and preregister one materially different successor after direct, incremental, binary-mask, and conditioned external-layout paths failed before promotion-safe candidate gates.",
+    "causal_change": "Preregister stroke-only patch suppression as a non-layout, preserve-first successor that can only constrain separately supplied repairs to source-dark lifted stroke pixels.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1077,12 +1077,28 @@
       {
         "path": "tests/test_external_text_layout_binary_mask_residual_reachability.py",
         "sha256": "b94a5afc2c555dd84eb9bbb568a8fc8c9459ccf73ffa015019887c3e717641bc"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-preregistration.md",
+        "sha256": "bbc63dabd0d81243165f5319556ab5dba696488a0b58d2a3dccb00d6aac48b22"
+      },
+      {
+        "path": "docs/stroke-only-patch-suppression-preflight-v1.json",
+        "sha256": "da5a0f6d5de6259049082a3bff769aa76b8ebd81139367ac004c842ae2fbc036"
+      },
+      {
+        "path": "scripts/analysis/generate_stroke_only_patch_suppression.py",
+        "sha256": "df4e621fc2779bed04c311c80f3da82d01be3e0953071c96714a32077faa5d6e"
+      },
+      {
+        "path": "tests/test_generate_stroke_only_patch_suppression.py",
+        "sha256": "3641a1085089b7b71807a77389dbbf726ea772c108cfb439cc929583cf2fb238"
       }
     ],
-    "failure_bucket": "post_external_layout_direct_support_exhaustion",
+    "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "preregister a non-rescue successor, either a separate target-free residual source with layout only as safety/veto or a non-layout failure bucket mechanism",
+    "next_action": "implement and run only the registered train/train160 stroke-only preflight; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1436,8 +1452,13 @@
       },
       {
         "id": "successor_preregistration_after_external_layout_exhaustion",
+        "status": "passed",
+        "detail": "A non-layout stroke-only patch suppression successor is preregistered with exact proposal, implementation, test, split authority, and no-candidate/no-validation boundary."
+      },
+      {
+        "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
-        "detail": "Record one new causal change outside killed external-layout direct-support, incremental-score, binary-mask, conditioned-monotonic, threshold-rescue, detector-transform, and gate-lowering paths before implementation or first-gate execution."
+        "detail": "Run only the registered train/train160 preflight for stroke-only patch suppression and prove synthetic preserve safety, split-authority closure, and planned validation/blind output absence before any candidate or gate opens."
       }
     ],
     "killed_family_prohibitions": [
@@ -3473,6 +3494,30 @@
       "outcome": "binary_external_text_occupancy_mask_reachable_but_preserve_gate_unsafe_before_candidate_surface",
       "repeat_policy": "do_not_repeat_or_rescue_with_detector_confidence_layout_gate_or_candidate_threshold_tuning",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-preregistration.md",
+          "sha256": "bbc63dabd0d81243165f5319556ab5dba696488a0b58d2a3dccb00d6aac48b22"
+        },
+        {
+          "path": "docs/stroke-only-patch-suppression-preflight-v1.json",
+          "sha256": "da5a0f6d5de6259049082a3bff769aa76b8ebd81139367ac004c842ae2fbc036"
+        },
+        {
+          "path": "scripts/analysis/generate_stroke_only_patch_suppression.py",
+          "sha256": "df4e621fc2779bed04c311c80f3da82d01be3e0953071c96714a32077faa5d6e"
+        },
+        {
+          "path": "tests/test_generate_stroke_only_patch_suppression.py",
+          "sha256": "3641a1085089b7b71807a77389dbbf726ea772c108cfb439cc929583cf2fb238"
+        }
+      ],
+      "id": "stroke-only-patch-suppression-preregistration",
+      "outcome": "non_layout_source_dark_stroke_only_patch_suppression_frozen_pending_train_only_preflight",
+      "repeat_policy": "implement_and_run_exact_train_only_stroke_only_preflight_no_threshold_blend_component_or_split_rescue",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
