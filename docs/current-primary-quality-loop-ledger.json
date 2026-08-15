@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Replace the killed five-channel conditioned monotonic U-Net path with a closed-form external text-layout support-score residual projection, authorized only for a train-role reachability diagnostic after the support diagnostic PASS and checkpoint-gate KILL.",
+    "causal_change": "Close the closed-form external text-layout direct-support residual projection after train-only reachability showed strong positive effect but unsafe preserve-gate leakage.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -988,13 +988,29 @@
       },
       {
         "path": "tests/test_external_text_layout_direct_support_residual_preflight.py",
-        "sha256": "08da07e58133bdbe9b1a0a666153eb792d65bf362916eb12ef1d538ec0bacc81"
+        "sha256": "0d021ffaf97b58178a6f086a5e5de9839eae91c1dbadb894b6e14e6c7b4b3c6f"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md",
+        "sha256": "4c8815ae6e1390dff27814335ff5f952a63dad46a73d2c9fb80bfa37ed0610e5"
+      },
+      {
+        "path": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815/audit.json",
+        "sha256": "3a5ecf3b8acec9eea35524d4d1e7e3789303bd0ba69954197e1ee2a3d09f2d69"
+      },
+      {
+        "path": "scripts/analysis/audit_external_text_layout_direct_support_residual_reachability.py",
+        "sha256": "a1894f6727e7cc49243f274b76d291f33cd518eac37558222b046c7f78793c3d"
+      },
+      {
+        "path": "tests/test_external_text_layout_direct_support_residual_reachability.py",
+        "sha256": "f366d5c9fc762cfd8cf96452888bca03ee04062d6901c3c047126e7542a58010"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Run only the registered train-role direct-support reachability diagnostic from docs/external-text-layout-direct-support-residual-proposal-v1.json. Model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, threshold rescue, and resource-threshold tuning remain closed until that diagnostic passes.",
+    "next_action": "Direct-support residual v1 is closed: train-only reachability KILLed on preserve safety (preserve gate ratio 0.4356632845245391 versus the 0.005 maximum). Keep model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, threshold rescue, and resource-threshold tuning closed. Next, preregister a materially different mechanism with explicit preserve separation before any candidate surface opens.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1119,6 +1135,11 @@
       {
         "detail": "The direct support-score residual proposal preflight freezes a materially different, no-U-Net path: use the already PASSed closed-form external text-layout support score only to authorize a train-role reachability diagnostic. It keeps model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, and threshold rescue closed.",
         "id": "external_text_layout_direct_support_residual_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "The registered train-only direct support-score residual reachability diagnostic KILLed the family before candidate inference: all 256 patches had positive-gate reachability and positive gate ratio was 0.8899201285493683, but preserve gate ratio was 0.4356632845245391 versus the frozen 0.005 maximum. No training, checkpoint generation, candidate inference, quality gate, visual review, reserved blind, or promotion opened.",
+        "id": "external_text_layout_direct_support_residual_reachability_diagnostic",
         "status": "passed"
       },
       {
@@ -3138,7 +3159,7 @@
         },
         {
           "path": "tests/test_external_text_layout_direct_support_residual_preflight.py",
-          "sha256": "08da07e58133bdbe9b1a0a666153eb792d65bf362916eb12ef1d538ec0bacc81"
+          "sha256": "0d021ffaf97b58178a6f086a5e5de9839eae91c1dbadb894b6e14e6c7b4b3c6f"
         },
         {
           "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
@@ -3161,6 +3182,42 @@
       "outcome": "closed_form_support_score_residual_projection_preflight_passed_without_training_candidate_or_quality_gate",
       "repeat_policy": "run_only_the_registered_train_role_reachability_diagnostic_no_candidate_or_threshold_rescue",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md",
+          "sha256": "4c8815ae6e1390dff27814335ff5f952a63dad46a73d2c9fb80bfa37ed0610e5"
+        },
+        {
+          "path": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815/audit.json",
+          "sha256": "3a5ecf3b8acec9eea35524d4d1e7e3789303bd0ba69954197e1ee2a3d09f2d69"
+        },
+        {
+          "path": "scripts/analysis/audit_external_text_layout_direct_support_residual_reachability.py",
+          "sha256": "a1894f6727e7cc49243f274b76d291f33cd518eac37558222b046c7f78793c3d"
+        },
+        {
+          "path": "tests/test_external_text_layout_direct_support_residual_reachability.py",
+          "sha256": "f366d5c9fc762cfd8cf96452888bca03ee04062d6901c3c047126e7542a58010"
+        },
+        {
+          "path": "tests/test_external_text_layout_direct_support_residual_preflight.py",
+          "sha256": "0d021ffaf97b58178a6f086a5e5de9839eae91c1dbadb894b6e14e6c7b4b3c6f"
+        },
+        {
+          "path": "docs/external-text-layout-direct-support-residual-proposal-v1.json",
+          "sha256": "fbdfc25d977238f33c7631a59b3ef76ac56b8a8c9f59384730f44a4555aab054"
+        },
+        {
+          "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+          "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+        }
+      ],
+      "id": "external-text-layout-direct-support-residual-reachability-diagnostic",
+      "outcome": "direct_support_projection_reachable_but_preserve_gate_unsafe_before_candidate_surface",
+      "repeat_policy": "do_not_rescue_with_score_normalization_detector_transform_gate_or_candidate_threshold_tuning",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1

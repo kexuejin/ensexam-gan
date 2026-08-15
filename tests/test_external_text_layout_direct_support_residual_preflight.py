@@ -7,6 +7,7 @@ import numpy as np
 
 from scripts.analysis.validate_external_text_layout_direct_support_residual_preflight import (
     LEDGER_PATH,
+    OUTPUT_PATH,
     PLAN_PATH,
     PreflightError,
     assert_exact_plan,
@@ -77,14 +78,19 @@ class ExternalTextLayoutDirectSupportResidualPreflightTest(unittest.TestCase):
         with self.assertRaisesRegex(PreflightError, "checkpoint"):
             validate_ledger_authority(ROOT, ledger)
 
-    def test_registered_preflight_passes_without_opening_candidate_surface(self) -> None:
-        result = run_preflight(repo_root=ROOT)
+    def test_registered_preflight_artifact_passed_without_opening_candidate_surface(self) -> None:
+        result = json.loads((ROOT / OUTPUT_PATH).read_text(encoding="utf-8"))
         self.assertEqual(result["terminal"], "PASS", result)
         self.assertFalse(result["model_training_started"])
         self.assertFalse(result["candidate_inference_started"])
         self.assertFalse(result["quality_gate_started"])
         self.assertFalse(result["promotion_enabled"])
         self.assertFalse(result["target_decode"])
+
+    def test_live_preflight_rerun_fails_closed_after_diagnostic_output_exists(self) -> None:
+        result = run_preflight(repo_root=ROOT)
+        self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED", result)
+        self.assertIn("planned output must be absent", result["reason"])
 
     def test_existing_planned_output_fails_closed(self) -> None:
         with TemporaryDirectory() as raw:
