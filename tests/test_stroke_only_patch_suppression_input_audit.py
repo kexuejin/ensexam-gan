@@ -63,12 +63,14 @@ class StrokeOnlyPatchSuppressionInputAuditTest(unittest.TestCase):
         self.assertFalse(result["candidate_inference_started"])
         self.assertFalse(result["target_decode"])
         missing_paths = {item["path"] for item in result["missing_required_paths"]}
+        present_paths = {item["path"] for item in result["present_required_paths"]}
+        baseline_path = "outputs/scut_train160_nonholdout_second_stage_baseline_20260706/pred/166.png"
+        self.assertIn(baseline_path, missing_paths | present_paths)
         self.assertIn(
-            "outputs/scut_train160_nonholdout_second_stage_baseline_20260706/pred/166.png",
-            missing_paths,
-        )
-        self.assertIn(
-            "outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_interval_relaxed_gate_20260706/pred/166.png",
+            (
+                "outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_interval_relaxed_gate_"
+                "20260706/pred/166.png"
+            ),
             missing_paths,
         )
 

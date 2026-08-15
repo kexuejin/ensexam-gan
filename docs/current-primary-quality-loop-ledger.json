@@ -1108,13 +1108,25 @@
       },
       {
         "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
-        "sha256": "a42dd86d880519c9fec9fc323bf3b441c6c24bb4699ef1c300dee528d00a0713"
+        "sha256": "783aef72047f1bef945704415f32f6b1829243e262231f62b4c9ce74ac6f4c39"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-baseline-restore-custody.md",
+        "sha256": "3958f24239c9317d20cbe2f593b129cdcc699f4f4e1b1ea06441608b11be912c"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-input-custody-audit-after-baseline-restore-20260815/audit.json",
+        "sha256": "069c10cbafa01b4168606e1d8dce07ab57453e9c247d894542408c40998561d4"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-baseline-restore-20260815/metrics.csv",
+        "sha256": "d70683dbd58d301504336fa8387babf732af59431ff2908c60aeb47b21ffa447"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "restore exact historical train160 baseline and relaxed-interval source-candidate prediction PNGs, or preregister a different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "restore exact historical train160 relaxed-interval source-candidate prediction PNGs, or preregister a materially different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1474,7 +1486,7 @@
       {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
-        "detail": "Pending behind input custody: selected train160 rows 166/190/192 have source/target files, but the required registered baseline and relaxed-interval source-candidate prediction PNGs are missing. Restore exact historical train-only pixels or preregister a different available train-only source candidate before running the stroke-only generator."
+        "detail": "Pending behind narrowed input custody: selected train160 rows 166/190/192 now have source/target files and restored current-primary baseline predictions, but the required registered relaxed-interval source-candidate prediction PNGs are still missing. Restore exact historical source-candidate pixels or preregister a materially different available train-only source candidate before running the stroke-only generator."
       }
     ],
     "killed_family_prohibitions": [
@@ -3551,7 +3563,7 @@
         },
         {
           "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
-          "sha256": "a42dd86d880519c9fec9fc323bf3b441c6c24bb4699ef1c300dee528d00a0713"
+          "sha256": "783aef72047f1bef945704415f32f6b1829243e262231f62b4c9ce74ac6f4c39"
         },
         {
           "path": "docs/product-quality-review-pages.csv",
@@ -3565,6 +3577,26 @@
       "id": "stroke-only-patch-suppression-input-custody-audit",
       "outcome": "selected_train160_source_rows_present_but_registered_baseline_and_relaxed_interval_prediction_pngs_missing_before_preflight_materialization",
       "repeat_policy": "restore_exact_historical_train160_prediction_pngs_or_preregister_a_different_available_train_only_source_candidate; do_not_train_fabricate_threshold_rescue_or_substitute_validation_rows",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-baseline-restore-custody.md",
+          "sha256": "3958f24239c9317d20cbe2f593b129cdcc699f4f4e1b1ea06441608b11be912c"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-input-custody-audit-after-baseline-restore-20260815/audit.json",
+          "sha256": "069c10cbafa01b4168606e1d8dce07ab57453e9c247d894542408c40998561d4"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-baseline-restore-20260815/metrics.csv",
+          "sha256": "d70683dbd58d301504336fa8387babf732af59431ff2908c60aeb47b21ffa447"
+        }
+      ],
+      "id": "stroke-only-patch-suppression-baseline-restore-custody",
+      "outcome": "registered_train160_current_primary_baseline_predictions_restored_but_relaxed_interval_source_candidate_pngs_remain_missing_before_preflight_materialization",
+      "repeat_policy": "restore_exact_relaxed_interval_source_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate; do_not_train_fabricate_use_noop_baseline_candidate_or_substitute_validation_rows",
       "terminal": "PREREQUISITE_NEEDED"
     }
   ],
