@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Close the external text-layout binary occupancy mask projection after train-only diagnostics showed high target-lighter reachability but unsafe preserve-mask coverage.",
+    "causal_change": "Choose and preregister one materially different successor after direct, incremental, binary-mask, and conditioned external-layout paths failed before promotion-safe candidate gates.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1079,10 +1079,10 @@
         "sha256": "b94a5afc2c555dd84eb9bbb568a8fc8c9459ccf73ffa015019887c3e717641bc"
       }
     ],
-    "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
+    "failure_bucket": "post_external_layout_direct_support_exhaustion",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "External layout alone is closed as a direct edit support signal: raw full score, full-minus-RGB incremental score, and binary occupancy mask all failed preserve safety before candidate inference. Binary mask residual v1 reached positive gate ratio 0.4167254554223624 but preserve gate ratio 0.38511495786256056 versus the 0.005 maximum. Keep model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, threshold rescue, detector/confidence rescue, and resource-threshold tuning closed. Next, preregister a mechanism that uses a separate target-free residual source plus external layout only as a safety/veto feature, or move to a non-layout failure bucket with stronger preserve separation evidence.",
+    "next_action": "preregister a non-rescue successor, either a separate target-free residual source with layout only as safety/veto or a non-layout failure bucket mechanism",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1433,6 +1433,11 @@
         "detail": "The registered train-only binary mask diagnostic KILLed the family before candidate inference: occupancy reached many target-lighter pixels (positive gate ratio 0.4167254554223624, reachable patch ratio 0.8203125), but preserve gate ratio was 0.38511495786256056 versus the frozen 0.005 maximum and margin was only 0.03161049755980183. No training, checkpoint, candidate, quality gate, visual review, reserved blind, or promotion opened.",
         "id": "external_text_layout_binary_mask_residual_reachability_diagnostic",
         "status": "passed"
+      },
+      {
+        "id": "successor_preregistration_after_external_layout_exhaustion",
+        "status": "pending",
+        "detail": "Record one new causal change outside killed external-layout direct-support, incremental-score, binary-mask, conditioned-monotonic, threshold-rescue, detector-transform, and gate-lowering paths before implementation or first-gate execution."
       }
     ],
     "killed_family_prohibitions": [
@@ -3322,7 +3327,7 @@
       ],
       "id": "external-text-layout-direct-support-residual-reachability-diagnostic",
       "outcome": "direct_support_projection_reachable_but_preserve_gate_unsafe_before_candidate_surface",
-      "repeat_policy": "do_not_rescue_with_score_normalization_detector_transform_gate_or_candidate_threshold_tuning",
+      "repeat_policy": "do_not_repeat_or_rescue_with_score_normalization_detector_transform_gate_or_candidate_threshold_tuning",
       "terminal": "KILL"
     },
     {
@@ -3394,7 +3399,7 @@
       ],
       "id": "external-text-layout-incremental-support-residual-reachability-diagnostic",
       "outcome": "incremental_support_projection_reachable_but_not_preserve_separating_before_candidate_surface",
-      "repeat_policy": "do_not_rescue_with_score_direction_normalization_detector_transform_gate_or_candidate_threshold_tuning",
+      "repeat_policy": "do_not_repeat_or_rescue_with_score_direction_normalization_detector_transform_gate_or_candidate_threshold_tuning",
       "terminal": "KILL"
     },
     {
@@ -3466,7 +3471,7 @@
       ],
       "id": "external-text-layout-binary-mask-residual-reachability-diagnostic",
       "outcome": "binary_external_text_occupancy_mask_reachable_but_preserve_gate_unsafe_before_candidate_surface",
-      "repeat_policy": "do_not_rescue_with_detector_confidence_layout_gate_or_candidate_threshold_tuning",
+      "repeat_policy": "do_not_repeat_or_rescue_with_detector_confidence_layout_gate_or_candidate_threshold_tuning",
       "terminal": "KILL"
     }
   ],

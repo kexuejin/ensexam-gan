@@ -19,10 +19,17 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+DECISION_TERMINAL_RE = re.compile(r"\b(PASS|KILL|PREREQUISITE_NEEDED)\b")
 RECORD_TERMINALS = {"PASS", "KILL", "PREREQUISITE_NEEDED", "PENDING"}
 ACTIVE_TERMINALS = {"PREREQUISITE_NEEDED", "PENDING"}
 TRACKED_CODE_PREFIXES = {"networks", "scripts", "tests", "tools"}
-NONBLOCKING_GAP_CLASSES = {"tracked_code_historical_drift"}
+DOCUMENTABLE_IGNORED_PREFIXES = {"artifacts", "outputs"}
+NONBLOCKING_GAP_CLASSES = {
+    "documented_ignored_evidence_hash_drift",
+    "documented_missing_ignored_artifact",
+    "documented_missing_ignored_output",
+    "tracked_code_historical_drift",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -105,6 +112,63 @@ def validate_artifact(repo_root: Path, artifact: Any, label: str) -> dict[str, s
     return {"path": str(path.relative_to(repo_root.absolute())), "sha256": actual_sha256}
 
 
+def validate_evidence_artifact(
+    repo_root: Path,
+    artifact: Any,
+    label: str,
+    decision_docs: list[dict[str, Any]],
+) -> dict[str, Any]:
+    data = require_mapping(artifact, label)
+    path = repo_path(repo_root, data.get("path"), label)
+    relative_path = str(path.relative_to(repo_root.absolute()))
+    expected_sha256 = require_sha256(data.get("sha256"), f"{label}.sha256")
+    base = {"path": relative_path, "sha256": expected_sha256}
+    prefix = relative_path.split("/", 1)[0]
+    decision_documents = (
+        find_decision_documentation(decision_docs, relative_path, expected_sha256)
+        if prefix in DOCUMENTABLE_IGNORED_PREFIXES
+        else []
+    )
+
+    if not path.is_file():
+        if decision_documents:
+            return {
+                **base,
+                "status": "documented_missing_ignored_evidence",
+                "decision_documented": True,
+                "decision_documents": decision_documents,
+            }
+        raise ValueError(f"{label}.path is not a file: {path}")
+
+    actual_sha256 = sha256_file(path)
+    if actual_sha256 != expected_sha256:
+        if prefix in TRACKED_CODE_PREFIXES:
+            historical_match = find_git_history_sha256_match(
+                repo_root, relative_path, expected_sha256
+            )
+            if historical_match is not None:
+                return {
+                    **base,
+                    "actual_sha256": actual_sha256,
+                    "status": "tracked_code_historical_drift",
+                    "historical_git_match": True,
+                    "historical_git_commit": historical_match["commit"],
+                    "historical_git_short_commit": historical_match["short_commit"],
+                }
+        if decision_documents:
+            return {
+                **base,
+                "actual_sha256": actual_sha256,
+                "status": "documented_ignored_evidence_hash_drift",
+                "decision_documented": True,
+                "decision_documents": decision_documents,
+            }
+        raise ValueError(
+            f"{label}.sha256 mismatch for {path}: expected {expected_sha256}, got {actual_sha256}"
+        )
+    return {"path": relative_path, "sha256": actual_sha256}
+
+
 def iter_declared_artifacts(value: Any, label: str = "ledger") -> list[tuple[str, Any]]:
     artifacts: list[tuple[str, Any]] = []
     if isinstance(value, dict):
@@ -172,15 +236,93 @@ def find_git_history_sha256_match(
     return None
 
 
+def load_tracked_decision_docs(repo_root: Path) -> list[dict[str, Any]]:
+    if not (repo_root / ".git").exists():
+        return []
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(repo_root), "ls-files", "--", "docs/decisions"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return []
+
+    docs: list[dict[str, Any]] = []
+    for relative_path in sorted(result.stdout.splitlines()):
+        if not relative_path.endswith(".md"):
+            continue
+        path = repo_root / relative_path
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        docs.append(
+            {
+                "path": relative_path,
+                "sha256": sha256_file(path),
+                "text": text,
+            }
+        )
+    return docs
+
+
+def find_decision_documentation(
+    decision_docs: list[dict[str, Any]], relative_path: str, expected_sha256: str
+) -> list[dict[str, Any]]:
+    matches: list[dict[str, Any]] = []
+    for doc in decision_docs:
+        text = doc["text"]
+        if relative_path not in text or expected_sha256 not in text:
+            continue
+        terminals = sorted(set(DECISION_TERMINAL_RE.findall(text)))
+        if not terminals:
+            continue
+        matches.append(
+            {
+                "path": doc["path"],
+                "sha256": doc["sha256"],
+                "terminal_markers": terminals,
+            }
+        )
+    return matches
+
+
+def annotate_decision_documentation(
+    entry: dict[str, Any], decision_docs: list[dict[str, Any]]
+) -> None:
+    raw_path = entry.get("path")
+    expected_sha256 = entry.get("expected_sha256")
+    if not isinstance(raw_path, str) or not isinstance(expected_sha256, str):
+        return
+    prefix = raw_path.split("/", 1)[0]
+    if prefix not in DOCUMENTABLE_IGNORED_PREFIXES:
+        return
+    matches = find_decision_documentation(decision_docs, raw_path, expected_sha256)
+    if not matches:
+        return
+    entry["decision_documented"] = True
+    entry["decision_documents"] = matches
+
+
 def evidence_gap_class(item: dict[str, Any]) -> str:
     raw_path = item.get("path")
     status = item.get("status")
     prefix = raw_path.split("/", 1)[0] if isinstance(raw_path, str) and raw_path else ""
     if status == "missing":
+        documented = item.get("decision_documented") is True
         if prefix == "artifacts":
-            return "missing_ignored_artifact"
+            return (
+                "documented_missing_ignored_artifact"
+                if documented
+                else "missing_ignored_artifact"
+            )
         if prefix == "outputs":
-            return "missing_ignored_output"
+            return (
+                "documented_missing_ignored_output"
+                if documented
+                else "missing_ignored_output"
+            )
         if prefix in {"configs", "docs", "hardcase_lists", "scripts", "tests", "tools"}:
             return "missing_tracked_reference"
         return "missing_other_reference"
@@ -192,6 +334,8 @@ def evidence_gap_class(item: dict[str, Any]) -> str:
         if prefix == "docs":
             return "tracked_evidence_hash_drift"
         if prefix in {"artifacts", "outputs"}:
+            if item.get("decision_documented") is True:
+                return "documented_ignored_evidence_hash_drift"
             return "ignored_evidence_hash_drift"
         return "other_hash_drift"
     return "invalid_reference"
@@ -275,6 +419,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
     missing: list[dict[str, Any]] = []
     mismatched: list[dict[str, Any]] = []
     invalid: list[dict[str, Any]] = []
+    decision_docs = load_tracked_decision_docs(repo_root)
 
     for label, artifact in iter_declared_artifacts(ledger):
         entry: dict[str, Any] = {"label": label}
@@ -289,6 +434,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
             )
             if not path.is_file():
                 entry["status"] = "missing"
+                annotate_decision_documentation(entry, decision_docs)
                 missing.append(entry)
             else:
                 actual_sha256 = sha256_file(path)
@@ -305,6 +451,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
                         if match is not None:
                             entry["historical_git_commit"] = match["commit"]
                             entry["historical_git_short_commit"] = match["short_commit"]
+                    annotate_decision_documentation(entry, decision_docs)
                     mismatched.append(entry)
                 else:
                     entry["status"] = "ok"
@@ -363,12 +510,17 @@ def validate_protocol(protocol: Any) -> dict[str, Any]:
     return expected
 
 
-def validate_evidence_list(repo_root: Path, value: Any, label: str) -> list[dict[str, str]]:
+def validate_evidence_list(
+    repo_root: Path,
+    value: Any,
+    label: str,
+    decision_docs: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
     artifacts = require_list(value, label)
     if not artifacts:
         raise ValueError(f"{label} must contain at least one artifact")
     return [
-        validate_artifact(repo_root, artifact, f"{label}[{index}]")
+        validate_evidence_artifact(repo_root, artifact, f"{label}[{index}]", decision_docs)
         for index, artifact in enumerate(artifacts)
     ]
 
@@ -417,7 +569,9 @@ def validate_calibration(repo_root: Path, value: Any) -> dict[str, Any]:
     }
 
 
-def validate_records(repo_root: Path, value: Any) -> list[dict[str, Any]]:
+def validate_records(
+    repo_root: Path, value: Any, decision_docs: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
     records = require_list(value, "records")
     if not records:
         raise ValueError("records must not be empty")
@@ -435,9 +589,10 @@ def validate_records(repo_root: Path, value: Any) -> list[dict[str, Any]]:
         outcome = require_string(data.get("outcome"), f"records[{index}].outcome")
         repeat_policy = require_string(data.get("repeat_policy"), f"records[{index}].repeat_policy")
         if terminal == "KILL" or outcome == "safe_no_lift":
-            if repeat_policy != "do_not_repeat":
+            if not repeat_policy.startswith("do_not_repeat"):
                 raise ValueError(
-                    f"records[{index}] must use repeat_policy=do_not_repeat for {terminal}/{outcome}"
+                    f"records[{index}] must use repeat_policy starting with do_not_repeat "
+                    f"for {terminal}/{outcome}"
                 )
         normalized.append(
             {
@@ -445,13 +600,20 @@ def validate_records(repo_root: Path, value: Any) -> list[dict[str, Any]]:
                 "terminal": terminal,
                 "outcome": outcome,
                 "repeat_policy": repeat_policy,
-                "evidence": validate_evidence_list(repo_root, data.get("evidence"), f"records[{index}].evidence"),
+                "evidence": validate_evidence_list(
+                    repo_root,
+                    data.get("evidence"),
+                    f"records[{index}].evidence",
+                    decision_docs,
+                ),
             }
         )
     return normalized
 
 
-def validate_active_iteration(repo_root: Path, value: Any) -> dict[str, Any]:
+def validate_active_iteration(
+    repo_root: Path, value: Any, decision_docs: list[dict[str, Any]]
+) -> dict[str, Any]:
     data = require_mapping(value, "active_iteration")
     terminal = require_string(data.get("terminal"), "active_iteration.terminal")
     if terminal not in ACTIVE_TERMINALS:
@@ -501,7 +663,12 @@ def validate_active_iteration(repo_root: Path, value: Any) -> dict[str, Any]:
         "pending_prerequisites": pending_prerequisites,
         "next_action": require_string(data.get("next_action"), "active_iteration.next_action"),
         "prohibited_before_first_gate": prohibited,
-        "evidence": validate_evidence_list(repo_root, data.get("evidence"), "active_iteration.evidence"),
+        "evidence": validate_evidence_list(
+            repo_root,
+            data.get("evidence"),
+            "active_iteration.evidence",
+            decision_docs,
+        ),
     }
 
 
@@ -524,6 +691,7 @@ def validate_ledger(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
         raise ValueError("program.promotion_state must be disabled until a candidate passes all gates")
     if program.get("reserved_blind_state") != "disabled":
         raise ValueError("program.reserved_blind_state must be disabled until promotion gates pass")
+    decision_docs = load_tracked_decision_docs(repo_root)
     return {
         "program": {
             "name": require_string(program.get("name"), "program.name"),
@@ -533,8 +701,10 @@ def validate_ledger(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
         },
         "baseline": validate_baseline(repo_root, ledger.get("baseline")),
         "calibration": validate_calibration(repo_root, ledger.get("calibration")),
-        "records": validate_records(repo_root, ledger.get("records")),
-        "active_iteration": validate_active_iteration(repo_root, ledger.get("active_iteration")),
+        "records": validate_records(repo_root, ledger.get("records"), decision_docs),
+        "active_iteration": validate_active_iteration(
+            repo_root, ledger.get("active_iteration"), decision_docs
+        ),
     }
 
 
