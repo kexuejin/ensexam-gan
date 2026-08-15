@@ -137,6 +137,52 @@ def unique_path_counts(items: list[dict[str, Any]]) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def evidence_gap_class(item: dict[str, Any]) -> str:
+    raw_path = item.get("path")
+    status = item.get("status")
+    prefix = raw_path.split("/", 1)[0] if isinstance(raw_path, str) and raw_path else ""
+    if status == "missing":
+        if prefix == "artifacts":
+            return "missing_ignored_artifact"
+        if prefix == "outputs":
+            return "missing_ignored_output"
+        if prefix in {"configs", "docs", "hardcase_lists", "scripts", "tests", "tools"}:
+            return "missing_tracked_reference"
+        return "missing_other_reference"
+    if status == "sha256_mismatch":
+        if prefix in {"networks", "scripts", "tests", "tools"}:
+            return "tracked_code_hash_drift"
+        if prefix == "docs":
+            return "tracked_evidence_hash_drift"
+        if prefix in {"artifacts", "outputs"}:
+            return "ignored_evidence_hash_drift"
+        return "other_hash_drift"
+    return "invalid_reference"
+
+
+def gap_class_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
+    class_counts: dict[str, int] = {}
+    class_unique_paths: dict[str, dict[str, int]] = {}
+    for item in items:
+        gap_class = evidence_gap_class(item)
+        class_counts[gap_class] = class_counts.get(gap_class, 0) + 1
+        raw_path = item.get("path")
+        if not isinstance(raw_path, str) or not raw_path:
+            raw_path = "<invalid>"
+        paths = class_unique_paths.setdefault(gap_class, {})
+        paths[raw_path] = paths.get(raw_path, 0) + 1
+    return {
+        "gap_class_counts": dict(sorted(class_counts.items())),
+        "gap_class_unique_path_counts": {
+            gap_class: len(paths) for gap_class, paths in sorted(class_unique_paths.items())
+        },
+        "gap_class_unique_paths": {
+            gap_class: dict(sorted(paths.items()))
+            for gap_class, paths in sorted(class_unique_paths.items())
+        },
+    }
+
+
 def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
     checked: list[dict[str, Any]] = []
     missing: list[dict[str, Any]] = []
@@ -180,6 +226,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
     status = "evidence_complete" if total and not missing and not mismatched and not invalid else "evidence_incomplete"
     missing_unique_paths = unique_path_counts(missing)
     mismatched_unique_paths = unique_path_counts(mismatched)
+    gap_summary = gap_class_summary([*missing, *mismatched, *invalid])
     return {
         "status": status,
         "artifact_reference_count": total,
@@ -193,6 +240,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
         "mismatch_prefix_counts": path_prefix_counts(mismatched),
         "mismatch_unique_paths": mismatched_unique_paths,
         "invalid_count": len(invalid),
+        **gap_summary,
         "missing": missing,
         "mismatched": mismatched,
         "invalid": invalid,

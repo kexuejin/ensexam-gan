@@ -214,6 +214,11 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             self.assertEqual(audit["missing_unique_path_count"], 1)
             self.assertEqual(audit["missing_prefix_counts"], {"docs": 2})
             self.assertEqual(audit["missing_unique_paths"], {"docs/decisions/d2.md": 2})
+            self.assertEqual(audit["gap_class_counts"], {"missing_tracked_reference": 2})
+            self.assertEqual(
+                audit["gap_class_unique_path_counts"],
+                {"missing_tracked_reference": 1},
+            )
             missing_paths = {item["path"] for item in audit["missing"]}
             self.assertEqual(missing_paths, {"docs/decisions/d2.md"})
             self.assertIn("status=evidence_incomplete", result.stdout)
@@ -238,6 +243,11 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             self.assertEqual(audit["mismatch_unique_path_count"], 1)
             self.assertEqual(audit["mismatch_prefix_counts"], {"docs": 2})
             self.assertEqual(audit["mismatch_unique_paths"], {"docs/decisions/d2d.md": 2})
+            self.assertEqual(audit["gap_class_counts"], {"tracked_evidence_hash_drift": 2})
+            self.assertEqual(
+                audit["gap_class_unique_path_counts"],
+                {"tracked_evidence_hash_drift": 1},
+            )
             mismatched_paths = {item["path"] for item in audit["mismatched"]}
             self.assertEqual(mismatched_paths, {"docs/decisions/d2d.md"})
 
