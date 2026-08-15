@@ -1,0 +1,42 @@
+{
+  "authority": {
+    "direct_support_terminal": "KILL",
+    "incremental_support_preflight": "not_started",
+    "support_diagnostic": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "evidence_hashes": {
+    "direct_support_diagnostic": "3a5ecf3b8acec9eea35524d4d1e7e3789303bd0ba69954197e1ee2a3d09f2d69",
+    "direct_support_kill_decision": "4c8815ae6e1390dff27814335ff5f952a63dad46a73d2c9fb80bfa37ed0610e5",
+    "direct_support_plan": "fbdfc25d977238f33c7631a59b3ef76ac56b8a8c9f59384730f44a4555aab054",
+    "registered_patch_index": "68d3099cfc1023593ef9558e8c356ba5eb6100ac34964767cbdd605325f5f10a",
+    "support_diagnostic": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734",
+    "support_diagnostic_decision": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+  },
+  "model_training_started": false,
+  "plan": "/Volumes/Tool/source/ensexam-gan/docs/external-text-layout-incremental-support-residual-proposal-v1.json",
+  "plan_sha256": "4fb6c73717365dffc50596b20853147efd77e82582b2e1d3b216c5348b274514",
+  "planned_outputs_absent": [
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-incremental-support-residual-inner-val15-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-incremental-support-residual-inner-val15-score",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-incremental-support-residual-holdout40-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-incremental-support-residual-diagnostic-20260815",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-incremental-support-residual-scut115-candidate"
+  ],
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "schema_version": 1,
+  "synthetic_projection": {
+    "delta_bound_gray": 20.4,
+    "delta_min_gray": 0.0,
+    "gate_count": 2,
+    "nonnegative": true,
+    "score_count": 5,
+    "score_formula": "support_full_score_minus_rgb_ablation_score"
+  },
+  "target_decode": false,
+  "terminal": "PASS"
+}

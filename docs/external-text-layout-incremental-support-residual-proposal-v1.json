@@ -1,0 +1,118 @@
+{
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "state": "preflight_only",
+    "visual_review": false
+  },
+  "causal_change": "replace the killed raw full support-score projection with the fold-specific incremental external-layout score, defined as full_fit score minus RGB-ablation score, and judge it only through a page-folded train-role preserve-separation diagnostic before any candidate surface opens",
+  "diagnostic_successors": {
+    "KILL": "close_incremental_support_residual_without_score_delta_threshold_or_gate_rescue",
+    "PASS": "authorize_separate_target_free_application_preflight_only",
+    "PREREQUISITE_NEEDED": "repair_registered_diagnostic_evidence_or_metadata_only"
+  },
+  "evidence": {
+    "direct_support_diagnostic": {
+      "path": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815/audit.json",
+      "sha256": "3a5ecf3b8acec9eea35524d4d1e7e3789303bd0ba69954197e1ee2a3d09f2d69"
+    },
+    "direct_support_kill_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md",
+      "sha256": "4c8815ae6e1390dff27814335ff5f952a63dad46a73d2c9fb80bfa37ed0610e5"
+    },
+    "direct_support_plan": {
+      "path": "docs/external-text-layout-direct-support-residual-proposal-v1.json",
+      "sha256": "fbdfc25d977238f33c7631a59b3ef76ac56b8a8c9f59384730f44a4555aab054"
+    },
+    "registered_patch_index": {
+      "path": "hardcase_lists/external-text-layout-conditioned-monotonic-train-patches-v1.csv",
+      "sha256": "68d3099cfc1023593ef9558e8c356ba5eb6100ac34964767cbdd605325f5f10a"
+    },
+    "support_diagnostic": {
+      "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+      "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+    },
+    "support_diagnostic_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md",
+      "sha256": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+    }
+  },
+  "family": "external_text_layout_incremental_support_residual_v1",
+  "forbidden_rescues": [
+    "detector_threshold_tuning",
+    "layout_transform_tuning",
+    "repeat_direct_support_residual_v1",
+    "score_normalization_rescue",
+    "gate_threshold_rescue",
+    "candidate_gate_lowering",
+    "candidate_inference_before_train_only_diagnostic",
+    "scut115_before_inner_val15",
+    "holdout40_before_inner_val15",
+    "reserved_blind_before_development_gates"
+  ],
+  "incremental_support_projection": {
+    "ablation_fit": "support_diagnostic_fold_rgb_ablation_fit",
+    "calibration_source": "page_folded_train_patch_incremental_score_centers",
+    "delta_bound_gray": 20.4,
+    "direction_enforcement": "nonnegative_rgb_only",
+    "full_fit": "support_diagnostic_fold_full_fit",
+    "input_channels": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "external_text_occupancy",
+      "external_text_confidence"
+    ],
+    "normalization": "heldout_fold_preserve_to_positive_incremental_score_span",
+    "output_channels": 3,
+    "score_formula": "support_full_score_minus_rgb_ablation_score",
+    "score_below_preserve_center_delta_gray": 0.0,
+    "score_at_or_above_positive_center_delta_gray": 20.4,
+    "target_access_at_application": false,
+    "training": false
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "planned_outputs_must_be_absent": {
+    "first_gate_candidate": "outputs/external-text-layout-incremental-support-residual-inner-val15-candidate",
+    "first_gate_score": "outputs/external-text-layout-incremental-support-residual-inner-val15-score",
+    "holdout40_candidate": "outputs/external-text-layout-incremental-support-residual-holdout40-candidate",
+    "incremental_support_diagnostic": "outputs/external-text-layout-incremental-support-residual-diagnostic-20260815",
+    "scut115_candidate": "outputs/external-text-layout-incremental-support-residual-scut115-candidate"
+  },
+  "preflight_successors": {
+    "KILL": "close_incremental_support_residual_without_score_delta_threshold_or_gate_rescue",
+    "PASS": "authorize_train_only_incremental_support_preserve_separation_diagnostic_only",
+    "PREREQUISITE_NEEDED": "repair_registered_preflight_evidence_or_metadata_only"
+  },
+  "schema_version": 1,
+  "state": "preregistered_external_text_layout_incremental_support_residual_preflight",
+  "train_only_preserve_separation_diagnostic": {
+    "allowed_roles": [
+      "train"
+    ],
+    "calibration": "page_folded_train_patch_incremental_preserve_to_positive_span",
+    "candidate_inference": false,
+    "fit_source": "support_diagnostic_full_and_rgb_ablation_fold_fits_only",
+    "gate_threshold_gray": 12.0,
+    "maximum_preserve_gate_ratio": 0.005,
+    "minimum_ordered_center_folds": 5,
+    "minimum_positive_gate_ratio": 0.05,
+    "minimum_positive_over_preserve_gate_margin": 0.04,
+    "minimum_reachable_patch_ratio": 0.1,
+    "output_dir": "outputs/external-text-layout-incremental-support-residual-diagnostic-20260815",
+    "required_patch_count": 256,
+    "target_access": "train_labels_only_for_page_folded_reachability_measurement",
+    "validation_roles_forbidden": [
+      "inner_val15",
+      "scut115",
+      "holdout40",
+      "reserved_blind"
+    ]
+  }
+}

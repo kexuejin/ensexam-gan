@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Close the closed-form external text-layout direct-support residual projection after train-only reachability showed strong positive effect but unsafe preserve-gate leakage.",
+    "causal_change": "Close the external text-layout incremental full-minus-RGB-ablation support projection after train-only held-out fold diagnostics showed weak preserve separation and near-identical positive/preserve gate rates.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1005,12 +1005,48 @@
       {
         "path": "tests/test_external_text_layout_direct_support_residual_reachability.py",
         "sha256": "f366d5c9fc762cfd8cf96452888bca03ee04062d6901c3c047126e7542a58010"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-preflight-pass.md",
+        "sha256": "a70b53d67f1c51b5b17f5b52a263ce33ef4cb2df86ac75415dd5bb4b0f89c41b"
+      },
+      {
+        "path": "docs/external-text-layout-incremental-support-residual-proposal-v1.json",
+        "sha256": "4fb6c73717365dffc50596b20853147efd77e82582b2e1d3b216c5348b274514"
+      },
+      {
+        "path": "outputs/external-text-layout-incremental-support-residual-preflight-20260815/preflight.json",
+        "sha256": "cdb48622584d501cc82e8783d690171ac9fa24b9bed1a1d0273358eed42dd9bf"
+      },
+      {
+        "path": "scripts/analysis/validate_external_text_layout_incremental_support_residual_preflight.py",
+        "sha256": "1537854f94d3bcc5df62ae763d8837ff910debbf64c5bdbce179f1dd02eb316f"
+      },
+      {
+        "path": "tests/test_external_text_layout_incremental_support_residual_preflight.py",
+        "sha256": "d385763f48e632db0d2bea07014aa9db5ce892e07824888768049b4355ea1395"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md",
+        "sha256": "74d95f8bcc2cae0a886a4030bbed8610a6162618861a23c59b982e596be72a37"
+      },
+      {
+        "path": "outputs/external-text-layout-incremental-support-residual-diagnostic-20260815/audit.json",
+        "sha256": "80c15c71e0e878a081a65c2fbcb81c51319b05857758c0788e4e9491dd8194c1"
+      },
+      {
+        "path": "scripts/analysis/audit_external_text_layout_incremental_support_residual_reachability.py",
+        "sha256": "0703ef29fb32412a9b5d864c6a58cff3673906335ad1c5a752fc6bd521808e51"
+      },
+      {
+        "path": "tests/test_external_text_layout_incremental_support_residual_reachability.py",
+        "sha256": "74884ffa6bff7f24e7f594138537af9a0cfdd6bb1cc4ce049e4a764d03612867"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Direct-support residual v1 is closed: train-only reachability KILLed on preserve safety (preserve gate ratio 0.4356632845245391 versus the 0.005 maximum). Keep model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, threshold rescue, and resource-threshold tuning closed. Next, preregister a materially different mechanism with explicit preserve separation before any candidate surface opens.",
+    "next_action": "Incremental support residual v1 is closed: held-out train-fold calibration ordered positive above preserve in only 1/5 folds, positive/preserve gate ratios were 0.06302786269657285/0.06281005370228102, and preserve leakage exceeded the 0.005 maximum. Keep model training, checkpoint generation, candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, threshold rescue, score-direction rescue, score-normalization rescue, and resource-threshold tuning closed. Next, preregister a materially different preserve-separation mechanism before any candidate surface opens.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1341,6 +1377,16 @@
         "detail": "The real v10 resume killed allocator-relief batch reuse after page 24 crossed the 35 percent free-memory gate, then replaced detector lifetime with page-level process isolation and large-page height tiling. The CPU-only materializer completed all 275 train pages under the existing 13 GiB RSS, 35 percent free-memory, and 512 MiB run-local swap-growth gates. Final manifest SHA256 is 2578fb78cc3188776d97fff2e1efd2fc8f91d224b4efb680ffa83e1847c96579, content SHA256 is 8d4753dbd160c85043b1b65c1161e4cdc00059a07216bcc3d63b879754896750, peak RSS was 10942496768 bytes, minimum free memory was 38.0 percent, swap growth was 0, launcher result validation is idempotent, and transaction residue is absent.",
         "id": "external_text_layout_recovered_materializer_tiled_page_materialization",
         "status": "passed"
+      },
+      {
+        "detail": "The incremental support residual proposal freezes a materially different score source after the raw direct-support KILL: full external-layout support score minus RGB-ablation support score, with the same 12-gray gate and candidate/quality/promotion surfaces closed.",
+        "id": "external_text_layout_incremental_support_residual_preflight",
+        "status": "passed"
+      },
+      {
+        "detail": "The registered train-only incremental support residual diagnostic KILLed the family before candidate inference: only 1/5 held-out train-fold calibrations ordered positive above preserve, positive and preserve gate ratios were nearly identical at 0.06302786269657285 and 0.06281005370228102, and preserve leakage exceeded the 0.005 maximum. No training, checkpoint, candidate, quality gate, visual review, reserved blind, or promotion opened.",
+        "id": "external_text_layout_incremental_support_residual_reachability_diagnostic",
+        "status": "passed"
       }
     ],
     "killed_family_prohibitions": [
@@ -1407,7 +1453,14 @@
       "independent_hw5k_expert_support_v1_quality_gate",
       "independent_hw5k_expert_support_v1_promotion",
       "external_text_layout_duplicate_upsample_repair_repeat_probe",
-      "external_text_layout_same_detector_runtime_geometry_rescue_without_preregistration"
+      "external_text_layout_same_detector_runtime_geometry_rescue_without_preregistration",
+      "external_text_layout_incremental_support_residual_v1_repeat_diagnostic",
+      "external_text_layout_incremental_support_residual_v1_score_direction_or_normalization_rescue",
+      "external_text_layout_incremental_support_residual_v1_detector_layout_or_gate_rescue",
+      "external_text_layout_incremental_support_residual_v1_training",
+      "external_text_layout_incremental_support_residual_v1_candidate_inference",
+      "external_text_layout_incremental_support_residual_v1_quality_gate",
+      "external_text_layout_incremental_support_residual_v1_promotion"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -3217,6 +3270,78 @@
       "id": "external-text-layout-direct-support-residual-reachability-diagnostic",
       "outcome": "direct_support_projection_reachable_but_preserve_gate_unsafe_before_candidate_surface",
       "repeat_policy": "do_not_rescue_with_score_normalization_detector_transform_gate_or_candidate_threshold_tuning",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-preflight-pass.md",
+          "sha256": "a70b53d67f1c51b5b17f5b52a263ce33ef4cb2df86ac75415dd5bb4b0f89c41b"
+        },
+        {
+          "path": "docs/external-text-layout-incremental-support-residual-proposal-v1.json",
+          "sha256": "4fb6c73717365dffc50596b20853147efd77e82582b2e1d3b216c5348b274514"
+        },
+        {
+          "path": "outputs/external-text-layout-incremental-support-residual-preflight-20260815/preflight.json",
+          "sha256": "cdb48622584d501cc82e8783d690171ac9fa24b9bed1a1d0273358eed42dd9bf"
+        },
+        {
+          "path": "scripts/analysis/validate_external_text_layout_incremental_support_residual_preflight.py",
+          "sha256": "1537854f94d3bcc5df62ae763d8837ff910debbf64c5bdbce179f1dd02eb316f"
+        },
+        {
+          "path": "tests/test_external_text_layout_incremental_support_residual_preflight.py",
+          "sha256": "d385763f48e632db0d2bea07014aa9db5ce892e07824888768049b4355ea1395"
+        },
+        {
+          "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+          "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+        },
+        {
+          "path": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815/audit.json",
+          "sha256": "3a5ecf3b8acec9eea35524d4d1e7e3789303bd0ba69954197e1ee2a3d09f2d69"
+        }
+      ],
+      "id": "external-text-layout-incremental-support-residual-preflight",
+      "outcome": "incremental_full_minus_rgb_ablation_support_projection_preflight_passed_without_training_candidate_or_quality_gate",
+      "repeat_policy": "run_only_the_registered_train_role_incremental_preserve_separation_diagnostic_no_candidate_or_score_rescue",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md",
+          "sha256": "74d95f8bcc2cae0a886a4030bbed8610a6162618861a23c59b982e596be72a37"
+        },
+        {
+          "path": "outputs/external-text-layout-incremental-support-residual-diagnostic-20260815/audit.json",
+          "sha256": "80c15c71e0e878a081a65c2fbcb81c51319b05857758c0788e4e9491dd8194c1"
+        },
+        {
+          "path": "scripts/analysis/audit_external_text_layout_incremental_support_residual_reachability.py",
+          "sha256": "0703ef29fb32412a9b5d864c6a58cff3673906335ad1c5a752fc6bd521808e51"
+        },
+        {
+          "path": "tests/test_external_text_layout_incremental_support_residual_reachability.py",
+          "sha256": "74884ffa6bff7f24e7f594138537af9a0cfdd6bb1cc4ce049e4a764d03612867"
+        },
+        {
+          "path": "tests/test_external_text_layout_incremental_support_residual_preflight.py",
+          "sha256": "d385763f48e632db0d2bea07014aa9db5ce892e07824888768049b4355ea1395"
+        },
+        {
+          "path": "docs/external-text-layout-incremental-support-residual-proposal-v1.json",
+          "sha256": "4fb6c73717365dffc50596b20853147efd77e82582b2e1d3b216c5348b274514"
+        },
+        {
+          "path": "outputs/external-text-layout-incremental-support-residual-preflight-20260815/preflight.json",
+          "sha256": "cdb48622584d501cc82e8783d690171ac9fa24b9bed1a1d0273358eed42dd9bf"
+        }
+      ],
+      "id": "external-text-layout-incremental-support-residual-reachability-diagnostic",
+      "outcome": "incremental_support_projection_reachable_but_not_preserve_separating_before_candidate_surface",
+      "repeat_policy": "do_not_rescue_with_score_direction_normalization_detector_transform_gate_or_candidate_threshold_tuning",
       "terminal": "KILL"
     }
   ],
