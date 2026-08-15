@@ -133,6 +133,7 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
                 items=items,
                 page_dir=Path("/pages"),
                 detector_factory=factory,
+                memory_releaser=lambda: events.append("relief") or 0,
             )
 
         self.assertEqual(completed, [item[0] for item in items])
@@ -141,9 +142,78 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
         expected: list[str] = []
         for file_name, _source, record_path in items:
             expected.extend(
-                [f"npz:{file_name}", f"record:{Path(record_path).name}:{file_name}"]
+                [
+                    f"npz:{file_name}",
+                    f"record:{Path(record_path).name}:{file_name}",
+                    "relief",
+                ]
             )
         self.assertEqual(events, expected)
+
+    def test_memory_relief_failure_is_after_durable_record_and_fail_closed(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            fixture = make_fixture(root, 1)
+            registered = fixture["registered"]
+            page_dir, record_dir, _completed = materializer.prepare_resume_state(
+                repo_root=root,
+                plan_file=root / fixture["plan_path"],
+                registered=registered,
+            )
+            file_name, _relative, source_path = registered["sources"][0]
+            record_path = record_dir / f"{Path(file_name).stem}.json"
+
+            def fail_relief() -> int:
+                raise RuntimeError("synthetic relief failure")
+
+            with self.assertRaisesRegex(
+                materializer.MaterializationError, "memory relief failed"
+            ):
+                batch_runtime.materialize_batch_pages(
+                    spec=fixture["spec"],
+                    items=[(file_name, str(source_path), str(record_path))],
+                    page_dir=page_dir,
+                    detector_factory=lambda _spec: EmptyDetector(),
+                    memory_releaser=fail_relief,
+                )
+
+            self.assertTrue(record_path.is_file())
+            _pages, _records, completed = materializer.prepare_resume_state(
+                repo_root=root,
+                plan_file=root / fixture["plan_path"],
+                registered=registered,
+            )
+            self.assertEqual(list(completed), [file_name])
+
+    def test_platform_page_memory_relief_is_available(self) -> None:
+        released = batch_runtime.release_page_memory()
+        self.assertIsInstance(released, int)
+        self.assertGreaterEqual(released, 0)
+
+    def test_platform_page_memory_relief_failures_are_fail_closed(self) -> None:
+        with (
+            mock.patch.object(batch_runtime, "_MALLOC_ZONE_LIBRARY", None),
+            mock.patch.object(batch_runtime, "_MALLOC_ZONE_PRESSURE_RELIEF", None),
+            mock.patch.object(
+                batch_runtime.ctypes,
+                "CDLL",
+                side_effect=OSError("synthetic missing library"),
+            ),
+        ):
+            with self.assertRaisesRegex(
+                materializer.MaterializationError, "memory relief is unavailable"
+            ):
+                batch_runtime.release_page_memory()
+
+        failing_relief = mock.Mock(side_effect=RuntimeError("synthetic call failure"))
+        with mock.patch.object(
+            batch_runtime, "_MALLOC_ZONE_PRESSURE_RELIEF", failing_relief
+        ):
+            with self.assertRaisesRegex(
+                materializer.MaterializationError, "memory relief failed"
+            ):
+                batch_runtime.release_page_memory()
+        failing_relief.assert_called_once_with(None, 0)
 
     def test_batch_is_cpu_only_fixed_size_and_unique(self) -> None:
         one = [("page.png", "/source/page.png", "/records/page.json")]

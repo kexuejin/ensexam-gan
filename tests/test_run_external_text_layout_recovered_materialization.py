@@ -27,6 +27,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         self.assertEqual(launcher.validate_v6_contract(launcher.ROOT)["schema_version"], 6)
         self.assertEqual(launcher.validate_v8_contract(launcher.ROOT)["schema_version"], 8)
         self.assertEqual(launcher.validate_v9_contract(launcher.ROOT)["schema_version"], 9)
+        self.assertEqual(launcher.validate_v10_contract(launcher.ROOT)["schema_version"], 10)
         self.assertEqual(
             launcher.materializer.sha256_file(
                 launcher.ROOT
@@ -82,7 +83,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
-    def test_execution_authority_requires_v9_integration_pass(self) -> None:
+    def test_execution_authority_requires_v10_integration_pass(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             ledger_path = root / launcher.LEDGER_PATH
@@ -192,6 +193,24 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             prerequisites.append(
                 {
                     "id": "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_integration",
+                    "status": "passed",
+                }
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            with self.assertRaises(launcher.RecoveredMaterializationError):
+                launcher.validate_execution_authority(root)
+            prerequisites.append(
+                {
+                    "id": "external_text_layout_recovered_materializer_page_memory_relief_v10_preregistration",
+                    "status": "passed",
+                }
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            with self.assertRaises(launcher.RecoveredMaterializationError):
+                launcher.validate_execution_authority(root)
+            prerequisites.append(
+                {
+                    "id": "external_text_layout_recovered_materializer_page_memory_relief_v10_integration",
                     "status": "passed",
                 }
             )
@@ -313,7 +332,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 derived_plan_path=root / "generated/effective-plan.json",
             )
             self.assertEqual(result["terminal"], "PASS")
-            self.assertEqual(result["schema_version"], 9)
+            self.assertEqual(result["schema_version"], 10)
             self.assertEqual(result["runtime_safety"], runtime_safety)
             self.assertEqual(
                 json.loads((root / launcher.RESULT_PATH).read_text()), result
@@ -335,7 +354,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 },
                 "evidence": {"original_plan": {"path": "docs/plan.json"}},
             }
-            terminal = {"schema_version": 9, "terminal": "PASS"}
+            terminal = {"schema_version": 10, "terminal": "PASS"}
             with (
                 mock.patch.object(
                     launcher, "validate_repository_contract", return_value=contract

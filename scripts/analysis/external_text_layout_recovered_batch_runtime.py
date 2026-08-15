@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import ctypes
+import gc
 import multiprocessing
 import os
 from pathlib import Path
@@ -17,6 +19,29 @@ BATCH_SIZE = 8
 BATCH_TIMEOUT_SECONDS = 15 * 60.0
 MONITOR_INTERVAL_SECONDS = 0.25
 MAX_RECOVERED_PROCESS_TREE_RSS_BYTES = 13 * 1024**3
+_MALLOC_ZONE_LIBRARY: Any | None = None
+_MALLOC_ZONE_PRESSURE_RELIEF: Any | None = None
+
+
+def release_page_memory() -> int:
+    global _MALLOC_ZONE_LIBRARY, _MALLOC_ZONE_PRESSURE_RELIEF
+    gc.collect()
+    if _MALLOC_ZONE_PRESSURE_RELIEF is None:
+        try:
+            library = ctypes.CDLL("/usr/lib/libSystem.B.dylib")
+            relief = library.malloc_zone_pressure_relief
+            relief.argtypes = [ctypes.c_void_p, ctypes.c_size_t]
+            relief.restype = ctypes.c_size_t
+        except (AttributeError, OSError, TypeError) as error:
+            raise materializer.MaterializationError(
+                "page memory relief is unavailable"
+            ) from error
+        _MALLOC_ZONE_LIBRARY = library
+        _MALLOC_ZONE_PRESSURE_RELIEF = relief
+    try:
+        return int(_MALLOC_ZONE_PRESSURE_RELIEF(None, 0))
+    except Exception as error:
+        raise materializer.MaterializationError("page memory relief failed") from error
 
 
 def enforce_recovered_health_limits(
@@ -84,12 +109,14 @@ def materialize_batch_pages(
     items: list[tuple[str, str, str]],
     page_dir: Path,
     detector_factory: Callable[[dict[str, Any]], Any] | None = None,
+    memory_releaser: Callable[[], int] | None = None,
 ) -> list[str]:
     """Create one detector and atomically commit each serial page in a batch."""
     _validate_batch_items(items)
     if spec.get("device") != "cpu":
         raise materializer.MaterializationError("recovered detector must remain CPU-only")
     factory = detector_factory or materializer.create_detector
+    release_memory = memory_releaser or release_page_memory
     detector = factory(spec)
     completed: list[str] = []
     try:
@@ -102,6 +129,14 @@ def materialize_batch_pages(
                 page_dir=page_dir,
             )
             materializer.atomic_write_json(Path(record_path_value), row)
+            try:
+                release_memory()
+            except materializer.MaterializationError:
+                raise
+            except Exception as error:
+                raise materializer.MaterializationError(
+                    "page memory relief failed"
+                ) from error
             completed.append(file_name)
     finally:
         close = getattr(detector, "close", None)

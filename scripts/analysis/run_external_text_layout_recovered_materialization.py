@@ -22,6 +22,7 @@ from scripts.analysis import materialize_external_text_layout_support_train_only
 from scripts.analysis import probe_external_text_layout_runtime_safety as safety_probe  # noqa: E402
 from scripts.analysis import external_text_layout_recovered_batch_runtime as batch_runtime  # noqa: E402
 from scripts.analysis import external_text_layout_recovered_v9_contract as v9_contract  # noqa: E402
+from scripts.analysis import external_text_layout_recovered_v10_contract as v10_contract  # noqa: E402
 
 
 CONTRACT_PATH = Path("docs/external-text-layout-recovered-materializer-launch-v2.json")
@@ -242,6 +243,19 @@ def validate_v9_contract(repo_root: Path) -> dict[str, Any]:
         != FORMAL_MAX_PROCESS_TREE_RSS_BYTES
     ):
         raise RecoveredMaterializationError("launcher v9 runtime constants changed")
+    return contract
+
+
+def validate_v10_contract(repo_root: Path) -> dict[str, Any]:
+    try:
+        contract = v10_contract.validate_contract(repo_root)
+    except (OSError, ValueError) as error:
+        raise RecoveredMaterializationError(str(error)) from error
+    if (
+        v10_contract.RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
+        != RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
+    ):
+        raise RecoveredMaterializationError("launcher v10 runtime constants changed")
     return contract
 
 
@@ -551,6 +565,7 @@ def validate_v3_contract(repo_root: Path) -> dict[str, Any]:
 
 
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
+    validate_v10_contract(repo_root)
     validate_v9_contract(repo_root)
     validate_v8_contract(repo_root)
     validate_v6_contract(repo_root)
@@ -629,6 +644,8 @@ def validate_execution_authority(repo_root: Path) -> None:
         "external_text_layout_recovered_materializer_bounded_rss_launch_v8_integration": "passed",
         "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_preregistration": "passed",
         "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_integration": "passed",
+        "external_text_layout_recovered_materializer_page_memory_relief_v10_preregistration": "passed",
+        "external_text_layout_recovered_materializer_page_memory_relief_v10_integration": "passed",
         "external_text_layout_support_train_only_diagnostic": "pending",
     }
     if active.get("terminal") != "PREREQUISITE_NEEDED" or any(
@@ -910,7 +927,7 @@ def build_launcher_result(
         "authority": {
             "candidate_inference": False,
             "quality_evaluation": False,
-            "result_authority": "recovered_materializer_launcher_v9",
+            "result_authority": "recovered_materializer_launcher_v10",
         },
         "derived_plan": {
             "path": contract["derived_plan"]["path"],
@@ -921,7 +938,7 @@ def build_launcher_result(
         "materialization": materialization,
         "recovered_second_stage_metrics_sha256": metrics_change["after"],
         "runtime_safety": runtime_safety,
-        "schema_version": 9,
+        "schema_version": 10,
         "terminal": "PASS",
     }
 
@@ -1080,11 +1097,11 @@ def validate_existing_result(
     result = read_json(result_path)
     if (
         result.get("terminal") != "PASS"
-        or result.get("schema_version") != 9
+        or result.get("schema_version") != 10
         or result.get("archive_cache_identities") != archive_inputs
         or result.get("materialization") != materialization
         or result.get("authority", {}).get("result_authority")
-        != "recovered_materializer_launcher_v9"
+        != "recovered_materializer_launcher_v10"
         or result.get("derived_plan", {}).get("path")
         != contract["derived_plan"]["path"]
         or result.get("derived_plan", {}).get("sha256")
@@ -1166,7 +1183,7 @@ def main() -> int:
             json.dumps(
                 {
                     "reason": str(error),
-                    "schema_version": 9,
+                    "schema_version": 10,
                     "terminal": "PREREQUISITE_NEEDED",
                 },
                 sort_keys=True,

@@ -1,0 +1,125 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": true,
+    "launcher_result_schema_version": 10,
+    "model_execution": true,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_page_memory_relief_v10_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-recovered-materializer-page-memory-relief-v10.json",
+    "sha256": "947c88aa38f11df43c4aa83d1bd49a9d82fb312ab48daddfa16569cd3480c85d"
+  },
+  "implementation": {
+    "batch_runtime": {
+      "line_count": 450,
+      "path": "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "sha256": "18ea64193f397c41f9690dcd42eb772041cc724687cb446bd2b7758b9d187c87"
+    },
+    "batch_runtime_test": {
+      "path": "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "sha256": "d7f2e2356742c5dedda699fe8934a1a90f88ab67ac90de7c62217baadb46fbeb"
+    },
+    "launcher": {
+      "line_count": 1199,
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "9bff00041cbbc1f2226cb8bf3b890bdc4a7c42b264a2ca715c32807b6c2ab7aa"
+    },
+    "launcher_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "2b5e24eeae2204dbdeed2f77672d5e8663e02cbc56726b2306e7107528c837ae"
+    },
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    },
+    "v10_contract_validator": {
+      "line_count": 144,
+      "path": "scripts/analysis/external_text_layout_recovered_v10_contract.py",
+      "sha256": "d38a5b9638891b14347937e5c80269fe43a646e318bed424dc71165c71bf9930"
+    }
+  },
+  "limits": {
+    "batch_size": 8,
+    "batch_timeout_seconds": 900.0,
+    "maximum_concurrent_model_processes": 1,
+    "recovered_runtime_process_tree_rss_bytes_max": 13958643712,
+    "runtime_memory_free_percent_min": 35.0,
+    "runtime_monitor_interval_seconds": 0.25,
+    "runtime_swap_growth_bytes_max": 536870912,
+    "shared_runtime_process_tree_rss_bytes_max_unchanged": 10737418240,
+    "worker_count": 1
+  },
+  "memory_relief": {
+    "after_atomic_npz_and_record_commit": true,
+    "before_next_page": true,
+    "failure_is_fatal": true,
+    "garbage_collection": "gc.collect",
+    "library_handle_retained_with_function_pointer": true,
+    "malloc_relief": "libSystem.B.dylib_malloc_zone_pressure_relief_null_zone_goal_zero",
+    "once_per_completed_page": true,
+    "output_semantics_changed": false
+  },
+  "retained_resume_state": {
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "launcher_result_present": false,
+    "next_file": "hw5k_1447.jpg",
+    "next_manifest_index": 24,
+    "pages_content_sha256": "9d53f57a8bd8fd18b04778175f4d6cfadd13aa3d64bc0b7b5058cc89652af9b1",
+    "pages_count": 23,
+    "pages_filename_sha256": "0dafc470f31c5b107e60799aeccfd350c9c7c098138ac1202a5133a04b54381b",
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "a6ce3b00fe3af1f8d4007dffb1b0656f3c95ec5166857eeb09c32e9f4a3f3e0b",
+    "records_count": 23,
+    "records_filename_sha256": "be41617a0d06bf4900ba730f4c667b9ecff08a832659bca6c638b1d75fcfedb1"
+  },
+  "schema_version": 10,
+  "verification": {
+    "compile": [
+      {
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "complete_external_layout": [
+      {
+        "count": 136,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 136,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "focused": [
+      {
+        "count": 27,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 27,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "memory_relief_call_failure_is_fail_closed": true,
+    "memory_relief_symbol_failure_is_fail_closed": true,
+    "partial_progress_remains_resumable": true,
+    "shared_10_gib_defaults_remain_exact": true,
+    "v10_execution_authority_is_fail_closed": true
+  },
+  "next_action": "Commit and push this v10 integration PASS, then run one exact CPU-only Python 3.13 launcher resume from manifest index 24 hw5k_1447.jpg. The run must retain the final 13 GiB RSS cap, 35 percent runtime free-memory floor, 512 MiB run-local swap-growth cap, fixed eight-page batches, 0.25-second monitoring, and 900-second timeout. A schema-v10 PASS must validate all 275 records and leave no transaction residue before the diagnostic opens. Any renewed 13 GiB rejection KILLs allocator-relief batch reuse and requires an algorithmic execution redesign; it must not create v11 threshold tuning.",
+  "terminal": "PASS"
+}
