@@ -1,0 +1,77 @@
+{
+  "allowed_successors": [
+    "select a named failure bucket outside target_dark_or_overerase_risk with an available leakage-safe train-only path",
+    "preregister a materially different non-component, non-Delta-Trust, non-safe-metric-fallback candidate family with train-only evidence",
+    "record broader durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "generator_training": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "selector_promotion": false,
+    "visual_review": false
+  },
+  "bucket": "target_dark_or_overerase_risk",
+  "exhausted_route_results": [
+    {
+      "family": "target_dark_component_context_feature_v1",
+      "gate": "train160_leave_one_page_out_component_ranker_recheck",
+      "record_id": "target-dark-component-context-feature-recheck-kill",
+      "reason": "Both the original 18 scalar component features and the 26-feature multiscale context / printed-line continuity extension underperformed weak labels on macro ROC-AUC, average precision, and reject-ratio criteria before generator or validation surfaces opened.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "balanced007_delta_trust_oracle_ceiling_v1",
+      "gate": "train160_next120_development_oracle_ceiling_recheck",
+      "record_id": "balanced007-delta-trust-oracle-ceiling-recheck-kill",
+      "reason": "The target-aware oracle was worse than the current balanced007 candidate on both train160 and next120, leaving no development-only residual headroom before patch-index generation or training.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "safe_metric_fallback_oracle_reconstruction_v1",
+      "gate": "fresh_current_state_queue_reconstruction_plus_train160_next120_oracle_preflight",
+      "record_id": "safe-metric-fallback-reconstruction-no-headroom-kill",
+      "reason": "The only available aligned current-state reconstruction had zero auto-expand rows and the strict oracle preflight had negative candidate-relative residual headroom on every development page.",
+      "terminal": "KILL"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "docs/target-dark-component-context-feature-recheck-v1.json",
+      "sha256": "b94882379a22e9c152333a14621700d455e136ad9056cb197983720653fd9957"
+    },
+    {
+      "path": "docs/balanced007-delta-trust-oracle-ceiling-recheck-v1.json",
+      "sha256": "1024407a756c50029eac2e63887c9ec442353032109ba5ffe63209917c74c635"
+    },
+    {
+      "path": "docs/safe-metric-fallback-reconstruction-no-headroom-v1.json",
+      "sha256": "f8534e4966d7fc205115886a6f4baffe31b116c2fde2b0e9d8a5f1c2d55fc17b"
+    }
+  ],
+  "forbidden_next_steps_inside_bucket": [
+    "repeat_target_dark_component_context_feature_v1",
+    "add_more_labels_to_same_component_ranker",
+    "component_threshold_topk_feature_subset_or_generator_rescue",
+    "repeat_balanced007_delta_trust_oracle_ceiling_v1",
+    "delta_trust_threshold_margin_page_selector_patch_index_or_training_rescue",
+    "repeat_safe_metric_fallback_oracle_reconstruction_v1",
+    "safe_metric_selector_threshold_page_review_validation_reserved_blind_or_promotion_rescue",
+    "use_scut115_holdout40_reserved_blind_visual_review_or_current_primary_replacement_as_selection_evidence"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "scope": "Current-state target-dark/overerase-risk successor routes with available leakage-safe train-only or development-only evidence after the closed stroke-only source-candidate bucket.",
+  "state": "target_dark_or_overerase_risk_available_routes_exhausted",
+  "terminal_result": {
+    "reason": "The available current-state target_dark_or_overerase_risk routes have each failed before candidate admission: component-ranker representation failed train160 feature criteria, Delta-Trust oracle had no development residual ceiling, and safe-metric fallback reconstruction had no auto-expand rows or development headroom. Continuing in this bucket would repeat prohibited component, Delta-Trust, safe-metric selector, threshold, page-specific, validation, visual-review, or blind-rescue paths.",
+    "terminal": "KILL"
+  }
+}

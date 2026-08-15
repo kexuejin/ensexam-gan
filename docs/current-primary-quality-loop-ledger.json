@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Record that the only available current-state safe-metric fallback reconstruction KILLs the route: the reconstructed queue has zero auto-expand rows and the strict train160/next120 oracle preflight has negative candidate-relative residual headroom on every development page.",
+    "causal_change": "Record that the available current-state target_dark_or_overerase_risk successor bucket is exhausted after component-context, Delta-Trust oracle, and safe-metric fallback reconstruction routes all failed before candidate admission.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1685,12 +1685,20 @@
       {
         "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/oracle_preflight_from_materialized156_smoke_quality/per_page.csv",
         "sha256": "c2b530b9866f81a4b0ee9fea47e081fa7bc0d9696b3277096b9147b33e9436f4"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md",
+        "sha256": "2587d882596bf73e59dcbc78fffe9622141dd03adef268f1341b6747afd87144"
+      },
+      {
+        "path": "docs/target-dark-overerase-bucket-exhaustion-v1.json",
+        "sha256": "0226ac8e0daa00cf8ebab15f8574fe934f49b08ee7cf71fdbfd937d45e69fae5"
       }
     ],
-    "failure_bucket": "target_dark_or_overerase_risk",
+    "failure_bucket": "successor_selection_outside_target_dark_or_overerase_risk",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "select another named failure bucket with an available leakage-safe train-only path, preregister a materially different non-safe-metric-fallback family, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "select another named failure bucket outside target_dark_or_overerase_risk with an available leakage-safe train-only path, preregister a materially different candidate family with train-only evidence, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -2109,8 +2117,13 @@
       },
       {
         "id": "post_safe_metric_fallback_no_headroom_successor_selection",
+        "status": "passed",
+        "detail": "The current target_dark_or_overerase_risk bucket was closed after component-context, Delta-Trust oracle, and safe-metric fallback reconstruction routes all failed before candidate admission."
+      },
+      {
+        "id": "post_target_dark_overerase_bucket_exhaustion_successor_selection",
         "status": "pending",
-        "detail": "Choose another named failure bucket with an available leakage-safe train-only path, preregister a materially different non-safe-metric-fallback family, or record broader durable exhaustion if no such path remains."
+        "detail": "Choose a named failure bucket outside target_dark_or_overerase_risk with an available leakage-safe train-only path, preregister a materially different candidate family with train-only evidence, or record broader durable exhaustion if no such path remains."
       }
     ],
     "killed_family_prohibitions": [
@@ -5019,6 +5032,34 @@
         {
           "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/oracle_preflight_from_materialized156_smoke_quality/per_page.csv",
           "sha256": "c2b530b9866f81a4b0ee9fea47e081fa7bc0d9696b3277096b9147b33e9436f4"
+        }
+      ]
+    },
+    {
+      "id": "target-dark-overerase-bucket-exhaustion",
+      "terminal": "KILL",
+      "outcome": "target_dark_or_overerase_risk_available_routes_exhausted",
+      "repeat_policy": "do_not_repeat_target_dark_or_overerase_risk_component_delta_trust_or_safe_metric_fallback_routes_without_materially_new_train_only_evidence",
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md",
+          "sha256": "2587d882596bf73e59dcbc78fffe9622141dd03adef268f1341b6747afd87144"
+        },
+        {
+          "path": "docs/target-dark-overerase-bucket-exhaustion-v1.json",
+          "sha256": "0226ac8e0daa00cf8ebab15f8574fe934f49b08ee7cf71fdbfd937d45e69fae5"
+        },
+        {
+          "path": "docs/target-dark-component-context-feature-recheck-v1.json",
+          "sha256": "b94882379a22e9c152333a14621700d455e136ad9056cb197983720653fd9957"
+        },
+        {
+          "path": "docs/balanced007-delta-trust-oracle-ceiling-recheck-v1.json",
+          "sha256": "1024407a756c50029eac2e63887c9ec442353032109ba5ffe63209917c74c635"
+        },
+        {
+          "path": "docs/safe-metric-fallback-reconstruction-no-headroom-v1.json",
+          "sha256": "f8534e4966d7fc205115886a6f4baffe31b116c2fde2b0e9d8a5f1c2d55fc17b"
         }
       ]
     }
