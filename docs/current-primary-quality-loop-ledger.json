@@ -849,12 +849,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-host-capacity-rss-launch-v9-integration-pass.md",
         "sha256": "41ddf9a13638b22293b6bcf628e377f190e0711c2968c441595de4dfa334af3f"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-page-memory-relief-v10.json",
+        "sha256": "947c88aa38f11df43c4aa83d1bd49a9d82fb312ab48daddfa16569cd3480c85d"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-page-memory-relief-v10-preregistration.md",
+        "sha256": "718a5ebdba7a00351df68a51b87dcde91bad0e3892802ef58f96cf7a7bf8b0d9"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the host-capacity RSS v9 integration PASS, then immediately run the exact Python 3.13 launcher with OMP, OpenBLAS, MKL, and vecLib thread caps set to one. Pass a fresh 60-second stable-current-baseline window and resume exact manifest index 19 hw5k_1376.jpg under the final recovered-only 13 GiB RSS cap, 70 percent launch and 35 percent runtime free-memory floors, 512 MiB run-local swap-growth cap, one CPU child, fixed eight-page batches, 0.25-second monitoring, and 900-second timeout. Preserve exact order, 18 retained hashes, and the 39d5 plan. A 13 GiB rejection requires an algorithmic change and must never trigger another cap increase. Require schema-v9 launcher PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS.",
+    "next_action": "Commit and push the page-memory-relief v10 preregistration, then implement fail-closed gc.collect plus malloc_zone_pressure_relief after every atomic page record and before the next page, schema-v10 result and authority, and extracted v10 contract validation. Do not change the final recovered 13 GiB RSS cap, shared 10 GiB default, 70 percent launch or 35 percent runtime free-memory floors, 512 MiB run-local swap cap, fixed eight-page CPU batches, monitoring, timeout, order, 23 retained hashes, or 39d5 plan. Resume exact manifest index 24 hw5k_1447.jpg only after dual-runtime focused and complete suites pass and a v10 integration PASS is pushed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1139,6 +1147,11 @@
       {
         "detail": "V9 passed 24 focused and 133 complete external-layout tests in Python 3.13.1 and 3.10.11 plus dual-runtime compile. The recovered monitor accepts the observed 11992580096-byte peak below the final 13 GiB cap, terminates the process group at 13 GiB plus one, and independently preserves the 35-percent free-memory and 512 MiB run-local swap gates. Shared materializer/runtime hashes remain exact at 10 GiB. V9 contract validation moved into a cohesive 148-line module while the launcher remains 1182 lines. Schema-v9 authority and output are locked; all 18 retained hashes, next file hw5k_1376.jpg, and the 39d5 plan remain exact. Resume is authorized after this PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "V9 advanced from 18 to 23 pages before correctly stopping at 14049755136 bytes above the final 13 GiB cap; the next supervisor attempt was cancelled in readiness before detector creation. V10 freezes fail-closed gc.collect and macOS malloc_zone_pressure_relief after each atomic page record and before the next page, without changing detector outputs, fixed eight-page batches, final RSS, free-memory, swap, CPU, order, or timeout boundaries. The exact libSystem symbol passed a model-free call. Only implementation and synthetic verification are open; all 23 retained hashes and next file hw5k_1447.jpg remain authoritative.",
+        "id": "external_text_layout_recovered_materializer_page_memory_relief_v10_preregistration",
         "status": "passed"
       }
     ],
