@@ -1093,12 +1093,28 @@
       {
         "path": "tests/test_generate_stroke_only_patch_suppression.py",
         "sha256": "3641a1085089b7b71807a77389dbbf726ea772c108cfb439cc929583cf2fb238"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-input-custody-audit.md",
+        "sha256": "4ea6bc16eb6a1d095a1b3fd627d5fa1c88aef48d1abb2477d3d1f12b6e08d101"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-input-custody-audit-20260815/audit.json",
+        "sha256": "0fab10c783a89703c4342039df14d0a5372c68e3fab86ab94978e8073264427c"
+      },
+      {
+        "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+        "sha256": "d43f98b44efe16d617d26428175e7b985457e5a21313333c2169ee91438bf2d9"
+      },
+      {
+        "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
+        "sha256": "a42dd86d880519c9fec9fc323bf3b441c6c24bb4699ef1c300dee528d00a0713"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "implement and run only the registered train/train160 stroke-only preflight; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "restore exact historical train160 baseline and relaxed-interval source-candidate prediction PNGs, or preregister a different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1458,7 +1474,7 @@
       {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
-        "detail": "Run only the registered train/train160 preflight for stroke-only patch suppression and prove synthetic preserve safety, split-authority closure, and planned validation/blind output absence before any candidate or gate opens."
+        "detail": "Pending behind input custody: selected train160 rows 166/190/192 have source/target files, but the required registered baseline and relaxed-interval source-candidate prediction PNGs are missing. Restore exact historical train-only pixels or preregister a different available train-only source candidate before running the stroke-only generator."
       }
     ],
     "killed_family_prohibitions": [
@@ -3517,6 +3533,38 @@
       "id": "stroke-only-patch-suppression-preregistration",
       "outcome": "non_layout_source_dark_stroke_only_patch_suppression_frozen_pending_train_only_preflight",
       "repeat_policy": "implement_and_run_exact_train_only_stroke_only_preflight_no_threshold_blend_component_or_split_rescue",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-input-custody-audit.md",
+          "sha256": "4ea6bc16eb6a1d095a1b3fd627d5fa1c88aef48d1abb2477d3d1f12b6e08d101"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-input-custody-audit-20260815/audit.json",
+          "sha256": "0fab10c783a89703c4342039df14d0a5372c68e3fab86ab94978e8073264427c"
+        },
+        {
+          "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+          "sha256": "d43f98b44efe16d617d26428175e7b985457e5a21313333c2169ee91438bf2d9"
+        },
+        {
+          "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
+          "sha256": "a42dd86d880519c9fec9fc323bf3b441c6c24bb4699ef1c300dee528d00a0713"
+        },
+        {
+          "path": "docs/product-quality-review-pages.csv",
+          "sha256": "5c0182d739a41db3962f1ee51b760cd93ce5bc2f68fd96979e81cd410cf52a52"
+        },
+        {
+          "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
+          "sha256": "24c35c8d4eb73ee1e0ed4a60752e1b517e1cc94ff5e4575ce525664364b75517"
+        }
+      ],
+      "id": "stroke-only-patch-suppression-input-custody-audit",
+      "outcome": "selected_train160_source_rows_present_but_registered_baseline_and_relaxed_interval_prediction_pngs_missing_before_preflight_materialization",
+      "repeat_policy": "restore_exact_historical_train160_prediction_pngs_or_preregister_a_different_available_train_only_source_candidate; do_not_train_fabricate_threshold_rescue_or_substitute_validation_rows",
       "terminal": "PREREQUISITE_NEEDED"
     }
   ],
