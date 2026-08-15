@@ -1,0 +1,123 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": false,
+    "launcher_implementation_and_synthetic_verification": true,
+    "model_execution": false,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_bounded_rss_v8_preregistration_only",
+    "training": false
+  },
+  "dataset_shape_audit": {
+    "above_failed_page_pixel_count": 19,
+    "count": 275,
+    "failed_page": {
+      "file": "hw5k_121.jpg",
+      "height": 2202,
+      "manifest_index": 9,
+      "pixels": 6665454,
+      "width": 3027
+    },
+    "maximum_page": {
+      "file": "hw5k_3225.jpg",
+      "height": 3211,
+      "manifest_index": 121,
+      "pixels": 7767409,
+      "width": 2419
+    },
+    "maximum_to_failed_pixel_ratio": 1.1653233223123287,
+    "manifest": {
+      "path": "hardcase_lists/monotonic-residual-erase-train275-v1.txt",
+      "sha256": "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    }
+  },
+  "evidence": {
+    "launcher_v7_integration": {
+      "path": "docs/external-text-layout-recovered-materializer-settled-baseline-resume-v7-integration-verification-20260815.json",
+      "sha256": "1b5676a031a0af080ddad941db047e28dca0952560cf738a62cf5fbab13bdb1d"
+    },
+    "launcher_v7_source": {
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "b058013e3ecbcc5c26d7fb88d7913cb7721ddb61c7dd8fd6368f5267f59d1d59"
+    },
+    "launcher_v7_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "fe2536ae3b382738a12dbe3a0c834b834d34b5aa777764f3df7c241c08e3875b"
+    },
+    "recovered_batch_runtime_v7": {
+      "path": "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "sha256": "057e0fec7eb0b6adfb43135dee66e3277c142c34fc7d98c2ba4b3a5a22669e2f"
+    },
+    "recovered_batch_runtime_v7_test": {
+      "path": "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "sha256": "fbec10f38613643ae093b26e410a66132cb49f8a96ef9740700d36f56de1b29a"
+    },
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    }
+  },
+  "governance_correction": {
+    "actual_next_file": "hw5k_121.jpg",
+    "execution_impact": "none_launcher_always_uses_exact_manifest_order",
+    "incorrect_prior_documented_file": "hw5k_1214.jpg",
+    "incorrect_prior_file_is_in_manifest": false
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "tests/test_run_external_text_layout_recovered_materialization.py"
+    ],
+    "launcher_result_schema_version": 8,
+    "new_dependency": false,
+    "shared_materializer_mutation": false,
+    "shared_runtime_mutation": false
+  },
+  "observed_v7_stop": {
+    "completed_count": 8,
+    "final_materialization_present": false,
+    "launcher_result_present": false,
+    "post_stop_booted_ios_simulator_count": 0,
+    "post_stop_conflicting_model_process_count": 0,
+    "post_stop_memory_free_percent": 74.0,
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "reason": "detector RSS safety limit exceeded: 11147149312 > 10737418240",
+    "trigger_process_tree_rss_bytes": 11147149312
+  },
+  "required_verification": [
+    "the_recovered_batch_monitor_accepts_11147149312_bytes_below_the_new_11_gib_cap",
+    "the_recovered_batch_monitor_terminates_the_process_group_at_11_gib_plus_one_byte",
+    "free_memory_below_35_percent_and_swap_growth_above_512_mib_remain_independent_terminations",
+    "the_shared_10_gib_materializer_and_runtime_defaults_remain_byte_exact",
+    "launcher_result_schema_v8_records_the_recovered_11_gib_limit",
+    "execution_authority_requires_v8_preregistration_and_integration_pass",
+    "retained_eight_page_state_and_exact_manifest_order_remain_unchanged",
+    "dual_runtime_focused_and_complete_external_layout_suites_pass"
+  ],
+  "runtime": {
+    "batch_size": 8,
+    "batch_timeout_seconds": 900.0,
+    "maximum_concurrent_model_processes": 1,
+    "maximum_runtime_process_tree_rss_bytes": 11811160064,
+    "maximum_swap_growth_bytes": 536870912,
+    "minimum_launch_memory_free_percent": 70.0,
+    "minimum_runtime_memory_free_percent": 35.0,
+    "monitor_interval_seconds": 0.25,
+    "shared_default_process_tree_rss_bytes_unchanged": 10737418240,
+    "stability_window_seconds": 60.0,
+    "worker_count": 1
+  },
+  "schema_version": 8,
+  "supersedes": {
+    "path": "docs/external-text-layout-recovered-materializer-settled-baseline-resume-v7-integration-verification-20260815.json",
+    "reason": "the_first_real_v7_resume_reached_the_next_manifest_page_but_its_10_38_gib_observed_rss_exceeded_the_shared_10_gib_cap",
+    "sha256": "1b5676a031a0af080ddad941db047e28dca0952560cf738a62cf5fbab13bdb1d",
+    "status": "eight_pages_retained_then_rss_rejected_before_page_nine_completion"
+  },
+  "terminal": "PREREQUISITE_NEEDED"
+}
