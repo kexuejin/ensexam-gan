@@ -101,19 +101,42 @@ class EmptyDetector:
         self.closed = True
 
 
+class CenterBoxDetector:
+    def __init__(self) -> None:
+        self.inputs: list[str] = []
+        self.closed = False
+
+    def predict(self, *, input: str, **_kwargs: object) -> list[dict[str, object]]:
+        self.inputs.append(input)
+        image = cv2.imread(input, cv2.IMREAD_COLOR)
+        if image is None:
+            raise RuntimeError(f"failed to read detector input: {input}")
+        height, width = image.shape[:2]
+        y = max(1, height // 2)
+        x = max(1, width // 2)
+        polygon = np.asarray(
+            [[[x - 1, y - 1], [x + 1, y - 1], [x + 1, y + 1], [x - 1, y + 1]]],
+            dtype=np.float32,
+        )
+        return [{"dt_polys": polygon, "dt_scores": np.asarray([0.9], dtype=np.float32)}]
+
+    def close(self) -> None:
+        self.closed = True
+
+
 class RecoveredBatchRuntimeTest(unittest.TestCase):
-    def test_exact_eight_pages_use_one_cpu_detector_and_commit_in_order(self) -> None:
+    def test_exact_eight_pages_use_fresh_cpu_detector_and_commit_in_order(self) -> None:
         items = [
             (f"page{index}.png", f"/source/page{index}.png", f"/records/page{index}.json")
             for index in range(8)
         ]
-        detector = EmptyDetector()
-        factory = mock.Mock(return_value=detector)
+        detectors = [EmptyDetector() for _item in items]
+        factory = mock.Mock(side_effect=detectors)
         events: list[str] = []
 
         def materialize_one(**kwargs: object) -> dict[str, object]:
             file_name = str(kwargs["file_name"])
-            self.assertIs(kwargs["detector"], detector)
+            self.assertIs(kwargs["detector"], detectors[int(file_name[4])])
             events.append(f"npz:{file_name}")
             return {"file": file_name}
 
@@ -137,8 +160,8 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
             )
 
         self.assertEqual(completed, [item[0] for item in items])
-        factory.assert_called_once_with({"device": "cpu"})
-        self.assertTrue(detector.closed)
+        self.assertEqual(factory.call_args_list, [mock.call({"device": "cpu"})] * 8)
+        self.assertTrue(all(detector.closed for detector in detectors))
         expected: list[str] = []
         for file_name, _source, record_path in items:
             expected.extend(
@@ -149,6 +172,44 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
                 ]
             )
         self.assertEqual(events, expected)
+
+    def test_tiled_page_detector_splits_large_pages_and_preserves_coordinates(
+        self,
+    ) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            small = root / "small.png"
+            large = root / "large.png"
+            self.assertTrue(cv2.imwrite(str(small), np.zeros((20, 20, 3), dtype=np.uint8)))
+            self.assertTrue(cv2.imwrite(str(large), np.zeros((80, 20, 3), dtype=np.uint8)))
+
+            small_base = CenterBoxDetector()
+            small_detector = batch_runtime.TiledPageDetector(
+                {"device": "cpu"},
+                detector_factory=lambda _spec: small_base,
+                max_tile_pixels=700,
+                overlap_pixels=4,
+            )
+            small_result = small_detector.predict(input=str(small), batch_size=1)
+            self.assertEqual(small_base.inputs, [str(small)])
+            self.assertEqual(np.asarray(small_result[0]["dt_polys"]).shape, (1, 4, 2))
+
+            large_base = CenterBoxDetector()
+            large_detector = batch_runtime.TiledPageDetector(
+                {"device": "cpu"},
+                detector_factory=lambda _spec: large_base,
+                max_tile_pixels=700,
+                overlap_pixels=4,
+            )
+            large_result = large_detector.predict(input=str(large), batch_size=1)
+            polygons = np.asarray(large_result[0]["dt_polys"])
+
+            self.assertGreater(len(large_base.inputs), 1)
+            self.assertTrue(all(Path(path).name.startswith("tile-") for path in large_base.inputs))
+            self.assertEqual(polygons.shape[1:], (4, 2))
+            centers_y = sorted(float(value) for value in polygons[:, :, 1].mean(axis=1))
+            self.assertEqual(len(centers_y), len(large_base.inputs))
+            self.assertGreater(centers_y[-1], centers_y[0])
 
     def test_memory_relief_failure_is_after_durable_record_and_fail_closed(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
@@ -264,10 +325,10 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
             )
         self.assertEqual(events, ["setsid", "simulator", "detector"])
 
-    def test_isolated_batch_starts_exactly_one_spawn_child(self) -> None:
+    def test_isolated_batch_starts_one_spawn_child_per_page(self) -> None:
         items = [
             (f"page{index}.png", f"/source/page{index}.png", f"/records/page{index}.json")
-            for index in range(8)
+            for index in range(3)
         ]
 
         class Process:
@@ -287,9 +348,9 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
             def join(self, timeout: float | None = None) -> None:
                 del timeout
 
-        process = Process()
         context = mock.Mock()
-        context.Process.return_value = process
+        processes = [Process() for _item in items]
+        context.Process.side_effect = processes
         with mock.patch.object(
             batch_runtime.multiprocessing, "get_context", return_value=context
         ) as get_context:
@@ -300,12 +361,13 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
                 health_reader=safe_health,
             )
         get_context.assert_called_once_with("spawn")
-        context.Process.assert_called_once()
-        call = context.Process.call_args.kwargs
-        self.assertIs(call["target"], batch_runtime.materialize_batch_child)
-        self.assertEqual(call["args"][1], items)
-        self.assertFalse(call["daemon"])
-        self.assertTrue(process.started)
+        self.assertEqual(context.Process.call_count, len(items))
+        for item, process, call in zip(items, processes, context.Process.call_args_list):
+            kwargs = call.kwargs
+            self.assertIs(kwargs["target"], batch_runtime.materialize_batch_child)
+            self.assertEqual(kwargs["args"][1], [item])
+            self.assertFalse(kwargs["daemon"])
+            self.assertTrue(process.started)
 
     def test_rss_free_swap_and_timeout_terminate_the_batch_process(self) -> None:
         class Process:

@@ -8,6 +8,7 @@ import gc
 import multiprocessing
 import os
 from pathlib import Path
+import tempfile
 import time
 from typing import Any, Callable
 
@@ -19,6 +20,8 @@ BATCH_SIZE = 8
 BATCH_TIMEOUT_SECONDS = 15 * 60.0
 MONITOR_INTERVAL_SECONDS = 0.25
 MAX_RECOVERED_PROCESS_TREE_RSS_BYTES = 13 * 1024**3
+PAGE_TILE_MAX_PIXELS = 4_250_000
+PAGE_TILE_OVERLAP_PIXELS = 128
 _MALLOC_ZONE_LIBRARY: Any | None = None
 _MALLOC_ZONE_PRESSURE_RELIEF: Any | None = None
 
@@ -103,6 +106,128 @@ def _validate_batch_items(items: list[tuple[str, str, str]]) -> None:
             )
 
 
+class TiledPageDetector:
+    """Limit per-inference image size while preserving page-coordinate outputs."""
+
+    def __init__(
+        self,
+        spec: dict[str, Any],
+        *,
+        detector_factory: Callable[[dict[str, Any]], Any] = materializer.create_detector,
+        max_tile_pixels: int = PAGE_TILE_MAX_PIXELS,
+        overlap_pixels: int = PAGE_TILE_OVERLAP_PIXELS,
+    ) -> None:
+        if (
+            isinstance(max_tile_pixels, bool)
+            or max_tile_pixels <= 0
+            or isinstance(overlap_pixels, bool)
+            or overlap_pixels < 0
+        ):
+            raise materializer.MaterializationError("tiled detector limits changed")
+        self._detector = detector_factory(spec)
+        self._max_tile_pixels = int(max_tile_pixels)
+        self._overlap_pixels = int(overlap_pixels)
+
+    def close(self) -> None:
+        close = getattr(self._detector, "close", None)
+        if callable(close):
+            close()
+
+    def _core_spans(self, *, height: int, width: int) -> list[tuple[int, int]]:
+        if height <= 0 or width <= 0:
+            raise materializer.MaterializationError("invalid tiled detector input")
+        if height * width <= self._max_tile_pixels:
+            return [(0, height)]
+        max_tile_height = self._max_tile_pixels // width
+        core_height = max_tile_height - (2 * self._overlap_pixels)
+        if core_height <= 0:
+            raise materializer.MaterializationError(
+                "tiled detector input exceeds memory-safe geometry"
+            )
+        spans: list[tuple[int, int]] = []
+        start = 0
+        while start < height:
+            end = min(height, start + core_height)
+            spans.append((start, end))
+            start = end
+        return spans
+
+    def predict(self, *, input: str, **kwargs: Any) -> list[dict[str, Any]]:
+        import cv2
+        import numpy as np
+
+        source_path = Path(input)
+        image = cv2.imread(str(source_path), cv2.IMREAD_COLOR)
+        if image is None:
+            raise materializer.MaterializationError(
+                f"source image decode failed: {source_path}"
+            )
+        height, width = image.shape[:2]
+        spans = self._core_spans(height=height, width=width)
+        if len(spans) == 1 and spans[0] == (0, height):
+            results = self._detector.predict(input=input, **kwargs)
+            return results if isinstance(results, list) else list(results)
+
+        polygons: list[np.ndarray] = []
+        scores: list[float] = []
+        with tempfile.TemporaryDirectory(prefix="ensexam-layout-tile-") as raw:
+            tile_root = Path(raw)
+            for index, (core_start, core_end) in enumerate(spans):
+                tile_start = max(0, core_start - self._overlap_pixels)
+                tile_end = min(height, core_end + self._overlap_pixels)
+                tile = image[tile_start:tile_end, :]
+                tile_path = tile_root / f"tile-{index:04d}.png"
+                if not cv2.imwrite(str(tile_path), tile):
+                    raise materializer.MaterializationError(
+                        "tiled detector input write failed"
+                    )
+                tile_results = self._detector.predict(
+                    input=str(tile_path), **kwargs
+                )
+                tile_list = (
+                    tile_results
+                    if isinstance(tile_results, list)
+                    else list(tile_results)
+                )
+                if len(tile_list) != 1:
+                    raise materializer.MaterializationError(
+                        "tiled detector did not return exactly one tile result"
+                    )
+                tile_polygons, tile_scores = materializer.extract_result(tile_list[0])
+                polygon_array = np.asarray(tile_polygons)
+                score_array = np.asarray(tile_scores, dtype=np.float32)
+                if polygon_array.size == 0:
+                    continue
+                if polygon_array.ndim != 3 or polygon_array.shape[1:] != (4, 2):
+                    raise materializer.MaterializationError(
+                        "tiled detector polygons must have shape [N,4,2]"
+                    )
+                if score_array.ndim != 1 or len(score_array) != len(polygon_array):
+                    raise materializer.MaterializationError(
+                        "tiled detector score count changed"
+                    )
+                shifted = polygon_array.astype(np.float64, copy=True)
+                shifted[:, :, 1] += float(tile_start)
+                centers_y = shifted[:, :, 1].mean(axis=1)
+                keep = (centers_y >= core_start) & (centers_y < core_end)
+                for polygon, score in zip(shifted[keep], score_array[keep], strict=True):
+                    polygons.append(polygon)
+                    scores.append(float(score))
+
+        if not polygons:
+            return [{"dt_polys": np.empty((0, 4, 2)), "dt_scores": np.empty((0,))}]
+        return [
+            {
+                "dt_polys": np.stack(polygons, axis=0),
+                "dt_scores": np.asarray(scores, dtype=np.float32),
+            }
+        ]
+
+
+def create_recovered_detector(spec: dict[str, Any]) -> TiledPageDetector:
+    return TiledPageDetector(spec)
+
+
 def materialize_batch_pages(
     *,
     spec: dict[str, Any],
@@ -111,16 +236,16 @@ def materialize_batch_pages(
     detector_factory: Callable[[dict[str, Any]], Any] | None = None,
     memory_releaser: Callable[[], int] | None = None,
 ) -> list[str]:
-    """Create one detector and atomically commit each serial page in a batch."""
+    """Atomically commit each page with a fresh detector lifetime."""
     _validate_batch_items(items)
     if spec.get("device") != "cpu":
         raise materializer.MaterializationError("recovered detector must remain CPU-only")
-    factory = detector_factory or materializer.create_detector
+    factory = detector_factory or create_recovered_detector
     release_memory = memory_releaser or release_page_memory
-    detector = factory(spec)
     completed: list[str] = []
-    try:
-        for file_name, source_path_value, record_path_value in items:
+    for file_name, source_path_value, record_path_value in items:
+        detector = factory(spec)
+        try:
             row = materializer.materialize_one(
                 detector=detector,
                 file_name=file_name,
@@ -129,19 +254,19 @@ def materialize_batch_pages(
                 page_dir=page_dir,
             )
             materializer.atomic_write_json(Path(record_path_value), row)
-            try:
-                release_memory()
-            except materializer.MaterializationError:
-                raise
-            except Exception as error:
-                raise materializer.MaterializationError(
-                    "page memory relief failed"
-                ) from error
-            completed.append(file_name)
-    finally:
-        close = getattr(detector, "close", None)
-        if callable(close):
-            close()
+        finally:
+            close = getattr(detector, "close", None)
+            if callable(close):
+                close()
+        try:
+            release_memory()
+        except materializer.MaterializationError:
+            raise
+        except Exception as error:
+            raise materializer.MaterializationError(
+                "page memory relief failed"
+            ) from error
+        completed.append(file_name)
     return completed
 
 
@@ -240,21 +365,42 @@ def run_isolated_batch(
             "detector child Simulator recheck cannot be disabled"
         )
     context = multiprocessing.get_context("spawn")
-    process = context.Process(
-        target=materialize_batch_child,
-        args=(spec, items, str(page_dir), reject_booted_ios_simulators),
-        daemon=False,
-    )
-    process.start()
-    return wait_for_batch_process(
-        process,
-        health_reader=health_reader,
-        maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
-        minimum_memory_free_percent=minimum_memory_free_percent,
-        maximum_swap_used_bytes=maximum_swap_used_bytes,
-        batch_timeout_seconds=batch_timeout_seconds,
-        monitor_interval_seconds=monitor_interval_seconds,
-    )
+    observed: dict[str, float | int] = {
+        "minimum_memory_free_percent": 100.0,
+        "peak_process_tree_rss_bytes": 0,
+        "peak_swap_used_bytes": 0,
+    }
+    for item in items:
+        process = context.Process(
+            target=materialize_batch_child,
+            args=(spec, [item], str(page_dir), reject_booted_ios_simulators),
+            daemon=False,
+        )
+        process.start()
+        page_health = wait_for_batch_process(
+            process,
+            health_reader=health_reader,
+            maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
+            minimum_memory_free_percent=minimum_memory_free_percent,
+            maximum_swap_used_bytes=maximum_swap_used_bytes,
+            batch_timeout_seconds=batch_timeout_seconds,
+            monitor_interval_seconds=monitor_interval_seconds,
+        )
+        observed = {
+            "minimum_memory_free_percent": min(
+                float(observed["minimum_memory_free_percent"]),
+                float(page_health["minimum_memory_free_percent"]),
+            ),
+            "peak_process_tree_rss_bytes": max(
+                int(observed["peak_process_tree_rss_bytes"]),
+                int(page_health["peak_process_tree_rss_bytes"]),
+            ),
+            "peak_swap_used_bytes": max(
+                int(observed["peak_swap_used_bytes"]),
+                int(page_health["peak_swap_used_bytes"]),
+            ),
+        }
+    return observed
 
 
 def materialize(

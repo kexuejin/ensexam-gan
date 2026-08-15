@@ -865,12 +865,16 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-page-memory-relief-v10-integration-pass.md",
         "sha256": "0c396c4e6840efbc56ce3f3e1ac32a40fda962eca5461c175ad740dd5a8f4d82"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-tiled-page-pass.md",
+        "sha256": "ad76ff6783227ea1548e47f5e8d11b05816dd4781a6436829f9f0265a83f9e4f"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the page-memory-relief v10 integration PASS, then run one exact CPU-only Python 3.13 launcher resume from manifest index 24 hw5k_1447.jpg. Keep the final 13 GiB RSS cap, 35 percent runtime free-memory floor, 512 MiB run-local swap-growth cap, fixed eight-page batches, monitoring, timeout, exact order, 23 retained hashes, and 39d5 plan. A schema-v10 PASS must validate all 275 records and leave no transaction residue before the diagnostic opens. Any renewed 13 GiB rejection KILLs allocator-relief batch reuse and requires an algorithmic execution redesign; never create v11 threshold tuning.",
+    "next_action": "External text-layout materialization is complete: schema-v10 PASS, 275 validated records, manifest SHA256 2578fb78cc3188776d97fff2e1efd2fc8f91d224b4efb680ffa83e1847c96579, content SHA256 8d4753dbd160c85043b1b65c1161e4cdc00059a07216bcc3d63b879754896750, no transaction residue, peak RSS 10942496768 bytes, minimum runtime free memory 38.0 percent, and zero run-local swap growth. Next, consume this support cache to establish the quality baseline and run one bounded causal candidate through SCUT115 and holdout40 gates. Do not rerun materialization or reopen resource-threshold tuning.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1165,6 +1169,11 @@
       {
         "detail": "V10 passed 27 focused and 136 complete external-layout tests in Python 3.13.1 and 3.10.11 plus dual-runtime compile. Every atomic page record precedes exactly one gc.collect and malloc_zone_pressure_relief call; the library handle is retained, symbol/call failures close execution, and committed records remain resumable. The shared materializer/runtime and all resource limits remain exact. All 23 real page/record pairs, aggregate hashes, next file hw5k_1447.jpg, and the 39d5 plan are unchanged. One bounded real resume is authorized after this PASS is pushed; another 13 GiB rejection KILLs this reuse design rather than opening threshold tuning.",
         "id": "external_text_layout_recovered_materializer_page_memory_relief_v10_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "The real v10 resume killed allocator-relief batch reuse after page 24 crossed the 35 percent free-memory gate, then replaced detector lifetime with page-level process isolation and large-page height tiling. The CPU-only materializer completed all 275 train pages under the existing 13 GiB RSS, 35 percent free-memory, and 512 MiB run-local swap-growth gates. Final manifest SHA256 is 2578fb78cc3188776d97fff2e1efd2fc8f91d224b4efb680ffa83e1847c96579, content SHA256 is 8d4753dbd160c85043b1b65c1161e4cdc00059a07216bcc3d63b879754896750, peak RSS was 10942496768 bytes, minimum free memory was 38.0 percent, swap growth was 0, launcher result validation is idempotent, and transaction residue is absent.",
+        "id": "external_text_layout_recovered_materializer_tiled_page_materialization",
         "status": "passed"
       }
     ],
