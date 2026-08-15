@@ -1,0 +1,58 @@
+{
+  "application": {
+    "baseline_input": "recovered_second_stage_rgb_plus_external_text_layout_channels",
+    "darker_candidate_rejected": true,
+    "identity_noop": true,
+    "reachable_brighten_applied": true,
+    "target_or_route_options_absent": true
+  },
+  "authority": {
+    "active_iteration": "monotonic-residual-erase-support",
+    "conditioned_patch_materialization_status": "passed",
+    "support_diagnostic_status": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "patch_index_materialized": true,
+  "plan": "/Volumes/Tool/source/ensexam-gan/docs/external-text-layout-conditioned-monotonic-preflight-v1.json",
+  "plan_sha256": "16671dc4d1afa6d1740702c709dad058a5bcc30e5a4282407c49c6fd979e9aae",
+  "planned_outputs_absent": [
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-score",
+    "/Volumes/Tool/source/ensexam-gan/artifacts/trials/external-text-layout-conditioned-monotonic-v1"
+  ],
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "real_image_decode": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "schema_version": 1,
+  "support": {
+    "aggregates": {
+      "ablation_mean_fold_auc": 0.644506096958718,
+      "full_auc_ablation_margin": 0.04347041960931275,
+      "full_mean_fold_auc": 0.6879765165680307,
+      "full_min_fold_auc": 0.6478868392944336,
+      "macro_median_page_auc": 0.7221097946166992,
+      "positive_mean_above_preserve_folds": 5
+    },
+    "evidence_hashes": {
+      "effective_plan": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+      "layout_materialization_manifest": "2578fb78cc3188776d97fff2e1efd2fc8f91d224b4efb680ffa83e1847c96579",
+      "support_diagnostic": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734",
+      "support_diagnostic_decision": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+    },
+    "support_audit": "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-support-prerequisite-20260813/audit.json"
+  },
+  "synthetic_preflight": {
+    "delta_max": 1.1801719665527344e-05,
+    "delta_min": 1.1205673217773438e-05,
+    "identity_exact": true,
+    "layout_encoder_gradient_abs": 6.388266774592921e-05,
+    "output_channels": 3
+  },
+  "target_decode": false,
+  "terminal": "PASS",
+  "training_started": false
+}

@@ -35,6 +35,9 @@ OUTPUT_PATH = Path(
 )
 ACTIVE_ITERATION_ID = "monotonic-residual-erase-support"
 SUPPORT_PREREQUISITE_ID = "external_text_layout_support_train_only_diagnostic"
+PATCH_MATERIALIZATION_ID = (
+    "external_text_layout_conditioned_monotonic_patch_materialization"
+)
 
 EXPECTED_AUTHORIZATION = {
     "candidate_inference": False,
@@ -241,6 +244,10 @@ def validate_ledger_authority(ledger: dict[str, Any]) -> dict[str, Any]:
             raise PreflightError(f"{forbidden} is not prohibited before first gate")
     return {
         "active_iteration": active.get("id"),
+        "conditioned_patch_materialization_status": prerequisites.get(
+            PATCH_MATERIALIZATION_ID,
+            "not_started",
+        ),
         "support_diagnostic_status": prerequisites.get(SUPPORT_PREREQUISITE_ID),
     }
 
@@ -481,9 +488,19 @@ def validate_application(plan: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-def validate_outputs_absent(repo_root: Path, plan: dict[str, Any]) -> list[str]:
+def validate_outputs_absent(
+    repo_root: Path,
+    plan: dict[str, Any],
+    *,
+    allow_materialized_patch_index: bool = False,
+) -> list[str]:
     absent: list[str] = []
     for label, value in sorted(plan["planned_outputs_must_be_absent"].items()):
+        if allow_materialized_patch_index and label in {
+            "patch_index",
+            "patch_index_summary_dir",
+        }:
+            continue
         path = repo_path(repo_root, value, f"planned output {label}")
         if path.exists():
             raise PreflightError(f"planned output must be absent: {path}")
@@ -508,7 +525,14 @@ def run_preflight(
         support = validate_support_audit(repo_root, plan)
         synthetic = run_synthetic_preflight(plan)
         application = validate_application(plan)
-        absent = validate_outputs_absent(repo_root, plan)
+        patch_materialized = (
+            authority["conditioned_patch_materialization_status"] == "passed"
+        )
+        absent = validate_outputs_absent(
+            repo_root,
+            plan,
+            allow_materialized_patch_index=patch_materialized,
+        )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as error:
         return {
             "reason": str(error),
@@ -521,6 +545,7 @@ def run_preflight(
         "candidate_inference_started": False,
         "checkpoint_generated": False,
         "planned_outputs_absent": absent,
+        "patch_index_materialized": patch_materialized,
         "plan": str(resolved_plan),
         "plan_sha256": sha256_file(resolved_plan),
         "promotion_enabled": False,

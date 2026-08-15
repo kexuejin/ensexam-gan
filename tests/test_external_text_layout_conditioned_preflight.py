@@ -92,6 +92,7 @@ class ExternalTextLayoutConditionedPreflightTest(unittest.TestCase):
         self.assertEqual(result["terminal"], "PASS", result)
         self.assertTrue(result["runnable"])
         self.assertEqual(result["authority"]["support_diagnostic_status"], "passed")
+        self.assertTrue(result["patch_index_materialized"])
         self.assertFalse(result["training_started"])
         self.assertFalse(result["checkpoint_generated"])
         self.assertFalse(result["candidate_inference_started"])

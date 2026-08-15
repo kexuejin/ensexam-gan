@@ -1,0 +1,55 @@
+{
+  "absent_later_outputs": [
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-score",
+    "/Volumes/Tool/source/ensexam-gan/artifacts/trials/external-text-layout-conditioned-monotonic-v1"
+  ],
+  "authority": {
+    "patch_materialization_status": "passed",
+    "support_status": "passed",
+    "surface_status": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "first_quality_gate_started": false,
+  "patch_index_sha256": "68d3099cfc1023593ef9558e8c356ba5eb6100ac34964767cbdd605325f5f10a",
+  "patch_summary": {
+    "candidate_count": 52645,
+    "channel_order": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "external_text_occupancy",
+      "external_text_confidence"
+    ],
+    "input_channels": 5,
+    "input_content_sha256": "90e0ec3b7f5e676801d2cab2f9f0a7af9d1aff053ca01154d810258b3692004e",
+    "label_content_sha256": "dfd459f552bd0828221c90258f33f4eacc54220494c7e02b21a179894853e99e",
+    "layout_content_sha256": "8d4753dbd160c85043b1b65c1161e4cdc00059a07216bcc3d63b879754896750",
+    "page_count": 24,
+    "patch_count": 256,
+    "patch_index": "/Volumes/Tool/source/ensexam-gan/hardcase_lists/external-text-layout-conditioned-monotonic-train-patches-v1.csv",
+    "patch_index_sha256": "68d3099cfc1023593ef9558e8c356ba5eb6100ac34964767cbdd605325f5f10a",
+    "positive_ratio_max": 0.9453582763671875,
+    "positive_ratio_min": 0.3106536865234375,
+    "preserve_ratio_min": 0.0546417236328125,
+    "selection": "top_target_lighter_support_with_frozen_external_text_layout",
+    "status": "pass",
+    "target_access": "train_labels_only_for_patch_support",
+    "terminal": "PASS",
+    "text_confidence_mean_avg": 0.32617453634611593,
+    "text_occupancy_ratio_avg": 0.40631022326928534,
+    "train_role_count": 275,
+    "train_role_sha256": "e9ac4d6f700f41ef3a9b7c3f04ce0593f593324a881a0f9fc387901a497f9039"
+  },
+  "patch_summary_sha256": "9e5ac380c4c9e83938f312e295402279f6b2427f71cfe84e342d870c5b917434",
+  "promotion_enabled": false,
+  "runnable": true,
+  "schema_version": 1,
+  "target_decode_roles": [
+    "train"
+  ],
+  "terminal": "PASS",
+  "training_started": false
+}
