@@ -115,6 +115,19 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             str(output),
         ]
 
+    def evidence_audit_command(self, root: Path, ledger: Path, output: Path) -> list[str]:
+        return [
+            sys.executable,
+            str(SCRIPT),
+            "--repo-root",
+            str(root),
+            "--ledger",
+            str(ledger),
+            "--evidence-audit-json",
+            str(output),
+            "--evidence-audit-only",
+        ]
+
     def test_valid_ledger_is_active_and_not_promotion_eligible(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
@@ -180,6 +193,47 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
 
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("must not contain parent traversal", result.stderr)
+
+    def test_evidence_audit_reports_missing_artifacts_without_status_claim(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            ledger = self.ledger(root)
+            (root / "docs" / "decisions" / "d2.md").unlink()
+            output = root / "evidence-audit.json"
+
+            result = subprocess.run(
+                self.evidence_audit_command(root, ledger, output),
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            audit = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(audit["status"], "evidence_incomplete")
+            self.assertEqual(audit["missing_count"], 2)
+            missing_paths = {item["path"] for item in audit["missing"]}
+            self.assertEqual(missing_paths, {"docs/decisions/d2.md"})
+            self.assertIn("status=evidence_incomplete", result.stdout)
+
+    def test_evidence_audit_reports_hash_mismatch_without_status_claim(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            ledger = self.ledger(root)
+            (root / "docs" / "decisions" / "d2d.md").write_text("changed\n", encoding="utf-8")
+            output = root / "evidence-audit.json"
+
+            result = subprocess.run(
+                self.evidence_audit_command(root, ledger, output),
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            audit = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(audit["status"], "evidence_incomplete")
+            self.assertEqual(audit["mismatch_count"], 2)
+            mismatched_paths = {item["path"] for item in audit["mismatched"]}
+            self.assertEqual(mismatched_paths, {"docs/decisions/d2d.md"})
 
 
 if __name__ == "__main__":

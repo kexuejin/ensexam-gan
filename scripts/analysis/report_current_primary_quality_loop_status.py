@@ -32,6 +32,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--repo-root", type=Path, default=ROOT)
     parser.add_argument("--output-json", type=Path)
     parser.add_argument("--output-md", type=Path)
+    parser.add_argument("--evidence-audit-json", type=Path)
+    parser.add_argument(
+        "--evidence-audit-only",
+        action="store_true",
+        help=(
+            "Report referenced evidence presence and hashes without claiming "
+            "the full quality-loop status is valid."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -91,6 +100,73 @@ def validate_artifact(repo_root: Path, artifact: Any, label: str) -> dict[str, s
             f"{label}.sha256 mismatch for {path}: expected {expected_sha256}, got {actual_sha256}"
         )
     return {"path": str(path.relative_to(repo_root.absolute())), "sha256": actual_sha256}
+
+
+def iter_declared_artifacts(value: Any, label: str = "ledger") -> list[tuple[str, Any]]:
+    artifacts: list[tuple[str, Any]] = []
+    if isinstance(value, dict):
+        if "path" in value and "sha256" in value:
+            artifacts.append((label, value))
+        for key, child in value.items():
+            artifacts.extend(iter_declared_artifacts(child, f"{label}.{key}"))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            artifacts.extend(iter_declared_artifacts(child, f"{label}[{index}]"))
+    return artifacts
+
+
+def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
+    checked: list[dict[str, Any]] = []
+    missing: list[dict[str, Any]] = []
+    mismatched: list[dict[str, Any]] = []
+    invalid: list[dict[str, Any]] = []
+
+    for label, artifact in iter_declared_artifacts(ledger):
+        entry: dict[str, Any] = {"label": label}
+        try:
+            path = repo_path(repo_root, artifact.get("path"), label)
+            expected_sha256 = require_sha256(artifact.get("sha256"), f"{label}.sha256")
+            entry.update(
+                {
+                    "path": str(path.relative_to(repo_root.absolute())),
+                    "expected_sha256": expected_sha256,
+                }
+            )
+            if not path.is_file():
+                entry["status"] = "missing"
+                missing.append(entry)
+            else:
+                actual_sha256 = sha256_file(path)
+                entry["actual_sha256"] = actual_sha256
+                if actual_sha256 != expected_sha256:
+                    entry["status"] = "sha256_mismatch"
+                    mismatched.append(entry)
+                else:
+                    entry["status"] = "ok"
+                    checked.append(entry)
+        except Exception as exc:
+            entry.update(
+                {
+                    "path": artifact.get("path") if isinstance(artifact, dict) else None,
+                    "status": "invalid_reference",
+                    "reason": str(exc),
+                }
+            )
+            invalid.append(entry)
+
+    total = len(checked) + len(missing) + len(mismatched) + len(invalid)
+    status = "evidence_complete" if total and not missing and not mismatched and not invalid else "evidence_incomplete"
+    return {
+        "status": status,
+        "artifact_reference_count": total,
+        "ok_count": len(checked),
+        "missing_count": len(missing),
+        "mismatch_count": len(mismatched),
+        "invalid_count": len(invalid),
+        "missing": missing,
+        "mismatched": mismatched,
+        "invalid": invalid,
+    }
 
 
 def validate_protocol(protocol: Any) -> dict[str, Any]:
@@ -353,7 +429,24 @@ def main() -> None:
     args = parse_args()
     repo_root = args.repo_root.resolve()
     ledger = load_ledger(args.ledger)
+    evidence_audit: dict[str, Any] | None = None
+    if args.evidence_audit_json or args.evidence_audit_only:
+        evidence_audit = audit_declared_evidence(ledger, repo_root)
+        if args.evidence_audit_json:
+            write_json(args.evidence_audit_json, evidence_audit)
+        if args.evidence_audit_only:
+            print(
+                "Evidence audit: "
+                f"status={evidence_audit['status']} "
+                f"ok={evidence_audit['ok_count']} "
+                f"missing={evidence_audit['missing_count']} "
+                f"mismatched={evidence_audit['mismatch_count']} "
+                f"invalid={evidence_audit['invalid_count']}"
+            )
+            return
     report = build_report(validate_ledger(ledger, repo_root))
+    if evidence_audit is not None:
+        report["evidence_audit"] = evidence_audit
     if args.output_json:
         write_json(args.output_json, report)
     if args.output_md:
