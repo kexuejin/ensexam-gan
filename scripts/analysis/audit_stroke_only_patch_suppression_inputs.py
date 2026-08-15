@@ -298,9 +298,15 @@ def run_audit(
     required_candidate: str = DEFAULT_REQUIRED_CANDIDATE,
 ) -> dict[str, Any]:
     repo_root = repo_root.resolve()
-    resolved_plan = plan_path or (repo_root / PLAN_PATH)
-    resolved_ledger = ledger_path or (repo_root / LEDGER_PATH)
-    resolved_review_csv = review_csv or (repo_root / REVIEW_CSV_PATH)
+    resolved_plan = plan_path or PLAN_PATH
+    resolved_ledger = ledger_path or LEDGER_PATH
+    resolved_review_csv = review_csv or REVIEW_CSV_PATH
+    if not resolved_plan.is_absolute():
+        resolved_plan = repo_root / resolved_plan
+    if not resolved_ledger.is_absolute():
+        resolved_ledger = repo_root / resolved_ledger
+    if not resolved_review_csv.is_absolute():
+        resolved_review_csv = repo_root / resolved_review_csv
     resolved_selector_replay = selector_replay_path or SELECTOR_REPLAY_PATH
     if not resolved_selector_replay.is_absolute():
         resolved_selector_replay = repo_root / resolved_selector_replay

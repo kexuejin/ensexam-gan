@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "state": "killed_after_train_only_preflight",
+  "iteration_id": "monotonic-residual-erase-support",
+  "family": "source_dark_local_paper_lift_source_candidate_v1",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "causal_change": "Create a target-free train-only source candidate by lifting current-primary baseline pixels toward local paper only where the original source is dark and the baseline contains local dark residuals, then pass that source candidate through the registered stroke-only suppression generator.",
+  "why_materially_different": [
+    "Does not depend on the missing relaxed-interval candidate PNGs or checkpoint.",
+    "Does not use external text layout support, selector thresholds, learned edit heads, or target pixels during generation.",
+    "Uses source-plus-baseline local paper evidence to create a new train-only source candidate before any validation surface opens."
+  ],
+  "authorization": {
+    "model_training": false,
+    "checkpoint_generation": false,
+    "source_candidate_materialization": "train160_only",
+    "stroke_only_materialization": "train160_only",
+    "inner_val15": false,
+    "development_gate": false,
+    "scut115": false,
+    "holdout40": false,
+    "reserved_blind": false,
+    "visual_review": false,
+    "promotion": false,
+    "current_primary_replacement": false
+  },
+  "generation_inputs": {
+    "source_image": "target_free_original_input",
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "target_image": "copied_to_review_csv_for_downstream_train_only_scoring_only_not_read_during_generation",
+    "allowed_splits": [
+      "train",
+      "train160"
+    ]
+  },
+  "fixed_parameters": {
+    "source_dark": 170,
+    "source_expand_dark": 190,
+    "baseline_dark": 238,
+    "local_dark_delta": 4,
+    "seed_lift_floor": 2,
+    "max_lift": 80,
+    "alpha": 0.85,
+    "dilate": 1,
+    "min_component_area": 2,
+    "max_component_area": 14000,
+    "local_median_kernel": 81
+  },
+  "terminal_result": {
+    "terminal": "KILL",
+    "reason": "Train-only metric preflight improved residual but overerase regressed by 0.0551980167963459 to 0.06272171783448424 across stroke-only variants, far beyond a promotion-safe tolerance."
+  },
+  "forbidden_rescues": [
+    "repeat_source_dark_local_paper_lift_v1",
+    "source_dark_threshold_sweep",
+    "baseline_dark_threshold_sweep",
+    "local_dark_delta_sweep",
+    "alpha_or_max_lift_sweep",
+    "component_area_or_dilate_sweep",
+    "median_kernel_sweep",
+    "stroke_only_variant_tuning_on_this_source_candidate",
+    "inner_val15",
+    "development_gate",
+    "scut115",
+    "holdout40",
+    "reserved_blind",
+    "promotion"
+  ]
+}

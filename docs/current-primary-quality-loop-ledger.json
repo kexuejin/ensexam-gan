@@ -1137,12 +1137,72 @@
       {
         "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
         "sha256": "24c35c8d4eb73ee1e0ed4a60752e1b517e1cc94ff5e4575ce525664364b75517"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-source-dark-local-paper-lift-source-candidate-kill.md",
+        "sha256": "b8265ec019e0845211c8f565afa18f127266e1d7293114df09a9abbaa0e7c442"
+      },
+      {
+        "path": "docs/source-dark-local-paper-lift-source-candidate-v1.json",
+        "sha256": "2636ae6b77873828ac154b2ba703a538778e2de8d39f5e0ad6687e8596385226"
+      },
+      {
+        "path": "scripts/analysis/materialize_source_dark_local_paper_candidate.py",
+        "sha256": "3cb7760772c6ceae25405e3a1f18cbf38867bf6595825a2946e31ea3148026b5"
+      },
+      {
+        "path": "tests/test_materialize_source_dark_local_paper_candidate.py",
+        "sha256": "28ee33403865e1fb5862c70de40419032ad8dab4e4da81b54a1ff475769bd36a"
+      },
+      {
+        "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+        "sha256": "adfb9899ff4d3b575d9e1b9eefe30629f83e2d6912dc1b60219b3c8b2f022f42"
+      },
+      {
+        "path": "outputs/source-dark-local-paper-candidate-train160-20260816/summary.json",
+        "sha256": "a4b63a9841913768e36abb6f51016c61a2e9d812282d865cd5ae81a0e4b951f9"
+      },
+      {
+        "path": "outputs/source-dark-local-paper-candidate-train160-20260816/review_rows.csv",
+        "sha256": "e657b24f2484076e1b5a567113088e188709424b50d643d46e249e2e03b93874"
+      },
+      {
+        "path": "outputs/source-dark-local-paper-candidate-train160-20260816/selector_replay_rows.csv",
+        "sha256": "0112e8a827b6da4cbf62778def6120b294d9b8797056c112421de9e67ccb9d0e"
+      },
+      {
+        "path": "outputs/source-dark-local-paper-candidate-train160-20260816/diagnostics.csv",
+        "sha256": "714f71a4aff071eeb0ef539e68c3aa3222ca0329d4fbc7551c07b7646efbeba7"
+      },
+      {
+        "path": "outputs/source-dark-local-paper-candidate-train160-20260816/metrics.csv",
+        "sha256": "22feecfa7f0ec60eb4e606869d9a46cda8120a2aed3a148b4cec9c8f9496e586"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-input-custody-audit-local-paper-source-20260816/audit.json",
+        "sha256": "0cdd629ff440947dd1d58076bd564a545a9bd81cc6d126ee59ee7fb3cf4f85d4"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/summary.json",
+        "sha256": "8e8e7230d89f63622442e64b95c482dc43ce6cdb84062eb6d80532ac16ba8d5a"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/diagnostics.csv",
+        "sha256": "91333da1d7628fc463c16d4bb62eaae66c77d54ff1340b701e8112419950a19c"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/review_rows.csv",
+        "sha256": "9c1fddfe3f5d06a305e8909033193f5482928864f2370888c6b250237f072083"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/metric_summary.json",
+        "sha256": "1d70db116caa22f5d7cb3d07896f172dde3714dcb3fb2910353b3c7f727624e7"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "restore exact historical train160 relaxed-interval source-candidate PNGs under candidate/166.png, candidate/190.png, and candidate/192.png, or preregister a materially different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "restore exact historical train160 relaxed-interval source-candidate PNGs under candidate/166.png, candidate/190.png, and candidate/192.png, or preregister a materially different available train-only source candidate that is not source_dark_local_paper_lift_v1; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1500,6 +1560,11 @@
         "detail": "A non-layout stroke-only patch suppression successor is preregistered with exact proposal, implementation, test, split authority, and no-candidate/no-validation boundary."
       },
       {
+        "id": "source_dark_local_paper_lift_source_candidate_train_only_preflight",
+        "status": "passed",
+        "detail": "A materially different target-free train160 source candidate was materialized from source plus current-primary baseline and passed custody, but the train-only metric preflight KILLed it before validation because residual gains of 0.011224798204455988 to 0.017921021545539983 came with overerase deltas of 0.0551980167963459 to 0.06273197557739196. No model training, validation gate, SCUT115, holdout40, reserved blind, promotion, or current-primary replacement opened."
+      },
+      {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
         "detail": "Pending behind selector-reconciled input custody: selected train160 rows 166/190/192 now have source/target files, restored current-primary baseline predictions, and review CSV paths aligned to selector replay, but the required relaxed-interval source-candidate PNGs under candidate/ remain missing. Restore exact historical source-candidate pixels or preregister a materially different available train-only source candidate before running the stroke-only generator."
@@ -1583,7 +1648,14 @@
       "external_text_layout_binary_mask_residual_v1_candidate_inference",
       "external_text_layout_binary_mask_residual_v1_quality_gate",
       "external_text_layout_binary_mask_residual_v1_promotion",
-      "external_text_layout_alone_as_direct_edit_support"
+      "external_text_layout_alone_as_direct_edit_support",
+      "source_dark_local_paper_lift_v1_repeat",
+      "source_dark_local_paper_lift_v1_threshold_alpha_kernel_component_or_dilate_rescue",
+      "source_dark_local_paper_lift_v1_inner_val15",
+      "source_dark_local_paper_lift_v1_scut115",
+      "source_dark_local_paper_lift_v1_holdout40",
+      "source_dark_local_paper_lift_v1_reserved_blind",
+      "source_dark_local_paper_lift_v1_promotion"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -3646,6 +3718,78 @@
       "outcome": "review_csv_candidate_paths_reconciled_to_selector_replay_candidate_directory_but_exact_relaxed_interval_source_candidate_pngs_remain_missing",
       "repeat_policy": "restore_exact_selector_replay_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate; do_not_chase_stale_pred_paths_train_fabricate_or_substitute_validation_rows",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-source-dark-local-paper-lift-source-candidate-kill.md",
+          "sha256": "b8265ec019e0845211c8f565afa18f127266e1d7293114df09a9abbaa0e7c442"
+        },
+        {
+          "path": "docs/source-dark-local-paper-lift-source-candidate-v1.json",
+          "sha256": "2636ae6b77873828ac154b2ba703a538778e2de8d39f5e0ad6687e8596385226"
+        },
+        {
+          "path": "scripts/analysis/materialize_source_dark_local_paper_candidate.py",
+          "sha256": "3cb7760772c6ceae25405e3a1f18cbf38867bf6595825a2946e31ea3148026b5"
+        },
+        {
+          "path": "tests/test_materialize_source_dark_local_paper_candidate.py",
+          "sha256": "28ee33403865e1fb5862c70de40419032ad8dab4e4da81b54a1ff475769bd36a"
+        },
+        {
+          "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+          "sha256": "adfb9899ff4d3b575d9e1b9eefe30629f83e2d6912dc1b60219b3c8b2f022f42"
+        },
+        {
+          "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
+          "sha256": "553b1e9bb1333c22f258062ebe3470a6e53be5023bef84850859e5d724dada82"
+        },
+        {
+          "path": "outputs/source-dark-local-paper-candidate-train160-20260816/summary.json",
+          "sha256": "a4b63a9841913768e36abb6f51016c61a2e9d812282d865cd5ae81a0e4b951f9"
+        },
+        {
+          "path": "outputs/source-dark-local-paper-candidate-train160-20260816/review_rows.csv",
+          "sha256": "e657b24f2484076e1b5a567113088e188709424b50d643d46e249e2e03b93874"
+        },
+        {
+          "path": "outputs/source-dark-local-paper-candidate-train160-20260816/selector_replay_rows.csv",
+          "sha256": "0112e8a827b6da4cbf62778def6120b294d9b8797056c112421de9e67ccb9d0e"
+        },
+        {
+          "path": "outputs/source-dark-local-paper-candidate-train160-20260816/diagnostics.csv",
+          "sha256": "714f71a4aff071eeb0ef539e68c3aa3222ca0329d4fbc7551c07b7646efbeba7"
+        },
+        {
+          "path": "outputs/source-dark-local-paper-candidate-train160-20260816/metrics.csv",
+          "sha256": "22feecfa7f0ec60eb4e606869d9a46cda8120a2aed3a148b4cec9c8f9496e586"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-input-custody-audit-local-paper-source-20260816/audit.json",
+          "sha256": "0cdd629ff440947dd1d58076bd564a545a9bd81cc6d126ee59ee7fb3cf4f85d4"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/summary.json",
+          "sha256": "8e8e7230d89f63622442e64b95c482dc43ce6cdb84062eb6d80532ac16ba8d5a"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/diagnostics.csv",
+          "sha256": "91333da1d7628fc463c16d4bb62eaae66c77d54ff1340b701e8112419950a19c"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/review_rows.csv",
+          "sha256": "9c1fddfe3f5d06a305e8909033193f5482928864f2370888c6b250237f072083"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/metric_summary.json",
+          "sha256": "1d70db116caa22f5d7cb3d07896f172dde3714dcb3fb2910353b3c7f727624e7"
+        }
+      ],
+      "id": "source-dark-local-paper-lift-source-candidate-kill",
+      "outcome": "target_free_local_paper_source_candidate_passed_train_only_custody_but_failed_overerase_preflight_before_validation",
+      "repeat_policy": "do_not_repeat_or_rescue_with_threshold_alpha_kernel_component_dilate_median_or_stroke_only_variant_tuning; restore_exact_selector_replay_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1
