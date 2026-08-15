@@ -1,0 +1,480 @@
+{
+  "artifact_reference_count": 606,
+  "invalid": [],
+  "invalid_count": 0,
+  "mismatch_count": 29,
+  "mismatch_prefix_counts": {
+    "outputs": 1,
+    "scripts": 15,
+    "tests": 13
+  },
+  "mismatch_unique_path_count": 14,
+  "mismatch_unique_paths": {
+    "outputs/external-text-layout-conditioned-preflight-20260815/preflight.json": 1,
+    "scripts/analysis/audit_external_text_layout_second_stage_cache_salvage.py": 1,
+    "scripts/analysis/external_text_layout_materialization_runtime.py": 1,
+    "scripts/analysis/materialize_external_text_layout_support_train_only.py": 1,
+    "scripts/analysis/probe_external_text_layout_runtime_safety.py": 1,
+    "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py": 8,
+    "scripts/infer/monotonic_residual_erase.py": 1,
+    "scripts/train/train_patch_cleanup_erasemap_probe.py": 2,
+    "tests/test_external_text_layout_frozen_cache_reconstruction.py": 8,
+    "tests/test_external_text_layout_runtime_equivalence_repair.py": 1,
+    "tests/test_external_text_layout_runtime_safety_probe.py": 1,
+    "tests/test_external_text_layout_second_stage_cache_salvage.py": 1,
+    "tests/test_external_text_layout_support_prerequisite.py": 1,
+    "tests/test_monotonic_residual_erase_prerequisite.py": 1
+  },
+  "mismatched": [
+    {
+      "actual_sha256": "2e66ea6f5a606dc6a8c2691f9c2c9f4a5e8d6ed60b5f0faba11db3f6fd60ede4",
+      "expected_sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16",
+      "label": "ledger.active_iteration.evidence[10]",
+      "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "label": "ledger.active_iteration.evidence[108]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "label": "ledger.active_iteration.evidence[109]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "abcde54e842c512b41bbdfe4382d9c200232f9e5b75bb3b9763376f9442f032c",
+      "label": "ledger.active_iteration.evidence[131]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "cc2048430cbb77806620b193e55bbef470aad5472b36a5a16634f3efc354165f",
+      "label": "ledger.active_iteration.evidence[132]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "e2aff5cb7845e5f6169eec6a258810a9bd9ebbdd87708d846cc5d2ddee018a2e",
+      "expected_sha256": "8dbecc59e5ed8d8517a232fa77f56955548938f6a4519e2796e72115b9d85870",
+      "label": "ledger.active_iteration.evidence[159]",
+      "path": "scripts/analysis/audit_external_text_layout_second_stage_cache_salvage.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "7940d34bda31af7648fe9ae7dd1c2c028620cfd5261b46563de4d7596c0a8a0d",
+      "expected_sha256": "26b0de04bdba5aebe83fb5d416bc118078273c249357384d9c41ad66eea6d9de",
+      "label": "ledger.active_iteration.evidence[160]",
+      "path": "tests/test_external_text_layout_second_stage_cache_salvage.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "bf3aacf54c383d28fb8c1f873fc57e8c1fd1f1632740f4f9c3ecc31529801c09",
+      "expected_sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b",
+      "label": "ledger.records[21].evidence[3]",
+      "path": "scripts/infer/monotonic_residual_erase.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "65d2a3fbdb942b429c150726a65949c839cc71a395e3eb39d052116d655ace47",
+      "expected_sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7",
+      "label": "ledger.records[21].evidence[4]",
+      "path": "tests/test_monotonic_residual_erase_prerequisite.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "2e66ea6f5a606dc6a8c2691f9c2c9f4a5e8d6ed60b5f0faba11db3f6fd60ede4",
+      "expected_sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16",
+      "label": "ledger.records[21].evidence[5]",
+      "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4",
+      "expected_sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf",
+      "label": "ledger.records[40].evidence[3]",
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53",
+      "expected_sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7",
+      "label": "ledger.records[40].evidence[4]",
+      "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "d40a3dfe32bccab402d95bfa059b80453870d6d8fd0c4bce5bd44fdce5d46c83",
+      "expected_sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c",
+      "label": "ledger.records[40].evidence[6]",
+      "path": "tests/test_external_text_layout_runtime_safety_probe.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2",
+      "expected_sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131",
+      "label": "ledger.records[40].evidence[8]",
+      "path": "tests/test_external_text_layout_support_prerequisite.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf",
+      "expected_sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5",
+      "label": "ledger.records[41].evidence[3]",
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "bf7146eebda2faab88986c1ce5286ad5a111b8e048a2f485cb2dd0b69465b9a8",
+      "expected_sha256": "0c2805198d406e612f3ac395f55fa226e92556da900b0d43d001dabd10a16894",
+      "label": "ledger.records[41].evidence[4]",
+      "path": "tests/test_external_text_layout_runtime_equivalence_repair.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "label": "ledger.records[42].evidence[2]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "label": "ledger.records[42].evidence[3]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "label": "ledger.records[43].evidence[3]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "label": "ledger.records[43].evidence[4]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786",
+      "label": "ledger.records[50].evidence[0]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97",
+      "label": "ledger.records[50].evidence[1]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "label": "ledger.records[52].evidence[2]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "label": "ledger.records[52].evidence[3]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "label": "ledger.records[57].evidence[3]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "label": "ledger.records[57].evidence[4]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
+      "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "label": "ledger.records[58].evidence[1]",
+      "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
+      "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "label": "ledger.records[58].evidence[2]",
+      "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
+      "status": "sha256_mismatch"
+    },
+    {
+      "actual_sha256": "57f2d5bfceef57d7b192c89716ee64f78c718246ae8ac798cb4514acf8008728",
+      "expected_sha256": "dfe2ea2749d5439f6628a29c17669d4078c89ecd47126046fe30aa83f419a7c0",
+      "label": "ledger.records[59].evidence[2]",
+      "path": "outputs/external-text-layout-conditioned-preflight-20260815/preflight.json",
+      "status": "sha256_mismatch"
+    }
+  ],
+  "missing": [
+    {
+      "expected_sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e",
+      "label": "ledger.active_iteration.evidence[55]",
+      "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7",
+      "label": "ledger.active_iteration.evidence[56]",
+      "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3",
+      "label": "ledger.active_iteration.evidence[77]",
+      "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351",
+      "label": "ledger.active_iteration.evidence[78]",
+      "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f",
+      "label": "ledger.active_iteration.evidence[85]",
+      "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4",
+      "label": "ledger.active_iteration.evidence[86]",
+      "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "46ed97cb263a48189a5af10a480cce43637353efa6e3b610aea5ff3b2f94ed94",
+      "label": "ledger.records[1].evidence[1]",
+      "path": "outputs/universal-sidecar-d4-preflight-20260809/preflight.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "0bbb27ed795d674912a09a60bcdcbc1ce2d50517f2e8b968b2b9662ddf40f97c",
+      "label": "ledger.records[2].evidence[1]",
+      "path": "artifacts/trials/universal-sidecar-d4-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-20260809/ensexam/20260809_090610/epoch_1.pth",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "715e8a1359a6984a4deab71634a203586637d1037a9cee2606c0ad43ceff6254",
+      "label": "ledger.records[2].evidence[2]",
+      "path": "outputs/universal-sidecar-d4-step80-20260809/train.log",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78",
+      "label": "ledger.records[2].evidence[3]",
+      "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb",
+      "label": "ledger.records[2].evidence[4]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab",
+      "label": "ledger.records[2].evidence[5]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d",
+      "label": "ledger.records[2].evidence[6]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "b448a17381a949c621e00c5fd9eeedf3404b4f7de26356043e3a80a56ebfebe5",
+      "label": "ledger.records[4].evidence[1]",
+      "path": "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "4006a5ba7fccaceee153ed0bd4c02ed67ad96c5d2be3c6da92745ea7332d7d78",
+      "label": "ledger.records[10].evidence[2]",
+      "path": "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "8ddc27cecaabf9a4b7b855fc1fef30b003dee8677296e82c8123441100e9cfcb",
+      "label": "ledger.records[10].evidence[3]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "941d0b85449f80233af14c639ed6de6ba1a942e82071da6feb9660d9c62a9fab",
+      "label": "ledger.records[10].evidence[4]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "4592ed71d9bcc1ec94cab7b51526238157649b174111152b9d20ee8b792d110d",
+      "label": "ledger.records[10].evidence[5]",
+      "path": "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "afe1eb4a500fd144f346ff6752285c574f49118318fab85e25668e2336371348",
+      "label": "ledger.records[12].evidence[1]",
+      "path": "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "7d8518e57b290a3b9a2de09d4953e83958894d65c1165113778b73a635c330c5",
+      "label": "ledger.records[13].evidence[1]",
+      "path": "outputs/universal-sidecar-d5-preflight-20260809/preflight.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "875feb5b9f824b5075746b03415d07f1cfb9a1addb062d6d57181a3c9555c87b",
+      "label": "ledger.records[14].evidence[1]",
+      "path": "artifacts/trials/universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-20260809/ensexam/20260809_112035/epoch_1.pth",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "2a13892194328df8d634b60081eb8f48c9c41bf8a464b37166f8047f6b4542dd",
+      "label": "ledger.records[14].evidence[2]",
+      "path": "outputs/universal-sidecar-d5-step80-20260809/train.log",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "b63ac6aee002386f9d2dea5c756a4780b11fc67aaeaab3440dafd1257b6b71ae",
+      "label": "ledger.records[14].evidence[3]",
+      "path": "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "a13dafc92bf0accae8e901eb86c355d8a2f7e38ce714ea4b5c118a7384773654",
+      "label": "ledger.records[14].evidence[4]",
+      "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/frozen_predictions/metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "13565b1dbd156b7dd797403a0d6fbd7132c6938313bd0a74b52b94a5e01bbe72",
+      "label": "ledger.records[14].evidence[5]",
+      "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/post_freeze_metrics.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "4e17003441c3e5a68a9f5e944ff351505f2bb150d65246611649697f0edc37ce",
+      "label": "ledger.records[14].evidence[6]",
+      "path": "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "a5e1f0c2f878052cc313bc4f3ce1cae0d05c3640af6824fefb78b5042a3e7937",
+      "label": "ledger.records[15].evidence[1]",
+      "path": "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "b12f358bc8457e7a90f7f7220e44867c531a810ad7f17fea2f52c71c18358c0e",
+      "label": "ledger.records[26].evidence[4]",
+      "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_residual_erase_probe.pt",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "93392e60a82a008305aa3e6af13ebb79587f81ef5ec8d6070d2025dd9cf1bc13",
+      "label": "ledger.records[26].evidence[5]",
+      "path": "artifacts/trials/monotonic-residual-erase-v2/monotonic_loss_history.csv",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "0ac8b8f0fbacb51bc39e2d37523565c8e18e381f73a91fb749e14e27fbcb778e",
+      "label": "ledger.records[30].evidence[1]",
+      "path": "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "88ed2f090bed3664cf0947faf273c066513a24e225e33f9846c7bb367a8fe1d7",
+      "label": "ledger.records[30].evidence[2]",
+      "path": "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "fa6cc3d0607a7b21e85e74884f4fa8bd6f09ae4135e477a3af8d467e8b3c46b3",
+      "label": "ledger.records[36].evidence[1]",
+      "path": "outputs/second-stage-alpha-support-materialization-20260812/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "db94152ccbcba11e4008e9ac31e3bdca821a336cbee5cc861861f0c99c4e2351",
+      "label": "ledger.records[36].evidence[2]",
+      "path": "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "05607257d424e2912c07bdc9bc28354875307210dfde21802f0cd9c8b403a09f",
+      "label": "ledger.records[38].evidence[1]",
+      "path": "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json",
+      "status": "missing"
+    },
+    {
+      "expected_sha256": "81fce1de56a3e2d3090bb7fbd131d6de4be70c48b966ca58ea34b64c2dd857b4",
+      "label": "ledger.records[38].evidence[2]",
+      "path": "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json",
+      "status": "missing"
+    }
+  ],
+  "missing_count": 35,
+  "missing_prefix_counts": {
+    "artifacts": 4,
+    "outputs": 31
+  },
+  "missing_unique_path_count": 25,
+  "missing_unique_paths": {
+    "artifacts/trials/monotonic-residual-erase-v2/monotonic_loss_history.csv": 1,
+    "artifacts/trials/monotonic-residual-erase-v2/monotonic_residual_erase_probe.pt": 1,
+    "artifacts/trials/universal-sidecar-d4-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-20260809/ensexam/20260809_090610/epoch_1.pth": 1,
+    "artifacts/trials/universal-sidecar-d5-d1-mixed-scut130-hw5k260-step80-primary-edit-direction-folded-20260809/ensexam/20260809_112035/epoch_1.pth": 1,
+    "outputs/independent-hw5k-expert-support-materialization-20260813/manifest.json": 2,
+    "outputs/independent-hw5k-expert-support-prerequisite-20260813/audit.json": 2,
+    "outputs/primary-edit-direction-folded-sidecar-preflight-20260809/audit-final.json": 1,
+    "outputs/primary-edit-direction-sidecar-preflight-20260808/audit-final.json": 1,
+    "outputs/second-stage-alpha-support-materialization-20260812/manifest.json": 2,
+    "outputs/second-stage-alpha-support-prerequisite-20260812/audit.json": 2,
+    "outputs/sign-separated-residual-repair-synthetic-preflight-20260809/audit-final.json": 1,
+    "outputs/spatial-primary-mask-support-materialization-20260811/manifest.json": 2,
+    "outputs/spatial-primary-mask-support-prerequisite-20260811/audit.json": 2,
+    "outputs/universal-sidecar-d4-preflight-20260809/preflight.json": 1,
+    "outputs/universal-sidecar-d4-step80-20260809/train.log": 1,
+    "outputs/universal-sidecar-d5-preflight-20260809/preflight.json": 1,
+    "outputs/universal-sidecar-d5-step80-20260809/train.log": 1,
+    "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/frozen_predictions/metrics.csv": 2,
+    "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/post_freeze_metrics.csv": 2,
+    "outputs/universal_sidecar_d4_d1_inner_val15_step80_primary_edit_direction_20260809/source_guard_summary.json": 2,
+    "outputs/universal_sidecar_d4_d1_step80_primary_edit_direction_20260809/checkpoint_audit.json": 2,
+    "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/frozen_predictions/metrics.csv": 1,
+    "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/post_freeze_metrics.csv": 1,
+    "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json": 1,
+    "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json": 1
+  },
+  "ok_count": 542,
+  "status": "evidence_incomplete"
+}

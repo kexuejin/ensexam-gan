@@ -211,6 +211,9 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             audit = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(audit["status"], "evidence_incomplete")
             self.assertEqual(audit["missing_count"], 2)
+            self.assertEqual(audit["missing_unique_path_count"], 1)
+            self.assertEqual(audit["missing_prefix_counts"], {"docs": 2})
+            self.assertEqual(audit["missing_unique_paths"], {"docs/decisions/d2.md": 2})
             missing_paths = {item["path"] for item in audit["missing"]}
             self.assertEqual(missing_paths, {"docs/decisions/d2.md"})
             self.assertIn("status=evidence_incomplete", result.stdout)
@@ -232,6 +235,9 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             audit = json.loads(output.read_text(encoding="utf-8"))
             self.assertEqual(audit["status"], "evidence_incomplete")
             self.assertEqual(audit["mismatch_count"], 2)
+            self.assertEqual(audit["mismatch_unique_path_count"], 1)
+            self.assertEqual(audit["mismatch_prefix_counts"], {"docs": 2})
+            self.assertEqual(audit["mismatch_unique_paths"], {"docs/decisions/d2d.md": 2})
             mismatched_paths = {item["path"] for item in audit["mismatched"]}
             self.assertEqual(mismatched_paths, {"docs/decisions/d2d.md"})
 

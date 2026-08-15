@@ -115,6 +115,28 @@ def iter_declared_artifacts(value: Any, label: str = "ledger") -> list[tuple[str
     return artifacts
 
 
+def path_prefix_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        raw_path = item.get("path")
+        if not isinstance(raw_path, str) or not raw_path:
+            prefix = "<invalid>"
+        else:
+            prefix = raw_path.split("/", 1)[0]
+        counts[prefix] = counts.get(prefix, 0) + 1
+    return dict(sorted(counts.items()))
+
+
+def unique_path_counts(items: list[dict[str, Any]]) -> dict[str, int]:
+    counts: dict[str, int] = {}
+    for item in items:
+        raw_path = item.get("path")
+        if not isinstance(raw_path, str) or not raw_path:
+            raw_path = "<invalid>"
+        counts[raw_path] = counts.get(raw_path, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
     checked: list[dict[str, Any]] = []
     missing: list[dict[str, Any]] = []
@@ -156,12 +178,20 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
 
     total = len(checked) + len(missing) + len(mismatched) + len(invalid)
     status = "evidence_complete" if total and not missing and not mismatched and not invalid else "evidence_incomplete"
+    missing_unique_paths = unique_path_counts(missing)
+    mismatched_unique_paths = unique_path_counts(mismatched)
     return {
         "status": status,
         "artifact_reference_count": total,
         "ok_count": len(checked),
         "missing_count": len(missing),
+        "missing_unique_path_count": len(missing_unique_paths),
+        "missing_prefix_counts": path_prefix_counts(missing),
+        "missing_unique_paths": missing_unique_paths,
         "mismatch_count": len(mismatched),
+        "mismatch_unique_path_count": len(mismatched_unique_paths),
+        "mismatch_prefix_counts": path_prefix_counts(mismatched),
+        "mismatch_unique_paths": mismatched_unique_paths,
         "invalid_count": len(invalid),
         "missing": missing,
         "mismatched": mismatched,
