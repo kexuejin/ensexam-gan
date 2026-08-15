@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "record_id": "successor-selection-current-state-inventory",
+  "status": "prerequisite_needed",
+  "product_default": "artifacts/current-primary",
+  "candidate_admission_ready": false,
+  "promotion_eligible": false,
+  "reserved_blind_authorized": false,
+  "inventory_scope": "current committed ledgers and tracked decision records after target-dark/overerase bucket exhaustion",
+  "closed_or_blocked_buckets": [
+    {
+      "name": "cross_domain_residual_headroom_vs_source_solved_pixel_regression",
+      "state": "exhausted",
+      "reason": "D3 baseline-tail, D4 primary-edit direction, and D5 folded-direction sidecar routes reached terminal residual-regression or no-lift/noop KILL states.",
+      "evidence": [
+        "docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md",
+        "docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md",
+        "docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md"
+      ]
+    },
+    {
+      "name": "external_text_layout_support_successors",
+      "state": "exhausted",
+      "reason": "The train-only support diagnostic passed, but the conditioned monotonic checkpoint, direct support score, incremental support score, and binary occupancy-mask residual routes all failed before candidate or quality surfaces.",
+      "evidence": [
+        "docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md",
+        "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-checkpoint-kill.md",
+        "docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md",
+        "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md",
+        "docs/decisions/2026-08-15-external-text-layout-binary-mask-residual-reachability-kill.md"
+      ]
+    },
+    {
+      "name": "stroke_only_source_candidate_successors",
+      "state": "exhausted",
+      "reason": "Exact selector-replay assets remain absent, local-paper and thin-component candidates failed train-only preserve-first screening, chroma and achroma variants failed inner-val15, and edge primary-edit failed SCUT115 page-level no-regression.",
+      "evidence": [
+        "docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md",
+        "docs/decisions/2026-08-16-source-dark-local-paper-lift-source-candidate-kill.md",
+        "docs/decisions/2026-08-16-source-dark-thin-component-lift-source-candidate-kill.md",
+        "docs/decisions/2026-08-16-source-chroma-primary-edit-lift-inner-val15-kill.md",
+        "docs/decisions/2026-08-16-source-achroma-primary-edit-lift-inner-val15-kill.md",
+        "docs/decisions/2026-08-16-source-edge-primary-edit-lift-scut115-kill.md"
+      ]
+    },
+    {
+      "name": "target_dark_or_overerase_risk_successors",
+      "state": "exhausted",
+      "reason": "Component-context, Delta-Trust oracle ceiling, and safe-metric fallback reconstruction routes all failed before candidate admission.",
+      "evidence": [
+        "docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md",
+        "docs/decisions/2026-08-16-target-dark-component-context-feature-recheck-kill.md",
+        "docs/decisions/2026-08-16-balanced007-delta-trust-oracle-ceiling-recheck-kill.md",
+        "docs/decisions/2026-08-16-safe-metric-fallback-reconstruction-no-headroom-kill.md"
+      ]
+    },
+    {
+      "name": "universal_mechanism_admission",
+      "state": "blocked",
+      "reason": "Requires a product-owner entry decision that caller-known routing is insufficient before any continuous three-expert reconstruction mixture is executable.",
+      "evidence": [
+        "docs/decisions/2026-08-05-materially-new-universal-preflight.md",
+        "docs/decisions/2026-08-06-universal-residual-adapter-sidecar-admission.md"
+      ]
+    }
+  ],
+  "not_a_completion_reason": "This inventory does not prove every possible future failure bucket is exhausted. It proves only that the currently ledgered successor buckets are terminal or blocked and no candidate may be admitted from them.",
+  "next_allowed": [
+    "preregister a materially different named failure bucket with new leakage-safe train-only evidence",
+    "restore exact selector-replay candidate PNGs with hash custody before reopening the source-candidate bucket",
+    "obtain the explicit product-owner entry decision required for universal mechanism admission",
+    "record broader durable exhaustion if no remaining bucket has an available leakage-safe path"
+  ],
+  "closed_surfaces": [
+    "training",
+    "candidate_inference",
+    "inner_val15",
+    "development_gate",
+    "scut115",
+    "holdout40",
+    "visual_review",
+    "reserved_blind",
+    "promotion",
+    "current_primary_replacement"
+  ]
+}

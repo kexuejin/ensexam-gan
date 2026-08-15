@@ -114,26 +114,86 @@ buckets:
     status: active
     summary: >-
       The current loop is between candidate families after the cross-domain
-      sidecar bucket, stroke-only source-candidate bucket, and
-      target-dark/overerase-risk bucket all reached terminal current-state
-      records. The next admissible move is successor selection, not training or
-      validation.
+      sidecar bucket, external text-layout support successors, stroke-only
+      source-candidate bucket, and target-dark/overerase-risk bucket all reached
+      terminal current-state records, while universal mechanism admission remains
+      product-owner blocked. The next admissible move is successor selection,
+      not training or validation.
     evidence:
       - docs/current-primary-quality-loop-ledger.json
+      - docs/successor-selection-current-state-inventory-v1.json
+      - docs/decisions/2026-08-16-successor-selection-current-state-inventory.md
       - docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md
       - docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md
       - docs/decisions/2026-08-16-current-primary-failure-ledger-successor-selection-reconciliation.md
     next_allowed: >-
       Select one named failure bucket outside the closed cross-domain sidecar,
-      stroke-only source-candidate, and target-dark/overerase-risk buckets with
-      an available leakage-safe train-only evidence path; preregister exactly
-      one materially different causal family; or record broader durable
-      exhaustion if no such path remains.
+      external text-layout, stroke-only source-candidate, and
+      target-dark/overerase-risk buckets with an available leakage-safe
+      train-only evidence path; restore exact selector-replay PNGs with hash
+      custody; obtain the universal-mechanism product-owner unblock; or record
+      broader durable exhaustion if no such path remains.
     prohibited: >-
       No validation, SCUT115, holdout40, visual review, reserved blind,
       promotion, current-primary replacement, threshold rescue, page-specific
       rescue, or reuse of a terminal family is authorized during successor
       selection.
+
+  - name: external_text_layout_support_successors
+    status: exhausted
+    summary: >-
+      External text-layout evidence added target-aligned train-role signal, but
+      every registered route to use it for edits failed before candidate or
+      quality admission: the conditioned monotonic checkpoint was subthreshold,
+      direct support leaked preserve pixels, incremental support failed preserve
+      separation, and binary occupancy masks also leaked preserve pixels.
+    evidence:
+      - docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md
+      - docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-checkpoint-kill.md
+      - docs/decisions/2026-08-15-external-text-layout-direct-support-residual-reachability-kill.md
+      - docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md
+      - docs/decisions/2026-08-15-external-text-layout-binary-mask-residual-reachability-kill.md
+    prohibited: >-
+      Do not reuse external text layout alone as an edit-support signal through
+      detector threshold, confidence, score normalization, direction, binary
+      mask, application-gate, candidate, or validation rescue.
+
+  - name: stroke_only_source_candidate_successors
+    status: exhausted
+    summary: >-
+      Available source-only successor candidates are exhausted: exact historical
+      selector-replay PNGs remain absent, local-paper and thin-component
+      candidates failed train-only preserve-first screening, chroma and achroma
+      variants failed inner-val15, and the source-edge route failed SCUT115
+      page-level no-regression.
+    evidence:
+      - docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md
+      - docs/decisions/2026-08-16-source-dark-local-paper-lift-source-candidate-kill.md
+      - docs/decisions/2026-08-16-source-dark-thin-component-lift-source-candidate-kill.md
+      - docs/decisions/2026-08-16-source-chroma-primary-edit-lift-inner-val15-kill.md
+      - docs/decisions/2026-08-16-source-achroma-primary-edit-lift-inner-val15-kill.md
+      - docs/decisions/2026-08-16-source-edge-primary-edit-lift-scut115-kill.md
+    prohibited: >-
+      Do not reopen source-only successors via threshold, alpha, component,
+      kernel, dilation, stroke-only blend, page-specific, visual-review, or
+      held-out rescue. Only exact selector-replay PNG restoration with hash
+      custody can reopen that missing-asset branch.
+
+  - name: target_dark_or_overerase_risk_successors
+    status: exhausted
+    summary: >-
+      The current-state target-dark/overerase-risk successor bucket is
+      exhausted: component-context, Delta-Trust oracle ceiling, and safe-metric
+      fallback reconstruction routes all failed before candidate admission.
+    evidence:
+      - docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md
+      - docs/decisions/2026-08-16-target-dark-component-context-feature-recheck-kill.md
+      - docs/decisions/2026-08-16-balanced007-delta-trust-oracle-ceiling-recheck-kill.md
+      - docs/decisions/2026-08-16-safe-metric-fallback-reconstruction-no-headroom-kill.md
+    prohibited: >-
+      Do not repeat target-dark/overerase successors through component-ranker,
+      Delta-Trust, safe-metric fallback, threshold, feature-subset, page, patch,
+      validation, or blind rescue without materially new train-only evidence.
 
   - name: universal_sidecar_step_lr_nearby_sweep
     status: exhausted
