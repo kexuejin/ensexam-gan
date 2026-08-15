@@ -1,0 +1,132 @@
+{
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "holdout40": false,
+    "inner_val15": "completed_once_killed",
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "source_candidate_materialization": "train160_only",
+    "stroke_only_materialization": "train160_only_if_source_candidate_passes",
+    "visual_review": false
+  },
+  "causal_change": "Create a target-free train-only source candidate by applying a small lift only where the source is low-saturation, current-primary already brightened that pixel, and the baseline still remains below local paper tone; then pass the fixed candidate through registered stroke-only suppression.",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "family": "source_achroma_primary_edit_lift_source_candidate_v1",
+  "fixed_config": {
+    "alpha": 0.2,
+    "baseline_dark": 238,
+    "local_dark_delta": 3,
+    "local_median_kernel": 81,
+    "max_component_area": 6000,
+    "max_lift": 16,
+    "min_component_area": 3,
+    "name": "primary_edit_achroma_core",
+    "primary_edit_floor": 24,
+    "saturation_max": 45,
+    "seed_lift_floor": 1
+  },
+  "forbidden_rescues": [
+    "source_achroma_primary_edit_lift_v1_saturation_threshold_rescue",
+    "source_achroma_primary_edit_lift_v1_primary_edit_floor_rescue",
+    "source_achroma_primary_edit_lift_v1_alpha_or_max_lift_rescue",
+    "source_achroma_primary_edit_lift_v1_component_area_kernel_or_dilation_rescue",
+    "source_achroma_primary_edit_lift_v1_stroke_only_variant_tuning_after_result",
+    "source_achroma_primary_edit_lift_v1_inner_val15_before_train_only_pass",
+    "source_achroma_primary_edit_lift_v1_scut115_before_inner_val15",
+    "source_achroma_primary_edit_lift_v1_holdout40_before_development_gate",
+    "source_achroma_primary_edit_lift_v1_reserved_blind_before_promotion_gates",
+    "source_achroma_primary_edit_lift_v1_current_primary_replacement_before_reserved_blind_pass",
+    "source_achroma_primary_edit_lift_v1_repeat",
+    "source_achroma_primary_edit_lift_v1_inner_val15_repeat",
+    "source_achroma_primary_edit_lift_v1_development_gate",
+    "source_achroma_primary_edit_lift_v1_scut115",
+    "source_achroma_primary_edit_lift_v1_holdout40",
+    "source_achroma_primary_edit_lift_v1_reserved_blind",
+    "source_achroma_primary_edit_lift_v1_promotion"
+  ],
+  "generation_inputs": {
+    "allowed_splits": [
+      "train",
+      "train160"
+    ],
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "source_image": "target_free_original_input",
+    "target_image": "read_only_after_candidate_write_for_train_only_scoring"
+  },
+  "inner_val15_metrics": {
+    "source_candidate": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": -1.3359577481095175e-05,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0018780111460169327,
+      "residual_regression_pages": [
+        "506.jpg"
+      ],
+      "terminal": "KILL"
+    },
+    "stroke_soft": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": -8.906384987399096e-06,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0004868933442909539,
+      "residual_regression_pages": [
+        "506.jpg"
+      ],
+      "terminal": "KILL"
+    }
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "source_candidate_train160_metrics": {
+    "baseline_overerase_ratio": 0.0025530178200578405,
+    "baseline_residual_ratio": 0.2421483934598291,
+    "candidate_overerase_ratio": 0.0025530178200578405,
+    "candidate_residual_ratio": 0.24076513622465745,
+    "max_page_overerase_delta": 0.0,
+    "min_page_residual_gain": 0.0003019323671497598,
+    "overerase_delta": 0.0,
+    "pages": 3,
+    "residual_gain": 0.001383257235171668
+  },
+  "state": "killed_after_inner_val15_gate",
+  "stroke_only_train160_metrics": {
+    "stroke_balanced": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.00010783298826777532,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.00036349478131109114
+    },
+    "stroke_soft": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.00017253278122843219,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.00048300826841829
+    },
+    "stroke_strict": {
+      "max_page_overerase_delta": 0.0,
+      "min_page_residual_gain": 0.0,
+      "overerase_delta": 0.0,
+      "residual_gain": 0.0
+    }
+  },
+  "terminal_result": {
+    "reason": "Train-only preserve-first metrics passed, but the fixed inner_val15 gate failed: the source candidate met mean residual gain and overerase preservation but regressed residual on 506.jpg; registered stroke_soft preserved overerase but missed the 0.0005 calibrated residual-gain floor and also regressed residual on 506.jpg.",
+    "terminal": "KILL"
+  },
+  "terminal_successors": {
+    "KILL": "close source_achroma_primary_edit_lift_v1 without saturation, primary-edit-floor, alpha, lift-cap, component-size, kernel, or stroke-only variant rescue",
+    "PASS": "authorize registered stroke-only train160 materialization for this fixed candidate only; if that passes, authorize exactly one leakage-safe inner_val15 gate while keeping later gates closed",
+    "PREREQUISITE_NEEDED": "repair registered train-only evidence or metadata only"
+  },
+  "why_materially_different": [
+    "Does not depend on missing selector-replay candidate PNGs.",
+    "Targets low-saturation primary-edit residual cores, while source_chroma_primary_edit_lift_v1 targeted high-saturation source marks.",
+    "Uses current-primary existing edit as the permission signal, not broad source-dark local-paper lifting.",
+    "Uses component area only as an oversized-region guard, not as the causal selector from source_dark_thin_component_lift_v1.",
+    "Uses no external text-layout detector, learned edit head, target pixels during generation, validation surface, or blind surface."
+  ]
+}
