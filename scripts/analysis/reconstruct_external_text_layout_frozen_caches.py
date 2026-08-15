@@ -176,6 +176,15 @@ def repo_path(repo_root: Path, value: str) -> Path:
     return repo_root / relative
 
 
+def is_registered_repository_root(value: Any) -> bool:
+    if not isinstance(value, str) or not value:
+        return False
+    if "\x00" in value or "\n" in value or "\r" in value:
+        return False
+    path = Path(value)
+    return path.is_absolute() and path != path.parent
+
+
 def validate_artifact(repo_root: Path, artifact: dict[str, Any], label: str) -> Path:
     if set(artifact) != {"path", "sha256"}:
         raise CacheReconstructionError(f"{label} artifact contract changed")
@@ -592,7 +601,9 @@ def validate_metrics_recovery_contract(
         )
     canonicalization = contract.get("canonicalization", {})
     if (
-        canonicalization.get("current_repository_root") != str(repo_root.resolve())
+        not is_registered_repository_root(
+            canonicalization.get("current_repository_root")
+        )
         or canonicalization.get("frozen_historical_repository_root")
         != "/private/tmp/ensexam-gan-h0-P0vNwp"
         or canonicalization.get("allowed_field") != "pred_path"

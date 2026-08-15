@@ -18,6 +18,29 @@ class ExternalTextLayoutSecondStageCacheSalvageTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
+    def test_registered_repository_root_is_absolute_but_not_checkout_bound(self) -> None:
+        self.assertTrue(salvage.is_registered_repository_root("/tmp/ensexam-gan"))
+        self.assertFalse(salvage.is_registered_repository_root("relative/repo"))
+        self.assertFalse(salvage.is_registered_repository_root("/"))
+        self.assertFalse(salvage.is_registered_repository_root("/tmp/repo\nnext"))
+
+    def test_source_provenance_records_source_drift_without_blocking(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            source = root / "tool.py"
+            source.write_text("new source\n", encoding="utf-8")
+            result = salvage.validate_source_provenance(
+                root,
+                {
+                    "function": "demo",
+                    "path": "tool.py",
+                    "sha256": hashlib.sha256(b"old source\n").hexdigest(),
+                },
+                "source",
+            )
+            self.assertEqual(result["status"], "changed")
+            self.assertEqual(result["actual_sha256"], salvage.sha256_file(source))
+
     def test_all_metric_fields_have_exact_sources(self) -> None:
         recomputed = {
             "changed_px": 10,

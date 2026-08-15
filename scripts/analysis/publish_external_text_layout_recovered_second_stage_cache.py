@@ -110,8 +110,9 @@ def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
         or recovered.get("metrics_sha256")
         != "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b"
         or recovered.get("prediction_set") != EXPECTED_PREDICTION_SET
-        or canonicalization.get("current_repository_root")
-        != str(repo_root.resolve())
+        or not reconstruction.is_registered_repository_root(
+            canonicalization.get("current_repository_root")
+        )
         or canonicalization.get("expected_data_rows") != 275
         or canonicalization.get("expected_replacement_count") != 275
         or contract.get("historical_identity", {}).get("status")

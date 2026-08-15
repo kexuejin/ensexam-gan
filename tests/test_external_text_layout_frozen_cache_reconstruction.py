@@ -285,6 +285,18 @@ class ExternalTextLayoutFrozenCacheReconstructionTest(unittest.TestCase):
             "81b75410da6f0c63397348a788f369a41e2782c9871566beb12b38fe8f9325d0",
         )
 
+    def test_registered_repository_root_is_absolute_but_not_checkout_bound(self) -> None:
+        self.assertTrue(
+            reconstruction.is_registered_repository_root("/tmp/ensexam-gan")
+        )
+        self.assertFalse(
+            reconstruction.is_registered_repository_root("relative/repo")
+        )
+        self.assertFalse(reconstruction.is_registered_repository_root("/"))
+        self.assertFalse(
+            reconstruction.is_registered_repository_root("/tmp/repo\nnext")
+        )
+
     def test_probe_must_exist_and_pass_with_complete_nonnegative_health(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)

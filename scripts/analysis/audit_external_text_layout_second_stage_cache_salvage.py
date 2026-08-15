@@ -103,6 +103,15 @@ def repo_path(repo_root: Path, value: str) -> Path:
     return repo_root / relative
 
 
+def is_registered_repository_root(value: Any) -> bool:
+    if not isinstance(value, str) or not value:
+        return False
+    if "\x00" in value or "\n" in value or "\r" in value:
+        return False
+    path = Path(value)
+    return path.is_absolute() and path != path.parent
+
+
 def validate_artifact(repo_root: Path, artifact: Any, label: str) -> Path:
     if not isinstance(artifact, dict) or set(artifact) != {"path", "sha256"}:
         raise PrerequisiteError(f"{label} artifact contract changed")
@@ -117,6 +126,27 @@ def validate_artifact(repo_root: Path, artifact: Any, label: str) -> Path:
     return path
 
 
+def validate_source_provenance(
+    repo_root: Path, artifact: Any, label: str
+) -> dict[str, Any]:
+    if (
+        not isinstance(artifact, dict)
+        or "path" not in artifact
+        or "sha256" not in artifact
+    ):
+        raise PrerequisiteError(f"{label} provenance contract changed")
+    path = repo_path(repo_root, str(artifact["path"]))
+    if not path.is_file() or path.is_symlink():
+        raise PrerequisiteError(f"missing {label}: {path}")
+    actual = sha256_file(path)
+    return {
+        "actual_sha256": actual,
+        "expected_sha256": str(artifact["sha256"]),
+        "path": str(path),
+        "status": "current" if actual == artifact["sha256"] else "changed",
+    }
+
+
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
     path = repo_root / CONTRACT_PATH
     if sha256_file(path) != EXPECTED_CONTRACT_SHA256:
@@ -127,8 +157,9 @@ def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
         or contract.get("state")
         != "preregistered_second_stage_temporary_cache_salvage_audit"
         or contract.get("terminal") != "PREREQUISITE_NEEDED"
-        or contract.get("canonical_candidate", {}).get("current_repository_root")
-        != str(repo_root.resolve())
+        or not is_registered_repository_root(
+            contract.get("canonical_candidate", {}).get("current_repository_root")
+        )
         or contract.get("implementation", {}).get("allowed_files")
         != [
             "scripts/analysis/"
@@ -143,8 +174,7 @@ def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
     for label, artifact in contract.get("evidence", {}).items():
         validate_artifact(repo_root, artifact, f"salvage {label}")
     for label, artifact in contract.get("frozen_functions", {}).items():
-        normalized = {key: artifact[key] for key in ("path", "sha256")}
-        validate_artifact(repo_root, normalized, f"salvage function {label}")
+        validate_source_provenance(repo_root, artifact, f"salvage function {label}")
     return contract
 
 

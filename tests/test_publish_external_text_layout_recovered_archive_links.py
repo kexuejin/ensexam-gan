@@ -84,6 +84,24 @@ class PublishExternalTextLayoutRecoveredArchiveLinksTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
+    def test_source_provenance_records_helper_drift_without_blocking(self) -> None:
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            helper = root / "helper.py"
+            helper.write_text("new helper\n", encoding="utf-8")
+            result = publication.validate_source_provenance(
+                root,
+                {
+                    "path": "helper.py",
+                    "sha256": hashlib.sha256(b"old helper\n").hexdigest(),
+                },
+                "helper",
+            )
+            self.assertEqual(result["status"], "changed")
+            self.assertEqual(
+                result["actual_sha256"], reconstruction.sha256_file(helper)
+            )
+
     def test_original_publication_model_and_helper_routes_are_absent(self) -> None:
         source = Path(publication.__file__).read_text(encoding="utf-8")
         for route in (

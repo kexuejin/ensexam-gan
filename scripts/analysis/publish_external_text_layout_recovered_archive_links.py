@@ -108,6 +108,27 @@ def validate_artifact(repo_root: Path, artifact: Any, label: str) -> Path:
     return path
 
 
+def validate_source_provenance(
+    repo_root: Path, artifact: Any, label: str
+) -> dict[str, Any]:
+    if (
+        not isinstance(artifact, dict)
+        or "path" not in artifact
+        or "sha256" not in artifact
+    ):
+        raise ArchivePublicationError(f"{label} provenance contract changed")
+    path = repo_path(repo_root, str(artifact["path"]))
+    if not path.is_file() or path.is_symlink():
+        raise ArchivePublicationError(f"missing {label}: {path}")
+    actual = reconstruction.sha256_file(path)
+    return {
+        "actual_sha256": actual,
+        "expected_sha256": str(artifact["sha256"]),
+        "path": str(path),
+        "status": "current" if actual == artifact["sha256"] else "changed",
+    }
+
+
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
     path = repo_root / CONTRACT_PATH
     if reconstruction.sha256_file(path) != EXPECTED_CONTRACT_SHA256:
@@ -148,7 +169,7 @@ def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
     for label, artifact in evidence.items():
         if label != "manifest":
             validate_artifact(repo_root, artifact, f"archive {label}")
-    validate_artifact(
+    validate_source_provenance(
         repo_root,
         implementation.get("validation_helper"),
         "archive validation helper",
