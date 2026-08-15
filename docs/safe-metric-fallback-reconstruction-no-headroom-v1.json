@@ -1,0 +1,114 @@
+{
+  "allowed_successors": [
+    "select another named failure bucket with an available leakage-safe train-only path",
+    "preregister a materially different non-safe-metric-fallback candidate family with train-only evidence",
+    "record broader durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "generator_training": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "selector_promotion": false,
+    "visual_review": false
+  },
+  "evidence": [
+    {
+      "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/queue_from_materialized156_smoke_quality/safe_metric_fallback_queue.csv",
+      "sha256": "a6ce03319e6f51023645281baea0b981cc96d13e03993c49345aabffcefaef0a"
+    },
+    {
+      "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/queue_from_materialized156_smoke_quality/safe_metric_fallback_queue_summary.json",
+      "sha256": "4b918a56b31da014ac47d7bf9aa699cc9f693da1ddc5ed4e0028b4a4f49fbac6"
+    },
+    {
+      "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/oracle_preflight_from_materialized156_smoke_quality/summary.json",
+      "sha256": "d348ec24ba6054a559db592676d390a48279085df76dfed2424c1e664797a31a"
+    },
+    {
+      "path": "outputs/safe_metric_fallback_reconstruction_probe_20260816_v2/oracle_preflight_from_materialized156_smoke_quality/per_page.csv",
+      "sha256": "c2b530b9866f81a4b0ee9fea47e081fa7bc0d9696b3277096b9147b33e9436f4"
+    }
+  ],
+  "failure_bucket": "target_dark_or_overerase_risk",
+  "family": "safe_metric_fallback_oracle_reconstruction_v1",
+  "forbidden_next_steps_inside_family": [
+    "selector_expansion",
+    "candidate_inference",
+    "generator_training",
+    "threshold_or_margin_rescue",
+    "page_specific_review_override",
+    "inner_val15_or_later_gate_execution",
+    "scut115_holdout40_reserved_blind_or_promotion"
+  ],
+  "inputs": {
+    "oracle_csvs": {
+      "next120": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
+      "train160": "outputs/delta_trust_oracle_20260719/train160_reverify/per_page.csv"
+    },
+    "quality_csv": "outputs/target_quality_promotion_decision_gate_smoke_20260712/blank_template_no_promotions.csv",
+    "selection_csv": "outputs/materialized_zero_reject_veto_156_alt_borderline_metric_safe_confirmed_safe_20260720/selection.csv"
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "metrics": {
+    "oracle_preflight": {
+      "all_pages_have_headroom": false,
+      "development_pages": 2,
+      "development_pages_by_split": {
+        "next120": 1,
+        "train160": 1
+      },
+      "headroom_pages": 0,
+      "mean_candidate_minus_oracle": -0.0022034734263598893,
+      "passes_candidate_relative_headroom_gate": false,
+      "positive_support_pages": 2
+    },
+    "oracle_preflight_pages": [
+      {
+        "candidate_minus_oracle": -0.0031394351782701446,
+        "candidate_residual_ratio": 0.20514895029458136,
+        "file": "308.jpg",
+        "oracle_residual_ratio": 0.2082883854728515,
+        "split": "next120"
+      },
+      {
+        "candidate_minus_oracle": -0.001267511674449634,
+        "candidate_residual_ratio": 0.04976651100733823,
+        "file": "132.jpg",
+        "oracle_residual_ratio": 0.05103402268178786,
+        "split": "train160"
+      }
+    ],
+    "queue": {
+      "bucket_counts": {
+        "retain_baseline": 122,
+        "review_required": 3
+      },
+      "input_rows": 125,
+      "review_required_by_split": {
+        "holdout40": 1,
+        "next120": 1,
+        "train160": 1
+      }
+    }
+  },
+  "reconstruction_scope": {
+    "available_selector_snapshot": "materialized_zero_reject_veto_156_alt_borderline_metric_safe_confirmed_safe_20260720",
+    "original_zero_reject_veto_112_selector_available": false,
+    "referenced_ranker_expansion_root_available": false,
+    "safe_metric_fallback_queue_expected_by_prior_notes": "outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_20260719/safe_metric_fallback_queue_failclosed_reverify2/safe_metric_fallback_queue.csv",
+    "substitute_limit": "The current-state reconstruction uses the available materialized156 selector plus smoke target-quality overlay, not the absent original 112-selector 163-page queue. Even this narrower available reconstruction has no candidate-relative development headroom."
+  },
+  "schema_version": 1,
+  "state": "fresh_reconstruction_no_candidate_headroom",
+  "terminal_result": {
+    "reason": "A fresh current-state reconstruction from the only available aligned materialized selector produced no auto-expand bucket and only two train/next development review-required pages. The strict oracle preflight passed provenance checks but both development pages had negative candidate-minus-oracle residual headroom, so this route cannot justify selector expansion, training, validation, or promotion.",
+    "terminal": "KILL"
+  }
+}
