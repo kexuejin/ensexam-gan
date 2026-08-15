@@ -251,7 +251,9 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
         cases = {
             "RSS": {
                 "memory_free_percent": 80.0,
-                "process_tree_rss_bytes": materializer.MAX_DETECTOR_RSS_BYTES + 1,
+                "process_tree_rss_bytes": (
+                    batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES + 1
+                ),
                 "swap_used_bytes": 0,
             },
             "memory": {
@@ -307,6 +309,40 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
                     batch_runtime.wait_for_batch_process(
                         Process(), health_reader=safe_health, **timing
                     )
+
+    def test_recovered_rss_cap_accepts_observed_page_without_weakening_shared_default(
+        self,
+    ) -> None:
+        observed = {
+            "memory_free_percent": 74.0,
+            "process_tree_rss_bytes": 11_147_149_312,
+            "swap_used_bytes": 0,
+        }
+        batch_runtime.enforce_recovered_health_limits(observed)
+        self.assertEqual(materializer.MAX_DETECTOR_RSS_BYTES, 10 * 1024**3)
+        self.assertEqual(
+            batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES, 11 * 1024**3
+        )
+        with self.assertRaisesRegex(
+            materializer.runtime.ResourceLimitError, "RSS safety limit"
+        ):
+            batch_runtime.enforce_recovered_health_limits(
+                {
+                    **observed,
+                    "process_tree_rss_bytes": (
+                        batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES + 1
+                    ),
+                }
+            )
+        with self.assertRaisesRegex(
+            materializer.MaterializationError, "would weaken"
+        ):
+            batch_runtime.enforce_recovered_health_limits(
+                observed,
+                maximum_process_tree_rss_bytes=(
+                    batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES + 1
+                ),
+            )
 
     def test_resume_skips_eight_pages_recovers_orphan_and_publishes_shared_manifest(
         self,

@@ -51,6 +51,12 @@ V6_CONTRACT_PATH = Path(
 EXPECTED_V6_CONTRACT_SHA256 = (
     "6a47d124168b6a49b37c71a30f5ca670cdf532cb19562ebc32ebd24ab98aecf2"
 )
+V8_CONTRACT_PATH = Path(
+    "docs/external-text-layout-recovered-materializer-bounded-rss-launch-v8.json"
+)
+EXPECTED_V8_CONTRACT_SHA256 = (
+    "b477fded33c5f861dee006256516a270d495fbf5133d3d176342ccd3f184b27c"
+)
 LEDGER_PATH = Path("docs/current-primary-quality-loop-ledger.json")
 DERIVED_PLAN_PATH = Path(
     "outputs/external-text-layout-recovered-materializer-input-20260815/"
@@ -75,6 +81,9 @@ EXPECTED_SAFETY_PROBE_SHA256 = (
     "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53"
 )
 FORMAL_MAX_PROCESS_TREE_RSS_BYTES = materializer.MAX_DETECTOR_RSS_BYTES
+RECOVERED_MAX_PROCESS_TREE_RSS_BYTES = (
+    batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES
+)
 FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT = materializer.MIN_MEMORY_FREE_PERCENT
 FORMAL_MONITOR_INTERVAL_SECONDS = 0.25
 
@@ -124,9 +133,99 @@ def launcher_safety_limits() -> dict[str, float | int]:
         "launch_stability_window_seconds": safety_probe.PROBE_LAUNCH_STABILITY_SECONDS,
         "runtime_memory_free_percent_min": FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT,
         "runtime_monitor_interval_seconds": FORMAL_MONITOR_INTERVAL_SECONDS,
-        "runtime_process_tree_rss_bytes_max": FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+        "runtime_process_tree_rss_bytes_max": RECOVERED_MAX_PROCESS_TREE_RSS_BYTES,
         "runtime_swap_growth_bytes_max": safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
     }
+
+
+def validate_v8_contract(repo_root: Path) -> dict[str, Any]:
+    contract_path = repo_root / V8_CONTRACT_PATH
+    if materializer.sha256_file(contract_path) != EXPECTED_V8_CONTRACT_SHA256:
+        raise RecoveredMaterializationError("launcher v8 contract sha256 changed")
+    contract = read_json(contract_path)
+    implementation = contract.get("implementation", {})
+    runtime_contract = contract.get("runtime", {})
+    observed = contract.get("observed_v7_stop", {})
+    correction = contract.get("governance_correction", {})
+    if (
+        contract.get("schema_version") != 8
+        or contract.get("terminal") != "PREREQUISITE_NEEDED"
+        or contract.get("authority", {}).get("result_authority")
+        != "recovered_materializer_bounded_rss_v8_preregistration_only"
+        or implementation.get("allowed_files")
+        != [
+            "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+            "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+            "tests/test_external_text_layout_recovered_batch_runtime.py",
+            "tests/test_run_external_text_layout_recovered_materialization.py",
+        ]
+        or implementation.get("launcher_result_schema_version") != 8
+        or implementation.get("new_dependency") is not False
+        or implementation.get("shared_materializer_mutation") is not False
+        or implementation.get("shared_runtime_mutation") is not False
+        or runtime_contract
+        != {
+            "batch_size": batch_runtime.BATCH_SIZE,
+            "batch_timeout_seconds": batch_runtime.BATCH_TIMEOUT_SECONDS,
+            "maximum_concurrent_model_processes": 1,
+            "maximum_runtime_process_tree_rss_bytes": RECOVERED_MAX_PROCESS_TREE_RSS_BYTES,
+            "maximum_swap_growth_bytes": safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
+            "minimum_launch_memory_free_percent": safety_probe.PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
+            "minimum_runtime_memory_free_percent": FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT,
+            "monitor_interval_seconds": FORMAL_MONITOR_INTERVAL_SECONDS,
+            "shared_default_process_tree_rss_bytes_unchanged": FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+            "stability_window_seconds": safety_probe.PROBE_LAUNCH_STABILITY_SECONDS,
+            "worker_count": 1,
+        }
+        or observed.get("reason")
+        != "detector RSS safety limit exceeded: 11147149312 > 10737418240"
+        or observed.get("trigger_process_tree_rss_bytes") != 11147149312
+        or correction.get("actual_next_file") != "hw5k_121.jpg"
+        or correction.get("incorrect_prior_file_is_in_manifest") is not False
+        or contract.get("supersedes", {}).get("status")
+        != "eight_pages_retained_then_rss_rejected_before_page_nine_completion"
+    ):
+        raise RecoveredMaterializationError("launcher v8 contract changed")
+    evidence = contract.get("evidence", {})
+    historical = {
+        "launcher_v7_source": (
+            "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+            "b058013e3ecbcc5c26d7fb88d7913cb7721ddb61c7dd8fd6368f5267f59d1d59",
+        ),
+        "launcher_v7_test": (
+            "tests/test_run_external_text_layout_recovered_materialization.py",
+            "fe2536ae3b382738a12dbe3a0c834b834d34b5aa777764f3df7c241c08e3875b",
+        ),
+        "recovered_batch_runtime_v7": (
+            "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+            "057e0fec7eb0b6adfb43135dee66e3277c142c34fc7d98c2ba4b3a5a22669e2f",
+        ),
+        "recovered_batch_runtime_v7_test": (
+            "tests/test_external_text_layout_recovered_batch_runtime.py",
+            "fbec10f38613643ae093b26e410a66132cb49f8a96ef9740700d36f56de1b29a",
+        ),
+    }
+    for label, (path, sha256) in historical.items():
+        if evidence.get(label) != {"path": path, "sha256": sha256}:
+            raise RecoveredMaterializationError(
+                f"launcher historical {label} evidence changed"
+            )
+    exact = {
+        "launcher_v7_integration": "1b5676a031a0af080ddad941db047e28dca0952560cf738a62cf5fbab13bdb1d",
+        "shared_materializer": EXPECTED_SHARED_MATERIALIZER_SHA256,
+        "shared_runtime": EXPECTED_SHARED_RUNTIME_SHA256,
+    }
+    for label, expected_sha256 in exact.items():
+        path = validate_artifact(repo_root, evidence.get(label), f"launcher v8 {label}")
+        if materializer.sha256_file(path) != expected_sha256:
+            raise RecoveredMaterializationError(f"launcher v8 {label} source changed")
+    manifest = contract.get("dataset_shape_audit", {}).get("manifest")
+    manifest_path = validate_artifact(repo_root, manifest, "launcher v8 manifest")
+    if materializer.sha256_file(manifest_path) != (
+        "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
+    ):
+        raise RecoveredMaterializationError("launcher v8 manifest changed")
+    return contract
 
 
 def validate_v6_contract(repo_root: Path) -> dict[str, Any]:
@@ -435,6 +534,7 @@ def validate_v3_contract(repo_root: Path) -> dict[str, Any]:
 
 
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
+    validate_v8_contract(repo_root)
     validate_v6_contract(repo_root)
     validate_v5_contract(repo_root)
     validate_v4_contract(repo_root)
@@ -507,6 +607,8 @@ def validate_execution_authority(repo_root: Path) -> None:
         "external_text_layout_recovered_materializer_formal_memory_launch_v5_integration": "passed",
         "external_text_layout_recovered_materializer_batched_launch_v6_preregistration": "passed",
         "external_text_layout_recovered_materializer_batched_launch_v6_integration": "passed",
+        "external_text_layout_recovered_materializer_bounded_rss_launch_v8_preregistration": "passed",
+        "external_text_layout_recovered_materializer_bounded_rss_launch_v8_integration": "passed",
         "external_text_layout_support_train_only_diagnostic": "pending",
     }
     if active.get("terminal") != "PREREQUISITE_NEEDED" or any(
@@ -679,7 +781,7 @@ def run_baseline_relative_materializer(
             worker_count=1,
             batch_size=batch_runtime.BATCH_SIZE,
             health_reader=relative_reader,
-            maximum_process_tree_rss_bytes=FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes=RECOVERED_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent=FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes=safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
             batch_timeout_seconds=batch_runtime.BATCH_TIMEOUT_SECONDS,
@@ -694,9 +796,9 @@ def run_baseline_relative_materializer(
         check_conflicts()
         check_simulators()
         post_run_health = relative_reader(os.getpid())
-        materializer.runtime.enforce_health_limits(
+        batch_runtime.enforce_recovered_health_limits(
             post_run_health,
-            maximum_process_tree_rss_bytes=FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
+            maximum_process_tree_rss_bytes=RECOVERED_MAX_PROCESS_TREE_RSS_BYTES,
             minimum_memory_free_percent=FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT,
             maximum_swap_used_bytes=safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
         )
@@ -788,7 +890,7 @@ def build_launcher_result(
         "authority": {
             "candidate_inference": False,
             "quality_evaluation": False,
-            "result_authority": "recovered_materializer_launcher_v6",
+            "result_authority": "recovered_materializer_launcher_v8",
         },
         "derived_plan": {
             "path": contract["derived_plan"]["path"],
@@ -799,7 +901,7 @@ def build_launcher_result(
         "materialization": materialization,
         "recovered_second_stage_metrics_sha256": metrics_change["after"],
         "runtime_safety": runtime_safety,
-        "schema_version": 6,
+        "schema_version": 8,
         "terminal": "PASS",
     }
 
@@ -919,7 +1021,7 @@ def validate_runtime_safety(value: Any) -> dict[str, Any]:
         or not (
             0
             <= materialization_rss
-            <= FORMAL_MAX_PROCESS_TREE_RSS_BYTES
+            <= RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
         )
         or not (
             0
@@ -927,7 +1029,7 @@ def validate_runtime_safety(value: Any) -> dict[str, Any]:
             <= safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES
         )
         or post_free < FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT
-        or not 0 <= post_rss <= FORMAL_MAX_PROCESS_TREE_RSS_BYTES
+        or not 0 <= post_rss <= RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
         or not 0 <= post_swap <= safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES
     ):
         raise RecoveredMaterializationError("launcher runtime safety bounds changed")
@@ -958,11 +1060,11 @@ def validate_existing_result(
     result = read_json(result_path)
     if (
         result.get("terminal") != "PASS"
-        or result.get("schema_version") != 6
+        or result.get("schema_version") != 8
         or result.get("archive_cache_identities") != archive_inputs
         or result.get("materialization") != materialization
         or result.get("authority", {}).get("result_authority")
-        != "recovered_materializer_launcher_v6"
+        != "recovered_materializer_launcher_v8"
         or result.get("derived_plan", {}).get("path")
         != contract["derived_plan"]["path"]
         or result.get("derived_plan", {}).get("sha256")
@@ -1044,7 +1146,7 @@ def main() -> int:
             json.dumps(
                 {
                     "reason": str(error),
-                    "schema_version": 6,
+                    "schema_version": 8,
                     "terminal": "PREREQUISITE_NEEDED",
                 },
                 sort_keys=True,

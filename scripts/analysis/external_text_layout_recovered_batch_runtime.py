@@ -16,6 +16,48 @@ from scripts.analysis import materialize_external_text_layout_support_train_only
 BATCH_SIZE = 8
 BATCH_TIMEOUT_SECONDS = 15 * 60.0
 MONITOR_INTERVAL_SECONDS = 0.25
+MAX_RECOVERED_PROCESS_TREE_RSS_BYTES = 11 * 1024**3
+
+
+def enforce_recovered_health_limits(
+    health: dict[str, float | int],
+    *,
+    observed_health: dict[str, float | int] | None = None,
+    maximum_process_tree_rss_bytes: int = MAX_RECOVERED_PROCESS_TREE_RSS_BYTES,
+    minimum_memory_free_percent: float = materializer.MIN_MEMORY_FREE_PERCENT,
+    maximum_swap_used_bytes: int = materializer.MAX_SWAP_USED_BYTES,
+) -> None:
+    if (
+        maximum_process_tree_rss_bytes > MAX_RECOVERED_PROCESS_TREE_RSS_BYTES
+        or minimum_memory_free_percent < materializer.MIN_MEMORY_FREE_PERCENT
+        or maximum_swap_used_bytes > materializer.MAX_SWAP_USED_BYTES
+    ):
+        raise materializer.MaterializationError(
+            "recovered health limit override would weaken defaults"
+        )
+    rss = int(health["process_tree_rss_bytes"])
+    free = float(health["memory_free_percent"])
+    swap = int(health["swap_used_bytes"])
+    observed = observed_health or materializer.runtime.health_summary(health)
+    if rss > maximum_process_tree_rss_bytes:
+        raise materializer.runtime.ResourceLimitError(
+            "detector RSS safety limit exceeded: "
+            f"{rss} > {maximum_process_tree_rss_bytes}",
+            trigger_health=health,
+            observed_health=observed,
+        )
+    if free < minimum_memory_free_percent:
+        raise materializer.runtime.ResourceLimitError(
+            f"system memory safety limit crossed: {free:.1f}% free",
+            trigger_health=health,
+            observed_health=observed,
+        )
+    if swap > maximum_swap_used_bytes:
+        raise materializer.runtime.ResourceLimitError(
+            f"swap safety limit exceeded: {swap} > {maximum_swap_used_bytes}",
+            trigger_health=health,
+            observed_health=observed,
+        )
 
 
 def _validate_batch_items(items: list[tuple[str, str, str]]) -> None:
@@ -88,7 +130,7 @@ def wait_for_batch_process(
     process: Any,
     *,
     health_reader: Callable[[int], dict[str, float | int]] | None = None,
-    maximum_process_tree_rss_bytes: int = materializer.MAX_DETECTOR_RSS_BYTES,
+    maximum_process_tree_rss_bytes: int = MAX_RECOVERED_PROCESS_TREE_RSS_BYTES,
     minimum_memory_free_percent: float = materializer.MIN_MEMORY_FREE_PERCENT,
     maximum_swap_used_bytes: int = materializer.MAX_SWAP_USED_BYTES,
     batch_timeout_seconds: float = BATCH_TIMEOUT_SECONDS,
@@ -121,7 +163,7 @@ def wait_for_batch_process(
         while process.is_alive():
             health = read_health(process.pid)
             observed = materializer.runtime.health_summary(health, observed)
-            materializer.runtime.enforce_health_limits(
+            enforce_recovered_health_limits(
                 health,
                 observed_health=observed,
                 maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
@@ -150,7 +192,7 @@ def run_isolated_batch(
     items: list[tuple[str, str, str]],
     page_dir: Path,
     health_reader: Callable[[int], dict[str, float | int]] | None = None,
-    maximum_process_tree_rss_bytes: int = materializer.MAX_DETECTOR_RSS_BYTES,
+    maximum_process_tree_rss_bytes: int = MAX_RECOVERED_PROCESS_TREE_RSS_BYTES,
     minimum_memory_free_percent: float = materializer.MIN_MEMORY_FREE_PERCENT,
     maximum_swap_used_bytes: int = materializer.MAX_SWAP_USED_BYTES,
     batch_timeout_seconds: float = BATCH_TIMEOUT_SECONDS,
@@ -188,7 +230,7 @@ def materialize(
     worker_count: int = 1,
     batch_size: int = BATCH_SIZE,
     health_reader: Callable[[int], dict[str, float | int]] | None = None,
-    maximum_process_tree_rss_bytes: int = materializer.MAX_DETECTOR_RSS_BYTES,
+    maximum_process_tree_rss_bytes: int = MAX_RECOVERED_PROCESS_TREE_RSS_BYTES,
     minimum_memory_free_percent: float = materializer.MIN_MEMORY_FREE_PERCENT,
     maximum_swap_used_bytes: int = materializer.MAX_SWAP_USED_BYTES,
     batch_timeout_seconds: float = BATCH_TIMEOUT_SECONDS,
@@ -266,7 +308,7 @@ def materialize(
 
         if not rows:
             check_conflicts()
-            materializer.runtime.enforce_health_limits(
+            enforce_recovered_health_limits(
                 read_health(os.getpid()),
                 maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
                 minimum_memory_free_percent=minimum_memory_free_percent,
@@ -291,7 +333,7 @@ def materialize(
             for offset in range(0, len(remaining), BATCH_SIZE):
                 batch = remaining[offset : offset + BATCH_SIZE]
                 check_conflicts()
-                materializer.runtime.enforce_health_limits(
+                enforce_recovered_health_limits(
                     read_health(os.getpid()),
                     maximum_process_tree_rss_bytes=maximum_process_tree_rss_bytes,
                     minimum_memory_free_percent=minimum_memory_free_percent,

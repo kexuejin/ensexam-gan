@@ -825,12 +825,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-bounded-rss-launch-v8-preregistration.md",
         "sha256": "e776ea37177f387d88a138ca58bf6031f60c96ccc1348766dcf7f5e9daa0a5d8"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-bounded-rss-launch-v8-integration-verification-20260815.json",
+        "sha256": "684ad1fb3f03ba5efaff84767ebc9618c9f6e1a463e3f48e3bbeea561c1321ed"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-bounded-rss-launch-v8-integration-pass.md",
+        "sha256": "5aa88a743755860353e475943d4a098d5046f197bd311a0251dec395631ed6f9"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the bounded-RSS v8 preregistration, then implement only the recovered batch monitor's 11 GiB cap, schema-v8 launcher evidence, v8 contract and execution-authority validation, and focused boundary tests. Keep the shared materializer and runtime byte-exact at 10 GiB, and preserve the 70 percent launch free-memory floor, 35 percent runtime free-memory floor, 512 MiB run-local swap-growth cap, fixed eight-page CPU batches, 0.25-second monitoring, 900-second timeout, exact manifest order, retained hashes, and exact 39d5 plan. The exact next page is manifest index 9 hw5k_121.jpg; prior hw5k_1214 prose was incorrect and had no execution effect. Keep model execution closed until dual-runtime focused and complete suites pass and a v8 integration PASS is pushed.",
+    "next_action": "Commit and push the bounded-RSS v8 integration PASS, then immediately run the exact Python 3.13 launcher with OMP, OpenBLAS, MKL, and vecLib thread caps set to one. Pass a fresh 60-second stable-current-baseline window and resume exact manifest index 9 hw5k_121.jpg under the recovered-only 11 GiB RSS cap, 70 percent launch and 35 percent runtime free-memory floors, 512 MiB run-local swap-growth cap, one CPU child, fixed eight-page batches, 0.25-second monitoring, and 900-second timeout. Preserve exact order, retained hashes, and the 39d5 plan. Stop with completed records retained if any later page crosses a bound; do not automatically raise the limit. Require schema-v8 launcher PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1100,6 +1108,11 @@
       {
         "detail": "The first v7 resume passed settled-baseline readiness but correctly stopped the actual ninth manifest page hw5k_121.jpg at 11147149312 bytes RSS above the shared 10 GiB cap. Post-stop free memory was 74 percent, no model process remained, and all eight retained hashes stayed exact. V8 freezes a recovered-only 11 GiB cap while leaving the shared 10 GiB default, 35-percent free-memory floor, 512 MiB run-local swap limit, CPU batching, ordering, timeout, and outputs unchanged. It also corrects prior documentation that incorrectly named nonexistent hw5k_1214.jpg. Only implementation and synthetic verification are open.",
         "id": "external_text_layout_recovered_materializer_bounded_rss_launch_v8_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "V8 passed 24 focused and 133 complete external-layout tests in Python 3.13.1 and 3.10.11 plus dual-runtime compile. The recovered monitor accepts the observed 11147149312-byte page below its 11 GiB cap, terminates the process group at 11 GiB plus one, and independently preserves the 35-percent free-memory and 512 MiB run-local swap gates. Shared materializer and runtime hashes remain exact at their 10 GiB default. Schema-v8 result and v8 execution authority are locked; pre-integration real authority stayed closed. All eight retained page/record hashes, actual next file hw5k_121.jpg, and the 39d5 plan remain exact. Resume is authorized only after this PASS is pushed.",
+        "id": "external_text_layout_recovered_materializer_bounded_rss_launch_v8_integration",
         "status": "passed"
       }
     ],
