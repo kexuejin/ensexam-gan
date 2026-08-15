@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "state": "passed_train_only_preflight_pending_first_gate",
+  "iteration_id": "monotonic-residual-erase-support",
+  "family": "source_chroma_primary_edit_lift_source_candidate_v1",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "causal_change": "Create a target-free train-only source candidate by applying a very small lift only where the source is high-chroma and current-primary already brightened that pixel, while the baseline still remains below local paper tone; then pass the fixed candidate through registered stroke-only suppression.",
+  "why_materially_different": [
+    "Does not depend on missing selector-replay candidate PNGs.",
+    "Uses high source saturation and current-primary existing edit as the permission signal, not broad source-dark local-paper lifting.",
+    "Does not rescue the thin-component family because component area is only a guard after chroma-plus-primary-edit eligibility, not the causal selector.",
+    "Uses no external text-layout detector, learned edit head, target pixels during generation, validation surface, or blind surface."
+  ],
+  "authorization": {
+    "model_training": false,
+    "checkpoint_generation": false,
+    "source_candidate_materialization": "train160_only",
+    "stroke_only_materialization": "train160_only",
+    "inner_val15": false,
+    "development_gate": false,
+    "scut115": false,
+    "holdout40": false,
+    "reserved_blind": false,
+    "visual_review": false,
+    "promotion": false,
+    "current_primary_replacement": false
+  },
+  "generation_inputs": {
+    "source_image": "target_free_original_input",
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "target_image": "read_only_after_candidate_write_for_train_only_scoring",
+    "allowed_splits": [
+      "train",
+      "train160"
+    ]
+  },
+  "fixed_config": {
+    "name": "primary_edit_chroma_tiny",
+    "saturation_min": 70,
+    "primary_edit_floor": 20,
+    "baseline_dark": 242,
+    "local_dark_delta": 2,
+    "seed_lift_floor": 1,
+    "max_lift": 18,
+    "alpha": 0.18,
+    "min_component_area": 2,
+    "max_component_area": 4000,
+    "local_median_kernel": 81
+  },
+  "terminal_result": {
+    "terminal": "PASS",
+    "reason": "Train-only source-candidate metrics improved residual on all three selected train160 rows with zero mean or page-level overerase regression, and registered stroke-only soft/balanced variants preserved zero overerase regression while retaining positive residual gain."
+  },
+  "source_candidate_metrics": {
+    "baseline_residual_ratio": 0.2421483934598291,
+    "candidate_residual_ratio": 0.24123254796857066,
+    "residual_gain": 0.0009158454912584815,
+    "baseline_overerase_ratio": 0.0025530178200578405,
+    "candidate_overerase_ratio": 0.0025530178200578405,
+    "overerase_delta": 0.0,
+    "min_page_residual_gain": 0.0008349190322705646,
+    "max_page_overerase_delta": 0.0,
+    "pages": 3
+  },
+  "stroke_only_metrics_on_source_candidate": {
+    "stroke_strict": {
+      "residual_gain": 0.0,
+      "overerase_delta": 0.0,
+      "min_page_residual_gain": 0.0,
+      "max_page_overerase_delta": 0.0
+    },
+    "stroke_balanced": {
+      "residual_gain": 0.0001699201824825932,
+      "overerase_delta": 0.0,
+      "min_page_residual_gain": 0.00010783298826777532,
+      "max_page_overerase_delta": 0.0
+    },
+    "stroke_soft": {
+      "residual_gain": 0.00023427296910196368,
+      "overerase_delta": 0.0,
+      "min_page_residual_gain": 0.00019409937888198447,
+      "max_page_overerase_delta": 0.0
+    }
+  },
+  "terminal_successors": {
+    "PASS": "authorize exactly one leakage-safe inner_val15 gate for the fixed source_chroma_primary_edit_lift_v1 candidate and the registered stroke_soft output; keep development gate, SCUT115, holdout40, reserved blind, visual review, promotion, and current-primary replacement closed",
+    "KILL": "close source_chroma_primary_edit_lift_v1 without saturation, edit-floor, alpha, component-size, kernel, or stroke-only variant rescue",
+    "PREREQUISITE_NEEDED": "repair registered train-only evidence or metadata only"
+  },
+  "forbidden_rescues": [
+    "source_chroma_primary_edit_lift_v1_saturation_threshold_rescue",
+    "source_chroma_primary_edit_lift_v1_primary_edit_floor_rescue",
+    "source_chroma_primary_edit_lift_v1_alpha_or_max_lift_rescue",
+    "source_chroma_primary_edit_lift_v1_component_area_kernel_or_dilation_rescue",
+    "source_chroma_primary_edit_lift_v1_stroke_only_variant_tuning_after_result",
+    "source_chroma_primary_edit_lift_v1_scut115_before_inner_val15",
+    "source_chroma_primary_edit_lift_v1_holdout40_before_development_gate",
+    "source_chroma_primary_edit_lift_v1_reserved_blind_before_promotion_gates",
+    "source_chroma_primary_edit_lift_v1_current_primary_replacement_before_reserved_blind_pass"
+  ]
+}

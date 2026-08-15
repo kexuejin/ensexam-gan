@@ -1253,12 +1253,92 @@
       {
         "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/metric_summary.json",
         "sha256": "b7d91757eca77a8d1f006420547493146b68efb429980d4d07bb2fe4be3d9284"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-source-chroma-primary-edit-lift-source-candidate-pass.md",
+        "sha256": "18b143baf78cdc8c83e0bbff575d83c36ab60b50a82f6b6f3ace2506fff64526"
+      },
+      {
+        "path": "docs/source-chroma-primary-edit-lift-source-candidate-v1.json",
+        "sha256": "08dc868229580b3a6699d129db415aed761091d755affd60cb5feafd784c484d"
+      },
+      {
+        "path": "scripts/analysis/materialize_source_chroma_primary_edit_candidate.py",
+        "sha256": "a26f0a7df22f799f804307cc9713c4389dde16f40741c827f521eaa08db7d4bd"
+      },
+      {
+        "path": "tests/test_materialize_source_chroma_primary_edit_candidate.py",
+        "sha256": "32c4b118b71ff0707ddc79e7986d9e5b7b44b1977e5d565e4818ea34952b66d8"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/summary.json",
+        "sha256": "336b3a95d13279f05288cd58d1eca4b1217814520aff6f8d630c09eb1ad9a1ab"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/diagnostics.csv",
+        "sha256": "384db2d8fcaad5ebe8a4b2b3a00c68299372b1473761985883892249746e0c4f"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/review_rows.csv",
+        "sha256": "13c9e9ecbdd6a0ad00d226f00bd8f0db753bb3ee7a4c1d09fcd7f94d2a75350d"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/summary.json",
+        "sha256": "9062271eabc0619fec8bc9a33b68e439fa68a919e67465811b52d5dddfa0d68e"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/diagnostics.csv",
+        "sha256": "71d301a29a46fad9fb1180043678a562b69e09227e4c55404be8cfecef780b30"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/review_rows.csv",
+        "sha256": "2813a1c6da5c0de850da077910faae98e75061e0d85111c4eae611b2cd7bdb75"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/metric_summary.json",
+        "sha256": "8a961da23e037f802fae9ba840c70178eec811ee509d118dc6393b5d0684bacc"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-source-chroma-primary-edit-lift-inner-val15-kill.md",
+        "sha256": "7be01717fbae0607295df815045e77d57c1176289cd4fc060093942c7d4f8f49"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/inner_val15_review_rows.csv",
+        "sha256": "927ea364709c6da2d3c7a7efb67d519662084b753feab475e209f568c93dca21"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/summary.json",
+        "sha256": "28f18ffaee6661a9e2f34712909f85a66e32bf6b7dbedf7ab76882b51b12d7f4"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/diagnostics.csv",
+        "sha256": "469145a5e9f8af4bc10c3e251952ae8dc90b2eaf9211dd76a6f0c8655034cd0f"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/review_rows.csv",
+        "sha256": "dd890794a16d2eec629d29ce160c797f851742dc59b30e5d7d1734721a1e3fd9"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/summary.json",
+        "sha256": "b315738a6b3a74f4273508a102beefd07ed4ffd18eeebd06e4d3ab1b1ba944c3"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/diagnostics.csv",
+        "sha256": "9e5c025545a53bd9cb0182e42b28a98b6ffc85732b3574eb17fb83b55b16e207"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/review_rows.csv",
+        "sha256": "9b71f70342648617e27481c4d18dea85d6c0f414540d8cb7dada9b549257e8d2"
+      },
+      {
+        "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/inner_val15_metric_summary.json",
+        "sha256": "457f86e8b3c8da1e47c9c4f8f9086fde60f1b0471f2a40e6a413b6f55f5ba2f8"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "preregister a qualitatively different available train-only source candidate for stroke-only patch suppression that is not source_dark_local_paper_lift_v1 or source_dark_thin_component_lift_v1; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "preregister a materially different available train-only source candidate after source_chroma_primary_edit_lift_v1 failed inner_val15; keep development gate, SCUT115, holdout40, reserved blind, visual review, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1632,8 +1712,13 @@
       },
       {
         "id": "stroke_only_patch_suppression_preflight",
+        "status": "passed",
+        "detail": "A materially different target-free train160 source-chroma primary-edit candidate passed preserve-first metrics: source residual gain 0.0009158454912584815 with zero mean/page overerase delta; registered stroke_only_soft retained residual gain 0.00023427296910196368 with zero mean/page overerase delta. No validation gate, SCUT115, holdout40, reserved blind, promotion, or current-primary replacement opened."
+      },
+      {
+        "id": "post_source_chroma_primary_edit_inner_val15_successor_selection",
         "status": "pending",
-        "detail": "Pending behind source-candidate custody: selected train160 rows 166/190/192 have source/target files, restored current-primary baseline predictions, and selector-replay-aligned review CSV paths, but the exact historical candidate PNGs under candidate/ remain locally absent. Preregister a materially different available train-only source candidate before running the stroke-only generator; exact restoration may reopen only if the historical PNGs are externally supplied and hash-audited."
+        "detail": "The fixed source_chroma_primary_edit_lift_v1 route passed train-only but KILLed at inner_val15: registered stroke_soft residual gain was 0.000013328486620976104 versus the 0.0005 calibrated floor and residual regressed on 250.jpg, 51.jpg, 517.jpg, and 281.jpg. The next step must preregister a materially different train-only source candidate or record durable exhaustion; validation, held-out, blind, promotion, and current-primary replacement remain closed."
       }
     ],
     "killed_family_prohibitions": [
@@ -1730,7 +1815,14 @@
       "source_dark_thin_component_lift_v1_scut115",
       "source_dark_thin_component_lift_v1_holdout40",
       "source_dark_thin_component_lift_v1_reserved_blind",
-      "source_dark_thin_component_lift_v1_promotion"
+      "source_dark_thin_component_lift_v1_promotion",
+      "source_chroma_primary_edit_lift_v1_repeat",
+      "source_chroma_primary_edit_lift_v1_saturation_primary_edit_alpha_component_kernel_or_stroke_variant_rescue",
+      "source_chroma_primary_edit_lift_v1_development_gate",
+      "source_chroma_primary_edit_lift_v1_scut115",
+      "source_chroma_primary_edit_lift_v1_holdout40",
+      "source_chroma_primary_edit_lift_v1_reserved_blind",
+      "source_chroma_primary_edit_lift_v1_promotion"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -3948,6 +4040,102 @@
       "id": "source-dark-thin-component-lift-source-candidate-kill",
       "outcome": "target_free_thin_component_source_candidate_and_registered_stroke_only_variants_failed_preserve_first_train_only_preflight",
       "repeat_policy": "do_not_repeat_or_rescue_with_source_dark_threshold_alpha_component_area_kernel_or_stroke_only_variant_tuning; preregister_a_qualitatively_different_available_train_only_source_candidate",
+      "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-source-chroma-primary-edit-lift-source-candidate-pass.md",
+          "sha256": "18b143baf78cdc8c83e0bbff575d83c36ab60b50a82f6b6f3ace2506fff64526"
+        },
+        {
+          "path": "docs/source-chroma-primary-edit-lift-source-candidate-v1.json",
+          "sha256": "08dc868229580b3a6699d129db415aed761091d755affd60cb5feafd784c484d"
+        },
+        {
+          "path": "scripts/analysis/materialize_source_chroma_primary_edit_candidate.py",
+          "sha256": "a26f0a7df22f799f804307cc9713c4389dde16f40741c827f521eaa08db7d4bd"
+        },
+        {
+          "path": "tests/test_materialize_source_chroma_primary_edit_candidate.py",
+          "sha256": "32c4b118b71ff0707ddc79e7986d9e5b7b44b1977e5d565e4818ea34952b66d8"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/summary.json",
+          "sha256": "336b3a95d13279f05288cd58d1eca4b1217814520aff6f8d630c09eb1ad9a1ab"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/diagnostics.csv",
+          "sha256": "384db2d8fcaad5ebe8a4b2b3a00c68299372b1473761985883892249746e0c4f"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-candidate-train160-20260816-v2/review_rows.csv",
+          "sha256": "13c9e9ecbdd6a0ad00d226f00bd8f0db753bb3ee7a4c1d09fcd7f94d2a75350d"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/summary.json",
+          "sha256": "9062271eabc0619fec8bc9a33b68e439fa68a919e67465811b52d5dddfa0d68e"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/diagnostics.csv",
+          "sha256": "71d301a29a46fad9fb1180043678a562b69e09227e4c55404be8cfecef780b30"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/review_rows.csv",
+          "sha256": "2813a1c6da5c0de850da077910faae98e75061e0d85111c4eae611b2cd7bdb75"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-chroma-primary-edit-source-preflight-20260816-v1/metric_summary.json",
+          "sha256": "8a961da23e037f802fae9ba840c70178eec811ee509d118dc6393b5d0684bacc"
+        }
+      ],
+      "id": "source-chroma-primary-edit-lift-source-candidate-pass",
+      "outcome": "target_free_chroma_primary_edit_source_candidate_and_registered_stroke_only_soft_passed_preserve_first_train_only_preflight",
+      "repeat_policy": "advance_fixed_candidate_to_inner_val15_once_no_parameter_rescue",
+      "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-source-chroma-primary-edit-lift-inner-val15-kill.md",
+          "sha256": "7be01717fbae0607295df815045e77d57c1176289cd4fc060093942c7d4f8f49"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/inner_val15_review_rows.csv",
+          "sha256": "927ea364709c6da2d3c7a7efb67d519662084b753feab475e209f568c93dca21"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/summary.json",
+          "sha256": "28f18ffaee6661a9e2f34712909f85a66e32bf6b7dbedf7ab76882b51b12d7f4"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/diagnostics.csv",
+          "sha256": "469145a5e9f8af4bc10c3e251952ae8dc90b2eaf9211dd76a6f0c8655034cd0f"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/source_candidate/review_rows.csv",
+          "sha256": "dd890794a16d2eec629d29ce160c797f851742dc59b30e5d7d1734721a1e3fd9"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/summary.json",
+          "sha256": "b315738a6b3a74f4273508a102beefd07ed4ffd18eeebd06e4d3ab1b1ba944c3"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/diagnostics.csv",
+          "sha256": "9e5c025545a53bd9cb0182e42b28a98b6ffc85732b3574eb17fb83b55b16e207"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/stroke_only/review_rows.csv",
+          "sha256": "9b71f70342648617e27481c4d18dea85d6c0f414540d8cb7dada9b549257e8d2"
+        },
+        {
+          "path": "outputs/source-chroma-primary-edit-inner-val15-gate-20260816-v1/inner_val15_metric_summary.json",
+          "sha256": "457f86e8b3c8da1e47c9c4f8f9086fde60f1b0471f2a40e6a413b6f55f5ba2f8"
+        }
+      ],
+      "id": "source-chroma-primary-edit-lift-inner-val15-kill",
+      "outcome": "fixed_chroma_primary_edit_source_candidate_failed_calibrated_inner_val15_residual_gain_and_page_regression_gate",
+      "repeat_policy": "do_not_repeat_source_chroma_primary_edit_lift_v1_or_parameter_rescue",
       "terminal": "KILL"
     }
   ],
