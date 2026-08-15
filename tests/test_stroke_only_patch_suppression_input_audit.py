@@ -8,10 +8,12 @@ from scripts.analysis.audit_stroke_only_patch_suppression_inputs import (
     DEFAULT_REQUIRED_BUCKET,
     DEFAULT_REQUIRED_CANDIDATE,
     PLAN_PATH,
+    SELECTOR_REPLAY_PATH,
     PreflightError,
     assert_exact_plan,
     run_audit,
     select_authorized_rows,
+    validate_selector_replay_alignment,
     validate_outputs_absent,
 )
 
@@ -62,6 +64,11 @@ class StrokeOnlyPatchSuppressionInputAuditTest(unittest.TestCase):
         self.assertEqual(result["selected_split_counts"], {"train160": 3})
         self.assertFalse(result["candidate_inference_started"])
         self.assertFalse(result["target_decode"])
+        self.assertEqual(
+            result["selector_replay_csv"],
+            str(SELECTOR_REPLAY_PATH),
+        )
+        self.assertEqual(len(result["selector_replay_alignment"]), 3)
         missing_paths = {item["path"] for item in result["missing_required_paths"]}
         present_paths = {item["path"] for item in result["present_required_paths"]}
         baseline_path = "outputs/scut_train160_nonholdout_second_stage_baseline_20260706/pred/166.png"
@@ -69,10 +76,50 @@ class StrokeOnlyPatchSuppressionInputAuditTest(unittest.TestCase):
         self.assertIn(
             (
                 "outputs/eval_scut_train160_nonholdout_exact129_outside_edit_lam16_interval_relaxed_gate_"
-                "20260706/pred/166.png"
+                "20260706/candidate/166.png"
             ),
             missing_paths,
         )
+
+    def test_selector_replay_mismatch_fails_closed(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            selector_replay = root / "selector.csv"
+            with selector_replay.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(
+                    handle,
+                    fieldnames=[
+                        "split",
+                        "file",
+                        "image_path",
+                        "baseline_pred_path",
+                        "candidate_pred_path",
+                    ],
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "split": "train160",
+                        "file": "166.jpg",
+                        "image_path": "source.png",
+                        "baseline_pred_path": "baseline.png",
+                        "candidate_pred_path": "candidate.png",
+                    }
+                )
+            with self.assertRaisesRegex(PreflightError, "does not match"):
+                validate_selector_replay_alignment(
+                    root,
+                    [
+                        {
+                            "split": "train160",
+                            "file": "166.jpg",
+                            "source_input": "source.png",
+                            "baseline_pred": "baseline.png",
+                            "candidate_pred": "wrong.png",
+                        }
+                    ],
+                    selector_replay_path=selector_replay,
+                )
 
     def test_existing_planned_output_fails_closed(self) -> None:
         with TemporaryDirectory() as raw:
@@ -150,6 +197,30 @@ class StrokeOnlyPatchSuppressionInputAuditTest(unittest.TestCase):
                         "bucket": DEFAULT_REQUIRED_BUCKET,
                         "candidate": DEFAULT_REQUIRED_CANDIDATE,
                         **paths,
+                    }
+                )
+
+            selector_replay = root / SELECTOR_REPLAY_PATH
+            selector_replay.parent.mkdir(parents=True)
+            with selector_replay.open("w", newline="", encoding="utf-8") as handle:
+                writer = csv.DictWriter(
+                    handle,
+                    fieldnames=[
+                        "split",
+                        "file",
+                        "image_path",
+                        "baseline_pred_path",
+                        "candidate_pred_path",
+                    ],
+                )
+                writer.writeheader()
+                writer.writerow(
+                    {
+                        "split": "train160",
+                        "file": "166.jpg",
+                        "image_path": paths["source_input"],
+                        "baseline_pred_path": paths["baseline_pred"],
+                        "candidate_pred_path": paths["candidate_pred"],
                     }
                 )
 

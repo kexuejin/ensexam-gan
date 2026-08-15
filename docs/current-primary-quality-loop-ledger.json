@@ -1104,11 +1104,11 @@
       },
       {
         "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
-        "sha256": "d43f98b44efe16d617d26428175e7b985457e5a21313333c2169ee91438bf2d9"
+        "sha256": "5c1eb7b46b61d31f888d75ab2b8838af5a686e02364535ca3214921a26983b18"
       },
       {
         "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
-        "sha256": "783aef72047f1bef945704415f32f6b1829243e262231f62b4c9ce74ac6f4c39"
+        "sha256": "553b1e9bb1333c22f258062ebe3470a6e53be5023bef84850859e5d724dada82"
       },
       {
         "path": "docs/decisions/2026-08-15-stroke-only-patch-suppression-baseline-restore-custody.md",
@@ -1121,12 +1121,28 @@
       {
         "path": "outputs/stroke-only-patch-suppression-baseline-restore-20260815/metrics.csv",
         "sha256": "d70683dbd58d301504336fa8387babf732af59431ff2908c60aeb47b21ffa447"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-stroke-only-patch-suppression-selector-path-custody.md",
+        "sha256": "85acaf85f596ca1f51e6426689ae9ee85d61f69e083af6af0f28afe317328f36"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-input-custody-audit-path-reconciled-20260816/audit.json",
+        "sha256": "ea6c7c89852f62ed7ceb94f2eecab2e80f2194bd9e55d7d1edc72a560de05ff9"
+      },
+      {
+        "path": "docs/product-quality-review-pages.csv",
+        "sha256": "cd187a148cd2ecf53f64a250fbdef44917eb026f3dde46e94e96dd74f8a4c64c"
+      },
+      {
+        "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
+        "sha256": "24c35c8d4eb73ee1e0ed4a60752e1b517e1cc94ff5e4575ce525664364b75517"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "restore exact historical train160 relaxed-interval source-candidate prediction PNGs, or preregister a materially different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "restore exact historical train160 relaxed-interval source-candidate PNGs under candidate/166.png, candidate/190.png, and candidate/192.png, or preregister a materially different available train-only source candidate; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1486,7 +1502,7 @@
       {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
-        "detail": "Pending behind narrowed input custody: selected train160 rows 166/190/192 now have source/target files and restored current-primary baseline predictions, but the required registered relaxed-interval source-candidate prediction PNGs are still missing. Restore exact historical source-candidate pixels or preregister a materially different available train-only source candidate before running the stroke-only generator."
+        "detail": "Pending behind selector-reconciled input custody: selected train160 rows 166/190/192 now have source/target files, restored current-primary baseline predictions, and review CSV paths aligned to selector replay, but the required relaxed-interval source-candidate PNGs under candidate/ remain missing. Restore exact historical source-candidate pixels or preregister a materially different available train-only source candidate before running the stroke-only generator."
       }
     ],
     "killed_family_prohibitions": [
@@ -3559,15 +3575,15 @@
         },
         {
           "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
-          "sha256": "d43f98b44efe16d617d26428175e7b985457e5a21313333c2169ee91438bf2d9"
+          "sha256": "5c1eb7b46b61d31f888d75ab2b8838af5a686e02364535ca3214921a26983b18"
         },
         {
           "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
-          "sha256": "783aef72047f1bef945704415f32f6b1829243e262231f62b4c9ce74ac6f4c39"
+          "sha256": "553b1e9bb1333c22f258062ebe3470a6e53be5023bef84850859e5d724dada82"
         },
         {
           "path": "docs/product-quality-review-pages.csv",
-          "sha256": "5c0182d739a41db3962f1ee51b760cd93ce5bc2f68fd96979e81cd410cf52a52"
+          "sha256": "cd187a148cd2ecf53f64a250fbdef44917eb026f3dde46e94e96dd74f8a4c64c"
         },
         {
           "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
@@ -3597,6 +3613,38 @@
       "id": "stroke-only-patch-suppression-baseline-restore-custody",
       "outcome": "registered_train160_current_primary_baseline_predictions_restored_but_relaxed_interval_source_candidate_pngs_remain_missing_before_preflight_materialization",
       "repeat_policy": "restore_exact_relaxed_interval_source_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate; do_not_train_fabricate_use_noop_baseline_candidate_or_substitute_validation_rows",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-stroke-only-patch-suppression-selector-path-custody.md",
+          "sha256": "85acaf85f596ca1f51e6426689ae9ee85d61f69e083af6af0f28afe317328f36"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-input-custody-audit-path-reconciled-20260816/audit.json",
+          "sha256": "ea6c7c89852f62ed7ceb94f2eecab2e80f2194bd9e55d7d1edc72a560de05ff9"
+        },
+        {
+          "path": "docs/product-quality-review-pages.csv",
+          "sha256": "cd187a148cd2ecf53f64a250fbdef44917eb026f3dde46e94e96dd74f8a4c64c"
+        },
+        {
+          "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+          "sha256": "5c1eb7b46b61d31f888d75ab2b8838af5a686e02364535ca3214921a26983b18"
+        },
+        {
+          "path": "tests/test_stroke_only_patch_suppression_input_audit.py",
+          "sha256": "553b1e9bb1333c22f258062ebe3470a6e53be5023bef84850859e5d724dada82"
+        },
+        {
+          "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
+          "sha256": "24c35c8d4eb73ee1e0ed4a60752e1b517e1cc94ff5e4575ce525664364b75517"
+        }
+      ],
+      "id": "stroke-only-patch-suppression-selector-path-custody",
+      "outcome": "review_csv_candidate_paths_reconciled_to_selector_replay_candidate_directory_but_exact_relaxed_interval_source_candidate_pngs_remain_missing",
+      "repeat_policy": "restore_exact_selector_replay_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate; do_not_chase_stale_pred_paths_train_fabricate_or_substitute_validation_rows",
       "terminal": "PREREQUISITE_NEEDED"
     }
   ],

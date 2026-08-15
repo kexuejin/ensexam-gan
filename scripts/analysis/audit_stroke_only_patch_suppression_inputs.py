@@ -35,6 +35,9 @@ from scripts.analysis.validate_external_text_layout_conditioned_preflight import
 
 PLAN_PATH = Path("docs/stroke-only-patch-suppression-preflight-v1.json")
 REVIEW_CSV_PATH = Path("docs/product-quality-review-pages.csv")
+SELECTOR_REPLAY_PATH = Path(
+    "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv"
+)
 OUTPUT_PATH = Path(
     "outputs/stroke-only-patch-suppression-input-custody-audit-20260815/audit.json"
 )
@@ -51,6 +54,11 @@ REQUIRED_FIELDS = (
     "candidate_pred",
     "target",
 )
+SELECTOR_REPLAY_FIELD_MAP = {
+    "baseline_pred": "baseline_pred_path",
+    "candidate_pred": "candidate_pred_path",
+    "source_input": "image_path",
+}
 EXPECTED_PLANNED_OUTPUTS_MUST_BE_ABSENT = {
     "holdout40_candidate": "outputs/stroke-only-patch-suppression-holdout40-candidate",
     "inner_val15_candidate": "outputs/stroke-only-patch-suppression-inner-val15-candidate",
@@ -176,6 +184,56 @@ def select_authorized_rows(
     return selected, dict(sorted(split_counts.items()))
 
 
+def validate_selector_replay_alignment(
+    repo_root: Path,
+    rows: list[dict[str, str]],
+    *,
+    selector_replay_path: Path,
+) -> list[dict[str, Any]]:
+    selector_path = selector_replay_path
+    if not selector_path.is_absolute():
+        selector_path = repo_root / selector_path
+    replay_rows = read_csv_rows(selector_path)
+    replay_by_key = {
+        (row.get("split", ""), row.get("file", "")): row
+        for row in replay_rows
+    }
+    alignment: list[dict[str, Any]] = []
+    for row in rows:
+        key = (row.get("split", ""), row.get("file", ""))
+        sample_key = f"{key[0]}/{key[1]}"
+        replay_row = replay_by_key.get(key)
+        if replay_row is None:
+            raise PreflightError(f"selector replay missing source row: {sample_key}")
+        aligned_paths: dict[str, str] = {}
+        for review_field, replay_field in SELECTOR_REPLAY_FIELD_MAP.items():
+            review_value = row.get(review_field, "")
+            replay_value = replay_row.get(replay_field, "")
+            if not replay_value:
+                raise PreflightError(
+                    f"selector replay missing {sample_key}.{replay_field}"
+                )
+            if review_value != replay_value:
+                raise PreflightError(
+                    f"review CSV {sample_key}.{review_field} does not match "
+                    f"selector replay {replay_field}: {review_value} != {replay_value}"
+                )
+            aligned_paths[review_field] = replay_value
+        alignment.append(
+            {
+                "candidate_overerase_ratio": replay_row.get("candidate_overerase_ratio"),
+                "candidate_residual_ratio": replay_row.get("candidate_residual_ratio"),
+                "copy_mask_cov8": replay_row.get("copy_mask_cov8"),
+                "overerase_regret": replay_row.get("overerase_regret"),
+                "paths": aligned_paths,
+                "primary_edit_px": replay_row.get("primary_edit_px"),
+                "residual_gain": replay_row.get("residual_gain"),
+                "sample_key": sample_key,
+            }
+        )
+    return alignment
+
+
 def validate_required_paths(
     repo_root: Path,
     rows: list[dict[str, str]],
@@ -235,6 +293,7 @@ def run_audit(
     plan_path: Path | None = None,
     ledger_path: Path | None = None,
     review_csv: Path | None = None,
+    selector_replay_path: Path | None = None,
     required_bucket: str = DEFAULT_REQUIRED_BUCKET,
     required_candidate: str = DEFAULT_REQUIRED_CANDIDATE,
 ) -> dict[str, Any]:
@@ -242,6 +301,9 @@ def run_audit(
     resolved_plan = plan_path or (repo_root / PLAN_PATH)
     resolved_ledger = ledger_path or (repo_root / LEDGER_PATH)
     resolved_review_csv = review_csv or (repo_root / REVIEW_CSV_PATH)
+    resolved_selector_replay = selector_replay_path or SELECTOR_REPLAY_PATH
+    if not resolved_selector_replay.is_absolute():
+        resolved_selector_replay = repo_root / resolved_selector_replay
     try:
         plan = read_json(resolved_plan)
         assert_exact_plan(plan)
@@ -255,6 +317,11 @@ def run_audit(
             allowed_splits=allowed_splits,
             required_bucket=required_bucket,
             required_candidate=required_candidate,
+        )
+        selector_replay_alignment = validate_selector_replay_alignment(
+            repo_root,
+            selected_rows,
+            selector_replay_path=resolved_selector_replay,
         )
         present_paths, missing_paths = validate_required_paths(repo_root, selected_rows)
     except (OSError, KeyError, PreflightError, TypeError, ValueError) as error:
@@ -290,6 +357,8 @@ def run_audit(
         "runnable": not missing_paths,
         "schema_version": 1,
         "selected_row_count": len(selected_rows),
+        "selector_replay_alignment": selector_replay_alignment,
+        "selector_replay_csv": str(resolved_selector_replay.relative_to(repo_root)),
         "selected_split_counts": split_counts,
         "target_decode": False,
         "terminal": terminal,
@@ -302,6 +371,7 @@ def main() -> int:
     parser.add_argument("--plan", type=Path)
     parser.add_argument("--ledger", type=Path)
     parser.add_argument("--review-csv", type=Path)
+    parser.add_argument("--selector-replay", type=Path)
     parser.add_argument("--required-bucket", default=DEFAULT_REQUIRED_BUCKET)
     parser.add_argument("--required-candidate", default=DEFAULT_REQUIRED_CANDIDATE)
     parser.add_argument("--output-json", type=Path, default=OUTPUT_PATH)
@@ -311,6 +381,7 @@ def main() -> int:
         plan_path=args.plan,
         ledger_path=args.ledger,
         review_csv=args.review_csv,
+        selector_replay_path=args.selector_replay,
         required_bucket=args.required_bucket,
         required_candidate=args.required_candidate,
     )
