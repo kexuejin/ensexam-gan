@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Record the current-state successor inventory after target-dark/overerase exhaustion: cross-domain sidecar, external text-layout, stroke-only source-candidate, and target-dark routes are terminal under current evidence; universal mechanism admission remains product-owner blocked; no candidate, validation, blind, promotion, or current-primary replacement surface opens.",
+    "causal_change": "Record broader durable exhaustion: all currently named current-primary failure buckets are exhausted, killed, blocked, or out of scope under committed evidence; no candidate is promoted and artifacts/current-primary remains the default.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1701,12 +1701,20 @@
       {
         "path": "docs/successor-selection-current-state-inventory-v1.json",
         "sha256": "d3b6f95522e7a7445387d6d487e8bcd88be5b8150c266f99f87490cad57a19e8"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-current-primary-broader-durable-exhaustion.md",
+        "sha256": "15383ad887dfc3065ab55ac8047a7402792c7cc3a120c8bf214535b39e3ad337"
+      },
+      {
+        "path": "docs/current-primary-broader-durable-exhaustion-v1.json",
+        "sha256": "bd239ae9d9b6202fe30b0bf5b537020b06cb076793af7262693a2eec7491b00d"
       }
     ],
-    "failure_bucket": "successor_selection_outside_closed_buckets",
+    "failure_bucket": "all_remaining_ledgered_failure_buckets_exhausted_or_blocked",
     "first_gate": "scut_inner_val15",
-    "id": "current-primary-successor-selection",
-    "next_action": "select a materially different named failure bucket with new leakage-safe train-only evidence, restore exact selector-replay candidate PNGs with hash custody, obtain the universal-mechanism product-owner unblock, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
+    "id": "current-primary-broader-durable-exhaustion",
+    "next_action": "no active successor remains in this ledger scope; future re-entry requires materially new leakage-safe evidence, exact selector-replay asset restoration with hash custody, product-owner unblock, or a new user-authorized quality program",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -2135,8 +2143,8 @@
       },
       {
         "id": "post_successor_inventory_broader_exhaustion_or_new_bucket_selection",
-        "status": "pending",
-        "detail": "Select a materially different named failure bucket with new leakage-safe train-only evidence, restore exact selector-replay candidate PNGs with hash custody, obtain the universal-mechanism product-owner unblock, or record broader durable exhaustion if no admissible path remains."
+        "status": "passed",
+        "detail": "Broader durable exhaustion was recorded: every currently ledgered successor bucket is exhausted, killed, blocked, or out of scope, and no candidate, validation, blind, promotion, or current-primary replacement surface opened."
       }
     ],
     "killed_family_prohibitions": [
@@ -2295,7 +2303,7 @@
       "loss_weight_sweep",
       "current_primary_replacement"
     ],
-    "terminal": "PREREQUISITE_NEEDED"
+    "terminal": "KILL"
   },
   "baseline": {
     "checkpoint": {
@@ -2337,7 +2345,8 @@
     "name": "EnsExam-GAN current-primary evidence-gated quality loop",
     "product_default": "artifacts/current-primary",
     "promotion_state": "disabled",
-    "reserved_blind_state": "disabled"
+    "reserved_blind_state": "disabled",
+    "lifecycle_state": "all_exhausted"
   },
   "records": [
     {
@@ -5089,6 +5098,22 @@
         {
           "path": "docs/successor-selection-current-state-inventory-v1.json",
           "sha256": "d3b6f95522e7a7445387d6d487e8bcd88be5b8150c266f99f87490cad57a19e8"
+        }
+      ]
+    },
+    {
+      "id": "current-primary-broader-durable-exhaustion",
+      "terminal": "KILL",
+      "outcome": "all_remaining_ledgered_failure_buckets_exhausted_or_blocked_no_candidate_promoted_current_primary_preserved",
+      "repeat_policy": "do_not_repeat_closed_buckets_without_materially_new_leakage_safe_evidence_exact_asset_restoration_or_product_owner_unblock",
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-current-primary-broader-durable-exhaustion.md",
+          "sha256": "15383ad887dfc3065ab55ac8047a7402792c7cc3a120c8bf214535b39e3ad337"
+        },
+        {
+          "path": "docs/current-primary-broader-durable-exhaustion-v1.json",
+          "sha256": "bd239ae9d9b6202fe30b0bf5b537020b06cb076793af7262693a2eec7491b00d"
         }
       ]
     }

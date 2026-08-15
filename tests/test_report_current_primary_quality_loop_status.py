@@ -155,6 +155,48 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             self.assertFalse(report["promotion_eligible"])
             self.assertIn("pending prerequisite: train_only_support", report["blockers"])
 
+    def test_all_exhausted_ledger_reports_terminal_status(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            ledger = self.ledger(root)
+            data = json.loads(ledger.read_text(encoding="utf-8"))
+            data["program"]["lifecycle_state"] = "all_exhausted"
+            data["active_iteration"]["terminal"] = "KILL"
+            data["active_iteration"]["prerequisites"][0]["status"] = "passed"
+            data["active_iteration"]["next_action"] = "none; all named buckets are exhausted or blocked"
+            data["active_iteration"]["causal_change"] = (
+                "broader durable exhaustion of all named failure buckets"
+            )
+            ledger.write_text(json.dumps(data), encoding="utf-8")
+            output = root / "report.json"
+
+            subprocess.run(self.command(root, ledger, output), check=True)
+
+            report = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(report["status"], "all_failure_buckets_exhausted_or_blocked")
+            self.assertEqual(report["program"]["lifecycle_state"], "all_exhausted")
+            self.assertFalse(report["candidate_admission_ready"])
+            self.assertFalse(report["promotion_eligible"])
+            self.assertEqual(report["blockers"], [])
+
+    def test_all_exhausted_ledger_rejects_pending_prerequisites(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            ledger = self.ledger(root)
+            data = json.loads(ledger.read_text(encoding="utf-8"))
+            data["program"]["lifecycle_state"] = "all_exhausted"
+            data["active_iteration"]["terminal"] = "KILL"
+            ledger.write_text(json.dumps(data), encoding="utf-8")
+
+            result = subprocess.run(
+                self.command(root, ledger, root / "report.json"),
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("no pending prerequisites", result.stderr)
+
     def test_hash_mismatch_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

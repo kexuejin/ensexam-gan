@@ -22,6 +22,7 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DECISION_TERMINAL_RE = re.compile(r"\b(PASS|KILL|PREREQUISITE_NEEDED)\b")
 RECORD_TERMINALS = {"PASS", "KILL", "PREREQUISITE_NEEDED", "PENDING"}
 ACTIVE_TERMINALS = {"PREREQUISITE_NEEDED", "PENDING"}
+PROGRAM_LIFECYCLE_STATES = {"active", "all_exhausted"}
 TRACKED_CODE_PREFIXES = {"networks", "scripts", "tests", "tools"}
 DOCUMENTABLE_IGNORED_PREFIXES = {"artifacts", "outputs"}
 NONBLOCKING_GAP_CLASSES = {
@@ -612,12 +613,25 @@ def validate_records(
 
 
 def validate_active_iteration(
-    repo_root: Path, value: Any, decision_docs: list[dict[str, Any]]
+    repo_root: Path,
+    value: Any,
+    decision_docs: list[dict[str, Any]],
+    lifecycle_state: str,
 ) -> dict[str, Any]:
     data = require_mapping(value, "active_iteration")
     terminal = require_string(data.get("terminal"), "active_iteration.terminal")
-    if terminal not in ACTIVE_TERMINALS:
-        raise ValueError("active_iteration.terminal must be PREREQUISITE_NEEDED or PENDING")
+    if lifecycle_state == "active":
+        if terminal not in ACTIVE_TERMINALS:
+            raise ValueError(
+                "active_iteration.terminal must be PREREQUISITE_NEEDED or PENDING"
+            )
+    elif lifecycle_state == "all_exhausted":
+        if terminal != "KILL":
+            raise ValueError(
+                "active_iteration.terminal must be KILL when program.lifecycle_state is all_exhausted"
+            )
+    else:
+        raise ValueError(f"unsupported program.lifecycle_state: {lifecycle_state}")
     first_gate = require_string(data.get("first_gate"), "active_iteration.first_gate")
     if first_gate != "scut_inner_val15":
         raise ValueError("active_iteration.first_gate must be scut_inner_val15")
@@ -640,8 +654,12 @@ def validate_active_iteration(
         require_string(prerequisite.get("detail"), f"active_iteration.prerequisites[{index}].detail")
         if status == "pending":
             pending_prerequisites.append(prerequisite_id)
-    if terminal == "PREREQUISITE_NEEDED" and not pending_prerequisites:
+    if lifecycle_state == "active" and terminal == "PREREQUISITE_NEEDED" and not pending_prerequisites:
         raise ValueError("active_iteration with PREREQUISITE_NEEDED requires a pending prerequisite")
+    if lifecycle_state == "all_exhausted" and pending_prerequisites:
+        raise ValueError(
+            "active_iteration must have no pending prerequisites when program.lifecycle_state is all_exhausted"
+        )
     prohibited = [
         require_string(item, "active_iteration.prohibited_before_first_gate[]")
         for item in require_list(
@@ -691,6 +709,11 @@ def validate_ledger(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
         raise ValueError("program.promotion_state must be disabled until a candidate passes all gates")
     if program.get("reserved_blind_state") != "disabled":
         raise ValueError("program.reserved_blind_state must be disabled until promotion gates pass")
+    lifecycle_state = program.get("lifecycle_state", "active")
+    if lifecycle_state not in PROGRAM_LIFECYCLE_STATES:
+        raise ValueError(
+            f"program.lifecycle_state must be one of {sorted(PROGRAM_LIFECYCLE_STATES)}, got {lifecycle_state!r}"
+        )
     decision_docs = load_tracked_decision_docs(repo_root)
     return {
         "program": {
@@ -698,18 +721,33 @@ def validate_ledger(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
             "product_default": program["product_default"],
             "promotion_state": program["promotion_state"],
             "reserved_blind_state": program["reserved_blind_state"],
+            "lifecycle_state": lifecycle_state,
         },
         "baseline": validate_baseline(repo_root, ledger.get("baseline")),
         "calibration": validate_calibration(repo_root, ledger.get("calibration")),
         "records": validate_records(repo_root, ledger.get("records"), decision_docs),
         "active_iteration": validate_active_iteration(
-            repo_root, ledger.get("active_iteration"), decision_docs
+            repo_root,
+            ledger.get("active_iteration"),
+            decision_docs,
+            lifecycle_state,
         ),
     }
 
 
 def build_report(validated: dict[str, Any]) -> dict[str, Any]:
     active = validated["active_iteration"]
+    program = validated["program"]
+    if program["lifecycle_state"] == "all_exhausted":
+        return {
+            "status": "all_failure_buckets_exhausted_or_blocked",
+            "baseline_verified": True,
+            "candidate_admission_ready": False,
+            "promotion_eligible": False,
+            "reserved_blind_authorized": False,
+            "blockers": [],
+            **validated,
+        }
     blockers = [
         f"active iteration {active['id']} is {active['terminal']}",
         *[f"pending prerequisite: {item}" for item in active["pending_prerequisites"]],

@@ -26,7 +26,7 @@ schema_version: 1
 updated: "2026-08-16"
 program: sustainable-generalization-safe-quality-loop
 product_default: artifacts/current-primary
-program_state: active
+program_state: all_exhausted
 
 anchors:
   checkpoint:
@@ -111,28 +111,30 @@ buckets:
       current-primary mutation.
 
   - name: successor_selection_outside_closed_buckets
-    status: active
+    status: exhausted
     summary: >-
       The current loop is between candidate families after the cross-domain
       sidecar bucket, external text-layout support successors, stroke-only
       source-candidate bucket, and target-dark/overerase-risk bucket all reached
       terminal current-state records, while universal mechanism admission remains
       product-owner blocked. The next admissible move is successor selection,
-      not training or validation.
+      not training or validation. Broader durable exhaustion has now closed
+      successor selection because no executable ledgered bucket remains.
     evidence:
       - docs/current-primary-quality-loop-ledger.json
       - docs/successor-selection-current-state-inventory-v1.json
       - docs/decisions/2026-08-16-successor-selection-current-state-inventory.md
+      - docs/current-primary-broader-durable-exhaustion-v1.json
+      - docs/decisions/2026-08-16-current-primary-broader-durable-exhaustion.md
       - docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md
       - docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md
       - docs/decisions/2026-08-16-current-primary-failure-ledger-successor-selection-reconciliation.md
-    next_allowed: >-
-      Select one named failure bucket outside the closed cross-domain sidecar,
-      external text-layout, stroke-only source-candidate, and
-      target-dark/overerase-risk buckets with an available leakage-safe
-      train-only evidence path; restore exact selector-replay PNGs with hash
-      custody; obtain the universal-mechanism product-owner unblock; or record
-      broader durable exhaustion if no such path remains.
+    terminal_basis: >-
+      The broader durable exhaustion record found no remaining executable
+      ledgered bucket. Future re-entry requires materially new leakage-safe
+      evidence, exact selector-replay PNG restoration with hash custody, the
+      universal-mechanism product-owner unblock, or a new user-authorized
+      quality program outside this exhausted scope.
     prohibited: >-
       No validation, SCUT115, holdout40, visual review, reserved blind,
       promotion, current-primary replacement, threshold rescue, page-specific
