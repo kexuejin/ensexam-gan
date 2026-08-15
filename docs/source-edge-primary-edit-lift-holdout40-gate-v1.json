@@ -1,0 +1,58 @@
+{
+  "authorization": {
+    "current_primary_replacement": false,
+    "holdout40": "completed_passed_fixed_source_candidate_metric_gate",
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": "blocked_pending_current_primary_prediction_surface_recovery",
+    "visual_review": false
+  },
+  "candidate": "source_edge_primary_edit_lift_v1_primary_edit_source_edge_core",
+  "family": "source_edge_primary_edit_lift_source_candidate_v1",
+  "gate": "holdout40",
+  "gate_result": {
+    "baseline_summary": {
+      "max_overerase_ratio": 0.010721820097559944,
+      "max_residual_ratio": 0.4634964170207369,
+      "mean_overerase_ratio": 0.00248161303023898,
+      "mean_residual_ratio": 0.13611082197479357,
+      "p95_overerase_ratio": 0.006366900583758761,
+      "p95_residual_ratio": 0.30574837989847886
+    },
+    "candidate_summary": {
+      "max_overerase_ratio": 0.010721820097559944,
+      "max_residual_ratio": 0.46216469021497875,
+      "mean_overerase_ratio": 0.00248161303023898,
+      "mean_residual_ratio": 0.13487801403380395,
+      "p95_overerase_ratio": 0.006366900583758761,
+      "p95_residual_ratio": 0.303715157871504
+    },
+    "decision": "accept",
+    "failed_checks": [],
+    "page_overerase_regression_count": 0,
+    "page_residual_regression_count": 0,
+    "protocol": "fixed_heldout_candidate_metric_gate",
+    "sample_count": 40
+  },
+  "input_surfaces": {
+    "baseline_prediction_dir": "artifacts/current-holdout40-primary-pred",
+    "candidate_generation_reads_targets": false,
+    "candidate_metric_csv": "outputs/source-edge-primary-edit-holdout40-gate-20260816-v1/source_candidate/post_freeze_metrics.csv",
+    "fixed_sample_list": "docs/holdout40-relative.txt",
+    "source_images": "data-links/samples/SCUT-EnsExam/train/all_images",
+    "target_images_read_after_candidate_write_for_scoring": "data-links/samples/SCUT-EnsExam/train/all_labels"
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "state": "holdout40_passed_scut115_prerequisite_needed",
+  "terminal_result": {
+    "reason": "The fixed source-edge primary-edit source candidate improved holdout40 mean residual, did not regress mean/p95/max residual or overerase, and had zero page-level residual or overerase regressions.",
+    "terminal": "PASS"
+  },
+  "terminal_successors": {
+    "KILL": "close source_edge_primary_edit_lift_v1 without threshold, alpha, component, kernel, or page-specific rescue",
+    "PASS": "restore or rebuild the frozen SCUT115 current-primary prediction surface, then run the same fixed candidate exactly once on SCUT115; keep reserved blind, visual review, promotion, and current-primary replacement closed",
+    "PREREQUISITE_NEEDED": "recover missing SCUT115 baseline predictions or run a registered source-only current-primary SCUT115 baseline reconstruction"
+  }
+}
