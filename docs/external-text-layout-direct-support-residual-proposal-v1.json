@@ -1,0 +1,103 @@
+{
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "state": "preflight_only",
+    "visual_review": false
+  },
+  "causal_change": "replace the killed five-channel U-Net training path with a closed-form support-score-to-nonnegative-residual proposal that is first judged only by a train-role reachability diagnostic",
+  "direct_support_projection": {
+    "calibration_source": "external_text_layout_support_train_only_diagnostic_full_fit",
+    "delta_bound_gray": 20.4,
+    "direction_enforcement": "nonnegative_rgb_only",
+    "input_channels": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "external_text_occupancy",
+      "external_text_confidence"
+    ],
+    "normalization": "fold_fit_preserve_to_positive_score_span",
+    "output_channels": 3,
+    "score_below_preserve_center_delta_gray": 0.0,
+    "score_at_or_above_positive_center_delta_gray": 20.4,
+    "target_access_at_application": false,
+    "training": false
+  },
+  "evidence": {
+    "conditioned_checkpoint_audit": {
+      "path": "outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815/audit.json",
+      "sha256": "140ceb8c24711e7a527367761aef57c6d892c24509788f2b846121b4518b0341"
+    },
+    "conditioned_checkpoint_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-checkpoint-kill.md",
+      "sha256": "acc90108dd15eda71e2677e3043f8ca01553d0ab1e3e6934afc3be68a231fced"
+    },
+    "conditioned_preflight_plan": {
+      "path": "docs/external-text-layout-conditioned-monotonic-preflight-v1.json",
+      "sha256": "16671dc4d1afa6d1740702c709dad058a5bcc30e5a4282407c49c6fd979e9aae"
+    },
+    "support_diagnostic": {
+      "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+      "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+    },
+    "support_diagnostic_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md",
+      "sha256": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+    }
+  },
+  "family": "external_text_layout_direct_support_residual_v1",
+  "forbidden_rescues": [
+    "detector_threshold_tuning",
+    "layout_transform_tuning",
+    "repeat_conditioned_monotonic_training",
+    "learning_rate_or_step_sweep",
+    "loss_weight_sweep",
+    "candidate_gate_lowering",
+    "scut115_before_inner_val15",
+    "holdout40_before_inner_val15",
+    "reserved_blind_before_development_gates"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "planned_outputs_must_be_absent": {
+    "direct_support_diagnostic": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815",
+    "first_gate_candidate": "outputs/external-text-layout-direct-support-residual-inner-val15-candidate",
+    "first_gate_score": "outputs/external-text-layout-direct-support-residual-inner-val15-score",
+    "holdout40_candidate": "outputs/external-text-layout-direct-support-residual-holdout40-candidate",
+    "scut115_candidate": "outputs/external-text-layout-direct-support-residual-scut115-candidate"
+  },
+  "schema_version": 1,
+  "state": "preregistered_external_text_layout_direct_support_residual_preflight",
+  "terminal_successors": {
+    "KILL": "close_direct_support_residual_without_score_delta_threshold_or_layout_rescue",
+    "PASS": "authorize_train_only_direct_support_reachability_diagnostic_only",
+    "PREREQUISITE_NEEDED": "repair_registered_preflight_evidence_or_metadata_only"
+  },
+  "train_only_reachability_diagnostic": {
+    "allowed_roles": [
+      "train"
+    ],
+    "candidate_inference": false,
+    "fit_source": "support_diagnostic_fold_fits_only",
+    "gate_threshold_gray": 12.0,
+    "maximum_preserve_gate_ratio": 0.005,
+    "minimum_positive_gate_ratio": 0.05,
+    "minimum_positive_over_preserve_gate_margin": 0.04,
+    "minimum_reachable_patch_ratio": 0.1,
+    "output_dir": "outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815",
+    "required_patch_count": 256,
+    "target_access": "train_labels_only_for_reachability_measurement",
+    "validation_roles_forbidden": [
+      "inner_val15",
+      "scut115",
+      "holdout40",
+      "reserved_blind"
+    ]
+  }
+}

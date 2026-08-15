@@ -1,0 +1,41 @@
+{
+  "authority": {
+    "conditioned_checkpoint_audit": "passed",
+    "conditioned_checkpoint_terminal": "KILL",
+    "direct_support_preflight": "passed",
+    "support_diagnostic": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint_generated": false,
+  "evidence_hashes": {
+    "conditioned_checkpoint_audit": "140ceb8c24711e7a527367761aef57c6d892c24509788f2b846121b4518b0341",
+    "conditioned_checkpoint_decision": "acc90108dd15eda71e2677e3043f8ca01553d0ab1e3e6934afc3be68a231fced",
+    "conditioned_preflight_plan": "16671dc4d1afa6d1740702c709dad058a5bcc30e5a4282407c49c6fd979e9aae",
+    "support_diagnostic": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734",
+    "support_diagnostic_decision": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+  },
+  "model_training_started": false,
+  "plan": "/Volumes/Tool/source/ensexam-gan/docs/external-text-layout-direct-support-residual-proposal-v1.json",
+  "plan_sha256": "fbdfc25d977238f33c7631a59b3ef76ac56b8a8c9f59384730f44a4555aab054",
+  "planned_outputs_absent": [
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-direct-support-residual-proposal-diagnostic-20260815",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-direct-support-residual-inner-val15-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-direct-support-residual-inner-val15-score",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-direct-support-residual-holdout40-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-direct-support-residual-scut115-candidate"
+  ],
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "schema_version": 1,
+  "synthetic_projection": {
+    "delta_bound_gray": 20.4,
+    "delta_min_gray": 0.0,
+    "gate_count": 2,
+    "nonnegative": true,
+    "score_count": 5
+  },
+  "target_decode": false,
+  "terminal": "PASS"
+}
