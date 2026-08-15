@@ -833,12 +833,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-bounded-rss-launch-v8-integration-pass.md",
         "sha256": "5aa88a743755860353e475943d4a098d5046f197bd311a0251dec395631ed6f9"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-host-capacity-rss-launch-v9.json",
+        "sha256": "b776caf4dc57a136f68686f62ee46aca23bab853361ffd7c30709c6ba0ebe34b"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-host-capacity-rss-launch-v9-preregistration.md",
+        "sha256": "92c6b3c494a6a0cb147a3cc4815d8c701a908e7d5b8ed743f588719f3ebcf82f"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the bounded-RSS v8 integration PASS, then immediately run the exact Python 3.13 launcher with OMP, OpenBLAS, MKL, and vecLib thread caps set to one. Pass a fresh 60-second stable-current-baseline window and resume exact manifest index 9 hw5k_121.jpg under the recovered-only 11 GiB RSS cap, 70 percent launch and 35 percent runtime free-memory floors, 512 MiB run-local swap-growth cap, one CPU child, fixed eight-page batches, 0.25-second monitoring, and 900-second timeout. Preserve exact order, retained hashes, and the 39d5 plan. Stop with completed records retained if any later page crosses a bound; do not automatically raise the limit. Require schema-v8 launcher PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS.",
+    "next_action": "Commit and push the host-capacity RSS v9 preregistration, then implement the final recovered-only 13 GiB cap, schema-v9 result and authority, and an extracted cohesive v9 contract validator without changing shared 10 GiB defaults. Preserve the 70 percent launch and 35 percent runtime free-memory floors, 512 MiB run-local swap-growth cap, one CPU child, fixed eight-page batches, 0.25-second monitoring, 900-second timeout, exact order, 18 retained page/record hashes, and the 39d5 plan. Resume exact manifest index 19 hw5k_1376.jpg only after dual-runtime focused and complete suites pass and a v9 integration PASS is pushed. Never raise the recovered RSS cap above 13 GiB automatically; a rejection there requires an algorithmic change.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1113,6 +1121,11 @@
       {
         "detail": "V8 passed 24 focused and 133 complete external-layout tests in Python 3.13.1 and 3.10.11 plus dual-runtime compile. The recovered monitor accepts the observed 11147149312-byte page below its 11 GiB cap, terminates the process group at 11 GiB plus one, and independently preserves the 35-percent free-memory and 512 MiB run-local swap gates. Shared materializer and runtime hashes remain exact at their 10 GiB default. Schema-v8 result and v8 execution authority are locked; pre-integration real authority stayed closed. All eight retained page/record hashes, actual next file hw5k_121.jpg, and the 39d5 plan remain exact. Resume is authorized only after this PASS is pushed.",
         "id": "external_text_layout_recovered_materializer_bounded_rss_launch_v8_integration",
+        "status": "passed"
+      },
+      {
+        "detail": "V8 safely advanced from 8 to 18 pages, then a fresh stable-baseline attempt stopped with zero progress at 11992580096 bytes RSS above 11 GiB on same-sized hw5k_1376.jpg. V9 replaces threshold chasing with one final recovered-only 13 GiB containment cap derived from the 24 GiB host, while the independent 35-percent free-memory and 512 MiB run-local swap gates remain authoritative and the shared 10 GiB default stays byte-exact. V9 also requires its contract validator to be extracted from the 1162-line launcher. Only implementation and synthetic verification are open; model execution remains closed.",
+        "id": "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_preregistration",
         "status": "passed"
       }
     ],

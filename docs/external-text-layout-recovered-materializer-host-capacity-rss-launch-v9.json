@@ -1,0 +1,118 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": false,
+    "launcher_implementation_and_synthetic_verification": true,
+    "model_execution": false,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_host_capacity_rss_v9_preregistration_only",
+    "training": false
+  },
+  "evidence": {
+    "launcher_v8_integration": {
+      "path": "docs/external-text-layout-recovered-materializer-bounded-rss-launch-v8-integration-verification-20260815.json",
+      "sha256": "684ad1fb3f03ba5efaff84767ebc9618c9f6e1a463e3f48e3bbeea561c1321ed"
+    },
+    "launcher_v8_source": {
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "650225d60f5f4168f91da9f08651ed6aa863a46fb95e0a70181f19277c47605f"
+    },
+    "launcher_v8_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "cdd871640a5279efb1c7745c4b54aa03ae0fc00a006f4e0ba6cb2a7e47ee3c57"
+    },
+    "recovered_batch_runtime_v8": {
+      "path": "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "sha256": "e8647bdb6d63b31f316b7edefe90b7e0efefaf3f1950ab73288b9cecdfb5b645"
+    },
+    "recovered_batch_runtime_v8_test": {
+      "path": "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "sha256": "72d073d6ae535d3ed9b2893f37c02046dfadd379d7049f0c75151f80c02722b3"
+    },
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    }
+  },
+  "host_capacity_policy": {
+    "physical_memory_bytes": 25769803776,
+    "recovered_rss_cap_bytes": 13958643712,
+    "recovered_rss_cap_fraction_of_physical_memory": 0.5416666666666666,
+    "runtime_free_memory_floor_percent": 35.0,
+    "runtime_swap_growth_cap_bytes": 536870912,
+    "shared_rss_cap_bytes_unchanged": 10737418240
+  },
+  "implementation": {
+    "allowed_files": [
+      "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "scripts/analysis/external_text_layout_recovered_v9_contract.py",
+      "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "tests/test_run_external_text_layout_recovered_materialization.py"
+    ],
+    "launcher_result_schema_version": 9,
+    "new_dependency": false,
+    "shared_materializer_mutation": false,
+    "shared_runtime_mutation": false
+  },
+  "observed_v8_execution": {
+    "first_attempt": {
+      "completed_after": 18,
+      "completed_before": 8,
+      "first_complete_batch_minimum_memory_free_percent": 40.0,
+      "first_complete_batch_peak_process_tree_rss_bytes": 10823958528,
+      "reason": "swap safety limit exceeded: 575406080 > 536870912"
+    },
+    "second_attempt": {
+      "completed_after": 18,
+      "completed_before": 18,
+      "reason": "detector RSS safety limit exceeded: 11992580096 > 11811160064",
+      "supervisor_terminal": "NO_PROGRESS",
+      "trigger_process_tree_rss_bytes": 11992580096
+    }
+  },
+  "required_verification": [
+    "the_recovered_monitor_accepts_11992580096_bytes_below_the_fixed_13_gib_cap",
+    "the_recovered_monitor_terminates_the_process_group_at_13_gib_plus_one_byte",
+    "the_35_percent_free_memory_and_512_mib_run_local_swap_gates_remain_independent",
+    "the_shared_10_gib_materializer_and_runtime_defaults_remain_byte_exact",
+    "schema_v9_records_the_host_capacity_bound_and_requires_v9_ledger_authority",
+    "v9_contract_validation_is_extracted_from_the_large_launcher",
+    "the_18_page_resume_state_and_exact_next_manifest_page_remain_unchanged",
+    "dual_runtime_focused_and_complete_external_layout_suites_pass"
+  ],
+  "resume_state": {
+    "completed_count": 18,
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "next_file": "hw5k_1376.jpg",
+    "next_manifest_index": 19,
+    "pages_content_sha256": "900941c438d64fc6d8f354f0866d7f45c67cc19efd10fe80f03a7480e6f2e2af",
+    "pages_filename_sha256": "dae7856768e3bd7c321f540461bf0572f07f9c05c0e29ba0eaeab8273202a0c5",
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "6bb2b04c2c355d8d0feab637d9da710248f03e93e8413f3d1ac1c4d79ca08d63",
+    "records_filename_sha256": "89155a5f4673ae67c68798712c97a158a6929a75172cbbe35f2ed53f91b6e167"
+  },
+  "runtime": {
+    "batch_size": 8,
+    "batch_timeout_seconds": 900.0,
+    "maximum_concurrent_model_processes": 1,
+    "maximum_runtime_process_tree_rss_bytes": 13958643712,
+    "maximum_swap_growth_bytes": 536870912,
+    "minimum_launch_memory_free_percent": 70.0,
+    "minimum_runtime_memory_free_percent": 35.0,
+    "monitor_interval_seconds": 0.25,
+    "stability_window_seconds": 60.0,
+    "worker_count": 1
+  },
+  "schema_version": 9,
+  "supersedes": {
+    "path": "docs/external-text-layout-recovered-materializer-bounded-rss-launch-v8-integration-verification-20260815.json",
+    "reason": "the_11_gib_cap_failed_with_zero_progress_at_a_runtime_peak_not_predicted_by_page_dimensions",
+    "sha256": "684ad1fb3f03ba5efaff84767ebc9618c9f6e1a463e3f48e3bbeea561c1321ed",
+    "status": "eighteen_pages_retained_then_zero_progress_rss_rejection"
+  },
+  "terminal": "PREREQUISITE_NEEDED"
+}
