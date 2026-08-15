@@ -1,0 +1,97 @@
+{
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "holdout40": "completed_passed_fixed_source_candidate_metric_gate",
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": "completed_once_killed",
+    "visual_review": false
+  },
+  "baseline_recovery": {
+    "device": "cpu",
+    "labels_read_during_recovery": false,
+    "method": "rebuilt_current_primary_baseline_predictions_source_only_cpu",
+    "metrics_csv": "outputs/source-edge-primary-edit-scut115-baseline-recovery-20260816-v2/frozen_predictions/metrics.csv",
+    "prediction_count": 115,
+    "prediction_dir": "outputs/source-edge-primary-edit-scut115-baseline-recovery-20260816-v2/frozen_predictions/pred",
+    "samples_file": "docs/scut-test115-relative.txt"
+  },
+  "candidate": "source_edge_primary_edit_lift_v1_primary_edit_source_edge_core",
+  "family": "source_edge_primary_edit_lift_source_candidate_v1",
+  "forbidden_rescues": [
+    "source_edge_primary_edit_lift_v1_source_edge_threshold_rescue",
+    "source_edge_primary_edit_lift_v1_primary_edit_floor_rescue",
+    "source_edge_primary_edit_lift_v1_alpha_or_max_lift_rescue",
+    "source_edge_primary_edit_lift_v1_component_area_kernel_or_dilation_rescue",
+    "source_edge_primary_edit_lift_v1_page_specific_replacement",
+    "source_edge_primary_edit_lift_v1_review_acceptance_override",
+    "source_edge_primary_edit_lift_v1_holdout40_repeat",
+    "source_edge_primary_edit_lift_v1_scut115_repeat",
+    "source_edge_primary_edit_lift_v1_reserved_blind",
+    "source_edge_primary_edit_lift_v1_promotion",
+    "source_edge_primary_edit_lift_v1_current_primary_replacement"
+  ],
+  "gate": "scut115",
+  "gate_result": {
+    "baseline_summary": {
+      "max_overerase_ratio": 0.010381593714927048,
+      "max_residual_ratio": 0.5958076064961345,
+      "mean_overerase_ratio": 0.0030891541790281146,
+      "mean_residual_ratio": 0.11813039572882839,
+      "p95_overerase_ratio": 0.007372123974219172,
+      "p95_residual_ratio": 0.33793644579667487
+    },
+    "candidate_summary": {
+      "max_overerase_ratio": 0.010381593714927048,
+      "max_residual_ratio": 0.5886473304623048,
+      "mean_overerase_ratio": 0.0030891541790281146,
+      "mean_residual_ratio": 0.11674289306173857,
+      "p95_overerase_ratio": 0.007372123974219172,
+      "p95_residual_ratio": 0.3367818610042459
+    },
+    "decision": "reject",
+    "failed_checks": [
+      {
+        "count": 1,
+        "files": [
+          "179.jpg"
+        ],
+        "name": "no_page_residual_regressions",
+        "passed": false
+      }
+    ],
+    "overerase_regression_pages": [],
+    "protocol": "fixed_heldout_candidate_metric_gate",
+    "residual_regression_pages": [
+      "179.jpg"
+    ],
+    "sample_count": 115
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "source_candidate_summary": {
+    "baseline_overerase_ratio": 0.003089154179028114,
+    "baseline_residual_ratio": 0.11813039572882837,
+    "candidate_overerase_ratio": 0.003089154179028114,
+    "candidate_residual_ratio": 0.11674289306173857,
+    "changed_px": 1023197,
+    "mask_px": 1396321,
+    "max_page_overerase_delta": 0.0,
+    "min_page_residual_gain": -0.00024994764610115905,
+    "overerase_delta": 0.0,
+    "pages": 115,
+    "residual_gain": 0.0013875026670898
+  },
+  "state": "killed_after_scut115_gate",
+  "terminal_result": {
+    "reason": "The fixed source-edge primary-edit source candidate improved SCUT115 aggregate and tail residual metrics with zero overerase regression, but failed the no-page-residual-regression rule on 179.jpg.",
+    "terminal": "KILL"
+  },
+  "terminal_successors": {
+    "KILL": "close source_edge_primary_edit_lift_v1 without source-edge threshold, primary-edit floor, alpha, lift-cap, component-size, kernel, page-specific, or held-out rescue",
+    "PASS": "not reached; would have required reserved-blind protocol only after SCUT115 and holdout40 both passed",
+    "PREREQUISITE_NEEDED": "not applicable after rebuilt SCUT115 baseline prediction surface completed"
+  }
+}
