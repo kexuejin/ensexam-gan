@@ -1205,12 +1205,60 @@
       {
         "path": "outputs/stroke-only-patch-suppression-exact-candidate-local-absence-20260816/audit.json",
         "sha256": "ea6c7c89852f62ed7ceb94f2eecab2e80f2194bd9e55d7d1edc72a560de05ff9"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-source-dark-thin-component-lift-source-candidate-kill.md",
+        "sha256": "33f58c81e068e7ffe6459f98dc80b712862023d16198fbd9895aacf8c70895cd"
+      },
+      {
+        "path": "docs/source-dark-thin-component-lift-source-candidate-v1.json",
+        "sha256": "4af6d2620564a08e3938c8b164ac603ff118e42ed9061093519c3117a0b912d0"
+      },
+      {
+        "path": "scripts/analysis/materialize_source_dark_thin_component_candidate.py",
+        "sha256": "997c5ac660bdd57df0d656597eff13540480217a50b0bb68fabea200a5f302d7"
+      },
+      {
+        "path": "tests/test_materialize_source_dark_thin_component_candidate.py",
+        "sha256": "312526fa6536ac6485505c92e8f90f3d66d91b4e922ebbd2bc070271c78ba959"
+      },
+      {
+        "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/summary.json",
+        "sha256": "e7fabe1e35b4dd8c1de319decb37d41c872d5b54e298d7d2b7daef4db65651fd"
+      },
+      {
+        "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/diagnostics.csv",
+        "sha256": "57f7ba93f1cae315d3d65f518a9ea62376128ded7b7fb9d86cd33c9c3745fb58"
+      },
+      {
+        "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/review_rows.csv",
+        "sha256": "e7931ae5cb448e006687847e94f1225fa886595e5776fa592d4efa9dfcb6733b"
+      },
+      {
+        "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/thin_strict_review_rows.csv",
+        "sha256": "a77288badbd43c078292279ef45c5794ad2604604350191da816f40a12a80c0e"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/summary.json",
+        "sha256": "ffc1bb2a36f100926590e01d4cb40b873f3f275868ba577d2c7c2e4be4400f48"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/diagnostics.csv",
+        "sha256": "25f286b1ce976115e6e3efba344533e248ec39a6396cb52ddaf8bdfef893bc43"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/review_rows.csv",
+        "sha256": "3f9f402ab92ee845d9729ac445e055b246dda9e11a580d2e78540774f38b2687"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/metric_summary.json",
+        "sha256": "b7d91757eca77a8d1f006420547493146b68efb429980d4d07bb2fe4be3d9284"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "preregister a materially different available train-only source candidate for stroke-only patch suppression; keep exact historical candidate restoration closed unless candidate/166.png, candidate/190.png, and candidate/192.png are externally supplied and hash-audited, and keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "preregister a qualitatively different available train-only source candidate for stroke-only patch suppression that is not source_dark_local_paper_lift_v1 or source_dark_thin_component_lift_v1; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1578,6 +1626,11 @@
         "detail": "A current-state custody recheck proves the exact selector-replay train160 candidate PNGs for 166/190/192 are still locally absent: 9 required source/baseline/target paths are present, 3 candidate_pred paths are missing, and no training, candidate inference, quality gate, reserved blind, promotion, or current-primary replacement opened. Stale pred paths, review-pack composites, and the KILLed source_dark_local_paper_lift_v1 outputs are not valid substitutes."
       },
       {
+        "id": "source_dark_thin_component_lift_source_candidate_train_only_preflight",
+        "status": "passed",
+        "detail": "A materially different target-free train160 thin-component source candidate was materialized from source plus current-primary baseline and passed through registered stroke-only suppression, but the family was KILLed before validation: the best source residual gain was 0.00053704756837084 with overerase delta 0.0005898335588607433, while the strict positive-gain route had only 0.00002356978216212317 residual gain with 0.00011767388035046628 overerase delta; stroke-only soft/balanced reduced overerase but produced negative residual gain. No model training, validation gate, SCUT115, holdout40, reserved blind, promotion, or current-primary replacement opened."
+      },
+      {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
         "detail": "Pending behind source-candidate custody: selected train160 rows 166/190/192 have source/target files, restored current-primary baseline predictions, and selector-replay-aligned review CSV paths, but the exact historical candidate PNGs under candidate/ remain locally absent. Preregister a materially different available train-only source candidate before running the stroke-only generator; exact restoration may reopen only if the historical PNGs are externally supplied and hash-audited."
@@ -1668,7 +1721,16 @@
       "source_dark_local_paper_lift_v1_scut115",
       "source_dark_local_paper_lift_v1_holdout40",
       "source_dark_local_paper_lift_v1_reserved_blind",
-      "source_dark_local_paper_lift_v1_promotion"
+      "source_dark_local_paper_lift_v1_promotion",
+      "source_dark_thin_component_lift_v1_repeat",
+      "source_dark_thin_component_lift_v1_threshold_alpha_area_kernel_or_variant_rescue",
+      "source_dark_thin_component_lift_v1_stroke_only_variant_tuning",
+      "source_dark_thin_component_lift_v1_inner_val15",
+      "source_dark_thin_component_lift_v1_development_gate",
+      "source_dark_thin_component_lift_v1_scut115",
+      "source_dark_thin_component_lift_v1_holdout40",
+      "source_dark_thin_component_lift_v1_reserved_blind",
+      "source_dark_thin_component_lift_v1_promotion"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -3831,6 +3893,62 @@
       "outcome": "exact_selector_replay_train160_candidate_pngs_remain_locally_absent_after_current_state_recheck",
       "repeat_policy": "do_not_chase_stale_pred_paths_review_pack_composites_or_killed_local_paper_outputs; preregister_a_materially_different_available_train_only_source_candidate_or_require_external_exact_png_restoration_with_hash_audit",
       "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-source-dark-thin-component-lift-source-candidate-kill.md",
+          "sha256": "33f58c81e068e7ffe6459f98dc80b712862023d16198fbd9895aacf8c70895cd"
+        },
+        {
+          "path": "docs/source-dark-thin-component-lift-source-candidate-v1.json",
+          "sha256": "4af6d2620564a08e3938c8b164ac603ff118e42ed9061093519c3117a0b912d0"
+        },
+        {
+          "path": "scripts/analysis/materialize_source_dark_thin_component_candidate.py",
+          "sha256": "997c5ac660bdd57df0d656597eff13540480217a50b0bb68fabea200a5f302d7"
+        },
+        {
+          "path": "tests/test_materialize_source_dark_thin_component_candidate.py",
+          "sha256": "312526fa6536ac6485505c92e8f90f3d66d91b4e922ebbd2bc070271c78ba959"
+        },
+        {
+          "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/summary.json",
+          "sha256": "e7fabe1e35b4dd8c1de319decb37d41c872d5b54e298d7d2b7daef4db65651fd"
+        },
+        {
+          "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/diagnostics.csv",
+          "sha256": "57f7ba93f1cae315d3d65f518a9ea62376128ded7b7fb9d86cd33c9c3745fb58"
+        },
+        {
+          "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/review_rows.csv",
+          "sha256": "e7931ae5cb448e006687847e94f1225fa886595e5776fa592d4efa9dfcb6733b"
+        },
+        {
+          "path": "outputs/source-dark-thin-component-candidate-train160-20260816-v1/thin_strict_review_rows.csv",
+          "sha256": "a77288badbd43c078292279ef45c5794ad2604604350191da816f40a12a80c0e"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/summary.json",
+          "sha256": "ffc1bb2a36f100926590e01d4cb40b873f3f275868ba577d2c7c2e4be4400f48"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/diagnostics.csv",
+          "sha256": "25f286b1ce976115e6e3efba344533e248ec39a6396cb52ddaf8bdfef893bc43"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/review_rows.csv",
+          "sha256": "3f9f402ab92ee845d9729ac445e055b246dda9e11a580d2e78540774f38b2687"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-thin-strict-source-preflight-20260816/metric_summary.json",
+          "sha256": "b7d91757eca77a8d1f006420547493146b68efb429980d4d07bb2fe4be3d9284"
+        }
+      ],
+      "id": "source-dark-thin-component-lift-source-candidate-kill",
+      "outcome": "target_free_thin_component_source_candidate_and_registered_stroke_only_variants_failed_preserve_first_train_only_preflight",
+      "repeat_policy": "do_not_repeat_or_rescue_with_source_dark_threshold_alpha_component_area_kernel_or_stroke_only_variant_tuning; preregister_a_qualitatively_different_available_train_only_source_candidate",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1

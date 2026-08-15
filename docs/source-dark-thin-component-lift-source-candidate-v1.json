@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "state": "killed_after_train_only_preflight",
+  "iteration_id": "monotonic-residual-erase-support",
+  "family": "source_dark_thin_component_lift_source_candidate_v1",
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "causal_change": "Create a target-free train-only source candidate by lifting only small connected components where the original source is dark and the current-primary baseline remains locally dark, then pass the strictest candidate through registered stroke-only suppression.",
+  "why_materially_different": [
+    "Does not depend on missing selector-replay candidate PNGs.",
+    "Rejects large connected components instead of the prior local-paper lift's broad source-dark dilation.",
+    "Uses no external text-layout detector, learned edit head, target pixels during generation, or validation surface."
+  ],
+  "authorization": {
+    "model_training": false,
+    "checkpoint_generation": false,
+    "source_candidate_materialization": "train160_only",
+    "stroke_only_materialization": "train160_only",
+    "inner_val15": false,
+    "development_gate": false,
+    "scut115": false,
+    "holdout40": false,
+    "reserved_blind": false,
+    "visual_review": false,
+    "promotion": false,
+    "current_primary_replacement": false
+  },
+  "generation_inputs": {
+    "source_image": "target_free_original_input",
+    "baseline_prediction": "current_primary_or_registered_baseline_prediction",
+    "target_image": "read_only_after_candidate_write_for_train_only_scoring",
+    "allowed_splits": [
+      "train",
+      "train160"
+    ]
+  },
+  "fixed_variants": {
+    "thin_strict": {
+      "source_dark": 90,
+      "baseline_dark": 190,
+      "local_dark_delta": 20,
+      "seed_lift_floor": 10,
+      "max_lift": 16,
+      "alpha": 0.25,
+      "min_component_area": 2,
+      "max_component_area": 20,
+      "local_median_kernel": 81
+    },
+    "thin_mid": {
+      "source_dark": 110,
+      "baseline_dark": 205,
+      "local_dark_delta": 16,
+      "seed_lift_floor": 8,
+      "max_lift": 24,
+      "alpha": 0.25,
+      "min_component_area": 2,
+      "max_component_area": 50,
+      "local_median_kernel": 81
+    },
+    "thin_broad": {
+      "source_dark": 130,
+      "baseline_dark": 215,
+      "local_dark_delta": 16,
+      "seed_lift_floor": 8,
+      "max_lift": 24,
+      "alpha": 0.25,
+      "min_component_area": 2,
+      "max_component_area": 100,
+      "local_median_kernel": 81
+    }
+  },
+  "terminal_result": {
+    "terminal": "KILL",
+    "reason": "Train-only metrics showed tiny residual gains with larger overerase regressions, and registered stroke-only suppression on the strictest source candidate either preserved the overerase regression or removed the residual gain."
+  },
+  "source_candidate_metrics": {
+    "thin_strict": {
+      "residual_gain": 0.00002356978216212317,
+      "overerase_delta": 0.00011767388035046628,
+      "max_page_overerase_delta": 0.00016253379804712434,
+      "min_page_residual_gain": 0.0
+    },
+    "thin_mid": {
+      "residual_gain": 0.00023919631405886396,
+      "overerase_delta": 0.00040135030180927416,
+      "max_page_overerase_delta": 0.0005440250442406334,
+      "min_page_residual_gain": 0.0001330052537075188
+    },
+    "thin_broad": {
+      "residual_gain": 0.00053704756837084,
+      "overerase_delta": 0.0005898335588607433,
+      "max_page_overerase_delta": 0.0008508461863226827,
+      "min_page_residual_gain": 0.0002803657694962075
+    }
+  },
+  "stroke_only_metrics_on_thin_strict": {
+    "stroke_strict": {
+      "residual_gain": 0.00002356978216212317,
+      "overerase_delta": 0.00011767388035046628
+    },
+    "stroke_balanced": {
+      "residual_gain": -0.0000013754103019384771,
+      "overerase_delta": 0.00008679586642687243
+    },
+    "stroke_soft": {
+      "residual_gain": -0.000000916940201295402,
+      "overerase_delta": 0.000052701866981266776
+    }
+  },
+  "forbidden_rescues": [
+    "repeat_source_dark_thin_component_lift_v1",
+    "source_dark_thin_component_lift_v1_threshold_alpha_area_kernel_or_variant_rescue",
+    "source_dark_thin_component_lift_v1_stroke_only_variant_tuning",
+    "source_dark_thin_component_lift_v1_inner_val15",
+    "source_dark_thin_component_lift_v1_development_gate",
+    "source_dark_thin_component_lift_v1_scut115",
+    "source_dark_thin_component_lift_v1_holdout40",
+    "source_dark_thin_component_lift_v1_reserved_blind",
+    "source_dark_thin_component_lift_v1_promotion"
+  ]
+}
