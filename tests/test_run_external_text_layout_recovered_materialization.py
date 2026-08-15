@@ -24,6 +24,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         self.assertEqual(contract["schema_version"], 2)
         self.assertEqual(launcher.validate_v4_contract(launcher.ROOT)["schema_version"], 4)
         self.assertEqual(launcher.validate_v5_contract(launcher.ROOT)["schema_version"], 5)
+        self.assertEqual(launcher.validate_v6_contract(launcher.ROOT)["schema_version"], 6)
         self.assertEqual(
             launcher.materializer.sha256_file(
                 launcher.ROOT
@@ -79,7 +80,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             "79fd61278e689a0003e37a5bdf20f856184b49c8fdb3af8ad9af03a3a13c451b",
         )
 
-    def test_execution_authority_requires_v5_integration_pass(self) -> None:
+    def test_execution_authority_requires_v6_integration_pass(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             ledger_path = root / launcher.LEDGER_PATH
@@ -142,6 +143,21 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 }
             )
             ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+            with self.assertRaises(launcher.RecoveredMaterializationError):
+                launcher.validate_execution_authority(root)
+            prerequisites.extend(
+                [
+                    {
+                        "id": "external_text_layout_recovered_materializer_batched_launch_v6_preregistration",
+                        "status": "passed",
+                    },
+                    {
+                        "id": "external_text_layout_recovered_materializer_batched_launch_v6_integration",
+                        "status": "passed",
+                    },
+                ]
+            )
+            ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
             launcher.validate_execution_authority(root)
 
     def test_derived_plan_write_is_atomic_idempotent_and_fail_closed(self) -> None:
@@ -200,7 +216,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             self.assertFalse((root / "generated/effective-plan.json").exists())
             materialize.assert_not_called()
 
-    def test_launcher_calls_unchanged_materializer_with_exact_plan(self) -> None:
+    def test_launcher_calls_batched_materializer_with_exact_plan(self) -> None:
         with tempfile.TemporaryDirectory() as raw:
             root = Path(raw)
             original = root / "docs" / "plan.json"
@@ -259,7 +275,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 derived_plan_path=root / "generated/effective-plan.json",
             )
             self.assertEqual(result["terminal"], "PASS")
-            self.assertEqual(result["schema_version"], 5)
+            self.assertEqual(result["schema_version"], 6)
             self.assertEqual(result["runtime_safety"], runtime_safety)
             self.assertEqual(
                 json.loads((root / launcher.RESULT_PATH).read_text()), result
@@ -281,7 +297,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                 },
                 "evidence": {"original_plan": {"path": "docs/plan.json"}},
             }
-            terminal = {"schema_version": 5, "terminal": "PASS"}
+            terminal = {"schema_version": 6, "terminal": "PASS"}
             with (
                 mock.patch.object(
                     launcher, "validate_repository_contract", return_value=contract
@@ -363,7 +379,9 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             )
             self.assertTrue((root / launcher.RESULT_PATH).is_file())
 
-    def test_high_stable_swap_uses_growth_and_restores_shared_surfaces(self) -> None:
+    def test_high_stable_swap_uses_explicit_batch_limits_without_global_mutation(
+        self,
+    ) -> None:
         baseline = 2 * 1024**3
 
         def health(_pid: int) -> dict[str, float | int]:
@@ -381,64 +399,48 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         }
         captured: dict[str, object] = {}
 
-        def original_page(**kwargs: object) -> dict[str, float | int]:
+        def runner(**kwargs: object) -> dict[str, object]:
             captured.update(kwargs)
-            return {
-                "minimum_memory_free_percent": 63.0,
-                "peak_process_tree_rss_bytes": 10_334_617_600,
-                "peak_swap_used_bytes": 0,
-            }
-
-        def runner(**_kwargs: object) -> dict[str, object]:
             self.assertEqual(
-                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
-                launcher.FORMAL_MONITOR_INTERVAL_SECONDS,
+                kwargs["health_reader"](123)["swap_used_bytes"], 0
             )
-            self.assertEqual(
-                launcher.materializer.runtime_health(123)["swap_used_bytes"], 0
-            )
-            launcher.materializer.enforce_health_limits(
+            launcher.materializer.runtime.enforce_health_limits(
                 {
                     "memory_free_percent": 39.0,
                     "process_tree_rss_bytes": 8 * 1024**3,
                     "swap_used_bytes": 512 * 1024**2,
-                }
+                },
+                maximum_process_tree_rss_bytes=kwargs[
+                    "maximum_process_tree_rss_bytes"
+                ],
+                minimum_memory_free_percent=kwargs[
+                    "minimum_memory_free_percent"
+                ],
+                maximum_swap_used_bytes=kwargs["maximum_swap_used_bytes"],
             )
-            launcher.materializer.run_isolated_page(
-                spec={},
-                file_name="page.png",
-                source_path=Path("source.png"),
-                page_dir=Path("pages"),
-                record_path=Path("records/page.json"),
-            )
+            with kwargs["lock_factory"](Path("/lock")):
+                pass
+            kwargs["conflict_checker"]()
             return materializer_result
 
         originals = (
             launcher.materializer.runtime.exclusive_run_lock,
-            launcher.materializer.runtime_health,
-            launcher.materializer.enforce_health_limits,
-            launcher.materializer.wait_for_page_process,
-            launcher.materializer.run_isolated_page,
-            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
+            launcher.materializer.runtime.runtime_health,
+            launcher.materializer.runtime.enforce_health_limits,
+            launcher.batch_runtime.materialize,
         )
         conflicts = mock.Mock()
         simulators = mock.Mock(return_value=0)
-        with mock.patch.object(
-            launcher.materializer, "run_isolated_page", side_effect=original_page
-        ) as page:
-            patched_original = launcher.materializer.run_isolated_page
-            result, evidence = launcher.run_baseline_relative_materializer(
-                repo_root=Path("/repo"),
-                derived_plan_path=Path("/repo/effective-plan.json"),
-                health_reader=health,
-                sleeper=lambda _seconds: None,
-                materialize_runner=runner,
-                lock_factory=noop_lock,
-                conflict_checker=conflicts,
-                simulator_checker=simulators,
-            )
-            self.assertIs(launcher.materializer.run_isolated_page, patched_original)
-            page.assert_called_once()
+        result, evidence = launcher.run_baseline_relative_materializer(
+            repo_root=Path("/repo"),
+            derived_plan_path=Path("/repo/effective-plan.json"),
+            health_reader=health,
+            sleeper=lambda _seconds: None,
+            materialize_runner=runner,
+            lock_factory=noop_lock,
+            conflict_checker=conflicts,
+            simulator_checker=simulators,
+        )
         self.assertEqual(result, materializer_result)
         self.assertEqual(evidence["launch_swap_baseline_bytes"], baseline)
         self.assertEqual(evidence["launch_health"]["peak_swap_growth_bytes"], 0)
@@ -446,6 +448,15 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             evidence["materialization_health"]["peak_swap_growth_bytes"], 0
         )
         self.assertTrue(captured["reject_booted_ios_simulators"])
+        self.assertEqual(captured["batch_size"], launcher.batch_runtime.BATCH_SIZE)
+        self.assertEqual(
+            captured["batch_timeout_seconds"],
+            launcher.batch_runtime.BATCH_TIMEOUT_SECONDS,
+        )
+        self.assertEqual(
+            captured["monitor_interval_seconds"],
+            launcher.FORMAL_MONITOR_INTERVAL_SECONDS,
+        )
         self.assertEqual(
             captured["maximum_process_tree_rss_bytes"],
             launcher.FORMAL_MAX_PROCESS_TREE_RSS_BYTES,
@@ -453,15 +464,13 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
         self.assertEqual(
             (
                 launcher.materializer.runtime.exclusive_run_lock,
-                launcher.materializer.runtime_health,
-                launcher.materializer.enforce_health_limits,
-                launcher.materializer.wait_for_page_process,
-                launcher.materializer.run_isolated_page,
-                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
+                launcher.materializer.runtime.runtime_health,
+                launcher.materializer.runtime.enforce_health_limits,
+                launcher.batch_runtime.materialize,
             ),
             originals,
         )
-        self.assertEqual(conflicts.call_count, 3)
+        self.assertEqual(conflicts.call_count, 4)
         self.assertEqual(simulators.call_count, 3)
         launcher.validate_runtime_safety(evidence)
 
@@ -492,7 +501,7 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             )
         runner.assert_not_called()
 
-    def test_runtime_swap_growth_terminates_and_restores_shared_surfaces(self) -> None:
+    def test_runtime_swap_growth_terminates_the_batch(self) -> None:
         baseline = 2 * 1024**3
         calls = 0
 
@@ -513,18 +522,25 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             def is_alive(self) -> bool:
                 return True
 
-        def runner(**_kwargs: object) -> dict[str, object]:
-            launcher.materializer.wait_for_page_process(Process())
-            raise AssertionError("runtime growth should terminate the page")
+            def join(self, timeout: float | None = None) -> None:
+                del timeout
 
-        originals = (
-            launcher.materializer.runtime.exclusive_run_lock,
-            launcher.materializer.runtime_health,
-            launcher.materializer.enforce_health_limits,
-            launcher.materializer.wait_for_page_process,
-            launcher.materializer.run_isolated_page,
-            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
-        )
+        def runner(**kwargs: object) -> dict[str, object]:
+            launcher.batch_runtime.wait_for_batch_process(
+                Process(),
+                health_reader=kwargs["health_reader"],
+                maximum_process_tree_rss_bytes=kwargs[
+                    "maximum_process_tree_rss_bytes"
+                ],
+                minimum_memory_free_percent=kwargs[
+                    "minimum_memory_free_percent"
+                ],
+                maximum_swap_used_bytes=kwargs["maximum_swap_used_bytes"],
+                batch_timeout_seconds=kwargs["batch_timeout_seconds"],
+                monitor_interval_seconds=kwargs["monitor_interval_seconds"],
+            )
+            raise AssertionError("runtime growth should terminate the batch")
+
         with mock.patch.object(
             launcher.materializer.runtime, "terminate_page_process"
         ) as terminate:
@@ -540,17 +556,6 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                     simulator_checker=lambda: 0,
                 )
             terminate.assert_called_once()
-        self.assertEqual(
-            (
-                launcher.materializer.runtime.exclusive_run_lock,
-                launcher.materializer.runtime_health,
-                launcher.materializer.enforce_health_limits,
-                launcher.materializer.wait_for_page_process,
-                launcher.materializer.run_isolated_page,
-                launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS,
-            ),
-            originals,
-        )
 
     def test_runtime_safety_validation_rejects_nonfinite_and_recovery_drift(self) -> None:
         evidence = {
@@ -608,16 +613,38 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             def is_alive(self) -> bool:
                 return True
 
-        def runner(**_kwargs: object) -> dict[str, object]:
-            launcher.materializer.enforce_health_limits(
+            def join(self, timeout: float | None = None) -> None:
+                del timeout
+
+        def runner(**kwargs: object) -> dict[str, object]:
+            launcher.materializer.runtime.enforce_health_limits(
                 {
                     "memory_free_percent": 39.0,
                     "process_tree_rss_bytes": 1024,
                     "swap_used_bytes": 0,
-                }
+                },
+                maximum_process_tree_rss_bytes=kwargs[
+                    "maximum_process_tree_rss_bytes"
+                ],
+                minimum_memory_free_percent=kwargs[
+                    "minimum_memory_free_percent"
+                ],
+                maximum_swap_used_bytes=kwargs["maximum_swap_used_bytes"],
             )
-            launcher.materializer.wait_for_page_process(Process())
-            raise AssertionError("free memory below the formal floor should terminate")
+            launcher.batch_runtime.wait_for_batch_process(
+                Process(),
+                health_reader=kwargs["health_reader"],
+                maximum_process_tree_rss_bytes=kwargs[
+                    "maximum_process_tree_rss_bytes"
+                ],
+                minimum_memory_free_percent=kwargs[
+                    "minimum_memory_free_percent"
+                ],
+                maximum_swap_used_bytes=kwargs["maximum_swap_used_bytes"],
+                batch_timeout_seconds=kwargs["batch_timeout_seconds"],
+                monitor_interval_seconds=kwargs["monitor_interval_seconds"],
+            )
+            raise AssertionError("free memory below the floor should terminate")
 
         with mock.patch.object(
             launcher.materializer.runtime, "terminate_page_process"
@@ -656,8 +683,23 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
             def is_alive(self) -> bool:
                 return True
 
-        def runner(**_kwargs: object) -> dict[str, object]:
-            launcher.materializer.wait_for_page_process(Process())
+            def join(self, timeout: float | None = None) -> None:
+                del timeout
+
+        def runner(**kwargs: object) -> dict[str, object]:
+            launcher.batch_runtime.wait_for_batch_process(
+                Process(),
+                health_reader=kwargs["health_reader"],
+                maximum_process_tree_rss_bytes=kwargs[
+                    "maximum_process_tree_rss_bytes"
+                ],
+                minimum_memory_free_percent=kwargs[
+                    "minimum_memory_free_percent"
+                ],
+                maximum_swap_used_bytes=kwargs["maximum_swap_used_bytes"],
+                batch_timeout_seconds=kwargs["batch_timeout_seconds"],
+                monitor_interval_seconds=kwargs["monitor_interval_seconds"],
+            )
             raise AssertionError("RSS above the formal limit should terminate")
 
         with mock.patch.object(
@@ -675,9 +717,6 @@ class RunExternalTextLayoutRecoveredMaterializationTest(unittest.TestCase):
                     simulator_checker=lambda: 0,
                 )
             terminate.assert_called_once()
-        self.assertEqual(
-            launcher.materializer.runtime.MONITOR_INTERVAL_SECONDS, 1.0
-        )
 
 
 if __name__ == "__main__":

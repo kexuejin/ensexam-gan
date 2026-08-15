@@ -793,12 +793,20 @@
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-batched-launch-v6-preregistration.md",
         "sha256": "ad6051c789edc96ce56a55dc021f892108cc67c1462e679a17ed2787139a69eb"
+      },
+      {
+        "path": "docs/external-text-layout-recovered-materializer-batched-launch-v6-integration-verification-20260815.json",
+        "sha256": "f8a7037f0179bd0108470b69a216f57d55cb8ef172bc8c6479b5d0d258531a0c"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-recovered-materializer-batched-launch-v6-integration-pass.md",
+        "sha256": "7e8c6c17f3d5b72daaa67b7cf02f744e164a92c8579f221b7fb8f8ec7adcbd50"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "Commit and push the launcher v6 preregistration, then implement only the fixed eight-page CPU batch runtime, launcher schema-v6 integration, and synthetic tests. Preserve exact source order, the eight retained page/record hashes, unchanged create_detector/materialize_one/atomic record/final manifest behavior, one child process, 70% locked launch readiness, the formal 35% runtime free-memory floor, 10 GiB RSS cap, 0.25-second monitoring, 512 MiB launch-relative swap-growth termination, 900-second batch timeout, Simulator recheck, and exact 39d5 plan. Do not resume from hw5k_1214 until v6 integration PASS is pushed and the v5-created 746460283-byte swap growth has cleared through host recovery or restart. Require schema-v6 PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS; diagnostic and quality surfaces remain closed.",
+    "next_action": "Commit and push the launcher v6 integration PASS. Then wait for host recovery or perform a deliberate clean restart so the v5-created 746460283-byte swap growth is not absorbed into the launch baseline. Recheck zero Booted iOS Simulators, zero conflicting model processes, at least 70 percent free memory, and clean stable swap; only then resume from hw5k_1214 with the exact project Python 3.13 executable and four thread caps set to one. Preserve exact source order, all eight retained page/record hashes, fixed eight-page CPU batches, one child process, the formal 35 percent runtime free-memory floor, 10 GiB RSS cap, 0.25-second monitoring, 512 MiB launch-relative swap-growth termination, 900-second batch timeout, and exact 39d5 plan. Require schema-v6 PASS, 275 NPZ hashes, exact manifest binding, zero residual process, and no transaction residue before materialization PASS; diagnostic and quality surfaces remain closed.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1048,6 +1056,11 @@
       {
         "detail": "The pushed v5 launcher correctly terminated page-nine detector loading when task-attributable swap growth reached 746460283 bytes, above the formal 512 MiB limit. Free memory recovered to 72%, no model process remained, and the exact eight-page resume state is unchanged. V6 freezes one CPU child per fixed batch of at most eight serial pages, one detector creation per child, unchanged atomic page/record and final-manifest semantics, and all existing launch/runtime limits. Only implementation and synthetic verification are open; model resume is closed until v6 integration PASS is pushed and the v5-created swap growth is no longer present in the host baseline.",
         "id": "external_text_layout_recovered_materializer_batched_launch_v6_preregistration",
+        "status": "passed"
+      },
+      {
+        "detail": "V6 passed 23 focused and 132 complete external-layout tests in Python 3.13.1 and 3.10.11 plus dual-runtime compile checks. One detector serves each fixed batch of at most eight serial CPU pages; partial records, orphan recovery, exact source order, shared final-manifest semantics, single-child execution, Simulator recheck, and process-group termination for RSS, free-memory, swap, and timeout are locked. Shared hashes and all eight retained page/record pairs remained exact after a schema-v6 closed-authority probe. Resume from hw5k_1214 is authorized only after this PASS is pushed and the v5-created 746460283-byte swap growth has cleared through host recovery or restart.",
+        "id": "external_text_layout_recovered_materializer_batched_launch_v6_integration",
         "status": "passed"
       }
     ],

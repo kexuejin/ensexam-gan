@@ -1,0 +1,79 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": true,
+    "model_execution": "frozen_target_free_cpu_detector_only_after_clean_host_readiness",
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_launcher_v6_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-recovered-materializer-batched-launch-v6.json",
+    "sha256": "6a47d124168b6a49b37c71a30f5ca670cdf532cb19562ebc32ebd24ab98aecf2"
+  },
+  "implementation": {
+    "batch_runtime_sha256": "057e0fec7eb0b6adfb43135dee66e3277c142c34fc7d98c2ba4b3a5a22669e2f",
+    "batch_runtime_test_sha256": "fbec10f38613643ae093b26e410a66132cb49f8a96ef9740700d36f56de1b29a",
+    "launcher_sha256": "b058013e3ecbcc5c26d7fb88d7913cb7721ddb61c7dd8fd6368f5267f59d1d59",
+    "launcher_test_sha256": "fe2536ae3b382738a12dbe3a0c834b834d34b5aa777764f3df7c241c08e3875b",
+    "shared_materializer_sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf",
+    "shared_materializer_test_sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2",
+    "shared_runtime_sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+  },
+  "limits": {
+    "batch_size": 8,
+    "batch_timeout_seconds": 900.0,
+    "launch_memory_free_percent_min": 70.0,
+    "launch_process_tree_rss_bytes_max": 8589934592,
+    "runtime_memory_free_percent_min": 35.0,
+    "runtime_monitor_interval_seconds": 0.25,
+    "runtime_process_tree_rss_bytes_max": 10737418240,
+    "runtime_swap_growth_bytes_max": 536870912,
+    "worker_count": 1
+  },
+  "retained_resume_state": {
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "launcher_result_present": false,
+    "next_file": "hw5k_1214.jpg",
+    "pages_content_sha256": "6f64c927663e0882d3f2780ad8ec88115d529985a0a4b691a525485642eb1bcf",
+    "pages_count": 8,
+    "pages_filename_sha256": "2c6159ca8199e3f9a89d402619601742b85022854eaf4b380513da394c8fa2ae",
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "94a06c2bd2a2a7f00c4ce2fd4d02b46805e2425fe27a27d2631e239e73ab2691",
+    "records_count": 8,
+    "records_filename_sha256": "3532ac52ceb6796be1c5f074d3e5c1ecbc018ca386d52dd19efa0d016f9c7a60"
+  },
+  "verification": {
+    "batch_semantics": {
+      "completed_records_retained_after_partial_failure": true,
+      "detector_factory_calls_for_exact_eight_pages": 1,
+      "expected_detector_loads_for_267_remaining_pages": 34,
+      "final_manifest_uses_shared_builder": true,
+      "fixed_source_order": true,
+      "orphan_npz_recovery_uses_shared_prepare_resume_state": true,
+      "single_spawn_child_per_batch": true
+    },
+    "closed_authority_probe": {
+      "changed_resume_state": false,
+      "exit_code": 2,
+      "schema_version": 6,
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    "complete_external_layout_tests": {
+      "python_3_10_11": "132_passed",
+      "python_3_13_1": "132_passed"
+    },
+    "compile_check": "passed_both_runtimes",
+    "diff_check": "passed",
+    "focused_tests": {
+      "python_3_10_11": "23_passed",
+      "python_3_13_1": "23_passed"
+    },
+    "no_model_process_after_verification": true,
+    "resource_termination": "rss_free_memory_swap_growth_and_timeout_each_use_process_group_termination",
+    "safety_parameters_cannot_be_weakened": true,
+    "shared_hashes_unchanged": true
+  },
+  "next_action": "Commit and push this integration PASS. Do not absorb the v5-created 746460283-byte swap growth into a new launch baseline. After host recovery or a deliberate clean restart, require zero Booted iOS Simulators, zero conflicting model processes, at least 70 percent free memory, and a clean stable swap state; then resume from hw5k_1214 with the exact project Python 3.13 executable and four thread caps set to one. Require schema-v6 PASS, exact 39d5 plan binding, all 275 NPZ hashes, zero residual model processes, and no transaction residue before materialization PASS.",
+  "schema_version": 6,
+  "terminal": "PASS"
+}
