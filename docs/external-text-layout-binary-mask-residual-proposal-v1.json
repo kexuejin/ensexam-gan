@@ -1,0 +1,98 @@
+{
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "state": "preflight_only",
+    "visual_review": false
+  },
+  "binary_mask_projection": {
+    "calibration_source": "none_binary_mask",
+    "delta_bound_gray": 20.4,
+    "direction_enforcement": "nonnegative_rgb_only",
+    "input_channels": [
+      "external_text_occupancy"
+    ],
+    "mask_formula": "external_text_occupancy_equals_one",
+    "output_channels": 3,
+    "target_access_at_application": false,
+    "training": false
+  },
+  "causal_change": "replace the killed score-based external-layout projections with a deterministic binary external-text occupancy mask used as the only train-role residual support signal, judged before any candidate surface opens",
+  "evidence": {
+    "incremental_support_diagnostic": {
+      "path": "outputs/external-text-layout-incremental-support-residual-diagnostic-20260815/audit.json",
+      "sha256": "80c15c71e0e878a081a65c2fbcb81c51319b05857758c0788e4e9491dd8194c1"
+    },
+    "incremental_support_kill_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-incremental-support-residual-reachability-kill.md",
+      "sha256": "74d95f8bcc2cae0a886a4030bbed8610a6162618861a23c59b982e596be72a37"
+    },
+    "registered_patch_index": {
+      "path": "hardcase_lists/external-text-layout-conditioned-monotonic-train-patches-v1.csv",
+      "sha256": "68d3099cfc1023593ef9558e8c356ba5eb6100ac34964767cbdd605325f5f10a"
+    },
+    "support_diagnostic": {
+      "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+      "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+    },
+    "support_diagnostic_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md",
+      "sha256": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+    }
+  },
+  "family": "external_text_layout_binary_mask_residual_v1",
+  "forbidden_rescues": [
+    "detector_threshold_tuning",
+    "layout_transform_tuning",
+    "repeat_direct_support_residual_v1",
+    "repeat_incremental_support_residual_v1",
+    "binary_mask_threshold_rescue",
+    "confidence_threshold_sweep",
+    "candidate_gate_lowering",
+    "candidate_inference_before_train_only_diagnostic",
+    "scut115_before_inner_val15",
+    "holdout40_before_inner_val15",
+    "reserved_blind_before_development_gates"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "planned_outputs_must_be_absent": {
+    "binary_mask_diagnostic": "outputs/external-text-layout-binary-mask-residual-diagnostic-20260815",
+    "first_gate_candidate": "outputs/external-text-layout-binary-mask-residual-inner-val15-candidate",
+    "first_gate_score": "outputs/external-text-layout-binary-mask-residual-inner-val15-score",
+    "holdout40_candidate": "outputs/external-text-layout-binary-mask-residual-holdout40-candidate",
+    "scut115_candidate": "outputs/external-text-layout-binary-mask-residual-scut115-candidate"
+  },
+  "preflight_successors": {
+    "KILL": "close_binary_mask_residual_without_threshold_or_confidence_rescue",
+    "PASS": "authorize_train_only_binary_mask_preserve_separation_diagnostic_only",
+    "PREREQUISITE_NEEDED": "repair_registered_preflight_evidence_or_metadata_only"
+  },
+  "schema_version": 1,
+  "state": "preregistered_external_text_layout_binary_mask_residual_preflight",
+  "train_only_preserve_separation_diagnostic": {
+    "allowed_roles": [
+      "train"
+    ],
+    "candidate_inference": false,
+    "gate_threshold_gray": 12.0,
+    "maximum_preserve_gate_ratio": 0.005,
+    "minimum_positive_gate_ratio": 0.05,
+    "minimum_positive_over_preserve_gate_margin": 0.04,
+    "minimum_reachable_patch_ratio": 0.1,
+    "output_dir": "outputs/external-text-layout-binary-mask-residual-diagnostic-20260815",
+    "required_patch_count": 256,
+    "target_access": "train_labels_only_for_binary_mask_reachability_measurement",
+    "validation_roles_forbidden": [
+      "inner_val15",
+      "scut115",
+      "holdout40",
+      "reserved_blind"
+    ]
+  }
+}

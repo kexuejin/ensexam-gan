@@ -1,0 +1,97 @@
+import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import unittest
+
+import numpy as np
+
+from scripts.analysis.validate_external_text_layout_binary_mask_residual_preflight import (
+    LEDGER_PATH,
+    OUTPUT_PATH,
+    PLAN_PATH,
+    PreflightError,
+    assert_exact_plan,
+    binary_mask_to_delta_gray,
+    run_preflight,
+    run_synthetic_projection,
+    validate_ledger_authority,
+    validate_outputs_absent,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class ExternalTextLayoutBinaryMaskResidualPreflightTest(unittest.TestCase):
+    def registered_plan(self) -> dict:
+        return json.loads((ROOT / PLAN_PATH).read_text(encoding="utf-8"))
+
+    def registered_ledger(self) -> dict:
+        return json.loads((ROOT / LEDGER_PATH).read_text(encoding="utf-8"))
+
+    def test_registered_plan_contract_is_exact(self) -> None:
+        plan = self.registered_plan()
+        assert_exact_plan(plan)
+        plan["binary_mask_projection"]["mask_formula"] = "confidence_gt_zero"
+        with self.assertRaisesRegex(PreflightError, "projection"):
+            assert_exact_plan(plan)
+
+    def test_binary_mask_projection_is_nonnegative_and_bounded(self) -> None:
+        delta = binary_mask_to_delta_gray(
+            np.asarray([False, True, False, True], dtype=np.bool_),
+            delta_bound_gray=20.4,
+        )
+        np.testing.assert_allclose(delta, [0.0, 20.4, 0.0, 20.4])
+        with self.assertRaisesRegex(ValueError, "boolean"):
+            binary_mask_to_delta_gray(np.asarray([0, 1]), delta_bound_gray=20.4)
+
+    def test_synthetic_projection_reaches_gate_without_darkening(self) -> None:
+        result = run_synthetic_projection(self.registered_plan())
+        self.assertTrue(result["nonnegative"])
+        self.assertEqual(result["delta_min_gray"], 0.0)
+        self.assertEqual(result["delta_bound_gray"], 20.4)
+        self.assertEqual(result["gate_count"], result["mask_count"])
+
+    def test_ledger_requires_support_pass_and_incremental_kill(self) -> None:
+        ledger = self.registered_ledger()
+        authority = validate_ledger_authority(ROOT, ledger)
+        self.assertEqual(authority["incremental_support_terminal"], "KILL")
+        prerequisite = next(
+            item
+            for item in ledger["active_iteration"]["prerequisites"]
+            if item["id"] == "external_text_layout_incremental_support_residual_reachability_diagnostic"
+        )
+        prerequisite["status"] = "pending"
+        with self.assertRaisesRegex(PreflightError, "incremental_support"):
+            validate_ledger_authority(ROOT, ledger)
+
+    def test_registered_preflight_artifact_passed_without_opening_candidate_surface(self) -> None:
+        result = json.loads((ROOT / OUTPUT_PATH).read_text(encoding="utf-8"))
+        self.assertEqual(result["terminal"], "PASS", result)
+        self.assertFalse(result["model_training_started"])
+        self.assertFalse(result["candidate_inference_started"])
+        self.assertFalse(result["quality_gate_started"])
+        self.assertFalse(result["promotion_enabled"])
+        self.assertFalse(result["target_decode"])
+
+    def test_live_preflight_rerun_fails_closed_after_diagnostic_output_exists(self) -> None:
+        result = run_preflight(repo_root=ROOT)
+        self.assertEqual(result["terminal"], "PREREQUISITE_NEEDED", result)
+        self.assertIn("planned output must be absent", result["reason"])
+
+    def test_existing_planned_output_fails_closed(self) -> None:
+        with TemporaryDirectory() as raw:
+            root = Path(raw)
+            existing = root / "candidate"
+            existing.mkdir()
+            plan = {
+                "planned_outputs_must_be_absent": {
+                    "first_gate_candidate": "candidate"
+                }
+            }
+            with self.assertRaisesRegex(PreflightError, "must be absent"):
+                validate_outputs_absent(root, plan)
+
+
+if __name__ == "__main__":
+    unittest.main()
