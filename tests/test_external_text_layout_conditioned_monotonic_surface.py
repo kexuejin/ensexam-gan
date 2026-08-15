@@ -169,6 +169,8 @@ class ExternalTextLayoutConditionedMonotonicSurfaceTest(unittest.TestCase):
         self.assertEqual(payload["args"]["model_type"], MODEL_TYPE)
         self.assertEqual(payload["args"]["mask_source"], MASK_SOURCE)
         self.assertEqual(payload["args"]["input_channels"], CONDITIONED_INPUT_CHANNELS)
+        self.assertEqual(payload["args"]["data_root"], "data")
+        self.assertNotIsInstance(payload["args"]["data_root"], Path)
         self.assertFalse(payload["args"]["validation_enabled"])
 
     def test_candidate_surface_keeps_target_free_layout_required_contract(self) -> None:

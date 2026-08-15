@@ -38,6 +38,7 @@ SUPPORT_PREREQUISITE_ID = "external_text_layout_support_train_only_diagnostic"
 PATCH_MATERIALIZATION_ID = (
     "external_text_layout_conditioned_monotonic_patch_materialization"
 )
+CHECKPOINT_AUDIT_ID = "external_text_layout_conditioned_monotonic_checkpoint_audit"
 
 EXPECTED_AUTHORIZATION = {
     "candidate_inference": False,
@@ -246,6 +247,10 @@ def validate_ledger_authority(ledger: dict[str, Any]) -> dict[str, Any]:
         "active_iteration": active.get("id"),
         "conditioned_patch_materialization_status": prerequisites.get(
             PATCH_MATERIALIZATION_ID,
+            "not_started",
+        ),
+        "conditioned_checkpoint_audit_status": prerequisites.get(
+            CHECKPOINT_AUDIT_ID,
             "not_started",
         ),
         "support_diagnostic_status": prerequisites.get(SUPPORT_PREREQUISITE_ID),
@@ -493,12 +498,18 @@ def validate_outputs_absent(
     plan: dict[str, Any],
     *,
     allow_materialized_patch_index: bool = False,
+    allow_checkpoint_audit: bool = False,
 ) -> list[str]:
     absent: list[str] = []
     for label, value in sorted(plan["planned_outputs_must_be_absent"].items()):
         if allow_materialized_patch_index and label in {
             "patch_index",
             "patch_index_summary_dir",
+        }:
+            continue
+        if allow_checkpoint_audit and label in {
+            "checkpoint_audit",
+            "training_output_dir",
         }:
             continue
         path = repo_path(repo_root, value, f"planned output {label}")
@@ -528,10 +539,14 @@ def run_preflight(
         patch_materialized = (
             authority["conditioned_patch_materialization_status"] == "passed"
         )
+        checkpoint_audited = (
+            authority["conditioned_checkpoint_audit_status"] == "passed"
+        )
         absent = validate_outputs_absent(
             repo_root,
             plan,
             allow_materialized_patch_index=patch_materialized,
+            allow_checkpoint_audit=checkpoint_audited,
         )
     except (KeyError, OSError, PreflightError, TypeError, ValueError) as error:
         return {
@@ -543,7 +558,7 @@ def run_preflight(
         "application": application,
         "authority": authority,
         "candidate_inference_started": False,
-        "checkpoint_generated": False,
+        "checkpoint_generated": checkpoint_audited,
         "planned_outputs_absent": absent,
         "patch_index_materialized": patch_materialized,
         "plan": str(resolved_plan),
@@ -558,7 +573,7 @@ def run_preflight(
         "synthetic_preflight": synthetic,
         "target_decode": False,
         "terminal": "PASS",
-        "training_started": False,
+        "training_started": checkpoint_audited,
     }
 
 

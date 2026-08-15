@@ -1,0 +1,65 @@
+{
+  "absent_quality_outputs": [
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-candidate",
+    "/Volumes/Tool/source/ensexam-gan/outputs/external-text-layout-conditioned-monotonic-inner-val15-score"
+  ],
+  "authority": {
+    "patch_materialization": "passed",
+    "preflight": "passed",
+    "support": "passed",
+    "surface": "passed"
+  },
+  "candidate_inference_started": false,
+  "checkpoint": "/Volumes/Tool/source/ensexam-gan/artifacts/trials/external-text-layout-conditioned-monotonic-v1/external_text_layout_conditioned_monotonic.pt",
+  "checkpoint_sha256": "c204d53405db11f4333bfa308c2cf9fc832aa8134fd089d29ff8531b28b94cad",
+  "history": "/Volumes/Tool/source/ensexam-gan/artifacts/trials/external-text-layout-conditioned-monotonic-v1/conditioned_monotonic_loss_history.csv",
+  "history_sha256": "a40e49d0214d8f9b963388ce66b5d3f8af84601c2d91382960932ce1097c191f",
+  "history_summary": {
+    "final_bright_magnitude_l1": 0.06779844,
+    "final_loss": 1.41070092,
+    "final_preserve_delta_l1": 0.00343905,
+    "final_step": 80,
+    "first_loss": 1.45080352,
+    "loss_delta": -0.04010259999999999,
+    "row_count": 80
+  },
+  "outcome": "conditioned_checkpoint_subthreshold_noop_before_candidate_gate",
+  "patch_summary": {
+    "max_delta_gray": 1.3735393285751343,
+    "min_delta_gray": 0.1869974285364151,
+    "negative_delta_pixel_count": 0,
+    "outcome": "conditioned_checkpoint_subthreshold_noop_before_candidate_gate",
+    "patch_count": 256,
+    "patches_with_gate": 0,
+    "positive_alpha_mean": 0.4992626172400917,
+    "positive_delta_mean_gray": 1.0067785496371522,
+    "positive_gate_ratio": 0.0,
+    "positive_pixels": 10932547,
+    "positive_support_ratio": 0.5607952108506828,
+    "preserve_alpha_mean": 0.4744748830948219,
+    "preserve_delta_mean_gray": 1.0056367144946532,
+    "preserve_gate_ratio": 0.0,
+    "preserve_pixels": 5844669,
+    "preserve_support_ratio": 0.07376208986342939,
+    "terminal": "KILL"
+  },
+  "plan": "/Volumes/Tool/source/ensexam-gan/docs/external-text-layout-conditioned-monotonic-preflight-v1.json",
+  "plan_sha256": "16671dc4d1afa6d1740702c709dad058a5bcc30e5a4282407c49c6fd979e9aae",
+  "promotion_enabled": false,
+  "quality_gate_started": false,
+  "repeat_policy": "do_not_repeat_conditioned_monotonic_v1_training_or_rescue_thresholds",
+  "reserved_blind_state": "unavailable",
+  "runnable": true,
+  "schema_version": 1,
+  "status": "kill",
+  "structural": {
+    "checkpoint_loader": "torch_default_weights_only_portable",
+    "final_step": 80,
+    "input_channels": 5,
+    "model_type": "monotonic_residual_erase",
+    "parameter_count": 385154,
+    "residual_delta_bound": 0.08
+  },
+  "terminal": "KILL",
+  "training_started": true
+}

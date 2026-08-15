@@ -342,10 +342,14 @@ def checkpoint_payload(
     args: argparse.Namespace,
     step: int,
 ) -> dict[str, object]:
+    serialized_args = {
+        key: (str(value) if isinstance(value, Path) else value)
+        for key, value in vars(args).items()
+    }
     return {
         "model": model.state_dict(),
         "args": {
-            **vars(args),
+            **serialized_args,
             "input_channels": CONDITIONED_INPUT_CHANNELS,
             "layout_source": "external_text_occupancy_confidence",
             "mask_source": MASK_SOURCE,

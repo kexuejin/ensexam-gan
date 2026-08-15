@@ -892,11 +892,11 @@
       },
       {
         "path": "scripts/analysis/validate_external_text_layout_conditioned_preflight.py",
-        "sha256": "2c94fa7afc1db8118165bf71680a5a7b2825aebf4d4b1482b65fd7af98d56c06"
+        "sha256": "bd3373e449130569d49a9aed8b840f72cd94fb6c671bbe1f501e867447bf56a7"
       },
       {
         "path": "tests/test_external_text_layout_conditioned_preflight.py",
-        "sha256": "73b570ca741b99f9349f2a804b828086bbb1b8e0c3c04fbc9772e76fdf3efea0"
+        "sha256": "d449b77e6b332843887fbae9ff3ca10d0fb0be1f33c4c933db8ed02bf35f1749"
       },
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-surface-integration-pass.md",
@@ -904,7 +904,7 @@
       },
       {
         "path": "scripts/train/train_external_text_layout_conditioned_monotonic.py",
-        "sha256": "f44666ee64b61c930f45448bb2a507ce203980397a6adb0b4e5b406b2c018d0c"
+        "sha256": "703945f8331c4ac8604fe753db99719d9b61d3044ac1ea560e9069dd019063e8"
       },
       {
         "path": "scripts/infer/run_external_text_layout_conditioned_monotonic_candidate.py",
@@ -912,7 +912,7 @@
       },
       {
         "path": "tests/test_external_text_layout_conditioned_monotonic_surface.py",
-        "sha256": "46b87a43eeecd573086600f9dc03f02070c3df893ff6941feab858546396b8f5"
+        "sha256": "57688cf741ce7744a444380089726ccf463c0c5707bddf9868acc58aaa4e2bbc"
       },
       {
         "path": "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-patch-materialization-pass.md",
@@ -945,12 +945,36 @@
       {
         "path": "tests/test_external_text_layout_conditioned_patch_materialization_audit.py",
         "sha256": "1a3458efe581b85b88ce57b08b54bb0d5c70cda8a85fa7620e870c2405ee7b5b"
+      },
+      {
+        "path": "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-checkpoint-kill.md",
+        "sha256": "acc90108dd15eda71e2677e3043f8ca01553d0ab1e3e6934afc3be68a231fced"
+      },
+      {
+        "path": "outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815/audit.json",
+        "sha256": "140ceb8c24711e7a527367761aef57c6d892c24509788f2b846121b4518b0341"
+      },
+      {
+        "path": "scripts/analysis/audit_external_text_layout_conditioned_monotonic_checkpoint.py",
+        "sha256": "c599bf4d51857cad31756be7eb51422ab893ecc42ec62cd1224f126213714cd7"
+      },
+      {
+        "path": "tests/test_external_text_layout_conditioned_checkpoint_audit.py",
+        "sha256": "e772bdd27e75c9712fa2e79af1886c9d814cdc7a5f25cf535cce50f97c54748d"
+      },
+      {
+        "path": "artifacts/trials/external-text-layout-conditioned-monotonic-v1/external_text_layout_conditioned_monotonic.pt",
+        "sha256": "c204d53405db11f4333bfa308c2cf9fc832aa8134fd089d29ff8531b28b94cad"
+      },
+      {
+        "path": "artifacts/trials/external-text-layout-conditioned-monotonic-v1/conditioned_monotonic_loss_history.csv",
+        "sha256": "a40e49d0214d8f9b963388ce66b5d3f8af84601c2d91382960932ce1097c191f"
       }
     ],
     "failure_bucket": "printed_text_layout_support_missing_from_final_rgb",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "External text-layout conditioned monotonic patch materialization PASSed: exact 256-patch train index and summary are hash-bound to recovered second-stage RGB, train labels, and frozen text-layout grids. Next, run only the registered 80-step CPU conditioned training command, then perform checkpoint audit before any candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, or threshold/resource tuning.",
+    "next_action": "External text-layout conditioned monotonic checkpoint audit KILLed the family: the exact 80-step CPU run is portable and monotonic but reaches 0/256 train patches and 0 pixels at the frozen 12-gray gate. Candidate inference, inner-val15, SCUT115, holdout40, visual review, reserved blind, promotion, and threshold/resource rescue remain closed. Next, preregister a materially different mechanism rather than tuning this path.",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1065,6 +1089,11 @@
       {
         "detail": "The exact train275 conditioned patch index was materialized and audited: 52,645 target-lighter candidates recomputed from recovered second-stage RGB and train labels, 256 top patches selected across 24 pages, frozen external text-layout occupancy/confidence hashes bound, preserve-negative coverage retained, and training/checkpoint/candidate/quality outputs remain absent.",
         "id": "external_text_layout_conditioned_monotonic_patch_materialization",
+        "status": "passed"
+      },
+      {
+        "detail": "The exact 80-step CPU conditioned monotonic checkpoint loaded through the default PyTorch path and preserved the nonnegative bound, but KILLed the family before candidate inference because all 256 train patches stayed below the frozen 12-gray application gate: max delta 1.373539 gray, positive/preserve gate ratios 0.0/0.0, and zero patches with reachable gate.",
+        "id": "external_text_layout_conditioned_monotonic_checkpoint_audit",
         "status": "passed"
       },
       {
@@ -2928,11 +2957,11 @@
         },
         {
           "path": "scripts/analysis/validate_external_text_layout_conditioned_preflight.py",
-          "sha256": "80b43319004a58391026a31e5825b0192eb562e7bb0fc4871d2f506fbaed5475"
+          "sha256": "bd3373e449130569d49a9aed8b840f72cd94fb6c671bbe1f501e867447bf56a7"
         },
         {
           "path": "tests/test_external_text_layout_conditioned_preflight.py",
-          "sha256": "73b570ca741b99f9349f2a804b828086bbb1b8e0c3c04fbc9772e76fdf3efea0"
+          "sha256": "d449b77e6b332843887fbae9ff3ca10d0fb0be1f33c4c933db8ed02bf35f1749"
         },
         {
           "path": "scripts/infer/monotonic_residual_erase.py",
@@ -2956,7 +2985,7 @@
         },
         {
           "path": "scripts/train/train_external_text_layout_conditioned_monotonic.py",
-          "sha256": "f44666ee64b61c930f45448bb2a507ce203980397a6adb0b4e5b406b2c018d0c"
+          "sha256": "703945f8331c4ac8604fe753db99719d9b61d3044ac1ea560e9069dd019063e8"
         },
         {
           "path": "scripts/infer/run_external_text_layout_conditioned_monotonic_candidate.py",
@@ -2964,7 +2993,7 @@
         },
         {
           "path": "tests/test_external_text_layout_conditioned_monotonic_surface.py",
-          "sha256": "46b87a43eeecd573086600f9dc03f02070c3df893ff6941feab858546396b8f5"
+          "sha256": "57688cf741ce7744a444380089726ccf463c0c5707bddf9868acc58aaa4e2bbc"
         }
       ],
       "id": "external-text-layout-conditioned-monotonic-surface-integration",
@@ -3004,7 +3033,7 @@
         },
         {
           "path": "scripts/analysis/validate_external_text_layout_conditioned_preflight.py",
-          "sha256": "2c94fa7afc1db8118165bf71680a5a7b2825aebf4d4b1482b65fd7af98d56c06"
+          "sha256": "bd3373e449130569d49a9aed8b840f72cd94fb6c671bbe1f501e867447bf56a7"
         },
         {
           "path": "tests/test_external_text_layout_conditioned_patch_index.py",
@@ -3016,13 +3045,53 @@
         },
         {
           "path": "tests/test_external_text_layout_conditioned_preflight.py",
-          "sha256": "73b570ca741b99f9349f2a804b828086bbb1b8e0c3c04fbc9772e76fdf3efea0"
+          "sha256": "d449b77e6b332843887fbae9ff3ca10d0fb0be1f33c4c933db8ed02bf35f1749"
         }
       ],
       "id": "external-text-layout-conditioned-monotonic-patch-materialization",
       "outcome": "exact_conditioned_train_patch_index_materialized_and_audited_without_training_or_quality_gate",
       "repeat_policy": "reuse_exact_256_patch_index_no_reselection_layout_transform_or_threshold_tuning",
       "terminal": "PASS"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-15-external-text-layout-conditioned-monotonic-checkpoint-kill.md",
+          "sha256": "acc90108dd15eda71e2677e3043f8ca01553d0ab1e3e6934afc3be68a231fced"
+        },
+        {
+          "path": "outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815/audit.json",
+          "sha256": "140ceb8c24711e7a527367761aef57c6d892c24509788f2b846121b4518b0341"
+        },
+        {
+          "path": "scripts/analysis/audit_external_text_layout_conditioned_monotonic_checkpoint.py",
+          "sha256": "c599bf4d51857cad31756be7eb51422ab893ecc42ec62cd1224f126213714cd7"
+        },
+        {
+          "path": "tests/test_external_text_layout_conditioned_checkpoint_audit.py",
+          "sha256": "e772bdd27e75c9712fa2e79af1886c9d814cdc7a5f25cf535cce50f97c54748d"
+        },
+        {
+          "path": "scripts/train/train_external_text_layout_conditioned_monotonic.py",
+          "sha256": "703945f8331c4ac8604fe753db99719d9b61d3044ac1ea560e9069dd019063e8"
+        },
+        {
+          "path": "tests/test_external_text_layout_conditioned_monotonic_surface.py",
+          "sha256": "57688cf741ce7744a444380089726ccf463c0c5707bddf9868acc58aaa4e2bbc"
+        },
+        {
+          "path": "artifacts/trials/external-text-layout-conditioned-monotonic-v1/external_text_layout_conditioned_monotonic.pt",
+          "sha256": "c204d53405db11f4333bfa308c2cf9fc832aa8134fd089d29ff8531b28b94cad"
+        },
+        {
+          "path": "artifacts/trials/external-text-layout-conditioned-monotonic-v1/conditioned_monotonic_loss_history.csv",
+          "sha256": "a40e49d0214d8f9b963388ce66b5d3f8af84601c2d91382960932ce1097c191f"
+        }
+      ],
+      "id": "external-text-layout-conditioned-monotonic-checkpoint-audit",
+      "outcome": "conditioned_checkpoint_subthreshold_noop_before_candidate_gate",
+      "repeat_policy": "do_not_repeat_conditioned_monotonic_v1_training_or_rescue_thresholds",
+      "terminal": "KILL"
     }
   ],
   "schema_version": 1
