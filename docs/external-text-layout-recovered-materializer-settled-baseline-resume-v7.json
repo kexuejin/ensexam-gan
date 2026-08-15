@@ -1,0 +1,74 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": false,
+    "launcher_implementation_change": false,
+    "model_execution": false,
+    "policy_and_synthetic_verification": true,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_settled_baseline_v7_preregistration_only",
+    "training": false
+  },
+  "evidence": {
+    "launcher_v6_contract": {
+      "path": "docs/external-text-layout-recovered-materializer-batched-launch-v6.json",
+      "sha256": "6a47d124168b6a49b37c71a30f5ca670cdf532cb19562ebc32ebd24ab98aecf2"
+    },
+    "launcher_v6_integration": {
+      "path": "docs/external-text-layout-recovered-materializer-batched-launch-v6-integration-verification-20260815.json",
+      "sha256": "f8a7037f0179bd0108470b69a216f57d55cb8ef172bc8c6479b5d0d258531a0c"
+    },
+    "launcher_v6_source": {
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "b058013e3ecbcc5c26d7fb88d7913cb7721ddb61c7dd8fd6368f5267f59d1d59"
+    },
+    "launcher_v6_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "fe2536ae3b382738a12dbe3a0c834b834d34b5aa777764f3df7c241c08e3875b"
+    }
+  },
+  "policy": {
+    "absolute_swap_history_is_a_launch_blocker": false,
+    "absolute_swap_maximum_bytes": null,
+    "baseline_authority": "first_locked_absolute_swap_reading_at_the_start_of_the_stability_window",
+    "historical_swap_attribution_required": false,
+    "host_restart_required": false,
+    "launch_readiness": {
+      "maximum_swap_growth_bytes": 0,
+      "minimum_memory_free_percent": 70.0,
+      "stability_window_seconds": 60.0
+    },
+    "runtime_limits": {
+      "batch_size": 8,
+      "batch_timeout_seconds": 900.0,
+      "maximum_concurrent_model_processes": 1,
+      "maximum_process_tree_rss_bytes": 10737418240,
+      "maximum_swap_growth_from_locked_baseline_bytes": 536870912,
+      "minimum_memory_free_percent": 35.0,
+      "monitor_interval_seconds": 0.25,
+      "worker_count": 1
+    },
+    "swap_growth_formula": "max(0,current_absolute_swap_bytes-locked_launch_baseline_bytes)"
+  },
+  "required_verification": [
+    "a_high_stable_absolute_swap_value_passes_the_readiness_window_when_growth_is_zero",
+    "any_swap_growth_during_the_readiness_window_rejects_before_materialization",
+    "runtime_swap_growth_above_536870912_bytes_terminates_the_process_group",
+    "no_production_source_change_is_required_for_settled_baseline_semantics",
+    "all_v6_batch_rss_free_memory_cpu_order_resume_and_timeout_guards_remain_exact",
+    "dual_runtime_focused_and_complete_external_layout_suites_pass"
+  ],
+  "resume_state": {
+    "completed_count": 8,
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "next_file": "hw5k_1214.jpg",
+    "retained_state_must_remain_exact": true
+  },
+  "schema_version": 7,
+  "supersedes": {
+    "path": "docs/external-text-layout-recovered-materializer-batched-launch-v6.json",
+    "scope": "only_the_v6_post_integration_host_recovery_or_restart_precondition",
+    "sha256": "6a47d124168b6a49b37c71a30f5ca670cdf532cb19562ebc32ebd24ab98aecf2",
+    "unchanged": "all_v6_batching_output_and_runtime_safety_semantics"
+  },
+  "terminal": "PREREQUISITE_NEEDED"
+}
