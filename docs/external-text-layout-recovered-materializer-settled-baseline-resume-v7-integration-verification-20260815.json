@@ -1,0 +1,130 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": true,
+    "launcher_result_schema_version": 6,
+    "model_execution": true,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_settled_baseline_v7_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-recovered-materializer-settled-baseline-resume-v7.json",
+    "sha256": "d15fcc08511b3255aecf7f5e2b4a25a50e36d146e6f6c092b63808b012626b92"
+  },
+  "implementation": {
+    "batch_runtime": {
+      "path": "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "sha256": "057e0fec7eb0b6adfb43135dee66e3277c142c34fc7d98c2ba4b3a5a22669e2f"
+    },
+    "batch_runtime_test": {
+      "path": "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "sha256": "fbec10f38613643ae093b26e410a66132cb49f8a96ef9740700d36f56de1b29a"
+    },
+    "launcher": {
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "b058013e3ecbcc5c26d7fb88d7913cb7721ddb61c7dd8fd6368f5267f59d1d59"
+    },
+    "launcher_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "fe2536ae3b382738a12dbe3a0c834b834d34b5aa777764f3df7c241c08e3875b"
+    },
+    "production_source_changed_for_v7": false,
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    },
+    "stability_reader": {
+      "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
+      "sha256": "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53"
+    }
+  },
+  "live_readiness_window": {
+    "baseline_swap_bytes": 1494745088,
+    "booted_ios_simulators": 0,
+    "conflicting_model_processes": 0,
+    "launch_health": {
+      "minimum_memory_free_percent": 83.0,
+      "peak_process_tree_rss_bytes": 65634304,
+      "peak_swap_growth_bytes": 0,
+      "sample_count": 61,
+      "stability_sample_interval_seconds": 1.0,
+      "stability_window_seconds": 60.0
+    },
+    "post_window_health": {
+      "memory_free_percent": 85.0,
+      "process_tree_rss_bytes": 65650688,
+      "swap_growth_bytes": 0
+    },
+    "terminal": "PASS"
+  },
+  "policy_verdict": {
+    "absolute_swap_maximum_required": false,
+    "high_stable_absolute_swap": "passed_as_zero_growth",
+    "host_restart_required": false,
+    "launch_growth_rejection": "passed_before_materializer",
+    "run_local_512_mib_growth_limit": "passed_with_process_group_termination",
+    "settled_current_baseline_is_authoritative": true
+  },
+  "retained_resume_state": {
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "launcher_result_present": false,
+    "next_file": "hw5k_1214.jpg",
+    "pages_content_sha256": "6f64c927663e0882d3f2780ad8ec88115d529985a0a4b691a525485642eb1bcf",
+    "pages_count": 8,
+    "pages_filename_sha256": "2c6159ca8199e3f9a89d402619601742b85022854eaf4b380513da394c8fa2ae",
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "94a06c2bd2a2a7f00c4ce2fd4d02b46805e2425fe27a27d2631e239e73ab2691",
+    "records_count": 8,
+    "records_filename_sha256": "3532ac52ceb6796be1c5f074d3e5c1ecbc018ca386d52dd19efa0d016f9c7a60"
+  },
+  "schema_version": 7,
+  "verification": {
+    "compile": [
+      {
+        "command": "/Volumes/Tool/source/ensexam-gan/.venv-py313-mps/bin/python3.13 -m py_compile <four-v6-files>",
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "command": "source .env; $ENSEXAM_PYTHON -m py_compile <four-v6-files>",
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "complete_external_layout": [
+      {
+        "count": 132,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 132,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "focused": [
+      {
+        "count": 23,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 23,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "named_swap_tests": [
+      "test_high_stable_swap_uses_explicit_batch_limits_without_global_mutation",
+      "test_launch_swap_growth_rejects_before_materializer",
+      "test_runtime_swap_growth_terminates_the_batch"
+    ]
+  },
+  "next_action": "Commit and push this v7 integration PASS, then resume the retained materialization from hw5k_1214 with the exact Python 3.13 executable and all four thread caps set to one. Do not wait for absolute swap reclamation or restart. The launcher must still pass its own locked 60-second zero-growth window and preserve every v6 CPU, batching, RSS, free-memory, swap-growth, timeout, order, resume, exact-plan, output, and terminal-result gate.",
+  "terminal": "PASS"
+}
