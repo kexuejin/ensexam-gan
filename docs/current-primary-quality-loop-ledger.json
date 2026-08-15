@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Advance the fixed target-free source-edge primary-edit lift source candidate after it passed train160 preserve-first screening and the calibrated inner_val15 no-page-regression gate.",
+    "causal_change": "Close the exhausted stroke-only source-candidate successor bucket and require the next route to be either a materially different non-source-only candidate family with train-only evidence, a new named failure bucket, or durable exhaustion.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1597,12 +1597,20 @@
       {
         "path": "outputs/source-edge-primary-edit-scut115-gate-20260816-v2/scut115_metric_gate.json",
         "sha256": "fc34f85570a412f99823db64a4d368c557459afa513b50532155b3a45565a397"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md",
+        "sha256": "0df95ea3b299228dec3b6c641bd3e0922352b86c9104080bd4f300866d295794"
+      },
+      {
+        "path": "docs/stroke-only-source-candidate-bucket-exhaustion-v1.json",
+        "sha256": "6dbc422e44788cef49d3abd2e77eca29d21792e9dc8c0bfe5f6e17940c75c8eb"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "preregister a materially different available train-only source candidate after source_edge_primary_edit_lift_v1 failed SCUT115 on 179.jpg, or record durable exhaustion of the stroke-only source-candidate bucket; keep reserved blind, visual review, promotion, and current-primary replacement closed",
+    "next_action": "select and preregister a materially different non-source-only candidate family with train-only evidence, select a new named failure bucket with an available leakage-safe train-only path, or record durable exhaustion if no remaining failure bucket has one; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1996,8 +2004,13 @@
       },
       {
         "id": "post_source_edge_primary_edit_scut115_successor_selection",
+        "status": "passed",
+        "detail": "The source_edge_primary_edit_lift_v1 SCUT115 KILL was resolved by recording durable exhaustion of the available stroke-only source-candidate successor bucket. The next route must move outside this closed bucket or record broader exhaustion; reserved blind, visual review, promotion, and current-primary replacement remain closed."
+      },
+      {
+        "id": "post_stroke_only_source_candidate_bucket_exhaustion_successor_selection",
         "status": "pending",
-        "detail": "The fixed source_edge_primary_edit_lift_v1 route passed train160, inner_val15, Dev40, and holdout40, but KILLed at SCUT115 because 179.jpg regressed residual. The next step must preregister a materially different train-only source candidate or record durable exhaustion; reserved blind, visual review, promotion, and current-primary replacement remain closed."
+        "detail": "After closing the stroke-only source-candidate bucket, choose the next leakage-safe route: a materially different non-source-only candidate family with train-only evidence, a new named failure bucket with an available train-only path, or durable exhaustion if none remain."
       }
     ],
     "killed_family_prohibitions": [
@@ -2118,7 +2131,10 @@
       "source_edge_primary_edit_lift_v1_scut115_repeat",
       "source_edge_primary_edit_lift_v1_reserved_blind",
       "source_edge_primary_edit_lift_v1_promotion",
-      "source_edge_primary_edit_lift_v1_current_primary_replacement"
+      "source_edge_primary_edit_lift_v1_current_primary_replacement",
+      "stroke_only_source_candidate_bucket_repeat_without_exact_selector_replay_png_restoration",
+      "stroke_only_source_candidate_threshold_alpha_kernel_component_dilation_or_variant_rescue",
+      "stroke_only_source_candidate_page_specific_visual_heldout_or_promotion_rescue"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -4767,6 +4783,22 @@
         {
           "path": "outputs/source-edge-primary-edit-scut115-gate-20260816-v2/scut115_metric_gate.json",
           "sha256": "fc34f85570a412f99823db64a4d368c557459afa513b50532155b3a45565a397"
+        }
+      ]
+    },
+    {
+      "id": "stroke-only-source-candidate-bucket-exhaustion",
+      "terminal": "KILL",
+      "outcome": "available_stroke_only_source_candidate_successor_bucket_exhausted_after_missing_selector_replay_and_terminal_train_inner_val15_scut115_results",
+      "repeat_policy": "do_not_repeat_stroke_only_source_candidate_successors_without_exact_selector_replay_png_restoration_or_materially_new_train_only_source; move_to_non_source_only_family_new_failure_bucket_or_broader_exhaustion_selection",
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md",
+          "sha256": "0df95ea3b299228dec3b6c641bd3e0922352b86c9104080bd4f300866d295794"
+        },
+        {
+          "path": "docs/stroke-only-source-candidate-bucket-exhaustion-v1.json",
+          "sha256": "6dbc422e44788cef49d3abd2e77eca29d21792e9dc8c0bfe5f6e17940c75c8eb"
         }
       ]
     }

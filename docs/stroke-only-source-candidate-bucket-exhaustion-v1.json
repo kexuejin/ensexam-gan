@@ -1,0 +1,83 @@
+{
+  "allowed_successors": [
+    "preregister a materially different non-source-only candidate family with train-only evidence",
+    "select a new named failure bucket outside stroke-only source-candidate successors",
+    "record durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "holdout40": false,
+    "model_training": false,
+    "new_source_candidate_inside_bucket": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "visual_review": false
+  },
+  "bucket": "stroke_only_source_candidate_successors_without_missing_selector_replay_pngs",
+  "candidate_family_results": [
+    {
+      "family": "exact_selector_replay_candidate_pngs",
+      "reason": "Exact historical relaxed-interval candidate PNGs for train160 selector false-positive rows remained locally absent and could not be reconstructed from metrics or review packs.",
+      "terminal": "PREREQUISITE_NEEDED"
+    },
+    {
+      "family": "source_dark_local_paper_lift_v1",
+      "gate": "train160_preserve_first",
+      "reason": "Large residual gains came with massive overerase regression; best stroke-only overerase variant still added overerase by 0.0551980167963459.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "source_dark_thin_component_lift_v1",
+      "gate": "train160_preserve_first",
+      "reason": "Strict path had only 0.00002356978216212317 residual gain with overerase regression; broader paths regressed overerase more and stroke-only variants removed gain.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "source_chroma_primary_edit_lift_v1",
+      "gate": "inner_val15",
+      "reason": "High-saturation primary-edit route passed train-only but failed inner_val15 calibrated residual/page-regression checks.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "source_achroma_primary_edit_lift_v1",
+      "gate": "inner_val15",
+      "reason": "Low-saturation primary-edit route passed train-only but regressed 506.jpg at inner_val15; stroke_soft also missed the residual-gain floor.",
+      "terminal": "KILL"
+    },
+    {
+      "family": "source_edge_primary_edit_lift_v1",
+      "gate": "scut115",
+      "reason": "Source-edge primary-edit route passed train160, inner_val15, Dev40, and holdout40, but regressed 179.jpg on SCUT115.",
+      "terminal": "KILL"
+    }
+  ],
+  "exhausted_signal_classes": [
+    "missing historical selector replay candidate surface",
+    "broad source-dark local-paper lift",
+    "source-dark thin connected components",
+    "high-chroma current-primary-edited source marks",
+    "low-saturation current-primary-edited residual cores",
+    "source-edge current-primary-edited residual cores"
+  ],
+  "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
+  "forbidden_next_steps_inside_bucket": [
+    "threshold_rescue",
+    "alpha_or_lift_cap_rescue",
+    "component_area_kernel_or_dilation_rescue",
+    "stroke_only_variant_tuning",
+    "page_specific_replacement",
+    "visual_review_acceptance_override",
+    "heldout_repeat_or_metric_relaxation",
+    "reserved_blind_or_promotion_from_any_killed_source_candidate"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "scope": "target-free deterministic source-plus-current-primary-baseline postprocess candidates intended to recover residual handwriting while preserving overerase before promotion surfaces",
+  "state": "stroke_only_source_candidate_bucket_exhausted",
+  "terminal_result": {
+    "reason": "Every materially distinct available source-candidate selector family either failed train-only preserve-first screening, failed inner_val15 no-page rules, or failed SCUT115 no-page rules. Continuing inside the same source-only bucket would require prohibited threshold, alpha, kernel, component, stroke-only blend, page-specific, or held-out rescue.",
+    "terminal": "KILL"
+  }
+}
