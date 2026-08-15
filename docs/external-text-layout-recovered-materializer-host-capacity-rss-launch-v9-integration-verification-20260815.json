@@ -1,0 +1,115 @@
+{
+  "authority": {
+    "formal_external_layout_materialization_resume": true,
+    "launcher_result_schema_version": 9,
+    "model_execution": true,
+    "quality_evaluation": false,
+    "result_authority": "recovered_materializer_host_capacity_rss_v9_integration_pass",
+    "training": false
+  },
+  "contract": {
+    "path": "docs/external-text-layout-recovered-materializer-host-capacity-rss-launch-v9.json",
+    "sha256": "b776caf4dc57a136f68686f62ee46aca23bab853361ffd7c30709c6ba0ebe34b"
+  },
+  "implementation": {
+    "batch_runtime": {
+      "path": "scripts/analysis/external_text_layout_recovered_batch_runtime.py",
+      "sha256": "8ec933f85b07a9e0aab6f59916b5fa12dbef008b6210d8f2c465b7a898af602e"
+    },
+    "batch_runtime_test": {
+      "path": "tests/test_external_text_layout_recovered_batch_runtime.py",
+      "sha256": "8e8a1c89733e4c96dd16a852c75bf30c08d9188f9daff15096a63cf76df8161c"
+    },
+    "launcher": {
+      "line_count": 1182,
+      "path": "scripts/analysis/run_external_text_layout_recovered_materialization.py",
+      "sha256": "2b430892cc8cede2e76687c102ec8c6f19e862ac5715e619d9b56500f6bee736"
+    },
+    "launcher_test": {
+      "path": "tests/test_run_external_text_layout_recovered_materialization.py",
+      "sha256": "8338ff5adcecbbb2ad05c4fdff6a347e7b236431f087fb6cff993307ed71ca12"
+    },
+    "shared_materializer": {
+      "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
+      "sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf"
+    },
+    "shared_runtime": {
+      "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
+      "sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4"
+    },
+    "v9_contract_validator": {
+      "line_count": 148,
+      "path": "scripts/analysis/external_text_layout_recovered_v9_contract.py",
+      "sha256": "5d2188cfe9bd62b842c75b28de3d8633a037b0d72ac7f9d77320aae6490c8b3b"
+    }
+  },
+  "limits": {
+    "batch_size": 8,
+    "batch_timeout_seconds": 900.0,
+    "maximum_concurrent_model_processes": 1,
+    "recovered_runtime_process_tree_rss_bytes_max": 13958643712,
+    "runtime_memory_free_percent_min": 35.0,
+    "runtime_monitor_interval_seconds": 0.25,
+    "runtime_swap_growth_bytes_max": 536870912,
+    "shared_runtime_process_tree_rss_bytes_max_unchanged": 10737418240,
+    "worker_count": 1
+  },
+  "retained_resume_state": {
+    "derived_plan_sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4",
+    "launcher_result_present": false,
+    "next_file": "hw5k_1376.jpg",
+    "next_manifest_index": 19,
+    "pages_content_sha256": "900941c438d64fc6d8f354f0866d7f45c67cc19efd10fe80f03a7480e6f2e2af",
+    "pages_count": 18,
+    "pages_filename_sha256": "dae7856768e3bd7c321f540461bf0572f07f9c05c0e29ba0eaeab8273202a0c5",
+    "progress_sha256": "fdba536b71ffd66d5b460c7357545eb9a07e0a8c0a1928f46ceadeb5c953af0c",
+    "records_content_sha256": "6bb2b04c2c355d8d0feab637d9da710248f03e93e8413f3d1ac1c4d79ca08d63",
+    "records_count": 18,
+    "records_filename_sha256": "89155a5f4673ae67c68798712c97a158a6929a75172cbbe35f2ed53f91b6e167"
+  },
+  "schema_version": 9,
+  "verification": {
+    "compile": [
+      {
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "complete_external_layout": [
+      {
+        "count": 133,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 133,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "focused": [
+      {
+        "count": 24,
+        "python": "3.13.1",
+        "terminal": "PASS"
+      },
+      {
+        "count": 24,
+        "python": "3.10.11",
+        "terminal": "PASS"
+      }
+    ],
+    "observed_11992580096_bytes_below_host_capacity_cap": true,
+    "recovered_13_gib_plus_one_terminates_process_group": true,
+    "shared_10_gib_defaults_remain_exact": true,
+    "swap_and_free_memory_terminations_remain_independent": true,
+    "v9_contract_validation_extracted": true,
+    "v9_execution_authority_is_fail_closed": true
+  },
+  "next_action": "Commit and push this v9 integration PASS, then run the exact Python 3.13 launcher with all four CPU thread caps set to one. It must pass a fresh 60-second stable-current-baseline window and resume manifest index 19 hw5k_1376.jpg under the final recovered 13 GiB RSS cap, 35 percent free-memory floor, 512 MiB run-local swap-growth cap, fixed eight-page batches, 0.25-second monitoring, and 900-second timeout. A 13 GiB rejection requires an algorithmic change, never another cap increase.",
+  "terminal": "PASS"
+}

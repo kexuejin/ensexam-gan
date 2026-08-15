@@ -16,7 +16,7 @@ from scripts.analysis import materialize_external_text_layout_support_train_only
 BATCH_SIZE = 8
 BATCH_TIMEOUT_SECONDS = 15 * 60.0
 MONITOR_INTERVAL_SECONDS = 0.25
-MAX_RECOVERED_PROCESS_TREE_RSS_BYTES = 11 * 1024**3
+MAX_RECOVERED_PROCESS_TREE_RSS_BYTES = 13 * 1024**3
 
 
 def enforce_recovered_health_limits(

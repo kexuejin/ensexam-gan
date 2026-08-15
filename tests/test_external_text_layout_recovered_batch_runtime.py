@@ -315,13 +315,13 @@ class RecoveredBatchRuntimeTest(unittest.TestCase):
     ) -> None:
         observed = {
             "memory_free_percent": 74.0,
-            "process_tree_rss_bytes": 11_147_149_312,
+            "process_tree_rss_bytes": 11_992_580_096,
             "swap_used_bytes": 0,
         }
         batch_runtime.enforce_recovered_health_limits(observed)
         self.assertEqual(materializer.MAX_DETECTOR_RSS_BYTES, 10 * 1024**3)
         self.assertEqual(
-            batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES, 11 * 1024**3
+            batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES, 13 * 1024**3
         )
         with self.assertRaisesRegex(
             materializer.runtime.ResourceLimitError, "RSS safety limit"

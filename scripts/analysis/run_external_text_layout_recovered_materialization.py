@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
 from scripts.analysis import materialize_external_text_layout_support_train_only as materializer  # noqa: E402
 from scripts.analysis import probe_external_text_layout_runtime_safety as safety_probe  # noqa: E402
 from scripts.analysis import external_text_layout_recovered_batch_runtime as batch_runtime  # noqa: E402
+from scripts.analysis import external_text_layout_recovered_v9_contract as v9_contract  # noqa: E402
 
 
 CONTRACT_PATH = Path("docs/external-text-layout-recovered-materializer-launch-v2.json")
@@ -81,6 +82,7 @@ EXPECTED_SAFETY_PROBE_SHA256 = (
     "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53"
 )
 FORMAL_MAX_PROCESS_TREE_RSS_BYTES = materializer.MAX_DETECTOR_RSS_BYTES
+V8_MAX_PROCESS_TREE_RSS_BYTES = 11 * 1024**3
 RECOVERED_MAX_PROCESS_TREE_RSS_BYTES = (
     batch_runtime.MAX_RECOVERED_PROCESS_TREE_RSS_BYTES
 )
@@ -168,7 +170,7 @@ def validate_v8_contract(repo_root: Path) -> dict[str, Any]:
             "batch_size": batch_runtime.BATCH_SIZE,
             "batch_timeout_seconds": batch_runtime.BATCH_TIMEOUT_SECONDS,
             "maximum_concurrent_model_processes": 1,
-            "maximum_runtime_process_tree_rss_bytes": RECOVERED_MAX_PROCESS_TREE_RSS_BYTES,
+            "maximum_runtime_process_tree_rss_bytes": V8_MAX_PROCESS_TREE_RSS_BYTES,
             "maximum_swap_growth_bytes": safety_probe.PROBE_MAX_SWAP_GROWTH_BYTES,
             "minimum_launch_memory_free_percent": safety_probe.PROBE_MIN_LAUNCH_MEMORY_FREE_PERCENT,
             "minimum_runtime_memory_free_percent": FORMAL_MIN_RUNTIME_MEMORY_FREE_PERCENT,
@@ -225,6 +227,21 @@ def validate_v8_contract(repo_root: Path) -> dict[str, Any]:
         "ba31900496161322f839f366fa40765d71182d99a59ddad2537786310aae432f"
     ):
         raise RecoveredMaterializationError("launcher v8 manifest changed")
+    return contract
+
+
+def validate_v9_contract(repo_root: Path) -> dict[str, Any]:
+    try:
+        contract = v9_contract.validate_contract(repo_root)
+    except (OSError, ValueError) as error:
+        raise RecoveredMaterializationError(str(error)) from error
+    if (
+        v9_contract.RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
+        != RECOVERED_MAX_PROCESS_TREE_RSS_BYTES
+        or v9_contract.SHARED_MAX_PROCESS_TREE_RSS_BYTES
+        != FORMAL_MAX_PROCESS_TREE_RSS_BYTES
+    ):
+        raise RecoveredMaterializationError("launcher v9 runtime constants changed")
     return contract
 
 
@@ -534,6 +551,7 @@ def validate_v3_contract(repo_root: Path) -> dict[str, Any]:
 
 
 def validate_repository_contract(repo_root: Path) -> dict[str, Any]:
+    validate_v9_contract(repo_root)
     validate_v8_contract(repo_root)
     validate_v6_contract(repo_root)
     validate_v5_contract(repo_root)
@@ -609,6 +627,8 @@ def validate_execution_authority(repo_root: Path) -> None:
         "external_text_layout_recovered_materializer_batched_launch_v6_integration": "passed",
         "external_text_layout_recovered_materializer_bounded_rss_launch_v8_preregistration": "passed",
         "external_text_layout_recovered_materializer_bounded_rss_launch_v8_integration": "passed",
+        "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_preregistration": "passed",
+        "external_text_layout_recovered_materializer_host_capacity_rss_launch_v9_integration": "passed",
         "external_text_layout_support_train_only_diagnostic": "pending",
     }
     if active.get("terminal") != "PREREQUISITE_NEEDED" or any(
@@ -890,7 +910,7 @@ def build_launcher_result(
         "authority": {
             "candidate_inference": False,
             "quality_evaluation": False,
-            "result_authority": "recovered_materializer_launcher_v8",
+            "result_authority": "recovered_materializer_launcher_v9",
         },
         "derived_plan": {
             "path": contract["derived_plan"]["path"],
@@ -901,7 +921,7 @@ def build_launcher_result(
         "materialization": materialization,
         "recovered_second_stage_metrics_sha256": metrics_change["after"],
         "runtime_safety": runtime_safety,
-        "schema_version": 8,
+        "schema_version": 9,
         "terminal": "PASS",
     }
 
@@ -1060,11 +1080,11 @@ def validate_existing_result(
     result = read_json(result_path)
     if (
         result.get("terminal") != "PASS"
-        or result.get("schema_version") != 8
+        or result.get("schema_version") != 9
         or result.get("archive_cache_identities") != archive_inputs
         or result.get("materialization") != materialization
         or result.get("authority", {}).get("result_authority")
-        != "recovered_materializer_launcher_v8"
+        != "recovered_materializer_launcher_v9"
         or result.get("derived_plan", {}).get("path")
         != contract["derived_plan"]["path"]
         or result.get("derived_plan", {}).get("sha256")
@@ -1146,7 +1166,7 @@ def main() -> int:
             json.dumps(
                 {
                     "reason": str(error),
-                    "schema_version": 8,
+                    "schema_version": 9,
                     "terminal": "PREREQUISITE_NEEDED",
                 },
                 sort_keys=True,
