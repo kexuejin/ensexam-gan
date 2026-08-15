@@ -1197,12 +1197,20 @@
       {
         "path": "outputs/stroke-only-patch-suppression-local-paper-source-preflight-20260816/metric_summary.json",
         "sha256": "1d70db116caa22f5d7cb3d07896f172dde3714dcb3fb2910353b3c7f727624e7"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-stroke-only-patch-suppression-exact-candidate-local-absence.md",
+        "sha256": "b4bb8d16e24df23cc1c669eba50948ada29837e2f3656d87932f19035a6714c9"
+      },
+      {
+        "path": "outputs/stroke-only-patch-suppression-exact-candidate-local-absence-20260816/audit.json",
+        "sha256": "ea6c7c89852f62ed7ceb94f2eecab2e80f2194bd9e55d7d1edc72a560de05ff9"
       }
     ],
     "failure_bucket": "paper_tone_overerase_risk_from_risky_patch_repairs",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "restore exact historical train160 relaxed-interval source-candidate PNGs under candidate/166.png, candidate/190.png, and candidate/192.png, or preregister a materially different available train-only source candidate that is not source_dark_local_paper_lift_v1; keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "preregister a materially different available train-only source candidate for stroke-only patch suppression; keep exact historical candidate restoration closed unless candidate/166.png, candidate/190.png, and candidate/192.png are externally supplied and hash-audited, and keep candidate inference, validation gates, SCUT115, holdout40, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -1565,9 +1573,14 @@
         "detail": "A materially different target-free train160 source candidate was materialized from source plus current-primary baseline and passed custody, but the train-only metric preflight KILLed it before validation because residual gains of 0.011224798204455988 to 0.017921021545539983 came with overerase deltas of 0.0551980167963459 to 0.06273197557739196. No model training, validation gate, SCUT115, holdout40, reserved blind, promotion, or current-primary replacement opened."
       },
       {
+        "id": "stroke_only_patch_suppression_exact_candidate_local_absence",
+        "status": "passed",
+        "detail": "A current-state custody recheck proves the exact selector-replay train160 candidate PNGs for 166/190/192 are still locally absent: 9 required source/baseline/target paths are present, 3 candidate_pred paths are missing, and no training, candidate inference, quality gate, reserved blind, promotion, or current-primary replacement opened. Stale pred paths, review-pack composites, and the KILLed source_dark_local_paper_lift_v1 outputs are not valid substitutes."
+      },
+      {
         "id": "stroke_only_patch_suppression_preflight",
         "status": "pending",
-        "detail": "Pending behind selector-reconciled input custody: selected train160 rows 166/190/192 now have source/target files, restored current-primary baseline predictions, and review CSV paths aligned to selector replay, but the required relaxed-interval source-candidate PNGs under candidate/ remain missing. Restore exact historical source-candidate pixels or preregister a materially different available train-only source candidate before running the stroke-only generator."
+        "detail": "Pending behind source-candidate custody: selected train160 rows 166/190/192 have source/target files, restored current-primary baseline predictions, and selector-replay-aligned review CSV paths, but the exact historical candidate PNGs under candidate/ remain locally absent. Preregister a materially different available train-only source candidate before running the stroke-only generator; exact restoration may reopen only if the historical PNGs are externally supplied and hash-audited."
       }
     ],
     "killed_family_prohibitions": [
@@ -3790,6 +3803,34 @@
       "outcome": "target_free_local_paper_source_candidate_passed_train_only_custody_but_failed_overerase_preflight_before_validation",
       "repeat_policy": "do_not_repeat_or_rescue_with_threshold_alpha_kernel_component_dilate_median_or_stroke_only_variant_tuning; restore_exact_selector_replay_candidate_pngs_or_preregister_a_materially_different_available_train_only_source_candidate",
       "terminal": "KILL"
+    },
+    {
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-stroke-only-patch-suppression-exact-candidate-local-absence.md",
+          "sha256": "b4bb8d16e24df23cc1c669eba50948ada29837e2f3656d87932f19035a6714c9"
+        },
+        {
+          "path": "outputs/stroke-only-patch-suppression-exact-candidate-local-absence-20260816/audit.json",
+          "sha256": "ea6c7c89852f62ed7ceb94f2eecab2e80f2194bd9e55d7d1edc72a560de05ff9"
+        },
+        {
+          "path": "scripts/analysis/audit_stroke_only_patch_suppression_inputs.py",
+          "sha256": "adfb9899ff4d3b575d9e1b9eefe30629f83e2d6912dc1b60219b3c8b2f022f42"
+        },
+        {
+          "path": "docs/product-quality-review-pages.csv",
+          "sha256": "cd187a148cd2ecf53f64a250fbdef44917eb026f3dde46e94e96dd74f8a4c64c"
+        },
+        {
+          "path": "outputs/selector_replay_exact129_outside_edit_lam16_union_train160_20260706/page_choices.csv",
+          "sha256": "24c35c8d4eb73ee1e0ed4a60752e1b517e1cc94ff5e4575ce525664364b75517"
+        }
+      ],
+      "id": "stroke-only-patch-suppression-exact-candidate-local-absence",
+      "outcome": "exact_selector_replay_train160_candidate_pngs_remain_locally_absent_after_current_state_recheck",
+      "repeat_policy": "do_not_chase_stale_pred_paths_review_pack_composites_or_killed_local_paper_outputs; preregister_a_materially_different_available_train_only_source_candidate_or_require_external_exact_png_restoration_with_hash_audit",
+      "terminal": "PREREQUISITE_NEEDED"
     }
   ],
   "schema_version": 1
