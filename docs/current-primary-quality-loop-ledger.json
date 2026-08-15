@@ -1,6 +1,6 @@
 {
   "active_iteration": {
-    "causal_change": "Close the balanced007 Delta-Trust oracle-ceiling route using existing development-only oracle evidence, then require the next route to select another named failure bucket, a materially different non-Delta-Trust family, or broader durable exhaustion.",
+    "causal_change": "Record that the safe-metric fallback oracle route currently lacks its referenced queue and oracle-preflight evidence, so it requires evidence reconstruction or a different train-only failure bucket before any candidate surface opens.",
     "evidence": [
       {
         "path": "docs/decisions/2026-08-10-monotonic-residual-erase-synthetic-prerequisite-pass.md",
@@ -1653,12 +1653,20 @@
       {
         "path": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
         "sha256": "6f7ca3d933d75e07f9c1d923527d1501117733c459a40853e9a02fb80121f28d"
+      },
+      {
+        "path": "docs/decisions/2026-08-16-safe-metric-fallback-current-state-prerequisite-needed.md",
+        "sha256": "5991128a0d22b25fe946f2a910e7a7b271d4cd33e8748324f6f96a7afaabce1f"
+      },
+      {
+        "path": "docs/safe-metric-fallback-current-state-prerequisite-v1.json",
+        "sha256": "12df9684140228aec20195399dd6a8d43b56b4f73806030e5fefc4803146e78a"
       }
     ],
     "failure_bucket": "target_dark_or_overerase_risk",
     "first_gate": "scut_inner_val15",
     "id": "monotonic-residual-erase-support",
-    "next_action": "select another named failure bucket with an available leakage-safe train-only path, preregister a materially different non-Delta-Trust candidate family with train-only evidence, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
+    "next_action": "rebuild the missing safe-metric fallback queue and oracle-preflight evidence in a fresh output directory, select another named failure bucket with an available leakage-safe train-only path, or record broader durable exhaustion; keep validation, visual review, reserved blind, promotion, and current-primary replacement closed",
     "prerequisites": [
       {
         "detail": "The all-darken v2 checkpoint, mixed within-patch directional support, residual-win labels, and overerase/paper-tone loss labels justify a preserve-or-brighten representation as the next materially different bounded uncertainty.",
@@ -2067,8 +2075,13 @@
       },
       {
         "id": "post_balanced007_delta_trust_oracle_ceiling_recheck_successor_selection",
+        "status": "passed",
+        "detail": "The next target_dark_or_overerase_risk route was checked as safe-metric fallback, but its referenced current-state queue and oracle-preflight outputs are absent. The route requires evidence reconstruction in a fresh output directory or bypass for another evidence-backed failure bucket."
+      },
+      {
+        "id": "safe_metric_fallback_current_state_evidence_reconstruction_or_successor_selection",
         "status": "pending",
-        "detail": "After closing the balanced007 Delta-Trust no-headroom route, choose another leakage-safe train-only route: a different named failure bucket, a materially different non-Delta-Trust family, or broader durable exhaustion if none remain."
+        "detail": "Rebuild the missing safe-metric fallback queue and oracle-preflight evidence in a fresh output directory, choose another leakage-safe train-only bucket, or record broader durable exhaustion."
       }
     ],
     "killed_family_prohibitions": [
@@ -2198,7 +2211,9 @@
       "target_dark_component_context_feature_v1_generator_training_validation_or_promotion",
       "balanced007_delta_trust_oracle_ceiling_v1_repeat",
       "balanced007_delta_trust_oracle_ceiling_v1_threshold_margin_selector_or_page_rescue",
-      "balanced007_delta_trust_oracle_ceiling_v1_patch_index_training_validation_or_promotion"
+      "balanced007_delta_trust_oracle_ceiling_v1_patch_index_training_validation_or_promotion",
+      "safe_metric_fallback_oracle_recheck_v1_use_missing_evidence",
+      "safe_metric_fallback_oracle_recheck_v1_selector_training_validation_or_promotion_without_rebuild"
     ],
     "prohibited_outside_registered_external_text_layout_diagnostic": [
       "unregistered_implementation",
@@ -4927,6 +4942,22 @@
         {
           "path": "outputs/delta_trust_oracle_20260719/next120_reverify/per_page.csv",
           "sha256": "6f7ca3d933d75e07f9c1d923527d1501117733c459a40853e9a02fb80121f28d"
+        }
+      ]
+    },
+    {
+      "id": "safe-metric-fallback-current-state-prerequisite-needed",
+      "terminal": "PREREQUISITE_NEEDED",
+      "outcome": "safe_metric_fallback_queue_and_oracle_preflight_outputs_missing_from_current_worktree_before_candidate_admission",
+      "repeat_policy": "rebuild_missing_safe_metric_fallback_queue_and_oracle_preflight_in_fresh_output_dir_or_select_another_evidence_backed_failure_bucket",
+      "evidence": [
+        {
+          "path": "docs/decisions/2026-08-16-safe-metric-fallback-current-state-prerequisite-needed.md",
+          "sha256": "5991128a0d22b25fe946f2a910e7a7b271d4cd33e8748324f6f96a7afaabce1f"
+        },
+        {
+          "path": "docs/safe-metric-fallback-current-state-prerequisite-v1.json",
+          "sha256": "12df9684140228aec20195399dd6a8d43b56b4f73806030e5fefc4803146e78a"
         }
       ]
     }

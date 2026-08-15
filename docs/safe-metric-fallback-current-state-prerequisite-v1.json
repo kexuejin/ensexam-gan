@@ -1,0 +1,52 @@
+{
+  "allowed_successors": [
+    "rebuild the missing safe-metric fallback queue and oracle-preflight evidence in a new output directory before route selection",
+    "select another named failure bucket with an available leakage-safe train-only path",
+    "record broader durable exhaustion if no remaining failure bucket has an available train-only path"
+  ],
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "current_primary_replacement": false,
+    "development_gate": false,
+    "generator_training": false,
+    "holdout40": false,
+    "inner_val15": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "selector_promotion": false,
+    "visual_review": false
+  },
+  "checked_paths": [
+    {
+      "exists": false,
+      "path": "outputs/balanced007_ranker_expansion_source_eval_20260708"
+    },
+    {
+      "exists": false,
+      "path": "outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_20260719/safe_metric_fallback_queue_failclosed_reverify2/safe_metric_fallback_queue.csv"
+    },
+    {
+      "exists": false,
+      "path": "outputs/balanced007_ranker_expansion_source_eval_20260708/quality_goal_review_20260719/safe_metric_fallback_oracle_preflight_failclosed_v3_20260719/summary.json"
+    }
+  ],
+  "failure_bucket": "target_dark_or_overerase_risk",
+  "family": "safe_metric_fallback_oracle_recheck_v1",
+  "forbidden_without_prerequisite": [
+    "use_missing_queue_summary_as_candidate_evidence",
+    "selector_expansion",
+    "candidate_inference",
+    "generator_training",
+    "inner_val15_or_later_gate_execution",
+    "visual_review_reserved_blind_or_promotion"
+  ],
+  "iteration_id": "monotonic-residual-erase-support",
+  "schema_version": 1,
+  "state": "current_state_evidence_missing",
+  "terminal_result": {
+    "reason": "The safe-metric fallback queue and oracle-preflight evidence referenced by the quality notes are absent from the current worktree, so the route cannot be used as train-only evidence or as a candidate-admission basis. It must be rebuilt in a fresh output directory or bypassed for another evidence-backed bucket.",
+    "terminal": "PREREQUISITE_NEEDED"
+  }
+}
