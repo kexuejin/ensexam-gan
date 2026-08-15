@@ -221,6 +221,14 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             )
             missing_paths = {item["path"] for item in audit["missing"]}
             self.assertEqual(missing_paths, {"docs/decisions/d2.md"})
+            self.assertEqual(
+                audit["successor_readiness"]["status"],
+                "blocked_by_unresolved_evidence",
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["blocking_gap_class_counts"],
+                {"missing_tracked_reference": 2},
+            )
             self.assertIn("status=evidence_incomplete", result.stdout)
 
     def test_evidence_audit_reports_hash_mismatch_without_status_claim(self) -> None:
@@ -247,6 +255,14 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             self.assertEqual(
                 audit["gap_class_unique_path_counts"],
                 {"tracked_evidence_hash_drift": 1},
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["status"],
+                "blocked_by_unresolved_evidence",
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["blocking_gap_class_counts"],
+                {"tracked_evidence_hash_drift": 2},
             )
             mismatched_paths = {item["path"] for item in audit["mismatched"]}
             self.assertEqual(mismatched_paths, {"docs/decisions/d2d.md"})
@@ -297,6 +313,18 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             self.assertEqual(audit["gap_class_counts"], {"tracked_code_historical_drift": 1})
             self.assertEqual(
                 audit["gap_class_unique_path_counts"],
+                {"tracked_code_historical_drift": 1},
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["status"],
+                "not_blocked_by_evidence_audit",
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["blocking_gap_class_counts"],
+                {},
+            )
+            self.assertEqual(
+                audit["successor_readiness"]["nonblocking_gap_class_counts"],
                 {"tracked_code_historical_drift": 1},
             )
             [mismatch] = audit["mismatched"]

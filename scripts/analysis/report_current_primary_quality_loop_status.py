@@ -22,6 +22,7 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 RECORD_TERMINALS = {"PASS", "KILL", "PREREQUISITE_NEEDED", "PENDING"}
 ACTIVE_TERMINALS = {"PREREQUISITE_NEEDED", "PENDING"}
 TRACKED_CODE_PREFIXES = {"networks", "scripts", "tests", "tools"}
+NONBLOCKING_GAP_CLASSES = {"tracked_code_historical_drift"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -219,6 +220,56 @@ def gap_class_summary(items: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
+def successor_readiness(gap_summary: dict[str, Any]) -> dict[str, Any]:
+    class_counts = require_mapping(gap_summary.get("gap_class_counts"), "gap_class_counts")
+    class_paths = require_mapping(
+        gap_summary.get("gap_class_unique_paths"), "gap_class_unique_paths"
+    )
+    blocking_class_counts = {
+        name: int(count)
+        for name, count in sorted(class_counts.items())
+        if name not in NONBLOCKING_GAP_CLASSES
+    }
+    nonblocking_class_counts = {
+        name: int(count)
+        for name, count in sorted(class_counts.items())
+        if name in NONBLOCKING_GAP_CLASSES
+    }
+    blocking_unique_paths = {
+        name: paths
+        for name, paths in sorted(class_paths.items())
+        if name in blocking_class_counts
+    }
+    nonblocking_unique_paths = {
+        name: paths
+        for name, paths in sorted(class_paths.items())
+        if name in nonblocking_class_counts
+    }
+    blocked = bool(blocking_class_counts)
+    return {
+        "status": (
+            "blocked_by_unresolved_evidence"
+            if blocked
+            else "not_blocked_by_evidence_audit"
+        ),
+        "blocking_gap_class_counts": blocking_class_counts,
+        "blocking_gap_unique_path_counts": {
+            name: len(paths) for name, paths in blocking_unique_paths.items()
+        },
+        "blocking_gap_unique_paths": blocking_unique_paths,
+        "nonblocking_gap_class_counts": nonblocking_class_counts,
+        "nonblocking_gap_unique_path_counts": {
+            name: len(paths) for name, paths in nonblocking_unique_paths.items()
+        },
+        "nonblocking_gap_unique_paths": nonblocking_unique_paths,
+        "next_action": (
+            "repair_or_record_decision_for_blocking_evidence_gaps_before_successor_selection"
+            if blocked
+            else "successor_selection_may_continue_subject_to_ledger_gate_order"
+        ),
+    }
+
+
 def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str, Any]:
     checked: list[dict[str, Any]] = []
     missing: list[dict[str, Any]] = []
@@ -287,6 +338,7 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
         "mismatch_unique_paths": mismatched_unique_paths,
         "invalid_count": len(invalid),
         **gap_summary,
+        "successor_readiness": successor_readiness(gap_summary),
         "missing": missing,
         "mismatched": mismatched,
         "invalid": invalid,
