@@ -23,7 +23,7 @@ elsewhere in this file is commentary only.
 
 ```yaml ledger
 schema_version: 1
-updated: "2026-08-13"
+updated: "2026-08-16"
 program: sustainable-generalization-safe-quality-loop
 product_default: artifacts/current-primary
 program_state: active
@@ -76,16 +76,23 @@ development_reference:
 
 buckets:
   - name: cross_domain_residual_headroom_vs_source_solved_pixel_regression
-    status: active
+    status: exhausted
     summary: >-
       Current-primary has large HW5K development headroom (dev232 residual mean
       0.7239 vs SCUT inner-val15 0.1769), but the first measurable universal
       sidecar movement regressed SCUT page 301.jpg and failed the inner-val15
-      p95/overerase source guard.
+      p95/overerase source guard. The later train-only baseline-tail
+      non-regression sidecar consumed its cache prerequisite and exact D3 run,
+      then KILLed on the same source residual regression class as D2; D4 and D5
+      direction-repair variants also terminated as no-lift/noop KILLs.
     evidence:
       - docs/decisions/2026-08-06-universal-residual-adapter-sidecar-u4c-scut15-kill.md
       - docs/plans/2026-08-06-universal-residual-adapter-sidecar-u4-development-validation.md
       - docs/decisions/2026-08-13-universal-sidecar-d3-baseline-tail-cache-verification.md
+      - docs/decisions/2026-08-08-universal-sidecar-d3-baseline-tail-inner-val15-kill.md
+      - docs/decisions/2026-08-09-universal-sidecar-d4-primary-edit-direction-inner-val15-kill.md
+      - docs/decisions/2026-08-09-universal-sidecar-d5-folded-direction-inner-val15-kill.md
+      - docs/decisions/2026-08-16-current-primary-failure-ledger-successor-selection-reconciliation.md
     prerequisite_status: >-
       SATISFIED (2026-08-13): the exact train-manifest baseline-support cache
       exists at
@@ -94,19 +101,39 @@ buckets:
       primary/config/list/rows hashes verified against the ledger anchors
       (rows_csv_sha256
       592f6383164af92ec10008881a8b160cee6828132831ac66c4d3316d2742545a). See
-      the 2026-08-13 cache-verification decision record.
-    next_allowed: >-
-      One causal change only: a train-only current-primary baseline-tail
-      non-regression constraint for the sidecar, holding architecture, data,
-      seed, step budget, optimizer, learning-rate schedule, and matched-copy
-      inference fixed. Prerequisite: an exact train-manifest baseline-support
-      cache or an equivalent validated online frozen-teacher signal. Must pass
-      structure/gradient checks and the SCUT inner-val15 zero-page-regression
-      gate before any HW5K development scoring.
+      the 2026-08-13 cache-verification decision record. The prerequisite is no
+      longer actionable because the exact registered D3 run reached terminal
+      KILL.
     prohibited: >-
-      SCUT115, holdout40, and reserved blind stay disabled until earlier gates
-      pass. No threshold rescue, postprocess rescue, hard routing, domain
-      labels, source selectors, base unfreezing, or current-primary mutation.
+      Do not reopen D3/D4/D5 through threshold rescue, postprocess rescue, hard
+      routing, domain labels, source selectors, base unfreezing, learning-rate
+      or step-count sweeps, SCUT115, holdout40, reserved blind, or
+      current-primary mutation.
+
+  - name: successor_selection_outside_closed_buckets
+    status: active
+    summary: >-
+      The current loop is between candidate families after the cross-domain
+      sidecar bucket, stroke-only source-candidate bucket, and
+      target-dark/overerase-risk bucket all reached terminal current-state
+      records. The next admissible move is successor selection, not training or
+      validation.
+    evidence:
+      - docs/current-primary-quality-loop-ledger.json
+      - docs/decisions/2026-08-16-stroke-only-source-candidate-bucket-exhaustion.md
+      - docs/decisions/2026-08-16-target-dark-overerase-bucket-exhaustion.md
+      - docs/decisions/2026-08-16-current-primary-failure-ledger-successor-selection-reconciliation.md
+    next_allowed: >-
+      Select one named failure bucket outside the closed cross-domain sidecar,
+      stroke-only source-candidate, and target-dark/overerase-risk buckets with
+      an available leakage-safe train-only evidence path; preregister exactly
+      one materially different causal family; or record broader durable
+      exhaustion if no such path remains.
+    prohibited: >-
+      No validation, SCUT115, holdout40, visual review, reserved blind,
+      promotion, current-primary replacement, threshold rescue, page-specific
+      rescue, or reuse of a terminal family is authorized during successor
+      selection.
 
   - name: universal_sidecar_step_lr_nearby_sweep
     status: exhausted
