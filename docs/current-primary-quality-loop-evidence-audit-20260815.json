@@ -4,13 +4,13 @@
     "ignored_evidence_hash_drift": 1,
     "missing_ignored_artifact": 4,
     "missing_ignored_output": 31,
-    "tracked_code_hash_drift": 28
+    "tracked_code_historical_drift": 28
   },
   "gap_class_unique_path_counts": {
     "ignored_evidence_hash_drift": 1,
     "missing_ignored_artifact": 4,
     "missing_ignored_output": 21,
-    "tracked_code_hash_drift": 13
+    "tracked_code_historical_drift": 13
   },
   "gap_class_unique_paths": {
     "ignored_evidence_hash_drift": {
@@ -45,7 +45,7 @@
       "outputs/universal_sidecar_d5_d1_inner_val15_step80_primary_edit_direction_folded_20260809/source_guard_summary.json": 1,
       "outputs/universal_sidecar_d5_d1_step80_primary_edit_direction_folded_20260809/checkpoint_audit.json": 1
     },
-    "tracked_code_hash_drift": {
+    "tracked_code_historical_drift": {
       "scripts/analysis/audit_external_text_layout_second_stage_cache_salvage.py": 1,
       "scripts/analysis/external_text_layout_materialization_runtime.py": 1,
       "scripts/analysis/materialize_external_text_layout_support_train_only.py": 1,
@@ -90,6 +90,9 @@
     {
       "actual_sha256": "2e66ea6f5a606dc6a8c2691f9c2c9f4a5e8d6ed60b5f0faba11db3f6fd60ede4",
       "expected_sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16",
+      "historical_git_commit": "5b0acecd7909ade23aa533a4c3ac7feaf69dda5e",
+      "historical_git_match": true,
+      "historical_git_short_commit": "5b0acec",
       "label": "ledger.active_iteration.evidence[10]",
       "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
       "status": "sha256_mismatch"
@@ -97,6 +100,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "historical_git_commit": "23b06c702f185c04eca458105880581096a870b4",
+      "historical_git_match": true,
+      "historical_git_short_commit": "23b06c7",
       "label": "ledger.active_iteration.evidence[108]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -104,6 +110,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "historical_git_commit": "64cc51197cc6796a28cc8d31366363ca223f4ecf",
+      "historical_git_match": true,
+      "historical_git_short_commit": "64cc511",
       "label": "ledger.active_iteration.evidence[109]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -111,6 +120,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "abcde54e842c512b41bbdfe4382d9c200232f9e5b75bb3b9763376f9442f032c",
+      "historical_git_commit": "f83db8db548d8cb990d67780043ccd14cb350c18",
+      "historical_git_match": true,
+      "historical_git_short_commit": "f83db8d",
       "label": "ledger.active_iteration.evidence[131]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -118,6 +130,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "cc2048430cbb77806620b193e55bbef470aad5472b36a5a16634f3efc354165f",
+      "historical_git_commit": "f83db8db548d8cb990d67780043ccd14cb350c18",
+      "historical_git_match": true,
+      "historical_git_short_commit": "f83db8d",
       "label": "ledger.active_iteration.evidence[132]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -125,6 +140,9 @@
     {
       "actual_sha256": "e2aff5cb7845e5f6169eec6a258810a9bd9ebbdd87708d846cc5d2ddee018a2e",
       "expected_sha256": "8dbecc59e5ed8d8517a232fa77f56955548938f6a4519e2796e72115b9d85870",
+      "historical_git_commit": "dc7415e96241c233d6a6b07ab3f8b35ead1516f3",
+      "historical_git_match": true,
+      "historical_git_short_commit": "dc7415e",
       "label": "ledger.active_iteration.evidence[159]",
       "path": "scripts/analysis/audit_external_text_layout_second_stage_cache_salvage.py",
       "status": "sha256_mismatch"
@@ -132,6 +150,9 @@
     {
       "actual_sha256": "7940d34bda31af7648fe9ae7dd1c2c028620cfd5261b46563de4d7596c0a8a0d",
       "expected_sha256": "26b0de04bdba5aebe83fb5d416bc118078273c249357384d9c41ad66eea6d9de",
+      "historical_git_commit": "dc7415e96241c233d6a6b07ab3f8b35ead1516f3",
+      "historical_git_match": true,
+      "historical_git_short_commit": "dc7415e",
       "label": "ledger.active_iteration.evidence[160]",
       "path": "tests/test_external_text_layout_second_stage_cache_salvage.py",
       "status": "sha256_mismatch"
@@ -139,6 +160,9 @@
     {
       "actual_sha256": "bf3aacf54c383d28fb8c1f873fc57e8c1fd1f1632740f4f9c3ecc31529801c09",
       "expected_sha256": "4891a59ae60696f77d255540fb53e36ad4ea49466e07905fe642e3b5ff5d4f0b",
+      "historical_git_commit": "1d4ffca5502326170c69e2a0caab22cfebc89fb9",
+      "historical_git_match": true,
+      "historical_git_short_commit": "1d4ffca",
       "label": "ledger.records[21].evidence[3]",
       "path": "scripts/infer/monotonic_residual_erase.py",
       "status": "sha256_mismatch"
@@ -146,6 +170,9 @@
     {
       "actual_sha256": "65d2a3fbdb942b429c150726a65949c839cc71a395e3eb39d052116d655ace47",
       "expected_sha256": "68d32074657bf2b45aa5f075b1f1ba6b6f82718f64dfc8e1e6716d9dd2d448c7",
+      "historical_git_commit": "1d4ffca5502326170c69e2a0caab22cfebc89fb9",
+      "historical_git_match": true,
+      "historical_git_short_commit": "1d4ffca",
       "label": "ledger.records[21].evidence[4]",
       "path": "tests/test_monotonic_residual_erase_prerequisite.py",
       "status": "sha256_mismatch"
@@ -153,6 +180,9 @@
     {
       "actual_sha256": "2e66ea6f5a606dc6a8c2691f9c2c9f4a5e8d6ed60b5f0faba11db3f6fd60ede4",
       "expected_sha256": "ce45f17c7d377aa665c9583215baead7ca555858cfe291ac089072ca8e51dc16",
+      "historical_git_commit": "5b0acecd7909ade23aa533a4c3ac7feaf69dda5e",
+      "historical_git_match": true,
+      "historical_git_short_commit": "5b0acec",
       "label": "ledger.records[21].evidence[5]",
       "path": "scripts/train/train_patch_cleanup_erasemap_probe.py",
       "status": "sha256_mismatch"
@@ -160,6 +190,9 @@
     {
       "actual_sha256": "47d3bda97e0c6f100ed556d7260b1467fc0a236e6391e7414cb6aa932dd9d0d4",
       "expected_sha256": "c40c4f771998e537baa7fa8914a7c3f84ee70efb052aabfa96d39314f11d2ecf",
+      "historical_git_commit": "27965fe4e2b29777bb2c7bdac67213609cd69b5c",
+      "historical_git_match": true,
+      "historical_git_short_commit": "27965fe",
       "label": "ledger.records[40].evidence[3]",
       "path": "scripts/analysis/external_text_layout_materialization_runtime.py",
       "status": "sha256_mismatch"
@@ -167,6 +200,9 @@
     {
       "actual_sha256": "55dcf747f40cc789f5c05c4840b783c6cafb28ce240a38f0c80bf0c2250bdb53",
       "expected_sha256": "c8059c18d8e59a382da8a6de888dcd04a59d1cb90924d6155523e29512f086d7",
+      "historical_git_commit": "27965fe4e2b29777bb2c7bdac67213609cd69b5c",
+      "historical_git_match": true,
+      "historical_git_short_commit": "27965fe",
       "label": "ledger.records[40].evidence[4]",
       "path": "scripts/analysis/probe_external_text_layout_runtime_safety.py",
       "status": "sha256_mismatch"
@@ -174,6 +210,9 @@
     {
       "actual_sha256": "d40a3dfe32bccab402d95bfa059b80453870d6d8fd0c4bce5bd44fdce5d46c83",
       "expected_sha256": "680b0994c2139b0eb6dbe04d4cd001d6780e42a85d7feddcd9327e0c6e05626c",
+      "historical_git_commit": "27965fe4e2b29777bb2c7bdac67213609cd69b5c",
+      "historical_git_match": true,
+      "historical_git_short_commit": "27965fe",
       "label": "ledger.records[40].evidence[6]",
       "path": "tests/test_external_text_layout_runtime_safety_probe.py",
       "status": "sha256_mismatch"
@@ -181,6 +220,9 @@
     {
       "actual_sha256": "79e64906656871976d29b3ced66fc396f93c1271f25149e587065600ec5f47f2",
       "expected_sha256": "201ab7be4c931014d1e52433c38f941ee70d101860556f63c3ed09518a3ac131",
+      "historical_git_commit": "27965fe4e2b29777bb2c7bdac67213609cd69b5c",
+      "historical_git_match": true,
+      "historical_git_short_commit": "27965fe",
       "label": "ledger.records[40].evidence[8]",
       "path": "tests/test_external_text_layout_support_prerequisite.py",
       "status": "sha256_mismatch"
@@ -188,6 +230,9 @@
     {
       "actual_sha256": "2a87d2a21b9141c9ca16e5f11f7ab1f523d59ffacf6f55759517fd0db26aafcf",
       "expected_sha256": "af35c3ac1e5473501189341e6940d63f562476d84ef77362a53a3a330415a7d5",
+      "historical_git_commit": "ee12c29521ac72b9cf1ed88fd9413c0ad7163896",
+      "historical_git_match": true,
+      "historical_git_short_commit": "ee12c29",
       "label": "ledger.records[41].evidence[3]",
       "path": "scripts/analysis/materialize_external_text_layout_support_train_only.py",
       "status": "sha256_mismatch"
@@ -195,6 +240,9 @@
     {
       "actual_sha256": "bf7146eebda2faab88986c1ce5286ad5a111b8e048a2f485cb2dd0b69465b9a8",
       "expected_sha256": "0c2805198d406e612f3ac395f55fa226e92556da900b0d43d001dabd10a16894",
+      "historical_git_commit": "ee12c29521ac72b9cf1ed88fd9413c0ad7163896",
+      "historical_git_match": true,
+      "historical_git_short_commit": "ee12c29",
       "label": "ledger.records[41].evidence[4]",
       "path": "tests/test_external_text_layout_runtime_equivalence_repair.py",
       "status": "sha256_mismatch"
@@ -202,6 +250,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "historical_git_commit": "23b06c702f185c04eca458105880581096a870b4",
+      "historical_git_match": true,
+      "historical_git_short_commit": "23b06c7",
       "label": "ledger.records[42].evidence[2]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -209,6 +260,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "historical_git_commit": "64cc51197cc6796a28cc8d31366363ca223f4ecf",
+      "historical_git_match": true,
+      "historical_git_short_commit": "64cc511",
       "label": "ledger.records[42].evidence[3]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -216,6 +270,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "fda812eeabb09ee1bf773ba81a4a73bc01303dec01d4cf6e5392cdec8de73502",
+      "historical_git_commit": "23b06c702f185c04eca458105880581096a870b4",
+      "historical_git_match": true,
+      "historical_git_short_commit": "23b06c7",
       "label": "ledger.records[43].evidence[3]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -223,6 +280,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "b1827310aaf9a7a723f2bb3b781a7cb18cbce5d0dac8168d61e16dabddb94039",
+      "historical_git_commit": "64cc51197cc6796a28cc8d31366363ca223f4ecf",
+      "historical_git_match": true,
+      "historical_git_short_commit": "64cc511",
       "label": "ledger.records[43].evidence[4]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -230,6 +290,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "8812d376ea4d5dd37c5bf5755f0a85bed9776cde536ae3345104ef54e9f50786",
+      "historical_git_commit": "883a4099a8a4daac56d96883a9a8eddd8f217d8e",
+      "historical_git_match": true,
+      "historical_git_short_commit": "883a409",
       "label": "ledger.records[50].evidence[0]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -237,6 +300,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "747568829e9940e0ce080b47b7a4f1a98feb3716b74dc9f6f4344ca3387faf97",
+      "historical_git_commit": "883a4099a8a4daac56d96883a9a8eddd8f217d8e",
+      "historical_git_match": true,
+      "historical_git_short_commit": "883a409",
       "label": "ledger.records[50].evidence[1]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -244,6 +310,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[52].evidence[2]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -251,6 +320,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[52].evidence[3]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -258,6 +330,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[57].evidence[3]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -265,6 +340,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[57].evidence[4]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"
@@ -272,6 +350,9 @@
     {
       "actual_sha256": "b4a45e40df042ea445ac1690b7a5e6766e649960ed3db9bf390e0e47ffed4bca",
       "expected_sha256": "726da0506bc60fad0b70189a4846ee38451ba6d94cf0d425f6bfbada06959157",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[58].evidence[1]",
       "path": "scripts/analysis/reconstruct_external_text_layout_frozen_caches.py",
       "status": "sha256_mismatch"
@@ -279,6 +360,9 @@
     {
       "actual_sha256": "6d9d91e653f6fdf039ff68dec61879ff1aaeec6f3da0793000dfd55a11781d9c",
       "expected_sha256": "4f177711489d2dfb172aabe74d37e68dc50b331a4b55a1064a4853a9004a627c",
+      "historical_git_commit": "91c3d534fcf56a34b19e8bc553b826aab6573678",
+      "historical_git_match": true,
+      "historical_git_short_commit": "91c3d53",
       "label": "ledger.records[58].evidence[2]",
       "path": "tests/test_external_text_layout_frozen_cache_reconstruction.py",
       "status": "sha256_mismatch"

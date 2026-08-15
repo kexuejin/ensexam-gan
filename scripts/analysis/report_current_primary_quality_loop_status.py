@@ -12,6 +12,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 RECORD_TERMINALS = {"PASS", "KILL", "PREREQUISITE_NEEDED", "PENDING"}
 ACTIVE_TERMINALS = {"PREREQUISITE_NEEDED", "PENDING"}
+TRACKED_CODE_PREFIXES = {"networks", "scripts", "tests", "tools"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -137,6 +139,38 @@ def unique_path_counts(items: list[dict[str, Any]]) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def find_git_history_sha256_match(
+    repo_root: Path, relative_path: str, expected_sha256: str
+) -> dict[str, str] | None:
+    if not (repo_root / ".git").exists():
+        return None
+    try:
+        log = subprocess.run(
+            ["git", "-C", str(repo_root), "log", "--all", "--format=%H", "--", relative_path],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    for commit in log.stdout.splitlines():
+        if not commit:
+            continue
+        try:
+            show = subprocess.run(
+                ["git", "-C", str(repo_root), "show", f"{commit}:{relative_path}"],
+                check=False,
+                capture_output=True,
+            )
+        except OSError:
+            continue
+        if show.returncode != 0:
+            continue
+        if hashlib.sha256(show.stdout).hexdigest() == expected_sha256:
+            return {"commit": commit, "short_commit": commit[:7]}
+    return None
+
+
 def evidence_gap_class(item: dict[str, Any]) -> str:
     raw_path = item.get("path")
     status = item.get("status")
@@ -150,7 +184,9 @@ def evidence_gap_class(item: dict[str, Any]) -> str:
             return "missing_tracked_reference"
         return "missing_other_reference"
     if status == "sha256_mismatch":
-        if prefix in {"networks", "scripts", "tests", "tools"}:
+        if prefix in TRACKED_CODE_PREFIXES:
+            if item.get("historical_git_match") is True:
+                return "tracked_code_historical_drift"
             return "tracked_code_hash_drift"
         if prefix == "docs":
             return "tracked_evidence_hash_drift"
@@ -208,6 +244,16 @@ def audit_declared_evidence(ledger: dict[str, Any], repo_root: Path) -> dict[str
                 entry["actual_sha256"] = actual_sha256
                 if actual_sha256 != expected_sha256:
                     entry["status"] = "sha256_mismatch"
+                    raw_path = entry["path"]
+                    prefix = raw_path.split("/", 1)[0]
+                    if prefix in TRACKED_CODE_PREFIXES:
+                        match = find_git_history_sha256_match(
+                            repo_root, raw_path, expected_sha256
+                        )
+                        entry["historical_git_match"] = match is not None
+                        if match is not None:
+                            entry["historical_git_commit"] = match["commit"]
+                            entry["historical_git_short_commit"] = match["short_commit"]
                     mismatched.append(entry)
                 else:
                     entry["status"] = "ok"

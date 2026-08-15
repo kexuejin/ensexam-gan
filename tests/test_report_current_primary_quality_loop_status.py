@@ -251,6 +251,60 @@ class ReportCurrentPrimaryQualityLoopStatusTest(unittest.TestCase):
             mismatched_paths = {item["path"] for item in audit["mismatched"]}
             self.assertEqual(mismatched_paths, {"docs/decisions/d2d.md"})
 
+    def test_evidence_audit_marks_tracked_code_hash_found_in_git_history(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            subprocess.run(["git", "init"], cwd=root, check=True, stdout=subprocess.DEVNULL)
+            tracked_script = self.artifact(root, "scripts/tool.py", "old\n")
+            subprocess.run(["git", "add", "scripts/tool.py"], cwd=root, check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-c",
+                    "user.name=Quality Loop Test",
+                    "-c",
+                    "user.email=quality-loop@example.invalid",
+                    "commit",
+                    "-m",
+                    "record old tool",
+                ],
+                cwd=root,
+                check=True,
+                stdout=subprocess.DEVNULL,
+            )
+            old_commit = subprocess.run(
+                ["git", "rev-parse", "HEAD"],
+                cwd=root,
+                check=True,
+                text=True,
+                capture_output=True,
+            ).stdout.strip()
+            ledger = self.ledger(root)
+            data = json.loads(ledger.read_text(encoding="utf-8"))
+            data["records"][0]["evidence"].append(tracked_script)
+            ledger.write_text(json.dumps(data), encoding="utf-8")
+            (root / "scripts" / "tool.py").write_text("new\n", encoding="utf-8")
+            output = root / "evidence-audit.json"
+
+            result = subprocess.run(
+                self.evidence_audit_command(root, ledger, output),
+                text=True,
+                capture_output=True,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            audit = json.loads(output.read_text(encoding="utf-8"))
+            self.assertEqual(audit["gap_class_counts"], {"tracked_code_historical_drift": 1})
+            self.assertEqual(
+                audit["gap_class_unique_path_counts"],
+                {"tracked_code_historical_drift": 1},
+            )
+            [mismatch] = audit["mismatched"]
+            self.assertEqual(mismatch["path"], "scripts/tool.py")
+            self.assertTrue(mismatch["historical_git_match"])
+            self.assertEqual(mismatch["historical_git_commit"], old_commit)
+            self.assertEqual(mismatch["historical_git_short_commit"], old_commit[:7])
+
 
 if __name__ == "__main__":
     unittest.main()
