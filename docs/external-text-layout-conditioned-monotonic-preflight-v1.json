@@ -1,0 +1,117 @@
+{
+  "authorization": {
+    "candidate_inference": false,
+    "checkpoint_generation": false,
+    "holdout40": false,
+    "model_training": false,
+    "promotion": false,
+    "reserved_blind": false,
+    "scut115": false,
+    "state": "preflight_only",
+    "visual_review": false
+  },
+  "candidate_application": {
+    "baseline_input": "recovered_second_stage_rgb_plus_external_text_layout_channels",
+    "device": "cpu",
+    "direction_enforcement": "candidate_must_not_darken_any_rgb_channel",
+    "edit_probability_threshold": 0.5,
+    "minimum_delta_threshold": 12.0,
+    "stride": 160,
+    "tile_size": 256
+  },
+  "conditioned_input": {
+    "channel_order": [
+      "second_stage_r",
+      "second_stage_g",
+      "second_stage_b",
+      "external_text_occupancy",
+      "external_text_confidence"
+    ],
+    "layout_root": "outputs/external-text-layout-support-materialization-20260813/pages",
+    "rgb_root": "outputs/archive/sign-separated-residual-repair-20260810/train275-frozen-pipeline/pred",
+    "shape_rule": "layout_channels_must_match_rgb_height_width",
+    "target_access": false
+  },
+  "evidence": {
+    "effective_plan": {
+      "path": "outputs/external-text-layout-recovered-materializer-input-20260815/effective-plan.json",
+      "sha256": "39d5d801c0507dc965c970927b2d2ea6a2e7d9a2f3f04b27564956093fbca5d4"
+    },
+    "layout_materialization_manifest": {
+      "path": "outputs/external-text-layout-support-materialization-20260813/manifest.json",
+      "sha256": "2578fb78cc3188776d97fff2e1efd2fc8f91d224b4efb680ffa83e1847c96579"
+    },
+    "support_diagnostic": {
+      "path": "outputs/external-text-layout-support-prerequisite-20260813/audit.json",
+      "sha256": "b0e77e816afab4458f4064dd1431f24649b73af4ed04a3a483ff992f77980734"
+    },
+    "support_diagnostic_decision": {
+      "path": "docs/decisions/2026-08-15-external-text-layout-support-diagnostic-pass.md",
+      "sha256": "32b6bc77ed78180503093aeadba523fba797989d7deefbe81d0db63e2bc8e44b"
+    }
+  },
+  "family": "external_text_layout_conditioned_monotonic_v1",
+  "first_quality_gate": {
+    "holdout40": false,
+    "manifest": "hardcase_lists/scut_train_hard_proxy_inner_val_15_20260726.txt",
+    "minimum_residual_gain": 0.0005,
+    "requires_measurable_movement": true,
+    "requires_no_aggregate_overerase_regression": true,
+    "requires_no_aggregate_residual_regression": true,
+    "requires_no_page_overerase_regression": true,
+    "requires_no_page_residual_regression": true,
+    "role": "inner_val15",
+    "scut115": false
+  },
+  "iteration_id": "monotonic-residual-erase-support",
+  "model": {
+    "allowed_delta_direction": "nonnegative_rgb_only",
+    "input_channels": 5,
+    "model_type": "monotonic_residual_erase",
+    "output_channels": 3,
+    "residual_delta_bound": 0.08
+  },
+  "planned_outputs_must_be_absent": {
+    "checkpoint_audit": "outputs/external-text-layout-conditioned-monotonic-checkpoint-audit-20260815",
+    "first_gate_candidate": "outputs/external-text-layout-conditioned-monotonic-inner-val15-candidate",
+    "first_gate_score": "outputs/external-text-layout-conditioned-monotonic-inner-val15-score",
+    "patch_index": "hardcase_lists/external-text-layout-conditioned-monotonic-train-patches-v1.csv",
+    "patch_index_summary_dir": "outputs/external-text-layout-conditioned-monotonic-train-patches-v1",
+    "training_output_dir": "artifacts/trials/external-text-layout-conditioned-monotonic-v1"
+  },
+  "schema_version": 1,
+  "state": "preregistered_external_text_layout_conditioned_preflight",
+  "support_diagnostic_requirements": {
+    "full_auc_ablation_margin_min": 0.03,
+    "full_mean_fold_auc_min": 0.65,
+    "minimum_passed_folds": 5,
+    "positive_mean_above_preserve_min_folds": 4,
+    "train_page_count": 275
+  },
+  "synthetic_preflight": {
+    "device": "cpu",
+    "identity_target_must_remain_exact": true,
+    "layout_channel_gradient_required": true,
+    "target_delta": 0.08
+  },
+  "terminal_successors": {
+    "KILL": "close_layout_conditioned_monotonic_without_threshold_or_layout_transform_rescue",
+    "PASS": "authorize_exact_layout_conditioned_trainer_and_application_implementation_only",
+    "PREREQUISITE_NEEDED": "repair_registered_preflight_evidence_or_metadata_only"
+  },
+  "trainer": {
+    "batch_size": 1,
+    "device": "cpu",
+    "input_channels": 5,
+    "log_every": 10,
+    "lr": 0.0001,
+    "max_steps": 80,
+    "output_dir": "artifacts/trials/external-text-layout-conditioned-monotonic-v1",
+    "patch_index_file": "hardcase_lists/external-text-layout-conditioned-monotonic-train-patches-v1.csv",
+    "residual_delta_bound": 0.08,
+    "save_every": 0,
+    "seed": 42,
+    "tile_size": 256,
+    "validation_enabled": false
+  }
+}

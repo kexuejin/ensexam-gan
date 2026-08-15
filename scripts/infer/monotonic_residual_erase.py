@@ -17,12 +17,20 @@ MODEL_TYPE = "monotonic_residual_erase"
 class MonotonicResidualEraseCleanupNet(nn.Module):
     """Identity-initialized cleanup that can only brighten selected pixels."""
 
-    def __init__(self, residual_delta_bound: float = 0.08):
+    def __init__(
+        self,
+        residual_delta_bound: float = 0.08,
+        *,
+        input_channels: int = 3,
+    ):
         super().__init__()
         if residual_delta_bound <= 0.0 or residual_delta_bound > 1.0:
             raise ValueError("residual_delta_bound must be in (0, 1]")
+        if input_channels < 3:
+            raise ValueError("input_channels must be at least 3")
         self.residual_delta_bound = float(residual_delta_bound)
-        self.enc1 = ConvBlock(3, 32)
+        self.input_channels = int(input_channels)
+        self.enc1 = ConvBlock(self.input_channels, 32)
         self.pool1 = nn.MaxPool2d(2)
         self.enc2 = ConvBlock(32, 64)
         self.pool2 = nn.MaxPool2d(2)
@@ -49,6 +57,11 @@ class MonotonicResidualEraseCleanupNet(nn.Module):
             nn.init.zeros_(head[-1].bias)
 
     def _decode(self, x: torch.Tensor) -> torch.Tensor:
+        if x.ndim != 4 or x.shape[1] != self.input_channels:
+            raise ValueError(
+                "monotonic residual-erase input must be NCHW with "
+                f"{self.input_channels} channels"
+            )
         e1 = self.enc1(x)
         e2 = self.enc2(self.pool1(e1))
         b = self.bottleneck(self.pool2(e2))
@@ -56,6 +69,7 @@ class MonotonicResidualEraseCleanupNet(nn.Module):
         return self.dec1(torch.cat([self.up1(d2), e1], dim=1))
 
     def forward_components(self, x: torch.Tensor) -> dict[str, torch.Tensor]:
+        baseline = x[:, :3]
         feature = self._decode(x)
         edit_logits = self.edit_support_head(feature)
         edit_alpha = torch.sigmoid(edit_logits)
@@ -68,10 +82,10 @@ class MonotonicResidualEraseCleanupNet(nn.Module):
         bright_magnitude = self.residual_delta_bound * torch.tanh(
             magnitude_folded
         )
-        clean_delta = bright_magnitude.expand_as(x)
+        clean_delta = bright_magnitude.expand_as(baseline)
         signed_delta = edit_alpha * clean_delta
-        clean_candidate = torch.clamp(x + clean_delta, 0.0, 1.0)
-        candidate = torch.clamp(x + signed_delta, 0.0, 1.0)
+        clean_candidate = torch.clamp(baseline + clean_delta, 0.0, 1.0)
+        candidate = torch.clamp(baseline + signed_delta, 0.0, 1.0)
         return {
             "candidate": candidate,
             "edit_alpha": edit_alpha,
@@ -92,9 +106,12 @@ class MonotonicResidualEraseCleanupNet(nn.Module):
 
 def build_monotonic_residual_erase_model(
     residual_delta_bound: float = 0.08,
+    *,
+    input_channels: int = 3,
 ) -> MonotonicResidualEraseCleanupNet:
     return MonotonicResidualEraseCleanupNet(
-        residual_delta_bound=residual_delta_bound
+        residual_delta_bound=residual_delta_bound,
+        input_channels=input_channels,
     )
 
 
@@ -109,7 +126,8 @@ def load_monotonic_residual_erase_model(
     if args.get("model_type") != MODEL_TYPE:
         raise ValueError("checkpoint model_type is not monotonic_residual_erase")
     model = build_monotonic_residual_erase_model(
-        residual_delta_bound=float(args.get("residual_delta_bound", 0.08))
+        residual_delta_bound=float(args.get("residual_delta_bound", 0.08)),
+        input_channels=int(args.get("input_channels", 3)),
     ).to(device)
     model.load_state_dict(state["model"])
     model.eval()

@@ -1,4 +1,6 @@
 import inspect
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 import torch
@@ -16,8 +18,10 @@ from scripts.infer.patch_cleanup_erasemap import (
     build_model,
 )
 from scripts.infer.monotonic_residual_erase import (
+    MODEL_TYPE,
     MonotonicResidualEraseCleanupNet,
     build_monotonic_residual_erase_model,
+    load_monotonic_residual_erase_model,
 )
 
 
@@ -53,10 +57,75 @@ class MonotonicResidualErasePrerequisiteTest(unittest.TestCase):
             )
         )
 
+    def test_layout_conditioned_input_preserves_rgb_only_output(self) -> None:
+        torch.manual_seed(20260815)
+        model = MonotonicResidualEraseCleanupNet(
+            BOUND,
+            input_channels=5,
+        ).eval()
+        rgb = torch.rand(1, 3, 16, 16) * 0.8 + 0.1
+        layout = torch.rand(1, 2, 16, 16)
+        conditioned = torch.cat([rgb, layout], dim=1)
+        with torch.no_grad():
+            pred, alpha, clean_candidate = model(conditioned)
+            components = model.forward_components(conditioned)
+
+        self.assertEqual(pred.shape, rgb.shape)
+        self.assertTrue(torch.equal(pred, rgb))
+        self.assertTrue(torch.equal(clean_candidate, rgb))
+        self.assertTrue(
+            torch.equal(components["signed_delta"], torch.zeros_like(rgb))
+        )
+        self.assertTrue(torch.equal(alpha, torch.full_like(alpha, 0.5)))
+        self.assertEqual(model.input_channels, 5)
+        with self.assertRaisesRegex(ValueError, "5 channels"):
+            model(torch.zeros(1, 3, 16, 16))
+
+    def test_layout_conditioned_checkpoint_roundtrip_preserves_channel_count(
+        self,
+    ) -> None:
+        torch.manual_seed(20260815)
+        model = MonotonicResidualEraseCleanupNet(
+            BOUND,
+            input_channels=5,
+        ).eval()
+        features = torch.rand(1, 5, 16, 16) * 0.8 + 0.1
+        with torch.no_grad():
+            model.edit_support_head[-1].bias.fill_(1.0)
+            model.bright_magnitude_head[-1].bias.fill_(0.25)
+            expected = model(features)[0]
+
+        with TemporaryDirectory() as raw:
+            checkpoint_path = Path(raw) / "conditioned.pt"
+            torch.save(
+                {
+                    "args": {
+                        "input_channels": 5,
+                        "model_type": MODEL_TYPE,
+                        "residual_delta_bound": BOUND,
+                    },
+                    "model": model.state_dict(),
+                },
+                checkpoint_path,
+            )
+            restored = load_monotonic_residual_erase_model(
+                checkpoint_path,
+                torch.device("cpu"),
+            )
+            with torch.no_grad():
+                actual = restored(features)[0]
+
+        self.assertEqual(restored.input_channels, 5)
+        self.assertTrue(torch.equal(actual, expected))
+
     def test_dedicated_builder_preserves_the_shared_model_factory(self) -> None:
         self.assertIsInstance(
             build_monotonic_residual_erase_model(),
             MonotonicResidualEraseCleanupNet,
+        )
+        self.assertEqual(
+            build_monotonic_residual_erase_model(input_channels=5).input_channels,
+            5,
         )
         with self.assertRaisesRegex(ValueError, "Unsupported cleanup model type"):
             build_model("monotonic_residual_erase")
@@ -71,6 +140,8 @@ class MonotonicResidualErasePrerequisiteTest(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "residual_delta_bound"):
             MonotonicResidualEraseCleanupNet(0.0)
+        with self.assertRaisesRegex(ValueError, "input_channels"):
+            MonotonicResidualEraseCleanupNet(BOUND, input_channels=2)
 
     def test_forced_output_is_nonnegative_and_bounded(self) -> None:
         model = self.make_model().eval()
