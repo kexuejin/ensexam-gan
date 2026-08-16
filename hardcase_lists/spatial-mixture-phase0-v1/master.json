@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "program": "spatial-mixture-phase0-v1",
+  "salt": "spatial-mixture-phase0-v1",
+  "fold_count": 6,
+  "frozen_fold_domain_counts": [
+    [
+      22,
+      42
+    ],
+    [
+      22,
+      42
+    ],
+    [
+      22,
+      42
+    ],
+    [
+      22,
+      42
+    ],
+    [
+      21,
+      43
+    ],
+    [
+      21,
+      42
+    ]
+  ],
+  "source_manifest": {
+    "path": "hardcase_lists/mixed_scut130_hw5k260_20260729.txt",
+    "sha256": "0385fb96aa7aee1812b95b90acd4198e2af39e96c895a7cd8cfb2681258470ca"
+  },
+  "pool": {
+    "scut": 130,
+    "hw5k": 253,
+    "total": 383
+  },
+  "identity_sha256": "818bb804e017a25141849a4cb778f1069de1aec929cb494cf7f785f2c9e2a594",
+  "master_sha256": "47a264e6bd1b462de1e35d857e1fb18ce02a29395f9e7da83fc812d2ea8c73f3",
+  "folds": {
+    "0": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold0.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold0.json",
+      "txt_sha256": "03c499f245aa7a5144268817c7a340e815def5aa54f70dc801def219ce7dc149",
+      "json_sha256": "bdb64d3b4b993880c219a4388b5e9ba958738ad29cc1319019169231fde60259",
+      "scut_count": 22,
+      "hw5k_count": 42,
+      "total": 64
+    },
+    "1": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold1.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold1.json",
+      "txt_sha256": "a39a938ba020de40c05182f3bdcb58ceb5564b361a7fdd1f2692d432b0e3bd8d",
+      "json_sha256": "c988cd04191d2a1c80a5e934c0f87ea81d415ea9ef9c7de952b69d3c0da696a4",
+      "scut_count": 22,
+      "hw5k_count": 42,
+      "total": 64
+    },
+    "2": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold2.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold2.json",
+      "txt_sha256": "c164df0f9f985f1aa1539ff9a77b9c22280896ce1712f55196bf5f715824d6c5",
+      "json_sha256": "29daf3fb4a815b55812c23c19d923083001a20fb05efcec3119a947568ce0321",
+      "scut_count": 22,
+      "hw5k_count": 42,
+      "total": 64
+    },
+    "3": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold3.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold3.json",
+      "txt_sha256": "8bbc2f0efd9358cb9840be2e555933c47c8a1ee0e68a7895a2a38f9f4c8090fe",
+      "json_sha256": "4de49de3de8c08a9ac63af311cbd94450e850f2def37667ad7c4ff95068cf657",
+      "scut_count": 22,
+      "hw5k_count": 42,
+      "total": 64
+    },
+    "4": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold4.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold4.json",
+      "txt_sha256": "87552ed7e3ac21cd765d32b9d7416a385016c3202885ba9d6a4611be47458c37",
+      "json_sha256": "a42ca0400f2f49bd6e7ddb72af3bf04df3be5f799ab3ac3b8ed6f58b47df105b",
+      "scut_count": 21,
+      "hw5k_count": 43,
+      "total": 64
+    },
+    "5": {
+      "txt": "hardcase_lists/spatial-mixture-phase0-v1/fold5.txt",
+      "json": "hardcase_lists/spatial-mixture-phase0-v1/fold5.json",
+      "txt_sha256": "54e1d42c555475070591964e1d1f607923b2f1e4347f679bda50557e3a77f347",
+      "json_sha256": "1e755d89cab9a418f46655178c3477a7b9bc130e123b982ff6788bf29ef0e109",
+      "scut_count": 21,
+      "hw5k_count": 42,
+      "total": 63
+    }
+  },
+  "prohibited_surfaces_checked": [
+    "dev40",
+    "holdout40",
+    "hw5k_dev232",
+    "hw5k_reserved",
+    "inner_val15",
+    "scut115"
+  ],
+  "plan_sha256": "95ed0483a0c50f211868fa6ea95dd24eeba3a3d4b5af15975fd8a84ead9a5242"
+}

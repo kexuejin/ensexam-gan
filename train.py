@@ -166,10 +166,12 @@ def load_initial_checkpoint(
     incompatible = generator.load_state_dict(checkpoint['G_state_dict'], strict=False)
     missing = list(incompatible.missing_keys)
     unexpected = list(incompatible.unexpected_keys)
+    mixture_enabled = getattr(generator, 'spatial_reconstruction_mixture_enabled', False)
     allowed_missing = {
         key
         for key in generator.state_dict()
         if key.startswith('universal_residual_adapter_sidecar.')
+        or (mixture_enabled and key.startswith('spatial_reconstruction_mixture.'))
     }
     if unexpected or any(key not in allowed_missing for key in missing):
         raise RuntimeError(
@@ -321,6 +323,82 @@ def validate_universal_sidecar_config(cfg: dict) -> None:
         raise ValueError("universal sidecar must not save scheduler state")
     if 'seed' not in train_cfg or train_cfg.get('reproducibility_mode') != 'strict':
         raise ValueError("universal sidecar requires strict reproducibility")
+
+
+def uses_spatial_reconstruction_mixture(model_cfg: dict | None) -> bool:
+    """Return whether the model config enables the spatial mixture host."""
+    mixture_cfg = (model_cfg or {}).get('spatial_reconstruction_mixture', {})
+    if isinstance(mixture_cfg, bool):
+        return mixture_cfg
+    if not isinstance(mixture_cfg, dict):
+        raise ValueError("model.spatial_reconstruction_mixture must be a mapping or bool")
+    return bool(mixture_cfg.get('enabled', False))
+
+
+def validate_spatial_mixture_config(cfg: dict) -> None:
+    """Fail closed on future spatial-mixture training configs.
+
+    Mirrors ``validate_universal_sidecar_config``: the mixture probe is a
+    bounded, strict-reproducibility, mixture-only-trainable, current-primary
+    initialized run. Any drift terminates before expensive training.
+    """
+    model_cfg = cfg.get('model', {})
+    if not uses_spatial_reconstruction_mixture(model_cfg):
+        return
+    mixture_cfg = model_cfg.get('spatial_reconstruction_mixture', {})
+    mode = str(mixture_cfg.get('mode', 'spatial_mixture'))
+    if mode not in ('baseline', 'single_head', 'uniform_two_expert', 'spatial_mixture'):
+        raise ValueError(f"invalid spatial mixture mode: {mode}")
+
+    train_cfg = cfg.get('train', {})
+    expected_init = normalize_path(
+        './artifacts/current-primary/micro_region_probe_step0001.pth'
+    )
+    if train_cfg.get('resume', False) or train_cfg.get('resume_path'):
+        raise ValueError("spatial mixture cannot resume optimizer state")
+    if normalize_path(train_cfg.get('init_checkpoint', '')) != expected_init:
+        raise ValueError(
+            "spatial mixture requires current-primary initialization"
+        )
+    patterns = train_cfg.get('trainable_generator_patterns') or []
+    if not patterns:
+        raise ValueError(
+            "spatial mixture requires mixture-only trainable_generator_patterns"
+        )
+    parameter_names = [name for name, _ in Generator(cfg=model_cfg).named_parameters()]
+    mixture_keys = [
+        name for name in parameter_names
+        if name.startswith('spatial_reconstruction_mixture.')
+    ]
+    if not mixture_keys:
+        raise ValueError(
+            "spatial mixture mode produced no mixture parameters"
+        )
+    for pattern in patterns:
+        compiled = re.compile(str(pattern))
+        matched = [name for name in parameter_names if compiled.search(name)]
+        if not matched:
+            raise ValueError(
+                "spatial mixture trainable pattern must match mixture params"
+            )
+        if any(
+            not name.startswith('spatial_reconstruction_mixture.')
+            for name in matched
+        ):
+            raise ValueError(
+                "spatial mixture trainable pattern must not match base params"
+            )
+    if train_cfg.get('freeze_generator_batchnorm_stats') is not True:
+        raise ValueError(
+            "spatial mixture requires BatchNorm freeze: "
+            "freeze_generator_batchnorm_stats=true"
+        )
+    if train_cfg.get('save_optimizer_state', True):
+        raise ValueError("spatial mixture must not save optimizer state")
+    if train_cfg.get('save_scheduler_state', True):
+        raise ValueError("spatial mixture must not save scheduler state")
+    if 'seed' not in train_cfg or train_cfg.get('reproducibility_mode') != 'strict':
+        raise ValueError("spatial mixture requires strict reproducibility")
 
 
 def validate_cached_baseline_tail_config(cfg: dict) -> None:
@@ -680,6 +758,7 @@ def train_ensexam(cfg: dict, run_dir: str = None, phase: str = 'train') -> float
     num_workers = train_cfg['num_workers']
     validate_checkpoint_strategy(resume, init_checkpoint)
     validate_universal_sidecar_config(cfg)
+    validate_spatial_mixture_config(cfg)
     validate_cached_baseline_tail_config(cfg)
     # Linux 服务器上 num_workers=0 会成为数据加载瓶颈，自动提升
     if num_workers == 0 and os.name != 'nt':

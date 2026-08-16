@@ -14,6 +14,7 @@ import torch.nn.functional as F
 
 from networks.blocks import (DownSample, UpSample, DilatedConvBlock,
                               ResBlock, LateralConnection)
+from networks.spatial_reconstruction_mixture import SpatialContinuousReconstructionMixture
 
 
 class CoarseNet(nn.Module):
@@ -427,6 +428,24 @@ class Generator(nn.Module):
                 ),
             )
 
+        # Spatial continuous reconstruction mixture host. Disabled by default:
+        # when absent/false, no mixture module is created and the state-dict
+        # surface and forward outputs remain exactly the legacy ones.
+        mixture_cfg = cfg.get("spatial_reconstruction_mixture", {}) or {}
+        if isinstance(mixture_cfg, bool):
+            mixture_cfg = {"enabled": mixture_cfg}
+        if not isinstance(mixture_cfg, dict):
+            raise ValueError("spatial_reconstruction_mixture must be a mapping")
+        self.spatial_reconstruction_mixture_enabled = bool(
+            mixture_cfg.get("enabled", False)
+        )
+        self.spatial_reconstruction_mixture = None
+        if self.spatial_reconstruction_mixture_enabled:
+            self.spatial_reconstruction_mixture = SpatialContinuousReconstructionMixture(
+                mode=str(mixture_cfg.get("mode", "spatial_mixture")),
+                gate_hidden_channels=int(mixture_cfg.get("gate_hidden_channels", 16)),
+            )
+
     def forward(
         self,
         Iin: torch.Tensor,
@@ -437,6 +456,7 @@ class Generator(nn.Module):
         need_reconstruction_feature = (
             return_reconstruction_feature
             or self.universal_residual_adapter_sidecar_enabled
+            or self.spatial_reconstruction_mixture_enabled
         )
         refine_input = torch.cat([Iin, Ms, Ic1], dim=1)
         reconstruction_feature = None
@@ -448,6 +468,18 @@ class Generator(nn.Module):
         else:
             Ire = self.refine(refine_input)
         Icomp = Ire * Mb + Iin * (1 - Mb)
+        if self.spatial_reconstruction_mixture is not None:
+            # The anchor y0 must be a well-formed image in [-1, 1] for the
+            # frozen mixture invariant `y1 == y2 == y0` (and therefore
+            # `mixture == y0` at init) to hold. The raw `Icomp` can exceed
+            # [-1,1] before the inference write clamp; clamp it here to match
+            # the product representation exactly. The same clamped anchor is
+            # used for both the feature bundle and the mixture anchor.
+            y0 = torch.clamp(Icomp, -1.0, 1.0)
+            feats = torch.cat(
+                [Iin, y0, Ms, Mb, Ic1, reconstruction_feature], dim=1
+            )
+            Icomp = self.spatial_reconstruction_mixture(feats, y0)
         universal_sidecar_telemetry = None
         if self.universal_residual_adapter_sidecar_enabled:
             Icomp, universal_sidecar_telemetry = self.universal_residual_adapter_sidecar(

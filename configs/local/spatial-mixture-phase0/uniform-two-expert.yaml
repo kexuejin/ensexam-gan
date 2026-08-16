@@ -1,0 +1,82 @@
+# Spatial Mixture Phase 0 - Control 3: two reconstruction experts, uniform mixture.
+#
+# Frozen by docs/plans/2026-08-16-spatial-continuous-reconstruction-mixture-implementation.md
+# (commit 2eae663). Shared trunk + E1/E2 terminal heads with fixed mixture
+# weights (w0, w1, w2) = (0, 0.5, 0.5). Active reconstruction capacity is the
+# frozen B_recon = 312,198. No spatial gate. Phase 0 training is NOT authorized
+# by this config; the sealed matrix runs only after a separate Gate A PASS and
+# Phase 0 authorization.
+model:
+  coarse_in_channels: 3
+  refine_in_channels: 7
+  cbam_reduction: 16
+  spatial_reconstruction_mixture:
+    enabled: true
+    mode: uniform_two_expert
+    gate_hidden_channels: 16
+loss:
+  spatial_mixture_loss:
+    pair: 1.0
+    residual: 2.15
+    overerase: 4.75
+    print_preserve: 2.0
+    collision_grad: 1.0
+    paper: 0.5
+    expert_diversity: 0.05
+    gate_usage: 0.02
+    gate_tv: 0.05
+train:
+  epochs: 1
+  batch_size: 4
+  lr: 5.0e-05
+  adam_betas: [0.3037, 0.9]
+  weight_decay: 0
+  device: mps
+  gpu_ids: []
+  num_workers: 0
+  amp:
+    enabled: false
+  max_steps_per_epoch: 640
+  save_every_n_epochs: 1
+  save_latest_checkpoint: false
+  save_epoch_checkpoints: true
+  save_optimizer_state: false
+  save_scheduler_state: false
+  save_dir: ./artifacts/trials/spatial-mixture-phase0-uniform-two-expert
+  resume: false
+  resume_path: ''
+  init_checkpoint: ./artifacts/current-primary/micro_region_probe_step0001.pth
+  trainable_generator_patterns:
+    - '^spatial_reconstruction_mixture\.'
+  freeze_generator_batchnorm_stats: true
+  seed: 42
+  reproducibility_mode: strict
+  sampling:
+    mode: page_balanced
+  scheduler:
+    enabled: false
+data:
+  data_root: ./data-links/samples/SCUT-HW5K-mixed-20260729
+  img_size: 256
+  overlap: 96
+  mask_threshold: 12
+  val_ratio: 0.001
+  train_file_list: ./hardcase_lists/spatial-mixture-phase0-v1/fold0_train.txt
+  augmentation: null
+inference:
+  auto_scale:
+    enabled: true
+    reference_text_height: 16.0
+    trigger_ratio: 1.05
+    min_scale: 0.5
+    max_scale: 1.5
+    min_components: 30
+evaluation:
+  standalone_test_mode: none
+  final_test_mode: none
+  skip_final_test: true
+  skip_validation: true
+  page_overlap: 32
+  val_every_n_epochs: 1
+early_stopping:
+  enabled: false
